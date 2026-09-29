@@ -15,7 +15,8 @@ DESTINO = os.path.join(BASE, "publicar", "anatoapp-web.html")
 with io.open(ORIGEN, encoding="utf-8") as f:
     html = f.read()
 
-titulo = re.search(r"<title>.*?</title>", html, re.S).group(0)
+# En la galería de claude.ai el título es el nombre de la página: va solo.
+titulo = "<title>AnatoApp</title>"
 estilo = re.search(r"<style>.*?</style>", html, re.S).group(0)
 cuerpo = re.search(r"<body>(.*?)</body>", html, re.S).group(1).strip()
 salida = "\n".join([titulo, estilo, cuerpo])

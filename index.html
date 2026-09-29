@@ -64,7 +64,7 @@ button{font:inherit;color:inherit}
 
 /* ===== cabecera ===== */
 header{
-  position:sticky; top:0; z-index:20;
+  position:sticky; top:env(safe-area-inset-top,0px); z-index:20;
   background:color-mix(in srgb,var(--bg) 88%,transparent); backdrop-filter:blur(12px);
   border-bottom:2px solid var(--linea); padding:10px 16px;
   display:flex; align-items:center; gap:10px;

@@ -64,7 +64,7 @@ button{font:inherit;color:inherit}
 
 /* ===== cabecera ===== */
 header{
-  position:sticky; top:0; z-index:20;
+  position:sticky; top:env(safe-area-inset-top,0px); z-index:20;
   background:color-mix(in srgb,var(--bg) 88%,transparent); backdrop-filter:blur(12px);
   border-bottom:2px solid var(--linea); padding:10px 16px;
   display:flex; align-items:center; gap:10px;
@@ -1105,7 +1105,7 @@ const CARDS = [
     dist:['Fue entrenador de boxeo en Londres y allí diseñó los aparatos.',
           'Trabajó con el New York City Ballet y allí inició el sistema.',
           'Estudió medicina en Inglaterra y publicó el método.'],
-    porque:'Trabajando con internos encamados nace la idea de usar resortes y la camilla como resistencia: el origen del Reformer.' },
+    porque:'Trabajando con internos encamados fija resortes a las cabeceras de las camas: según el manual de Mat 1, ese fue el primer Cadillac.' },
 
   { id:'h7', tema:'historia', tipo:'simple',
     q:'¿Qué ocurre en 1926?',
@@ -11357,7 +11357,7 @@ const APARATOS = {
   barrel: { nom: 'Ladder barrel', cond: { t: 'racha', n: 7 },
     info: 'Una escalera de barras unida a un barril curvo; la distancia entre los dos se ajusta al largo de las piernas. Ideal para la extensión, la flexión lateral y los estiramientos.' },
   reformer: { nom: 'Reformer', cond: { t: 'nivel', n: 6 },
-    info: 'Un carro que se desliza sobre rieles, con resortes que dan la resistencia, barra de pies, correas y hombreras. Nació de una idea de Joseph en la Isla de Man: usar resortes como resistencia para quienes no podían levantarse de la cama.' },
+    info: 'El Universal Reformer, uno de los aparatos que inventó Joseph: un carro que se desliza sobre rieles, con resortes que dan la resistencia, barra de pies, correas y hombreras.' },
   diploma: { nom: 'Diploma', cond: { t: 'unidades', ids: ['u17', 'u18'] },
     info: 'Pasaste por todo lo que te preguntaron en tus cuatro exámenes. Lo que fallaste allá ya lo practicaste acá.' },
   planta: { nom: 'Planta', cond: { t: 'logro', id: 'meta_5' },
@@ -11365,7 +11365,7 @@ const APARATOS = {
   espejo: { nom: 'Espejo', cond: { t: 'resp', n: 100 },
     info: 'Cien ejercicios respondidos. En el estudio, el espejo ayuda a ver la alineación; acá, tu calibración en el Perfil te muestra qué tan bien sabés lo que sabés.' },
   cadillac: { nom: 'Cadillac', cond: { t: 'nivel', n: 8 },
-    info: 'También llamado trapeze table: una camilla elevada con un marco de cuatro postes, barras y resortes. Es el aparato más versátil: sirve para asistir a quien recién empieza y para el repertorio más avanzado.' }
+    info: 'También llamado trapeze table: una camilla elevada con un marco de cuatro postes, barras y resortes. Según tu manual de Mat 1, nació en la Isla de Man, cuando Joseph fijó resortes a las cabeceras de las camas de hospital. Es el aparato más versátil: sirve para asistir a quien recién empieza y para el repertorio más avanzado.' }
 };
 
 /* nombres con juego de palabras (el 🎲 los va proponiendo) */

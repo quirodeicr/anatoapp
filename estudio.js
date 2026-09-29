@@ -92,7 +92,7 @@ const APARATOS = {
   barrel: { nom: 'Ladder barrel', cond: { t: 'racha', n: 7 },
     info: 'Una escalera de barras unida a un barril curvo; la distancia entre los dos se ajusta al largo de las piernas. Ideal para la extensión, la flexión lateral y los estiramientos.' },
   reformer: { nom: 'Reformer', cond: { t: 'nivel', n: 6 },
-    info: 'Un carro que se desliza sobre rieles, con resortes que dan la resistencia, barra de pies, correas y hombreras. Nació de una idea de Joseph en la Isla de Man: usar resortes como resistencia para quienes no podían levantarse de la cama.' },
+    info: 'El Universal Reformer, uno de los aparatos que inventó Joseph: un carro que se desliza sobre rieles, con resortes que dan la resistencia, barra de pies, correas y hombreras.' },
   diploma: { nom: 'Diploma', cond: { t: 'unidades', ids: ['u17', 'u18'] },
     info: 'Pasaste por todo lo que te preguntaron en tus cuatro exámenes. Lo que fallaste allá ya lo practicaste acá.' },
   planta: { nom: 'Planta', cond: { t: 'logro', id: 'meta_5' },
@@ -100,7 +100,7 @@ const APARATOS = {
   espejo: { nom: 'Espejo', cond: { t: 'resp', n: 100 },
     info: 'Cien ejercicios respondidos. En el estudio, el espejo ayuda a ver la alineación; acá, tu calibración en el Perfil te muestra qué tan bien sabés lo que sabés.' },
   cadillac: { nom: 'Cadillac', cond: { t: 'nivel', n: 8 },
-    info: 'También llamado trapeze table: una camilla elevada con un marco de cuatro postes, barras y resortes. Es el aparato más versátil: sirve para asistir a quien recién empieza y para el repertorio más avanzado.' }
+    info: 'También llamado trapeze table: una camilla elevada con un marco de cuatro postes, barras y resortes. Según tu manual de Mat 1, nació en la Isla de Man, cuando Joseph fijó resortes a las cabeceras de las camas de hospital. Es el aparato más versátil: sirve para asistir a quien recién empieza y para el repertorio más avanzado.' }
 };
 
 /* nombres con juego de palabras (el 🎲 los va proponiendo) */

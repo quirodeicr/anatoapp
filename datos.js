@@ -100,7 +100,7 @@ const CARDS = [
     dist:['Fue entrenador de boxeo en Londres y allí diseñó los aparatos.',
           'Trabajó con el New York City Ballet y allí inició el sistema.',
           'Estudió medicina en Inglaterra y publicó el método.'],
-    porque:'Trabajando con internos encamados nace la idea de usar resortes y la camilla como resistencia: el origen del Reformer.' },
+    porque:'Trabajando con internos encamados fija resortes a las cabeceras de las camas: según el manual de Mat 1, ese fue el primer Cadillac.' },
 
   { id:'h7', tema:'historia', tipo:'simple',
     q:'¿Qué ocurre en 1926?',
