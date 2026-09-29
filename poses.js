@@ -1,0 +1,412 @@
+/* ============================================================
+   AnatoApp — poses de ejercicios y posiciones (motor: figura.js v2)
+
+   tr dirección del tronco · fl flexión de columna (+ enrolla, − extiende)
+   cab flexión de cuello · bc/bl brazos [ángulo, codo, muñeca]
+   pc/pl piernas [muslo, rodilla, tobillo: + en punta, − flexionado]
+   apoyo = lo que toca el piso (se resuelve solo con cinemática inversa)
+   ik = agarres (manos a tobillos, nuca, pelvis…)
+   Supino: cabeza a la izquierda. Prono: cabeza a la derecha.
+   Pose 0 = posición inicial; s = paso de la secuencia del manual.
+   Para revisarlas: _galeria.html (muestra cada transición y el control
+   automático de apoyos, piso y articulaciones).
+   ============================================================ */
+'use strict';
+
+const POSES = (() => {
+  /* combina una pose con cambios; apoyo, ik y k se reemplazan enteros */
+  const X = (base, c = {}) => ({ ...base, ...c });
+  /* rueda todo el cuerpo (rodar como una pelota) */
+  const rotar = (p, g, extra = {}) => ({
+    ...p, tr: p.tr + g, ...['bc', 'bl', 'pc', 'pl'].reduce((o, k) => (p[k] ? { ...o, [k]: [p[k][0] + g, p[k][1], p[k][2] || 0] } : o), {}), ...extra
+  });
+
+  /* ---------- posiciones base ---------- */
+  const DE_PIE = { tr: -90, fl: 0, cab: 0, bc: [90, 8, 0], bl: [92, 8, 0], pc: [90, 0, 0], pl: [90, 0, 0], apoyo: ['pieC', 'pieL'] };
+  const SUPINO = { tr: 180, fl: 0, cab: 0, bc: [3, 0, 0], bl: [4, 0, 0], pc: [1, 0, 60], pl: [1, 0, 60], apoyo: ['pelvis', 'tronco', 'talonC', 'talonL', 'manoC', 'manoL'] };
+  const SUPINO_FLEX = X(SUPINO, { pc: [1, 0, -5], pl: [1, 0, -5] });
+  const SUPINO_PUNTA = X(SUPINO, { pc: [1, 0, 85], pl: [1, 0, 85] });
+  const RODILLAS = { tr: 180, fl: 0, cab: 0, bc: [3, 0, 0], bl: [4, 0, 0], pc: [-55, 115, 30], pl: [-57, 115, 30], apoyo: ['pelvis', 'tronco', 'pieC', 'pieL', 'manoC', 'manoL'] };
+  const MESA = X(RODILLAS, { pc: [-90, 90, 60], pl: [-91, 90, 60], apoyo: ['pelvis', 'tronco', 'manoC', 'manoL'] });
+  const PRONO = { tr: 0, fl: 0, cab: 0, bc: [178, 0, 0], bl: [179, 0, 0], pc: [180, 0, 90], pl: [180, 0, 90], apoyo: ['pelvis', 'tronco', 'puntaC', 'puntaL'] };
+  const SENTADO = { tr: -90, fl: 0, cab: 0, bc: [95, 10, 0], bl: [97, 10, 0], pc: [0, 0, -5], pl: [0, 0, -5], apoyo: ['pelvis', 'talonC', 'talonL', 'manoC', 'manoL'] };
+  const CUADRUPEDIA = { tr: -15, fl: 0, cab: 0, bc: [90, 0, 0], bl: [91, 0, 0], pc: [90, 90, 90], pl: [91, 90, 90], apoyo: ['rodillaC', 'rodillaL', 'manoC', 'manoL'] };
+  const PLANCHA = { tr: -12, fl: 0, cab: 0, bc: [82, 0, 0], bl: [83, 0, 0], pc: [168, 0, 22], pl: [168, 0, 22], apoyo: ['manoC', 'manoL', 'puntaC', 'puntaL'] };
+  const PL_SUPINA = { tr: -165, fl: 0, cab: 6, bc: [95, 0, 0], bl: [96, 0, 0], pc: [14, 0, 70], pl: [15, 0, 70], apoyo: ['manoC', 'manoL', 'talonC', 'talonL'] };
+  /* abdominal: cabeza y espalda alta despegadas hasta la punta de los omóplatos */
+  const CURL = { tr: -160, fl: 55, cab: 20 };
+  /* sentado en V (Teaser) */
+  const V = { tr: -128, fl: 12, cab: 4, bc: [-50, 0, 0], bl: [-49, 0, 0], pc: [-55, 0, 85], pl: [-54, 0, 85], apoyo: ['pelvis'] };
+  /* de costado, vista de frente: lado C = el de abajo */
+  const COSTADO = { tr: -166, fl: 0, cab: 6, bc: [165, -100, 0], bl: [95, 0, 0], pc: [2, 0, 90], pl: [10, 0, 90], k: { pc: [1, 1, 0.5], pl: [1, 1, 0.5] }, ik: { bc: 'sien' }, apoyo: ['pelvis', 'tronco', 'manoL'] };
+  /* de costado, vista desde arriba (patadas adelante y atrás) */
+  const COSTADO_ARRIBA = { tr: 180, fl: 0, cab: 0, bc: [180, 100, 0], bl: [-95, 0, 0], pc: [-15, 0, 85], pl: [-12, 0, 85], k: { bc: [1, 0.4, 1], bl: [0.8, 0.8, 1] } };
+  /* sentado visto de frente: piernas hacia quien mira */
+  const SENTADO_FRENTE = { tr: -90, fl: 0, cab: 0, bc: [178, 0, 0], bl: [2, 0, 0], pc: [114, 0, -100], pl: [66, 0, -100], k: { pc: [0.55, 0.6, 1.1], pl: [0.55, 0.6, 1.1] }, apoyo: ['pelvis'] };
+  /* hombros en el piso, pelvis arriba (Roll Over) */
+  const ROLL_OVER = { tr: 135, fl: 93, cab: 10, bc: [0, 0, 0], bl: [1, 0, 0], pc: [180, 0, 90], pl: [181, 0, 90], apoyo: ['hombros', 'manoC', 'manoL'] };
+  /* vertical sobre los hombros: la curva se concentra arriba */
+  const TOP = [-0.1, -0.1, 0, 0.7];
+  const VERTICAL = { tr: 96, fl: 90, cur: TOP, cab: 18, bc: [0, 0, 0], bl: [1, 0, 0], pc: [-90, 0, 88], pl: [-89, 0, 88], apoyo: ['hombros', 'manoC', 'manoL'] };
+  const VERTICAL_MANOS = X(VERTICAL, { ik: { bc: 'pelvis', bl: 'pelvis' }, apoyo: ['hombros'] });
+  /* plancha lateral, vista de frente (lado C = brazo de apoyo, abajo) */
+  const PL_LATERAL = { tr: -160, fl: 0, cab: 0, bc: [90, 0, 0], bl: [-90, 0, 0], pc: [19, 0, 90], pl: [21, 0, 90], k: { pc: [1, 1, 0.5], pl: [1, 1, 0.5] }, apoyo: ['manoC', 'pieC', 'pieL'] };
+
+  const P = {};
+  const ej = (id, nom, opts, poses) => { P[id] = { nom, vista: 'perfil', ...opts, poses }; };
+
+  /* ================= POSICIONES ================= */
+  ej('pos-bipedo', 'Bípedo (de pie)', {}, [DE_PIE]);
+  ej('pos-bipedo-frente', 'Bípedo, de frente', { vista: 'frente' }, [X(DE_PIE, { bc: [97, 0, 0], bl: [83, 0, 0], pc: [92, 0, 90], pl: [88, 0, 90], k: { pc: [1, 1, 0.3], pl: [1, 1, 0.3] } })]);
+  ej('pos-supino', 'Supino', {}, [SUPINO]);
+  ej('pos-supino-rodillas', 'Supino con rodillas flexionadas', {}, [RODILLAS]);
+  ej('pos-mesa', 'Supino, piernas en mesa', {}, [MESA]);
+  ej('pos-prono', 'Prono', {}, [PRONO]);
+  ej('pos-sedente', 'Sedente', {}, [SENTADO]);
+  ej('pos-sedente-silla', 'Sedente en silla', { silla: true }, [{ tr: -90, fl: 0, cab: 0, bc: [95, 70, 0], bl: [96, 70, 0], pc: [0, 90, 0], pl: [2, 88, 0], apoyo: ['pieC', 'pieL'] }]);
+  ej('pos-4-puntos', '4 puntos (cuadrupedia)', {}, [CUADRUPEDIA]);
+  ej('pos-plancha', 'Plancha prona', {}, [PLANCHA]);
+  ej('pos-plancha-supina', 'Plancha supina', {}, [PL_SUPINA]);
+  ej('pos-lateral', 'Decúbito lateral', { vista: 'frente' }, [COSTADO]);
+  ej('pos-rodillas', 'De rodillas', {}, [{ tr: -90, fl: 0, cab: 0, bc: [90, 5, 0], bl: [92, 5, 0], pc: [90, 90, 90], pl: [91, 90, 90], apoyo: ['rodillaC', 'rodillaL'] }]);
+
+  /* ================= MAT 1 ================= */
+  ej('mat1-e01', 'The Hundred Preparation', {}, [
+    RODILLAS,
+    X(RODILLAS, { bc: [-90, 0, 0], bl: [-88, 0, 0], apoyo: ['pelvis', 'tronco', 'pieC', 'pieL'], s: 1 }),
+    X(RODILLAS, { ...CURL, bc: [10, 0, 0], bl: [9, 0, 0], apoyo: ['pelvis', 'pieC', 'pieL'], s: 2 }),
+    X(RODILLAS, { ...CURL, bc: [4, 0, 0], bl: [3, 0, 0], apoyo: ['pelvis', 'pieC', 'pieL'], s: 3, dur: 500, pausa: 60 }),
+    X(RODILLAS, { ...CURL, bc: [16, 0, 0], bl: [15, 0, 0], apoyo: ['pelvis', 'pieC', 'pieL'], s: 3, dur: 500, pausa: 60 })
+  ]);
+  ej('mat1-e02', 'The Hundred', {}, [
+    RODILLAS,
+    X(MESA, { s: 1 }),
+    X(MESA, { bc: [-90, 0, 0], bl: [-88, 0, 0], apoyo: ['pelvis', 'tronco'], s: 2 }),
+    X(MESA, { ...CURL, bc: [10, 0, 0], bl: [9, 0, 0], pc: [-42, 0, 80], pl: [-41, 0, 80], apoyo: ['pelvis'], s: 3 }),
+    X(MESA, { ...CURL, bc: [4, 0, 0], bl: [3, 0, 0], pc: [-42, 0, 80], pl: [-41, 0, 80], apoyo: ['pelvis'], s: 4, dur: 500, pausa: 60 }),
+    X(MESA, { ...CURL, bc: [16, 0, 0], bl: [15, 0, 0], pc: [-42, 0, 80], pl: [-41, 0, 80], apoyo: ['pelvis'], s: 4, dur: 500, pausa: 60 })
+  ]);
+  const RU0 = X(SUPINO_FLEX, { bc: [-172, 0, 0], bl: [-171, 0, 0], apoyo: ['pelvis', 'tronco', 'talonC', 'talonL'] });
+  ej('mat1-e03', 'The Roll Up', {}, [
+    RU0,
+    X(RU0, { ...CURL, bc: [-80, 8, 0], bl: [-79, 8, 0], apoyo: ['pelvis', 'talonC', 'talonL'], s: 1 }),
+    X(RU0, { tr: -38, fl: 80, cab: 25, bc: [8, 0, 0], bl: [9, 0, 0], apoyo: ['pelvis', 'talonC', 'talonL'], s: 2, dur: 1900 }),
+    X(RU0, { tr: -112, fl: 85, cab: 25, bc: [0, 0, 0], bl: [1, 0, 0], apoyo: ['pelvis', 'talonC', 'talonL'], s: 3 }),
+    X(RU0, { s: 4, dur: 1700 })
+  ]);
+  const SLC = X(SUPINO, { pc: [-90, 0, 80], pl: [1, 0, 60], apoyo: ['pelvis', 'tronco', 'talonL', 'manoC', 'manoL'] });
+  ej('mat1-e04', 'Single Leg Circles', {}, [
+    SLC,
+    X(SLC, { pc: [-98, 0, 80], k: { pc: [0.86, 0.86, 1] }, s: 1, dur: 900 }),
+    X(SLC, { pc: [-82, 0, 80], k: { pc: [0.8, 0.8, 1] }, s: 1, dur: 900 }),
+    X(SLC, { pc: [-74, 0, 80], k: { pc: [0.93, 0.93, 1] }, s: 2, dur: 900 })
+  ]);
+  const BOLA = { tr: -115, fl: 90, cab: 35, pc: [-78, 152, 40], pl: [-79, 152, 40], ik: { bc: 'pantorrillaC', bl: 'pantorrillaL' }, apoyo: ['pelvis'] };
+  ej('mat1-e05', 'Rolling Like a Ball', { rueda: true }, [
+    BOLA,
+    rotar(BOLA, -82, { apoyo: ['hombros'], dx: -24, s: 1 }),
+    X(BOLA, { s: 2 })
+  ]);
+  const SLS = X(RODILLAS, { ...CURL, pc: [-140, 150, 70], pl: [-30, 0, 85], ik: { bc: 'tobilloC', bl: 'rodillaC' }, apoyo: ['pelvis'] });
+  ej('mat1-e06', 'Single Leg Stretch', {}, [
+    SLS,
+    X(SLS, { pc: [-30, 0, 85], pl: [-140, 150, 70], ik: { bc: 'rodillaL', bl: 'tobilloL' }, s: 1 }),
+    X(SLS, { s: 2 })
+  ]);
+  const DLS = X(RODILLAS, { ...CURL, pc: [-140, 150, 70], pl: [-139, 150, 70], ik: { bc: 'tobilloC', bl: 'tobilloL' }, apoyo: ['pelvis'] });
+  ej('mat1-e07', 'Double Leg Stretch', {}, [
+    DLS,
+    X(DLS, { pc: [-26, 0, 85], pl: [-25, 0, 85], bc: [-152, 0, 0], bl: [-150, 0, 0], ik: {}, s: 1 }),
+    X(DLS, { s: 2 })
+  ]);
+  const SSLS = X(SUPINO, { ...CURL, pc: [-105, 0, 85], pl: [-8, 0, 85], ik: { bc: 'pantorrillaC', bl: 'pantorrillaC' }, apoyo: ['pelvis'] });
+  ej('mat1-e08', 'Single Straight Leg Stretch', {}, [
+    SSLS,
+    X(SSLS, { pc: [-118, 0, 85], s: 1, dur: 600, pausa: 100 }),
+    X(SSLS, { pc: [-8, 0, 85], pl: [-105, 0, 85], ik: { bc: 'pantorrillaL', bl: 'pantorrillaL' }, s: 2 }),
+    X(SSLS, { pc: [-8, 0, 85], pl: [-118, 0, 85], ik: { bc: 'pantorrillaL', bl: 'pantorrillaL' }, s: 1, dur: 600, pausa: 100 })
+  ]);
+  const CODOS_NUCA = { bc: [0.55, 0.7, 0.45], bl: [0.5, 0.7, 0.45] };
+  const DSLS = X(SUPINO, { ...CURL, pc: [-90, 0, 85], pl: [-89, 0, 85], ik: { bc: 'nuca', bl: 'nuca' }, k: CODOS_NUCA, apoyo: ['pelvis'] });
+  ej('mat1-e09', 'Double Straight Leg Stretch', {}, [
+    DSLS,
+    X(DSLS, { pc: [-35, 0, 85], pl: [-34, 0, 85], s: 1 }),
+    X(DSLS, { s: 2 })
+  ]);
+  const CC = X(SUPINO, { ...CURL, pc: [-140, 150, 70], pl: [-28, 0, 85], ik: { bc: 'nuca', bl: 'nuca' }, k: CODOS_NUCA, apoyo: ['pelvis'] });
+  ej('mat1-e10', 'Criss Cross / Bicycle', {}, [
+    CC,
+    X(CC, { fl: 62, ik: { bc: 'nuca' }, bl: [-38, 150, 0], s: 1 }),
+    X(CC, { pc: [-28, 0, 85], pl: [-140, 150, 70], s: 2 }),
+    X(CC, { fl: 62, pc: [-28, 0, 85], pl: [-140, 150, 70], ik: { bl: 'nuca' }, bc: [-38, 150, 0], s: 1 })
+  ]);
+  const SSF = X(SENTADO, { bc: [0, 0, 0], bl: [1, 0, 0], pc: [0, 0, -10], pl: [0, 0, -10], apoyo: ['pelvis', 'talonC', 'talonL'] });
+  ej('mat1-e11', 'Spine Stretch Forward', {}, [
+    SSF,
+    X(SSF, { tr: -40, fl: 133, cab: 18, bc: [24, 0, 0], bl: [25, 0, 0], s: 1, dur: 1800 }),
+    X(SSF, { s: 2, dur: 1800 })
+  ]);
+  ej('mat1-e12', 'Spine Stretch Side', { vista: 'frente', persp: true }, [
+    SENTADO_FRENTE,
+    X(SENTADO_FRENTE, { tr: -108, fl: -42, bc: [112, 0, 0], bl: [-122, 25, 0], apoyo: ['pelvis', 'manoC'], s: 1 }),
+    X(SENTADO_FRENTE, { s: 2 }),
+    X(SENTADO_FRENTE, { tr: -72, fl: 42, bl: [68, 0, 0], bc: [-58, -25, 0], apoyo: ['pelvis', 'manoL'], s: 1 }),
+    X(SENTADO_FRENTE, { s: 2 })
+  ]);
+  const SAW = X(SSF, { bc: [0, 0, 0], bl: [180, 0, 0], k: { bc: [0.25, 0.25, 0.3], bl: [0.25, 0.25, 0.3] } });
+  ej('mat1-e13', 'Saw', {}, [
+    SAW,
+    X(SAW, { k: {}, s: 1 }),
+    X(SAW, { k: {}, tr: -42, fl: 115, cab: 20, bc: [22, 0, 0], bl: [-145, 0, 0], s: 2, dur: 1800 }),
+    X(SAW, { k: {}, s: 3, dur: 1800 })
+  ]);
+  const OLR = { tr: -85, fl: 30, cab: 10, pc: [-70, 110, 60], pl: [-69, 110, 60], ik: { bc: 'tobilloC', bl: 'tobilloL' }, apoyo: ['pelvis'] };
+  const OLR_V = X(OLR, { tr: -97, fl: 16, cab: 6, pc: [-66, 0, 85], pl: [-65, 0, 85] });
+  ej('mat1-e14', 'Open Leg Rocker', { rueda: true }, [
+    OLR,
+    X(OLR, { pc: [-66, 0, 85], s: 1 }),
+    X(OLR_V, { s: 2 }),
+    rotar(OLR_V, -80, { apoyo: ['hombros'], dx: -26, s: 3, dur: 1300 }),
+    X(OLR_V, { s: 4, dur: 1300 })
+  ]);
+  const CODOS_AFUERA = { bc: [0.6, 0.78, 1], bl: [0.6, 0.78, 1] };
+  const SWAN0 = X(PRONO, { bc: [-150, 150, 0], bl: [-149, 150, 0], k: CODOS_AFUERA, pc: [180, 0, 85], pl: [180, 0, 85], apoyo: ['pelvis', 'tronco', 'puntaC', 'puntaL', 'manoC', 'manoL'] });
+  ej('mat1-e15', 'Swan', {}, [
+    SWAN0,
+    X(SWAN0, { tr: -26, fl: -62, cab: 0, apoyo: ['pelvis', 'puntaC', 'puntaL', 'manoC', 'manoL'], s: 1, dur: 1700 }),
+    X(SWAN0, { s: 2, dur: 1700 })
+  ]);
+  const SLK = X(PRONO, { tr: -14, fl: -28, cab: 0, bc: [95, 95, 0], bl: [96, 95, 0], pc: [180, 0, 90], pl: [180, 0, 90], apoyo: ['pelvis', 'antebrazoC', 'antebrazoL', 'puntaC', 'puntaL'] });
+  const kickC = f => X(SLK, { pc: [180, f, 90], apoyo: ['pelvis', 'antebrazoC', 'antebrazoL', 'rodillaC', 'puntaL'], s: 1, dur: 550, pausa: 80 });
+  const kickL = f => X(SLK, { pl: [180, f, 90], apoyo: ['pelvis', 'antebrazoC', 'antebrazoL', 'rodillaL', 'puntaC'], s: 1, dur: 550, pausa: 80 });
+  ej('mat1-e16', 'Single Leg Kicks', {}, [
+    SLK, kickC(125), kickC(145), X(SLK, { s: 2 }), kickL(125), kickL(145)
+  ]);
+  const DLK = X(PRONO, { cab: 0, pc: [180, 0, 90], pl: [180, 0, 90], ik: { bc: 'cintura', bl: 'cintura' }, apoyo: ['pelvis', 'tronco', 'puntaC', 'puntaL'] });
+  const DLKk = f => X(DLK, { pc: [180, f, 90], pl: [180, f - 2, 90], apoyo: ['pelvis', 'tronco', 'rodillaC', 'rodillaL'], s: 1, dur: 500, pausa: 60 });
+  ej('mat1-e17', 'Double Leg Kicks', {}, [
+    DLK, DLKk(120), DLKk(140), DLKk(125),
+    X(DLK, { tr: -20, fl: -50, cab: 0, ik: {}, bc: [174, 0, 0], bl: [176, 0, 0], apoyo: ['pelvis', 'puntaC', 'puntaL'], s: 2, dur: 1600 })
+  ]);
+  const SWIM = X(PRONO, { tr: -8, fl: -20, bc: [0, 0, 0], bl: [2, 0, 0], apoyo: ['pelvis'] });
+  ej('mat1-e18', 'Swimming', {}, [
+    SWIM,
+    X(SWIM, { bc: [-14, 0, 0], pl: [-168, 0, 90], s: 1, dur: 500, pausa: 40 }),
+    X(SWIM, { bl: [-12, 0, 0], pc: [-168, 0, 90], s: 1, dur: 500, pausa: 40 })
+  ]);
+  ej('mat1-e19', 'Side Leg Lifts', { vista: 'frente' }, [
+    COSTADO,
+    X(COSTADO, { pl: [-16, 0, 90], s: 1 }),
+    X(COSTADO, { s: 2 })
+  ]);
+  ej('mat1-e20', 'Side Leg Circles (Small & Big)', { camara: 'arriba' }, [
+    COSTADO_ARRIBA,
+    X(COSTADO_ARRIBA, { pl: [-45, 0, 75], k: { ...COSTADO_ARRIBA.k, pl: [0.9, 0.9, 1] }, s: 1, dur: 900 }),
+    X(COSTADO_ARRIBA, { pl: [-20, 0, 85], k: { ...COSTADO_ARRIBA.k, pl: [0.82, 0.82, 1] }, s: 2, dur: 900 }),
+    X(COSTADO_ARRIBA, { pl: [8, 0, 90], k: { ...COSTADO_ARRIBA.k, pl: [0.92, 0.92, 1] }, s: 2, dur: 900 })
+  ]);
+  ej('mat1-e21', 'Side Leg Kicks', { camara: 'arriba' }, [
+    COSTADO_ARRIBA,
+    X(COSTADO_ARRIBA, { pl: [-50, 0, -10], s: 1, dur: 700 }),
+    X(COSTADO_ARRIBA, { pl: [-62, 0, -10], s: 1, dur: 400, pausa: 60 }),
+    X(COSTADO_ARRIBA, { pl: [28, 0, 90], s: 2, dur: 1100 })
+  ]);
+  ej('mat1-e22', 'Side Leg Bicycle', { camara: 'arriba' }, [
+    COSTADO_ARRIBA,
+    X(COSTADO_ARRIBA, { pl: [-55, 95, 80], s: 1 }),
+    X(COSTADO_ARRIBA, { pl: [-55, 0, 85], s: 1 }),
+    X(COSTADO_ARRIBA, { pl: [28, 0, 90], s: 2 }),
+    X(COSTADO_ARRIBA, { pl: [28, 130, 90], s: 2 }),
+    X(COSTADO_ARRIBA, { pl: [-50, 130, 90], s: 2 })
+  ]);
+  const BAN0 = X(COSTADO, { tr: -172, cab: 0, bc: [180, 0, 0], bl: [0, 0, 0], ik: {}, pc: [0, 0, 90], pl: [8, 0, 90], apoyo: ['pelvis', 'tronco'] });
+  ej('mat1-e23', 'Side Leg Bananas', { vista: 'frente' }, [
+    BAN0,
+    X(BAN0, { tr: -172, fl: 22, cab: 4, bc: [-168, 0, 0], bl: [-163, 0, 0], pc: [-10, 0, 90], pl: [-4, 0, 90], apoyo: ['pelvis'], s: 1, dur: 1500 }),
+    X(BAN0, { s: 2, dur: 1500 })
+  ]);
+  const SEAL = { tr: -115, fl: 88, cab: 34, pc: [-84, 150, 60], pl: [-83, 150, 60], k: { pc: [0.72, 0.8, 0.8], pl: [0.72, 0.8, 0.8] }, ik: { bc: 'tobilloC', bl: 'tobilloL' }, apoyo: ['pelvis'] };
+  const SEAL_AP = X(SEAL, { k: { pc: [0.72, 0.68, 0.8], pl: [0.72, 0.68, 0.8] } });
+  ej('mat1-e24', 'Seal', { rueda: true }, [
+    SEAL,
+    X(SEAL_AP, { s: 1, dur: 350, pausa: 40 }), X(SEAL, { s: 1, dur: 350, pausa: 40 }),
+    rotar(SEAL, -80, { apoyo: ['hombros'], dx: -22, s: 2 }),
+    X(SEAL_AP, { s: 3, dur: 1300 }), X(SEAL, { s: 3, dur: 350, pausa: 40 })
+  ]);
+  const PU_ROLL = { tr: 72, fl: 60, cab: 20, bc: [96, 0, 0], bl: [97, 0, 0], pc: [84, 18, 0], pl: [85, 18, 0], apoyo: ['pieC', 'pieL', 'manoC', 'manoL'] };
+  ej('mat1-e25', 'Push Ups', { ancla: 'pie' }, [
+    X(DE_PIE, { bc: [-90, 0, 0], bl: [-88, 0, 0] }),
+    X(PU_ROLL, { s: 1, dur: 1800 }),
+    X(PLANCHA, { libre: ['manoC', 'manoL'], s: 2, dur: 1800 }),
+    X(PLANCHA, { tr: -4, s: 3 }),
+    X(PLANCHA, { s: 4 }),
+    X(PU_ROLL, { libre: ['manoC', 'manoL'], s: 4, dur: 1800 })
+  ]);
+
+  /* ================= MAT 2 ================= */
+  /* sentado visto desde arriba: el tronco en escorzo, piernas hacia abajo de la imagen;
+     la rotación se ve como la línea de los hombros y los brazos que gira */
+  const TW = { tr: -90, fl: 0, cab: 0, bc: [180, 0, 0], bl: [0, 0, 0], pc: [94, 0, 90], pl: [86, 0, 90], k: { tronco: 0.14, pc: [1, 1, 0.3], pl: [1, 1, 0.3] } };
+  const girar = g => X(TW, { tr: -90 + g, bc: [180 + g, 0, 0], bl: [g, 0, 0] });
+  ej('mat2-e01', 'Spine Twist', { vista: 'frente', camara: 'arriba', matV: true }, [
+    TW,
+    X(girar(-38), { s: 1, dur: 900 }),
+    X(girar(-48), { s: 1, dur: 400, pausa: 60 }),
+    X(TW, { s: 2 }),
+    X(girar(38), { s: 1, dur: 900 }),
+    X(girar(48), { s: 1, dur: 400, pausa: 60 }),
+    X(TW, { s: 2 })
+  ]);
+  const MESA_BRAZOS = X(MESA, { bc: [-168, 0, 0], bl: [-167, 0, 0], apoyo: ['pelvis', 'tronco'] });
+  ej('mat2-e02', 'Teaser Preparation', {}, [
+    MESA_BRAZOS,
+    { tr: -124, fl: 10, cab: 4, bc: [-18, 0, 0], bl: [-17, 0, 0], pc: [-40, 40, 70], pl: [-39, 40, 70], apoyo: ['pelvis'], s: 1, dur: 1800 },
+    X(MESA_BRAZOS, { s: 2, dur: 1800 })
+  ]);
+  ej('mat2-e03', 'Teaser 1 — Torso Roll Down', {}, [
+    MESA_BRAZOS,
+    X(V, { s: 1, dur: 1800 }),
+    X(V, { tr: 180, fl: 0, cab: 0, bc: [-172, 0, 0], bl: [-171, 0, 0], apoyo: ['pelvis', 'tronco'], s: 2, dur: 1800 }),
+    X(V, { s: 3, dur: 1800 })
+  ]);
+  const PIERNAS_ARRIBA = X(SUPINO, { pc: [-90, 0, 85], pl: [-89, 0, 85], bc: [-170, 0, 0], bl: [-169, 0, 0], apoyo: ['pelvis', 'tronco'] });
+  ej('mat2-e04', 'Teaser 2 — Leg Lowers', {}, [
+    PIERNAS_ARRIBA,
+    X(V, { s: 1, dur: 1800 }),
+    X(V, { pc: [-12, 0, 85], pl: [-11, 0, 85], s: 2 }),
+    X(V, { s: 3 })
+  ]);
+  ej('mat2-e05', 'Teaser 3 — Arms and Legs Together', {}, [
+    V,
+    X(V, { tr: -172, fl: 0, cab: 0, bc: [-174, 0, 0], bl: [-173, 0, 0], pc: [-8, 0, 85], pl: [-7, 0, 85], s: 1, dur: 1800 }),
+    X(V, { s: 2, dur: 1800 })
+  ]);
+  const HIPC = { tr: -132, fl: 4, cab: 0, bc: [118, 0, 0], bl: [119, 0, 0], pc: [-52, 0, 85], pl: [-51, 0, 85], apoyo: ['pelvis', 'manoC', 'manoL'] };
+  ej('mat2-e06', 'Hip Circles', {}, [
+    HIPC,
+    X(HIPC, { pc: [-22, 0, 85], pl: [-21, 0, 85], k: { pc: [0.9, 0.9, 1], pl: [0.9, 0.9, 1] }, s: 1 }),
+    X(HIPC, { pc: [-36, 0, 85], pl: [-35, 0, 85], k: { pc: [0.86, 0.86, 1], pl: [0.86, 0.86, 1] }, s: 2 })
+  ]);
+  const RO0 = X(SUPINO_PUNTA, { bc: [3, 0, 0], bl: [4, 0, 0] });
+  ej('mat2-e07', 'Roll Over', { ancla: 'S' }, [
+    RO0,
+    X(RO0, { pc: [-90, 0, 88], pl: [-89, 0, 88], apoyo: ['pelvis', 'tronco', 'manoC', 'manoL'], s: 1 }),
+    X(ROLL_OVER, { s: 2, dur: 1900 }),
+    X(ROLL_OVER, { pc: [180, 0, -5], pl: [181, 0, -5], k: { pc: [0.95, 0.95, 1] }, s: 2 }),
+    X(SUPINO, { pc: [-32, 0, -5], pl: [-31, 0, -5], apoyo: ['pelvis', 'tronco', 'manoC', 'manoL'], s: 3, dur: 1900 })
+  ]);
+  const MC = { tr: 180, fl: 0, cab: 0, bc: [0, 0, 0], bl: [0, 0, 0], pc: [2, 0, 90], pl: [-2, 0, 90], k: { pc: [0.3, 0.3, 0.6], pl: [0.3, 0.3, 0.6] } };
+  ej('mat2-e08', 'Modified Corkscrew', { vista: 'frente', camara: 'arriba' }, [
+    MC,
+    X(MC, { pc: [58, 0, 90], pl: [52, 0, 90], k: { pc: [0.72, 0.72, 0.8], pl: [0.72, 0.72, 0.8] }, s: 1 }),
+    X(MC, { pc: [-52, 0, 90], pl: [-58, 0, 90], k: { pc: [0.72, 0.72, 0.8], pl: [0.72, 0.72, 0.8] }, s: 2 })
+  ]);
+  ej('mat2-e09', 'Corkscrew', { ancla: 'S' }, [
+    X(RO0, { pc: [-90, 0, 88], pl: [-89, 0, 88], apoyo: ['pelvis', 'tronco', 'manoC', 'manoL'] }),
+    X(ROLL_OVER, { s: 1, dur: 1800 }),
+    X(ROLL_OVER, { tr: 150, fl: 70, pc: [-150, 0, 88], pl: [-148, 0, 88], k: { pc: [0.85, 0.85, 1], pl: [0.85, 0.85, 1] }, s: 2, dur: 1600 }),
+    X(RO0, { pc: [-62, 0, 88], pl: [-60, 0, 88], k: { pc: [0.85, 0.85, 1], pl: [0.85, 0.85, 1] }, apoyo: ['pelvis', 'tronco', 'manoC', 'manoL'], s: 3, dur: 1600 }),
+    X(ROLL_OVER, { tr: 150, fl: 70, pc: [-150, 0, 88], pl: [-148, 0, 88], k: { pc: [0.8, 0.8, 1], pl: [0.8, 0.8, 1] }, s: 4, dur: 1600 })
+  ]);
+  const NP0 = X(SUPINO_FLEX, { ik: { bc: 'nuca', bl: 'nuca' }, k: CODOS_NUCA, apoyo: ['pelvis', 'tronco', 'talonC', 'talonL'] });
+  ej('mat2-e10', 'Neck Pull', {}, [
+    NP0,
+    X(NP0, { ...CURL, apoyo: ['pelvis', 'talonC', 'talonL'], s: 1 }),
+    X(NP0, { tr: -40, fl: 120, cab: 25, apoyo: ['pelvis', 'talonC', 'talonL'], s: 2, dur: 1800 }),
+    X(NP0, { tr: -90, fl: 0, cab: 0, apoyo: ['pelvis', 'talonC', 'talonL'], s: 3, dur: 1600 }),
+    X(NP0, { tr: -122, fl: 0, cab: 0, apoyo: ['pelvis', 'talonC', 'talonL'], s: 4, dur: 1400 })
+  ]);
+  ej('mat2-e11', 'Leg Pull Down', { ancla: 'mano' }, [
+    PLANCHA,
+    X(PLANCHA, { pc: [-162, 0, 90], apoyo: ['manoC', 'manoL', 'puntaL'], s: 1 }),
+    X(PLANCHA, { s: 2 })
+  ]);
+  ej('mat2-e12', 'Leg Pull Up', { ancla: 'mano' }, [
+    PL_SUPINA,
+    X(PL_SUPINA, { pc: [-80, 0, 85], apoyo: ['manoC', 'manoL', 'talonL'], s: 1 }),
+    X(PL_SUPINA, { s: 2 })
+  ]);
+  ej('mat2-e13', 'Jackknife', { ancla: 'S' }, [
+    X(RO0, { pc: [-90, 0, 88], pl: [-89, 0, 88], apoyo: ['pelvis', 'tronco', 'manoC', 'manoL'] }),
+    X(ROLL_OVER, { s: 1, dur: 1800 }),
+    X(ROLL_OVER, { tr: 105, fl: 88, cab: 44, pc: [150, 0, 90], pl: [151, 0, 90], apoyo: ['hombros', 'manoC', 'manoL', 'puntaC', 'puntaL'], s: 2 }),
+    X(VERTICAL, { s: 3, dur: 1600 }),
+    X(RO0, { tr: 160, fl: 30, cab: 12, pc: [-98, 0, 88], pl: [-97, 0, 88], apoyo: ['manoC', 'manoL'], s: 4, dur: 1900 })
+  ]);
+  const KSK = { tr: -35, fl: 0, cab: 0, bl: [86, 0, 0], ik: { bc: 'nuca' }, pl: [92, 88, 90], pc: [180, 0, 90], k: { pl: [1, 0.3, 0.3] }, apoyo: ['manoL', 'rodillaL'] };
+  ej('mat2-e14', 'Kneeling Side Kicks', { vista: 'frente' }, [
+    KSK,
+    X(KSK, { pc: [182, 0, -5], k: { ...KSK.k, pc: [0.72, 0.72, 0.8] }, s: 1 }),
+    X(KSK, { pc: [176, 0, 90], k: { ...KSK.k, pc: [0.84, 0.84, 1] }, s: 2 })
+  ]);
+  const SIT_HIP = { tr: -118, fl: 0, cab: 0, bc: [96, 0, 0], bl: [40, 60, 0], pc: [4, -176, 90], pl: [-4, -180, 90], k: { pc: [1, 1, 0.5], pl: [1, 1, 0.5] }, apoyo: ['pelvis', 'manoC'] };
+  /* sentado de lado con las piernas estiradas: paso previo a elevar la cadera */
+  const SIT_LARGO = X(SIT_HIP, { pc: [12, 0, 90], pl: [15, 0, 90], k: { pc: [1, 1, 0.5], pl: [1, 1, 0.5] }, apoyo: ['pelvis', 'manoC', 'pieC', 'pieL'] });
+  ej('mat2-e15', 'Twist (Seated Twist)', { vista: 'frente' }, [
+    SIT_HIP,
+    X(SIT_LARGO, { s: 1, dur: 900 }),
+    X(PL_LATERAL, { s: 1, dur: 1200 }),
+    X(PL_LATERAL, { cab: 30, bl: [55, 10, 0], k: { ...PL_LATERAL.k, ancho: 0.78 }, s: 1 }),
+    X(SIT_LARGO, { s: 2, dur: 1400 })
+  ]);
+  ej('mat2-e16', 'Side Bend Twist', { vista: 'frente' }, [
+    PL_LATERAL,
+    X(PL_LATERAL, { bl: [-150, 0, 0], s: 1 }),
+    X(PL_LATERAL, { cab: 32, bl: [70, 20, 0], k: { ...PL_LATERAL.k, ancho: 0.78 }, s: 2 }),
+    X(PL_LATERAL, { bl: [-90, 0, 0], g: 0.5, s: 3 })
+  ]);
+  ej('mat2-e17', 'Side Bend (Mermaid)', { vista: 'frente' }, [
+    PL_LATERAL,
+    X(PL_LATERAL, { bl: [-112, 0, 0], s: 1 }),
+    X(PL_LATERAL, { tr: -170, fl: 20, cab: 12, bl: [12, 0, 0], s: 2 }),
+    X(PL_LATERAL, { tr: -150, fl: -30, cab: -5, bl: [-172, 0, 0], s: 3 })
+  ]);
+  const TIJ = X(VERTICAL_MANOS, { pc: [-128, 0, 88], pl: [-48, 0, 88] });
+  ej('mat2-e18', 'Scissors', { ancla: 'S' }, [
+    X(RO0, { apoyo: ['pelvis', 'tronco', 'manoC', 'manoL'] }),
+    X(VERTICAL, { s: 1, dur: 2000 }),
+    X(VERTICAL_MANOS, { s: 2 }),
+    X(TIJ, { s: 3 }),
+    X(VERTICAL_MANOS, { s: 4 }),
+    X(TIJ, { pc: [-48, 0, 88], pl: [-128, 0, 88], s: 3 })
+  ]);
+  ej('mat2-e19', 'Bicycle', { ancla: 'S' }, [
+    VERTICAL_MANOS,
+    X(TIJ, { s: 1 }),
+    X(TIJ, { pl: [-40, 95, 80], s: 2 }),
+    X(TIJ, { pc: [-70, 0, 88], pl: [-115, 100, 80], s: 2 }),
+    X(TIJ, { pc: [-48, 0, 88], pl: [-128, 0, 88], s: 3 })
+  ]);
+  const PUENTE = { tr: 162, fl: -12, cab: 22, pc: [-18, 100, 30], pl: [-16, 100, 30], ik: { bc: 'pelvis', bl: 'pelvis' }, apoyo: ['hombros', 'pieC', 'pieL'] };
+  ej('mat2-e20', 'Shoulder Bridge', { ancla: 'S' }, [
+    PUENTE,
+    X(PUENTE, { pc: [-100, 0, -10], apoyo: ['hombros', 'pieL'], s: 1 }),
+    X(PUENTE, { pc: [6, 0, -5], apoyo: ['hombros', 'pieL'], s: 2 }),
+    X(PUENTE, { pc: [-100, 0, -10], apoyo: ['hombros', 'pieL'], s: 3 })
+  ]);
+  ej('mat2-e21', 'Boomerang', {}, [
+    X(SENTADO, { pc: [0, 0, 85], pl: [1, 0, 85], apoyo: ['pelvis', 'manoC', 'manoL'] }),
+    X(SUPINO_PUNTA, { pc: [-80, 0, 88], pl: [-79, 0, 88], apoyo: ['tronco', 'manoC', 'manoL'], libre: ['manoC', 'manoL'], s: 1, dur: 1400 }),
+    X(ROLL_OVER, { s: 1, dur: 1400 }),
+    X(V, { s: 2, dur: 2000 }),
+    X(V, { bc: [150, 0, 0], bl: [152, 0, 0], s: 3 }),
+    X(V, { tr: -100, pc: [-30, 0, 85], pl: [-29, 0, 85], bc: [-95, 0, 0], bl: [-93, 0, 0], s: 4, dur: 1100 }),
+    X(SENTADO, { tr: -40, fl: 125, cab: 20, bc: [16, 0, 0], bl: [17, 0, 0], pc: [0, 0, 85], pl: [1, 0, 85], apoyo: ['pelvis', 'talonC', 'talonL'], s: 4, dur: 1800 })
+  ]);
+  const SD_ARCO = X(SWAN0, { tr: -28, fl: -66, cab: 0, apoyo: ['pelvis', 'puntaC', 'puntaL', 'manoC', 'manoL'] });
+  ej('mat2-e22', 'Swan Dive y Swan Rocking', {}, [
+    SWAN0,
+    X(SD_ARCO, { s: 1, dur: 1600 }),
+    X(SD_ARCO, { tr: 10, bc: [-4, 0, 0], bl: [-2, 0, 0], pc: [-158, 0, 88], pl: [-157, 0, 88], apoyo: ['tronco'], libre: ['manoC', 'manoL'], dx: 8, s: 2, dur: 1100 }),
+    X(SD_ARCO, { tr: -42, pc: [178, 0, 88], pl: [178, 0, 88], bc: [50, 60, 0], bl: [52, 60, 0], apoyo: ['pelvis', 'puntaC', 'puntaL'], dx: -6, s: 3, dur: 1100 })
+  ]);
+  const BOW = { tr: -18, fl: -45, cab: 0, pc: [-165, 150, 80], pl: [-163, 150, 80], ik: { bc: 'tobilloC', bl: 'tobilloL' }, apoyo: ['pelvis'] };
+  ej('mat2-e23', 'Rocking', { rueda: true }, [
+    X(PRONO, { tr: -12, fl: -20, pc: [178, 150, 80], pl: [178, 150, 80], ik: { bc: 'tobilloC', bl: 'tobilloL' }, apoyo: ['pelvis', 'tronco', 'rodillaC', 'rodillaL'] }),
+    X(BOW, { s: 1, dur: 1500 }),
+    rotar(BOW, 24, { apoyo: ['tronco'], dx: 10, s: 2, dur: 1000 }),
+    rotar(BOW, -18, { apoyo: ['pelvis'], dx: -4, s: 3, dur: 1000 })
+  ]);
+
+  return P;
+})();

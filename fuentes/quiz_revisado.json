@@ -1,0 +1,362 @@
+{
+  "m1-q01": {
+    "pregunta": "Un cliente camina y notás que balancea un solo brazo. Según el modelo de tres niveles, ¿qué sigue?",
+    "opciones": [
+      "Repetir la observación global hasta que el patrón mejore por sí mismo",
+      "Analizar el plano frontal, que es donde ocurre el balanceo de brazos",
+      "Buscar la falla en lo planar/local, corregirla y reverificar en global",
+      "Corregir en lo local y dar el patrón por resuelto sin volver a evaluar"
+    ],
+    "correcta": 2,
+    "explicacion": "Lo global detecta dónde se interrumpe el patrón, lo local lo corrige y se vuelve a lo global para comprobar la mejora. El balanceo de brazos es un movimiento sobre todo sagital, no frontal.",
+    "nota": "Voseo en la pregunta (notás). Se reemplazaron los distractores absurdos ('Ignorarlo', 'Pasar directamente a potencia') por errores del propio ciclo global→local→global."
+  },
+  "m1-q02": {
+    "pregunta": "¿Qué par de movimientos pertenece al plano frontal?",
+    "opciones": [
+      "Abducción de cadera y flexión lateral del tronco",
+      "Flexión de cadera y extensión de la columna",
+      "Rotación medial de cadera y rotación espinal",
+      "Aducción de hombro y rotación del tronco"
+    ],
+    "correcta": 0,
+    "explicacion": "El plano frontal incluye abducción/aducción y flexión lateral. Flexión y extensión son sagitales; las rotaciones (medial/lateral y espinal) son transversales.",
+    "nota": "Se invirtió la pregunta (de 'movimientos → plano' a 'plano → par de movimientos') porque con nombres de un solo término ('Frontal' vs. 'Transversal') no se podía equilibrar la longitud. El último distractor mezcla un movimiento frontal con uno transversal."
+  },
+  "m1-q03": {
+    "pregunta": "¿Qué músculos aparecen en el manual como abductores de cadera?",
+    "opciones": [
+      "Pectíneo, grácil y aductores corto y largo",
+      "Ilíaco, psoas mayor, recto femoral y pectíneo",
+      "Cuadrado lumbar, oblicuos, intercostales y psoas",
+      "Glúteos medio, menor y mayor, piriforme y TFL"
+    ],
+    "correcta": 3,
+    "explicacion": "Glúteos medio, menor y mayor, piriforme y tensor de la fascia lata (TFL) abducen la cadera. Pectíneo, grácil y aductores la aducen; ilíaco, psoas y recto femoral la flexionan; cuadrado lumbar, oblicuos e intercostales hacen flexión lateral del tronco.",
+    "nota": "Se eliminó el distractor 'Iliopsoas y sartorio': anatómicamente el sartorio también abduce la cadera, así que la opción no era claramente falsa. Los distractores ahora son listas del manual (aductores, flexores de cadera, flexores laterales del tronco) de la misma extensión."
+  },
+  "m1-q04": {
+    "pregunta": "En la plomada vista de lado, ¿dónde está el último punto de referencia?",
+    "opciones": [
+      "Justo por detrás del maléolo lateral",
+      "Ligeramente por delante del maléolo lateral",
+      "En el centro del talón, bajo el calcáneo",
+      "Sobre el maléolo medial, en el borde interno"
+    ],
+    "correcta": 1,
+    "explicacion": "Ligeramente por delante del maléolo lateral, aproximadamente en el centro del cuboides.",
+    "nota": "Distractores igual de precisos (misma zona anatómica) para que la longitud no delate la respuesta."
+  },
+  "m1-q05": {
+    "pregunta": "Un cliente tiene la EIAS por detrás del pubis. ¿Qué abordaje corresponde?",
+    "opciones": [
+      "Alargar flexores de cadera y extensores lumbares; fortalecer isquiotibiales y abdominales",
+      "Fortalecer flexores de cadera y abdominales; alargar isquiotibiales y extensores lumbares",
+      "Fortalecer flexores de cadera y extensores lumbares; alargar isquiotibiales y abdominales",
+      "Fortalecer isquiotibiales y extensores lumbares; alargar flexores de cadera y abdominales"
+    ],
+    "correcta": 2,
+    "explicacion": "EIAS por detrás del pubis = retroversión pélvica. El abordaje es el inverso al de la anteversión, que alarga flexores de cadera y extensores lumbares y fortalece isquiotibiales y abdominales.",
+    "nota": "Los distractores son el abordaje de la anteversión y dos combinaciones cruzadas de los mismos cuatro grupos, con la misma estructura que la correcta."
+  },
+  "m1-q06": {
+    "pregunta": "Según el manual, ¿qué tipo de patrón postural es más difícil de modificar?",
+    "opciones": [
+      "Uno con base en la estructura ósea o articular",
+      "Uno sostenido por tensión y acortamiento muscular",
+      "Uno causado por debilidad de la musculatura",
+      "Uno ligado a un hábito postural reciente"
+    ],
+    "correcta": 0,
+    "explicacion": "Los patrones sobre todo musculares cambian con más facilidad; los que tienen base ósea o articular cambian menos, y se busca el mejor equilibrio que permita la estructura del cliente.",
+    "nota": "Se quitó 'Todos cambian igual' (demasiado obvio)."
+  },
+  "m1-q07": {
+    "pregunta": "La hiperextensión de rodilla se asocia generalmente a:",
+    "opciones": [
+      "Rigidez articular de la rodilla",
+      "Torsión tibial respecto del fémur",
+      "Rotación lateral del fémur",
+      "Hipermovilidad de la rodilla"
+    ],
+    "correcta": 3,
+    "explicacion": "Las rodillas quedan por detrás de la plomada, normalmente por hipermovilidad; se evita bloquearlas bajo carga y se equilibran isquiotibiales y cuádriceps.",
+    "nota": "Se quitaron 'Pronación del pie' y 'Escoliosis' (muy ajenos) y se usaron otras alteraciones de rodilla/pierna del mismo capítulo. No se usó genu varo porque el manual dice que a veces se acompaña de hiperextensión."
+  },
+  "m1-q08": {
+    "pregunta": "En el síndrome cruzado superior, ¿cuál de estos músculos está largo e inactivo?",
+    "opciones": [
+      "Pectoral menor",
+      "Serrato anterior",
+      "Trapecio superior",
+      "Dorsal ancho"
+    ],
+    "correcta": 1,
+    "explicacion": "Serrato anterior, trapecio inferior, romboides y flexores profundos del cuello quedan largos e inactivos; pectoral menor, trapecio superior y dorsal ancho están cortos y activos.",
+    "nota": "Se cambiaron 'Elevador de la escápula' y 'Esternocleidomastoideo' (más largos que la correcta) por otros músculos cortos/activos del mismo síndrome."
+  },
+  "m1-q09": {
+    "pregunta": "En la imagen del tazón con agua, si el agua se derrama hacia delante, la pelvis está en:",
+    "opciones": [
+      "Neutro",
+      "Retroversión",
+      "Anteversión",
+      "Rotación"
+    ],
+    "correcta": 2,
+    "explicacion": "Derrame hacia delante = inclinación anterior (anteversión); hacia atrás = retroversión.",
+    "nota": "Sin cambios de fondo; ya estaba equilibrada."
+  },
+  "m1-q10": {
+    "pregunta": "Un cliente dice: 'Lo logro, pero solo si me concentro mucho'. ¿En qué etapa está?",
+    "opciones": [
+      "Incompetente inconsciente",
+      "Incompetente consciente",
+      "Competente consciente",
+      "Competente inconsciente"
+    ],
+    "correcta": 2,
+    "explicacion": "Competente consciente: puede hacerlo con atención; es la etapa ideal para pulir detalles.",
+    "nota": "Sin cambios; ya estaba equilibrada. Conserva marcado_examen en el original."
+  },
+  "m1-q11": {
+    "pregunta": "Según la regla 80/20, el 80 % de la sesión debe:",
+    "opciones": [
+      "Introducir retos y habilidades nuevas, del lado seguro",
+      "Repetir los mismos ejercicios hasta automatizarlos",
+      "Dedicarse a movilidad, estiramientos y recuperación",
+      "Reforzar con variedad lo que el cliente ya logra"
+    ],
+    "correcta": 3,
+    "explicacion": "El 80 % refuerza lo que el cliente ya logra, con variedad y sin repetición vacía, y construye confianza e independencia; el 20 % introduce retos y habilidades nuevas, siempre del lado seguro.",
+    "nota": "El primer distractor es exactamente el 20 % (confusión de proporciones). Se quitó 'siempre' de un distractor."
+  },
+  "m1-q12": {
+    "pregunta": "¿Por qué el manual prefiere trabajar el núcleo con la pelvis en neutro?",
+    "opciones": [
+      "Aplana la curva lumbar contra el mat y protege los discos",
+      "Reparte la carga entre la musculatura espinal y la abdominal",
+      "Elimina la necesidad de estabilizar la zona lumbar",
+      "Es una posición fija que no varía con el movimiento"
+    ],
+    "correcta": 1,
+    "explicacion": "En neutro la gravedad reparte la carga de forma equilibrada entre la musculatura de la columna y el abdomen, lo que reduce la tensión lumbar. Además, lo neutro es dinámico, no fijo, y no aplana la lumbar (eso sería imprint).",
+    "nota": "Se acortó la correcta a su dato esencial y se agregó un distractor que confunde neutro con imprint."
+  },
+  "mat1-q01": {
+    "pregunta": "Un cliente arquea la zona lumbar en el Hundred con las piernas a 45°. ¿Qué hacés?",
+    "opciones": [
+      "Bajar más las piernas para exigir el abdomen",
+      "Mantener las piernas y acelerar el bombeo",
+      "Apoyar la cabeza y dejar las piernas a 45°",
+      "Subir las piernas o pasarlas a mesa (90°)"
+    ],
+    "correcta": 3,
+    "explicacion": "Las piernas bajan solo hasta donde el tronco las puede sostener sin que cambie la zona lumbar; si se arquea, se suben o se llevan a mesa. Apoyar la cabeza es la modificación para cuello y hombros, no para la lumbar.",
+    "nota": "Voseo (hacés). La correcta se acortó a lo esencial; los distractores quedaron igual de concretos."
+  },
+  "mat1-q02": {
+    "pregunta": "¿Qué modificación del Roll Up ayuda a un cliente con molestias en la zona baja de la espalda?",
+    "opciones": [
+      "Toalla enrollada bajo la curva lumbar",
+      "Sostener en el punto difícil (Kathy Grant)",
+      "Cabeza entre los brazos (picture frame)",
+      "Cambiarlo por el Roll Over avanzado"
+    ],
+    "correcta": 0,
+    "explicacion": "El soporte lumbar se empuja al subir y se reduce con el progreso (el Roll Down también es opción). Kathy Grant y picture frame son retos, y el Roll Over se evita con problemas lumbares.",
+    "nota": "Se reformuló la pregunta para que 'lumbar' no aparezca solo en la pregunta y en la correcta. Se reemplazó 'Hacerlo más rápido' (absurdo) por Roll Over, que el manual indica evitar con lumbar. No se usó Roll Down como distractor porque sí es una modificación válida para la lumbar."
+  },
+  "mat1-q03": {
+    "pregunta": "¿Cuál de estos ejercicios SÍ se recomienda con osteoporosis?",
+    "opciones": [
+      "Roll Up",
+      "Hundred",
+      "Swimming",
+      "Neck Pull"
+    ],
+    "correcta": 2,
+    "explicacion": "Se incluye la extensión de columna (Swan, Swimming); se evitan la flexión y la rotación con carga, como Hundred, Roll Up o Neck Pull.",
+    "nota": "La correcta pasó de Swan a Swimming (ambos figuran como recomendados) para poder equilibrar la longitud con nombres de ejercicios contraindicados en el manual."
+  },
+  "mat1-q04": {
+    "pregunta": "En Single Leg Stretch, ¿dónde van las manos?",
+    "opciones": [
+      "Mano externa en la rodilla, interna en el tobillo",
+      "Mano externa en el tobillo, interna en la rodilla",
+      "Ambas manos detrás de la rodilla flexionada",
+      "Ambas manos en la nuca, con los codos abiertos"
+    ],
+    "correcta": 1,
+    "explicacion": "Mano externa en el tobillo e interna en la rodilla de la pierna flexionada: así la rodilla no se desvía y los codos quedan abiertos.",
+    "nota": "El distractor principal es la posición invertida de las manos; se quitó 'En el piso'."
+  },
+  "mat1-q05": {
+    "pregunta": "En Side Leg Lifts, ¿cuál es la forma óptima?",
+    "opciones": [
+      "La pelvis acompaña a la pierna para ganar altura",
+      "La cintura se acorta para elevar más la pierna",
+      "El tronco rota hacia el frente siguiendo la pierna",
+      "La pierna se mueve con tronco, caderas y hombros quietos"
+    ],
+    "correcta": 3,
+    "explicacion": "Tronco, caderas y hombros quedan inmóviles; la pierna se mueve desde la ingle sin mover la pelvis ni acortar la cintura.",
+    "nota": "Se reformuló la pregunta ('¿qué debe permanecer inmóvil?') porque distractores como 'la cabeza' eran en parte verdaderos (también queda quieta). Ahora cada distractor describe un error concreto de forma."
+  },
+  "mat1-q06": {
+    "pregunta": "¿Qué principio resume la frase 'mejor cinco repeticiones perfectas que veinte sin atención'?",
+    "opciones": [
+      "Concentración",
+      "Precisión",
+      "Control",
+      "Respiración"
+    ],
+    "correcta": 0,
+    "explicacion": "Concentración: se enseña solo la cantidad de repeticiones en que se puede mantener la atención. La precisión es un resultado de concentrar, controlar y centrar.",
+    "nota": "Se cambiaron Ritmo/Relajación/Centrar por principios más cercanos (Precisión, Control) para que la opción correcta no sea la más larga."
+  },
+  "mat1-q07": {
+    "pregunta": "Tu clienta tiene 5 meses de embarazo y se marea en supino. ¿Qué hacés?",
+    "opciones": [
+      "Pasarla a prono para aliviar la espalda",
+      "Elevarle las piernas y seguir en supino",
+      "Sacarla de supino y limitar esa posición",
+      "Seguir en supino con la cabeza sobre una cuña"
+    ],
+    "correcta": 2,
+    "explicacion": "Desde el 5.º mes el útero puede comprimir vasos: el supino se suspende o se limita a unos 5 minutos y se sale si hay mareo, debilidad u hormigueo. El prono ya se suspende hacia el 3.er–4.º mes.",
+    "nota": "Voseo (hacés). Se quitaron 'Continuar, es normal' y 'Hacer Teaser' (demasiado obvios)."
+  },
+  "mat1-q08": {
+    "pregunta": "¿Qué indicación sigue la recomendación del manual sobre cómo dar consignas?",
+    "opciones": [
+      "No subas los hombros hacia las orejas",
+      "Deslizá los omóplatos hacia abajo por la espalda",
+      "Tratá de no subir los hombros hacia las orejas",
+      "Evitá arquear la zona lumbar al bajar"
+    ],
+    "correcta": 1,
+    "explicacion": "Es más fácil hacer algo bien que dejar de hacer algo mal: se indica la acción deseada, no la que hay que evitar, aunque se diga con 'tratá de no' o 'evitá'.",
+    "nota": "Voseo en las consignas. Dos distractores usan verbo afirmativo pero piden lo que NO hacer, para que la forma gramatical no delate la respuesta."
+  },
+  "mat1-q09": {
+    "pregunta": "Push Ups: cliente con molestia en las muñecas. ¿Qué opción propone el manual?",
+    "opciones": [
+      "Apoyar los tobillos sobre un rodillo de espuma",
+      "Adelantar las manos por delante de los hombros",
+      "Sostener la plancha tres respiraciones sin bajar",
+      "Usar agarraderas, mancuernas o antebrazos en bloques"
+    ],
+    "correcta": 3,
+    "explicacion": "Agarraderas, mancuernas hexagonales o antebrazos sobre bloques quitan carga de la muñeca. El rodillo bajo los tobillos es para molestias en los dedos del pie, y los hombros van sobre las muñecas.",
+    "nota": "Se quitaron 'Hacerlo más rápido' y 'Evitar toda carga de peso'. No se usó 'rodillas apoyadas' como distractor porque también reduce algo la carga en la muñeca."
+  },
+  "mat1-q10": {
+    "pregunta": "¿Qué nivel del docente logra que el cliente haga el ejercicio de forma segura, pero no necesariamente mejor?",
+    "opciones": [
+      "Líder en ejercicio",
+      "Mentor de maestros",
+      "Maestro de Pilates",
+      "Instructor integral"
+    ],
+    "correcta": 0,
+    "explicacion": "Es el nivel básico requerido para dar clases. El maestro de Pilates logra que lo haga mejor, y el mentor forma a otros maestros.",
+    "nota": "Ajuste mínimo ('Mentor' → 'Mentor de maestros') para igualar longitudes."
+  },
+  "mat2-q01": {
+    "pregunta": "¿Cuál de estos clientes NO debería hacer la secuencia 'Orden clásico avanzado'?",
+    "opciones": [
+      "Atleta joven con experiencia en Pilates",
+      "Bailarina profesional que practica Pilates",
+      "Instructora de Pilates en plena forma",
+      "Adulto con osteoporosis diagnosticada"
+    ],
+    "correcta": 3,
+    "explicacion": "Incluye inversiones; no se recomienda con osteoporosis, edad avanzada, obesidad, lesiones lumbares o cervicales, ni sin experiencia en Pilates.",
+    "nota": "Distractores con el mismo nivel de detalle que la correcta."
+  },
+  "mat2-q02": {
+    "pregunta": "En Teaser 2, ¿qué se mueve?",
+    "opciones": [
+      "Las piernas, con el tronco quieto",
+      "El tronco, con las piernas quietas",
+      "El tronco y las piernas a la vez",
+      "Los brazos, con el resto quieto"
+    ],
+    "correcta": 0,
+    "explicacion": "En Teaser 2 el tronco se queda en la V y bajan y suben solo las piernas. En Teaser 1 se mueve el tronco; en Teaser 3, ambos a la vez.",
+    "nota": "Todas las opciones tienen la misma forma; los dos primeros distractores corresponden a Teaser 1 y Teaser 3."
+  },
+  "mat2-q03": {
+    "pregunta": "Un cliente con el hombro lesionado quiere hacer Scissors. ¿Qué hacés?",
+    "opciones": [
+      "Hacerlo completo con apoyo ligero en las manos",
+      "Cambiarlo por Jackknife, con brazos en el mat",
+      "Usar la versión con caderas sobre foam roller",
+      "Pasar a Shoulder Bridge en su versión completa"
+    ],
+    "correcta": 2,
+    "explicacion": "Con lesiones de hombro, codo o muñeca, Scissors solo se hace con soporte de cadera (foam roller o baby arc). Jackknife se evita con lesiones de hombro, y en Shoulder Bridge solo se hace la versión intermedia.",
+    "nota": "Voseo (hacés). Se reemplazó 'Hacer Boomerang' por Shoulder Bridge completo, cuya restricción de hombro sí figura en el manual."
+  },
+  "mat2-q04": {
+    "pregunta": "Kneeling Side Kicks: ¿dónde debe quedar la cadera de apoyo?",
+    "opciones": [
+      "Por delante de la rodilla",
+      "Alineada sobre la rodilla",
+      "Por detrás de la rodilla",
+      "Hacia afuera de la rodilla"
+    ],
+    "correcta": 1,
+    "explicacion": "Alineada sobre la rodilla: así el tronco queda lo más estable posible, como contra un panel de vidrio.",
+    "nota": "Se reemplazó 'Da igual' (absurdo) por un desplazamiento lateral."
+  },
+  "mat2-q05": {
+    "pregunta": "En Rocking, ¿qué inicia el balanceo?",
+    "opciones": [
+      "Un impulso de la cabeza hacia adelante",
+      "Los brazos tirando de los tobillos",
+      "Los hombros llevados hacia atrás",
+      "Las piernas y el tronco en conjunto"
+    ],
+    "correcta": 3,
+    "explicacion": "Las piernas empujan hacia el techo y el cuerpo se mece como una mecedora; nunca se lanza la cabeza.",
+    "nota": "Se quitaron 'La cabeza' y 'El cuello' (casi idénticos) y se sumaron errores plausibles (tirar con los brazos, impulso de cabeza)."
+  },
+  "mat2-q06": {
+    "pregunta": "¿Qué caracteriza a los deportes de pelota según el manual?",
+    "opciones": [
+      "Movimientos unilaterales, rotacionales y reactivos",
+      "Movimientos bilaterales, sagitales y repetitivos",
+      "Movimientos complejos, estéticos y coreografiados",
+      "Movimientos simples, simétricos y de bajo impacto"
+    ],
+    "correcta": 0,
+    "explicacion": "Unilaterales, rotacionales y reactivos, con rangos extremos. Bilaterales, sagitales y repetitivos corresponde a actividades de triatleta; complejos y estéticos, a las de danza.",
+    "nota": "Se quitó 'estéticos y de rango extremo' como distractor: el manual también atribuye rangos extremos a los deportes de pelota, así que era en parte verdadero. Ahora el distractor de danza usa 'complejos, estéticos'."
+  },
+  "mat2-q07": {
+    "pregunta": "Leg Pull Up con molestia en las rodillas por hiperextensión. ¿Qué modificación propone el manual?",
+    "opciones": [
+      "Rotar las caderas hacia afuera",
+      "Manos sobre agarraderas o un bloque",
+      "Tobillos apoyados sobre un rodillo",
+      "Piernas separadas al ancho de caderas"
+    ],
+    "correcta": 2,
+    "explicacion": "Un rodillo de 6\" (o un mat enrollado) bajo los tobillos evita que la rodilla quede en hiperextensión. Rotar las caderas hacia afuera es la modificación para el tobillo.",
+    "nota": "Se quitó 'Rodillas flexionadas en el piso' porque en la práctica también evitaría la hiperextensión (distractor discutible). 'Hacerlo más rápido' se reemplazó por la modificación de tobillo del mismo ejercicio."
+  },
+  "mat2-q08": {
+    "pregunta": "¿Cuál de estos ejercicios de Mat 2 NO aparece marcado para evitar con osteoporosis?",
+    "opciones": [
+      "Roll Over",
+      "Leg Pull Down",
+      "Hip Circles",
+      "Boomerang"
+    ],
+    "correcta": 1,
+    "explicacion": "El Leg Pull Down es una plancha con carga de peso y solo tiene precaución de muñeca. Roll Over, Hip Circles y Boomerang implican flexión con carga o inversión y se evitan con osteoporosis.",
+    "nota": "Se cambiaron Teaser 1 y Jackknife por Hip Circles y Boomerang (también marcados 'evitar') para equilibrar la longitud de los nombres."
+  }
+}

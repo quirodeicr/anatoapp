@@ -1,0 +1,1573 @@
+{
+  "manual": "Mat 2 — Una guía detallada para enseñar Pilates (Nora St. John, ed. 2019)",
+  "id": "mat2",
+  "paginas_manual": [
+    1,
+    73
+  ],
+  "nota_paginacion": "Página impresa del manual físico. PDF: página_pdf = página_manual + 6. Las secciones de programa de formación, qué es Pilates, los 9 principios y clases grupales son iguales a Mat 1 (ver mat1.json); aquí solo va lo nuevo. Las págs. 74 en adelante repiten Principios del Movimiento.",
+  "secciones": [
+    {
+      "id": "mat2-s1",
+      "titulo": "Los maestros de primera generación",
+      "paginas_manual": [
+        11,
+        11
+      ],
+      "resumen": "Joseph soñaba llevar su método a escuelas y ejércitos, pero no tuvo gran reconocimiento en vida. En 1967 un incendio destruyó su estudio y murió poco después por inhalación de humo; Clara siguió enseñando hasta su muerte en 1977. Un grupo de alumnos mantuvo vivo el método.",
+      "puntos_clave": [
+        "Romana Kryzanowska: bailarina de ballet, trabajó años con Joe; creó uno de los primeros programas de formación en EE. UU. y enseñó el repertorio tal como lo aprendió (Romana's Pilates). Falleció en 2013.",
+        "Eve Gentry: bailarina moderna; Joe la ayudó a recuperar brazo y tronco tras una mastectomía radical; abrió estudio en Santa Fe. Su línea sigue con Michelle Larsson (Core Dynamics).",
+        "Ron Fletcher: bailarín de Martha Graham; inspirado por Clara, desarrolló trabajo en Step Barrel/Spine Corrector, abrió estudio en Rodeo Drive y llevó Pilates a la costa oeste con un estilo más 'bailado'. Falleció en 2012.",
+        "Carola Trier: estudio propio en Nueva York; su línea sigue con Jillian Hessel y Deborah Lessen.",
+        "Kathleen Stanford Grant: llegó por una lesión de rodilla; una de las dos alumnas certificadas por Joe; enseñó mat en NYU hasta 2010.",
+        "Lolita San Miguel: certificada por Joe; fundó el Ballet Concierto de Puerto Rico e integró Pilates al entrenamiento de sus bailarines.",
+        "Mary Bowen: comediante en Nueva York; hoy combina Pilates con el psicoanálisis junguiano.",
+        "El programa Balanced Body fue creado por Nora St. John, con formación en biología, danza y medicina china."
+      ]
+    },
+    {
+      "id": "mat2-s2",
+      "titulo": "Secuencias avanzadas de muestra",
+      "paginas_manual": [
+        58,
+        61
+      ],
+      "resumen": "Cuatro programas avanzados. Los tres primeros incluyen inversiones (Roll Over, Jackknife, Corkscrew) y no se recomiendan para personas mayores, con obesidad, osteoporosis, lesiones lumbares o cervicales, ni sin experiencia en Pilates.",
+      "puntos_clave": [
+        "Avanzado 1, Orden clásico: el orden tradicional con pre-Pilates de calentamiento; enfocado en flexibilidad de columna en flexión y fuerza del centro.",
+        "Avanzado 2, Walk the Plank: fuerza y estabilidad de brazos; menos tiempo en flexión y cambios frecuentes de posición; prepara para Reformer y Chair avanzados.",
+        "Avanzado 3, Súper avanzado clásico: el workout máximo de mat; incluye Scissors, Bicycle, Shoulder Bridge, Boomerang, Swimming de 50 sets y Rocking.",
+        "Avanzado 4, The Twist: rotación y estabilidad pélvica, sin inversiones; más seguro para problemas lumbares (usa Modified Corkscrew)."
+      ]
+    },
+    {
+      "id": "mat2-s3",
+      "titulo": "Formatos de clase: los 7 elementos",
+      "paginas_manual": [
+        66,
+        69
+      ],
+      "resumen": "Una clase balanceada incluye calentamiento, activación del core, retar al centro, fortalecer y movilizar la columna, el tren superior y el tren inferior, y usar distintas posiciones. Muchos ejercicios cubren varias categorías a la vez.",
+      "puntos_clave": [
+        "Calentamiento: sentadillas o pliés con brazos, Hundred, cardio.",
+        "Activación del core (a menudo con pre-Pilates): Pelvic Clock, Marching, Bridging, Hundred, Roll Up, Leg Circles, Cat/Camel.",
+        "Retar al centro: abdominales avanzados, estabilidad lumbopélvica, fortalecimiento de espalda, rotación y trabajo lateral.",
+        "Tren superior: Pinwheel/Telescope, Angels in the Snow, Sternum Drop, Wall Push Ups, planchas.",
+        "Aductores: el único estiramiento de mat es sentado con piernas separadas."
+      ]
+    },
+    {
+      "id": "mat2-s4",
+      "titulo": "Pilates para atletas",
+      "paginas_manual": [
+        70,
+        72
+      ],
+      "resumen": "Para trabajar con atletas hay que entender las demandas físicas de su deporte y el lenguaje de sus entrenadores. El manual agrupa las actividades en tres categorías.",
+      "puntos_clave": [
+        "Triatleta (correr, ciclismo, natación, montañismo): movimientos bilaterales, sagitales y repetitivos. Enfocar alineación de cadera-rodilla-tobillo, simetría, movilidad de hombro en natación y estabilidad escapular en ciclismo; entrenar rotación e inclinación lateral.",
+        "Correr y ciclismo: flexibilidad de cadera anterior, banda iliotibial, cuádriceps y pantorrillas.",
+        "Deportes de pelota (golf, tenis, béisbol, básquet, fútbol): unilaterales, rotacionales, reactivos, con rangos extremos. Buscar equilibrio fuerza-flexibilidad, rotación simétrica y proteger zonas sobrecargadas como el hombro del lanzador.",
+        "Golf: rotación de cadera y columna; béisbol: manguito rotador, tríceps y core.",
+        "Actividades de danza (danza, patinaje, gimnasia, circo, artes marciales): complejas, estéticas, asimétricas y de rango extremo. Corregir desequilibrios, fuerza y control en rango extremo y habilidades específicas."
+      ]
+    }
+  ],
+  "ejercicios": [
+    {
+      "id": "mat2-e01",
+      "nombre": "Spine Twist",
+      "paginas_manual": [
+        14,
+        15
+      ],
+      "nivel": "Intermedio",
+      "repeticiones": "4–8 sets",
+      "posicion_inicial": "Sentado erguido sobre el centro de los isquiones, piernas juntas y estiradas al frente con tobillos flexionados, brazos abiertos a la altura de los hombros. Con isquiotibiales tensos: mat enrollado o rodillas flexionadas.",
+      "secuencia": [
+        {
+          "fase": "Inhala",
+          "accion": "Unir los muslos internos, anclar los isquiones y rotar la columna a un lado con dos pulsos (respiración percusiva); brazos siempre en línea."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Volver al centro. Repetir al otro lado."
+        }
+      ],
+      "forma_optima": "Los pies quedan exactamente al mismo nivel y las piernas unidas mientras la columna rota.",
+      "indicaciones": [
+        "Isquiones con raíces; pies como pegados a la pared de enfrente.",
+        "Talones parejos y muslos internos juntos.",
+        "Rotar con suavidad desde el centro del tronco."
+      ],
+      "variantes": [
+        {
+          "nombre": "Clases concurridas",
+          "descripcion": "Empezar con codos flexionados y manos en los hombros; abrir los brazos al girar."
+        },
+        {
+          "nombre": "Respiración",
+          "descripcion": "Cambiar el patrón para buscar más rotación."
+        }
+      ],
+      "proposito": [
+        "Aumentar la rotación de columna",
+        "Fortalecer el core"
+      ],
+      "precauciones": {
+        "lumbar": "Limitar la rotación a un rango cómodo."
+      },
+      "transicion": "Roll Down a supino y girar para la Side Leg Series (intermedio) o manos junto a las caderas para Jackknife (avanzado).",
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Front view, seated tall on the sit bones with legs straight together and feet flexed, arms extended out to the sides at shoulder height, torso rotated to the right while the hips and feet stay square",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "alta",
+        "verificar": "Pies parejos (sin que un pie avance); brazos en línea con los hombros."
+      }
+    },
+    {
+      "id": "mat2-e02",
+      "nombre": "Teaser Preparation",
+      "paginas_manual": [
+        16,
+        17
+      ],
+      "nivel": "Intermedio",
+      "repeticiones": "3–6 reps",
+      "posicion_inicial": "Tres versiones. Bent Knee: supino con piernas en mesa y brazos por encima de la cabeza. Single Leg: rodillas flexionadas con un pie apoyado y la otra pierna estirada en el aire, muslos paralelos. Instructor Assist: los pies apoyados en los muslos del asistente, que los ancla con las manos.",
+      "secuencia": [
+        {
+          "fase": "Exhala",
+          "accion": "Llevar los brazos hacia las piernas y enrollar la columna hasta sentarse en V (con rodillas flexionadas o una pierna estirada, según la versión), en equilibrio detrás de los isquiones."
+        },
+        {
+          "fase": "Inhala",
+          "accion": "Rodar de regreso a la posición inicial."
+        }
+      ],
+      "forma_optima": "Piernas y tronco forman una V equilibrada; zona lumbar neutra o apenas flexionada; brazos hacia los pies, hombros abajo y mirada al horizonte.",
+      "indicaciones": [
+        "Igual esfuerzo en abdominales y espalda baja.",
+        "Pelvis enraizada; tronco y piernas 'florecen' hacia arriba.",
+        "Hundir los fémures en las caderas para estabilizar las piernas.",
+        "El impulso facilita; lento es más difícil.",
+        "Omóplatos hacia abajo para abrir el pecho."
+      ],
+      "proposito": [
+        "Fortalecer abdominales",
+        "Fortalecer flexores de cadera (iliopsoas, recto femoral, sartorio, TFL, aductores)",
+        "Fortalecer extensores de rodilla (vastos)",
+        "Coordinación y equilibrio",
+        "Retar el control de tronco y piernas"
+      ],
+      "precauciones": {
+        "lumbar_flexores_cadera_sacroiliaca": "Evitar.",
+        "osteoporosis": "Evitar con osteoporosis/osteopenia."
+      },
+      "transicion": "Teaser 1, 2 o 3, o rodar a prono para Swimming.",
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Balancing on the sit bones in a V shape with knees bent and shins parallel to the floor, arms reaching forward toward the knees, chest open, spine long",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "alta",
+        "verificar": "Espinillas paralelas al piso; pecho abierto, no desplomado."
+      }
+    },
+    {
+      "id": "mat2-e03",
+      "nombre": "Teaser 1 — Torso Roll Down",
+      "paginas_manual": [
+        18,
+        19
+      ],
+      "nivel": "Avanzado",
+      "repeticiones": "3–6 reps",
+      "posicion_inicial": "Supino, piernas en mesa y brazos por encima de la cabeza (más reto: piernas largas al techo).",
+      "secuencia": [
+        {
+          "fase": "Exhala",
+          "accion": "Brazos hacia las piernas; enrollar la columna estirando las piernas hasta la V."
+        },
+        {
+          "fase": "Inhala",
+          "accion": "Con las piernas quietas, bajar el tronco al piso con brazos por encima de la cabeza."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Volver a subir a la V. Al terminar, bajar el tronco flexionando las rodillas."
+        }
+      ],
+      "forma_optima": "V con zona lumbar neutra o apenas flexionada; brazos hacia los pies y hombros abajo.",
+      "indicaciones": [
+        "Al bajar, las piernas no se mueven (una banda elástica imaginaria entre manos y pies se estira).",
+        "El instructor puede guiar la alineación lumbar con el tacto.",
+        "Lento y preciso es más difícil."
+      ],
+      "variantes": [
+        {
+          "nombre": "Isquiotibiales tensos",
+          "descripcion": "Flexionar las rodillas lo necesario."
+        },
+        {
+          "nombre": "Brazos",
+          "descripcion": "Circular los brazos por los lados y traerlos al frente al sentarse."
+        }
+      ],
+      "proposito": [
+        "Fortalecer abdominales",
+        "Fortalecer flexores de cadera (iliopsoas, recto femoral, sartorio, TFL, aductores)",
+        "Fortalecer extensores de rodilla (vastos)",
+        "Coordinación y equilibrio",
+        "Retar el control de tronco y piernas"
+      ],
+      "precauciones": {
+        "lumbar_flexores_cadera_sacroiliaca": "Evitar.",
+        "osteoporosis": "Evitar con osteoporosis/osteopenia."
+      },
+      "transicion": "Teaser 2 y/o 3, rodar a prono para Swimming, o (avanzado) brazos atrás para Hip Circles.",
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Classic Pilates teaser: balancing on the sit bones with straight legs together lifted at about 60 degrees and the torso lifted to form a V shape, arms reaching parallel to the legs",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "alta",
+        "verificar": "Piernas rectas y juntas, forma de V clara."
+      }
+    },
+    {
+      "id": "mat2-e04",
+      "nombre": "Teaser 2 — Leg Lowers",
+      "paginas_manual": [
+        20,
+        21
+      ],
+      "nivel": "Avanzado",
+      "repeticiones": "3–6 reps",
+      "posicion_inicial": "Supino, piernas largas al techo y brazos por encima de la cabeza.",
+      "secuencia": [
+        {
+          "fase": "Exhala",
+          "accion": "Rodar hasta la V."
+        },
+        {
+          "fase": "Inhala",
+          "accion": "Con el tronco estable, bajar las piernas hacia el mat sin arquear la zona lumbar."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Subir las piernas a la V."
+        }
+      ],
+      "forma_optima": "Las piernas suben y bajan sin cambiar la posición de la espalda.",
+      "indicaciones": [
+        "La espalda como apoyada firmemente contra una pared.",
+        "Hundir los fémures en las caderas."
+      ],
+      "proposito": [
+        "Fortalecer abdominales",
+        "Fortalecer flexores de cadera (iliopsoas, recto femoral, sartorio, TFL, aductores)",
+        "Fortalecer extensores de rodilla (vastos)",
+        "Coordinación y equilibrio",
+        "Retar el control de tronco y piernas"
+      ],
+      "precauciones": {
+        "lumbar_flexores_cadera_sacroiliaca": "Evitar.",
+        "osteoporosis": "Evitar con osteoporosis/osteopenia."
+      },
+      "transicion": "Teaser 3 o Hip Circles.",
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Seated balance with the torso held in a teaser position at 45 degrees, arms reaching forward, straight legs lowered toward the mat but hovering above it",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "media",
+        "verificar": "El tronco se queda arriba mientras bajan solo las piernas."
+      }
+    },
+    {
+      "id": "mat2-e05",
+      "nombre": "Teaser 3 — Arms and Legs Together",
+      "paginas_manual": [
+        22,
+        23
+      ],
+      "nivel": "Avanzado",
+      "repeticiones": "2–4 reps",
+      "posicion_inicial": "En la V del Teaser.",
+      "secuencia": [
+        {
+          "fase": "Inhala",
+          "accion": "Bajar tronco y piernas a la vez hacia el piso, sin tocarlo."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Subir ambos de vuelta a la V."
+        }
+      ],
+      "forma_optima": "Movimiento suave y continuo, como si tronco y piernas flotaran.",
+      "indicaciones": [
+        "No 'botar' el abdomen ni arquear la zona lumbar al bajar.",
+        "Control desde el centro."
+      ],
+      "variantes": [
+        {
+          "nombre": "Con giro",
+          "descripcion": "Desde la V, circular las piernas hacia un lado y los brazos hacia el otro mientras se baja; volver al centro y repetir al otro lado."
+        }
+      ],
+      "proposito": [
+        "Fortalecer abdominales",
+        "Fortalecer flexores de cadera (iliopsoas, recto femoral, sartorio, TFL, aductores)",
+        "Fortalecer extensores de rodilla (vastos)",
+        "Coordinación y equilibrio",
+        "Retar el control de tronco y piernas"
+      ],
+      "precauciones": {
+        "lumbar_flexores_cadera_sacroiliaca": "Evitar.",
+        "osteoporosis": "Evitar con osteoporosis/osteopenia."
+      },
+      "transicion": "Brazos atrás para Hip Circles (avanzado).",
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Lying almost flat with both the upper torso and the straight legs hovering just above the mat at the same time, arms reaching overhead in line with the ears",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "baja-media",
+        "verificar": "Nada toca el mat salvo la pelvis; difícil de lograr con IA."
+      }
+    },
+    {
+      "id": "mat2-e06",
+      "nombre": "Hip Circles",
+      "paginas_manual": [
+        24,
+        25
+      ],
+      "nivel": "Avanzado",
+      "repeticiones": "3–6 reps",
+      "posicion_inicial": "Sentado en V con las manos en el mat detrás de las caderas y brazos extendidos sosteniendo el tronco.",
+      "secuencia": [
+        {
+          "fase": "Inhala",
+          "accion": "Con el tronco quieto, circular las piernas hacia la derecha bajándolas hacia el mat; las caderas pueden balancearse, hombros y tronco alto no."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Continuar el círculo hacia la izquierda y volver arriba. Repetir en el otro sentido."
+        }
+      ],
+      "forma_optima": "Hombros estables; círculos amplios y simétricos.",
+      "indicaciones": [
+        "Manos ancladas y un libro en equilibrio sobre la cabeza.",
+        "Pinceles en los pies dibujando círculos iguales.",
+        "Empujar el mat y alejar la cabeza de los hombros (no hundirse como tortuga).",
+        "Piernas pegadas como cola de sirena."
+      ],
+      "variantes": [
+        {
+          "nombre": "Antebrazos",
+          "descripcion": "Apoyar el peso en antebrazos en vez de manos."
+        },
+        {
+          "nombre": "Isquiotibiales tensos",
+          "descripcion": "Flexionar ligeramente las rodillas."
+        }
+      ],
+      "proposito": [
+        "Fortalecer unidad interna y abdominales",
+        "Fortalecer flexores de cadera y extensores de rodilla",
+        "Aumentar la rotación del tronco",
+        "Estabilidad escapular",
+        "Coordinación y equilibrio"
+      ],
+      "precauciones": {
+        "lumbar_flexores_cadera_sacroiliaca": "Evitar.",
+        "osteoporosis": "Evitar con osteoporosis/osteopenia."
+      },
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Seated leaning back with straight arms and hands on the mat behind the hips, both straight legs lifted together in a V, legs swinging slightly to one side",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "media",
+        "verificar": "Brazos rectos detrás; piernas juntas."
+      }
+    },
+    {
+      "id": "mat2-e07",
+      "nombre": "Roll Over",
+      "paginas_manual": [
+        26,
+        27
+      ],
+      "nivel": "Avanzado",
+      "repeticiones": "3 en cada sentido",
+      "posicion_inicial": "Supino, brazos a los lados de las caderas, piernas juntas y pies en punta.",
+      "secuencia": [
+        {
+          "fase": "Exhala",
+          "accion": "Activar el centro y llevar las piernas al techo."
+        },
+        {
+          "fase": "Inhala",
+          "accion": "Despegar la zona lumbar llevando las piernas sobre la cabeza hasta quedar paralelas al piso; presionar los brazos y apoyarse en los hombros, nunca en el cuello. Abrir las piernas al ancho de hombros y flexionar los pies."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Rodar hacia abajo con piernas separadas, pecho abierto y hombros en el mat; bajar las piernas tanto como permita la espalda sin arquearse. Juntar y apuntar para repetir. Luego invertir: subir separadas y bajar juntas."
+        }
+      ],
+      "forma_optima": "Movimiento suave y parejo en ambas direcciones; el tronco pasa por la vertical con piernas paralelas al piso, y al bajar las piernas se acercan al mat sin que la espalda se arquee.",
+      "indicaciones": [
+        "Brazos anclados al piso todo el tiempo.",
+        "Elevar el tronco para quitar peso de los hombros en la vertical.",
+        "Piernas paralelas al piso en la inversión."
+      ],
+      "variantes": [
+        {
+          "nombre": "Principiante",
+          "descripcion": "Sostener la zona lumbar con las manos, como en una vela."
+        },
+        {
+          "nombre": "Isquiotibiales tensos",
+          "descripcion": "Suavizar las rodillas en la inversión."
+        },
+        {
+          "nombre": "Leg lowers",
+          "descripcion": "En la inversión, bajar los pies flexionados al mat y volver a paralelo antes de rodar."
+        },
+        {
+          "nombre": "Stretch",
+          "descripcion": "Tomar los pies en la inversión."
+        }
+      ],
+      "proposito": [
+        "Fuerza y control del centro",
+        "Flexibilidad y articulación de la columna",
+        "Estabilizar los hombros"
+      ],
+      "precauciones": {
+        "lumbar": "Evitar.",
+        "cuello_hombro": "Evitar.",
+        "osteoporosis": "Evitar con osteoporosis/osteopenia."
+      },
+      "transicion": "Apoyar una pierna para Single Leg Circles.",
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Lying on the back with arms pressing into the mat, hips lifted and rolled over so the straight legs are behind the head and parallel to the floor, weight on the shoulder blades, not the neck",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "media",
+        "verificar": "Peso en omóplatos; piernas paralelas al piso, no tocando."
+      }
+    },
+    {
+      "id": "mat2-e08",
+      "nombre": "Modified Corkscrew",
+      "paginas_manual": [
+        28,
+        29
+      ],
+      "nivel": "Intermedio",
+      "repeticiones": "3–6 reps",
+      "posicion_inicial": "Supino, brazos a los lados, caderas flexionadas y piernas juntas al techo.",
+      "secuencia": [
+        {
+          "fase": "Inhala",
+          "accion": "Llevar las piernas a la derecha dejando que la cadera izquierda se despegue, y bajarlas hacia el piso sin arquear."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Barrer hacia la izquierda y volver arriba. Luego el sentido contrario."
+        }
+      ],
+      "indicaciones": [
+        "Piernas juntas como una sola.",
+        "Caderas sobre un reloj: tocar cada hora del círculo.",
+        "Brazos pegados al mat.",
+        "Círculos simétricos."
+      ],
+      "variantes": [
+        {
+          "nombre": "Windshield Wiper (principiante)",
+          "descripcion": "Con caderas ancladas, deslizar las piernas de un lado a otro como limpiaparabrisas."
+        }
+      ],
+      "proposito": [
+        "Aumentar la rotación de columna",
+        "Soporte y control del centro",
+        "Movilizar caderas",
+        "Estabilidad escapular"
+      ],
+      "precauciones": {
+        "lumbar": "Limitar el rango, solo Windshield Wiper, o evitar."
+      },
+      "transicion": "Rodillas al pecho y sentarse para Saw, o rodar a prono para Swan.",
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Lying on the back with arms long on the mat, both straight legs together tilted toward the right in a diagonal above the body, left hip slightly lifted",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "media",
+        "verificar": "Brazos anclados; piernas juntas."
+      }
+    },
+    {
+      "id": "mat2-e09",
+      "nombre": "Corkscrew",
+      "paginas_manual": [
+        30,
+        31
+      ],
+      "nivel": "Avanzado",
+      "repeticiones": "3–4 reps",
+      "posicion_inicial": "Supino, brazos a los lados, piernas largas al techo.",
+      "secuencia": [
+        {
+          "fase": "Inhala",
+          "accion": "Rodar a la posición de Roll Over, piernas paralelas al piso, sin cargar el cuello."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Pasar el peso a un lado de la columna y bajar rodando por ese lado."
+        },
+        {
+          "fase": "Inhala",
+          "accion": "Circular las piernas al otro lado y subir centrando la columna."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Pasar el peso al otro lado y bajar por ahí. Cambiar el sentido; terminar en Roll Over y bajar al centro."
+        }
+      ],
+      "forma_optima": "Pasar por el centro al circular al bajar y al subir; exige mucha conciencia corporal.",
+      "indicaciones": [
+        "Piernas unidas; tocar cada hora del reloj.",
+        "Hombros pegados al mat.",
+        "Centrar el cuerpo en la inversión."
+      ],
+      "proposito": [
+        "Rotación de columna",
+        "Soporte y control del centro",
+        "Flexibilidad de columna",
+        "Estabilidad escapular"
+      ],
+      "precauciones": {
+        "lumbar": "Evitar.",
+        "cuello_hombro": "Evitar.",
+        "osteoporosis": "Evitar con osteoporosis/osteopenia."
+      },
+      "transicion": "Rodillas al pecho y sentarse para Saw, o rodar a prono para Swan.",
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Inverted roll-over position with legs together angled diagonally to one side above the head, arms long on the mat, weight shifted slightly onto one side of the upper back",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "baja",
+        "verificar": "Posición compleja y dinámica; mejor mostrar el recorrido en un diagrama o remitir al manual."
+      }
+    },
+    {
+      "id": "mat2-e10",
+      "nombre": "Neck Pull",
+      "paginas_manual": [
+        32,
+        33
+      ],
+      "nivel": "Avanzado",
+      "repeticiones": "3–6 reps",
+      "posicion_inicial": "Supino, manos detrás de la cabeza con codos abiertos (en la visión periférica), piernas separadas al ancho de caderas y tobillos flexionados, ancladas al mat.",
+      "secuencia": [
+        {
+          "fase": "Inhala",
+          "accion": "Activar abdomen y llevar las costillas hacia las caderas para empezar a flexionar, sin adelantar la cabeza."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Seguir vértebra por vértebra, piernas en contacto con el mat, y redondear sobre las piernas."
+        },
+        {
+          "fase": "Inhala",
+          "accion": "Rodar hasta sentarse erguido, como alineado contra una pared."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Crecer, activar abdomen e inclinarse atrás en bisagra con columna neutra; al perder el control, retroversión y bajar vértebra por vértebra."
+        }
+      ],
+      "forma_optima": "Lento, suave, piernas en el piso y articulación vértebra por vértebra.",
+      "indicaciones": [
+        "Piernas pesadas, amarradas al piso.",
+        "Hombros hacia los bolsillos traseros.",
+        "Costillas bajas al mat para elevar la cabeza.",
+        "Barbilla hacia el pecho sin exagerar."
+      ],
+      "variantes": [
+        {
+          "nombre": "Solo Roll Down",
+          "descripcion": "Desde sentado con manos en la nuca: inclinarse al frente, bisagra atrás en neutro y bajar redondeando; rodillas al pecho para volver a sentarse."
+        },
+        {
+          "nombre": "Versión de Kathy Grant",
+          "descripcion": "Detenerse en el punto más difícil y respirar varias veces profundizando la activación."
+        }
+      ],
+      "proposito": [
+        "Fortalecer el abdomen",
+        "Flexibilidad y articulación de la columna"
+      ],
+      "precauciones": {
+        "lumbar": "Solo Roll Down o evitar.",
+        "cuello_hombro": "Evitar.",
+        "osteoporosis": "Evitar con osteoporosis/osteopenia."
+      },
+      "transicion": "Rodar de lado para la serie de Side Kick (intermedio) o piernas al techo para Scissors (avanzado).",
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Seated upright with legs straight hip-width apart and feet flexed, hands clasped behind the head with elbows wide, torso hinged slightly back with a long neutral spine",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "media",
+        "verificar": "Codos abiertos; espalda recta (fase de bisagra), no redondeada."
+      }
+    },
+    {
+      "id": "mat2-e11",
+      "nombre": "Leg Pull Down",
+      "paginas_manual": [
+        34,
+        34
+      ],
+      "nivel": "Intermedio",
+      "repeticiones": "4–6 sets por pierna",
+      "posicion_inicial": "Plancha con hombros sobre las muñecas, muslos internos unidos y el cuerpo en una línea de cabeza a pies.",
+      "secuencia": [
+        {
+          "fase": "Inhala",
+          "accion": "Elevar una pierna al techo con el pie en punta y dos pulsos; el tobillo de apoyo se flexiona llevando el cuerpo hacia atrás."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Bajar la pierna. Alternar."
+        }
+      ],
+      "forma_optima": "Línea recta de cabeza a pies; la pierna sube sin alterar las caderas; hombros anchos y cuello largo.",
+      "indicaciones": [
+        "Un bastón toca cabeza, espalda media, cadera y talones.",
+        "Una bandeja con dos tazas de té sobre las caderas.",
+        "Mirada hacia las manos."
+      ],
+      "variantes": [
+        {
+          "nombre": "Principiante",
+          "descripcion": "Desde cuatro puntos, elevar una pierna."
+        },
+        {
+          "nombre": "Muñecas",
+          "descripcion": "Agarraderas, mancuernas hexagonales o antebrazos sobre un bloque."
+        }
+      ],
+      "proposito": [
+        "Fortalecer todo el cuerpo: core, estabilizadores escapulares y lumbopélvicos",
+        "Fortalecer extensores de cadera (isquiotibiales y glúteo mayor)"
+      ],
+      "precauciones": {
+        "muneca": "Modificaciones o evitar."
+      },
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. High plank on the hands with the body in a straight line, one straight leg lifted toward the ceiling with pointed foot, hips level",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "alta",
+        "verificar": "Caderas niveladas (sin rotar hacia la pierna alta)."
+      }
+    },
+    {
+      "id": "mat2-e12",
+      "nombre": "Leg Pull Up",
+      "paginas_manual": [
+        35,
+        35
+      ],
+      "nivel": "Súper avanzado",
+      "repeticiones": "4–6 sets por pierna",
+      "posicion_inicial": "Plancha invertida: sentado con piernas juntas y largas, manos bajo los hombros detrás de las caderas (dedos hacia las caderas o hacia los lados), caderas elevadas lo más posible y barbilla ligeramente baja.",
+      "secuencia": [
+        {
+          "fase": "Inhala",
+          "accion": "Patear una pierna al techo con dos pulsos (respiración percusiva)."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Bajarla al mat. Alternar."
+        }
+      ],
+      "forma_optima": "Caderas lo más altas y estables posible.",
+      "indicaciones": [
+        "Caderas sostenidas por una correa colgada del techo.",
+        "Hombros sobre las muñecas; cabeza en ángulo cómodo."
+      ],
+      "variantes": [
+        {
+          "nombre": "Rodilla",
+          "descripcion": "Tobillos sobre un rodillo de 6\" o mat enrollado si la rodilla no tolera la hiperextensión."
+        },
+        {
+          "nombre": "Tobillo",
+          "descripcion": "Rotar las caderas hacia afuera para cargar el borde externo del pie."
+        }
+      ],
+      "proposito": [
+        "Fortalecer todo el cuerpo",
+        "Fortalecer extensores de cadera",
+        "Aumentar el rango de movimiento del hombro"
+      ],
+      "precauciones": {
+        "hombro_muneca": "Modificar o evitar.",
+        "cuello": "Evitar."
+      },
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Reverse plank: body facing up supported on straight arms with hands behind the hips and heels on the mat, hips lifted so the body forms a straight line, one straight leg kicked up toward the ceiling",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "media",
+        "verificar": "Caderas altas; manos detrás del cuerpo."
+      }
+    },
+    {
+      "id": "mat2-e13",
+      "nombre": "Jackknife",
+      "paginas_manual": [
+        36,
+        37
+      ],
+      "nivel": "Avanzado",
+      "repeticiones": "3–4 reps",
+      "posicion_inicial": "Supino, manos junto a las caderas, piernas al techo con pies en punta.",
+      "secuencia": [
+        {
+          "fase": "Inhala",
+          "accion": "Llevar las piernas sobre la cabeza hasta paralelo; presionar los brazos y equilibrarse en la espina de los omóplatos."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Bajar los pies al mat detrás de la cabeza con los isquiones hacia el techo."
+        },
+        {
+          "fase": "Inhala",
+          "accion": "Proyectar las piernas al techo tanto como permita el apoyo en los omóplatos."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Rodar hacia abajo con las piernas apuntando al techo el mayor tiempo posible."
+        }
+      ],
+      "forma_optima": "Las piernas se mantienen hacia el techo mientras la columna rueda al mat gracias a la fuerza del centro.",
+      "indicaciones": [
+        "No pasar de los omóplatos.",
+        "Brazos anclados.",
+        "Cuello y hombros relajados; elevar el tronco con las piernas arriba."
+      ],
+      "variantes": [
+        {
+          "nombre": "Isquiotibiales tensos",
+          "descripcion": "Suavizar las rodillas."
+        }
+      ],
+      "proposito": [
+        "Fuerza y control del centro",
+        "Flexibilidad y articulación de la columna",
+        "Estabilizar los hombros"
+      ],
+      "precauciones": {
+        "lumbar": "Evitar.",
+        "cuello_hombro": "Evitar.",
+        "osteoporosis": "Evitar con osteoporosis/osteopenia."
+      },
+      "transicion": "Bajar las piernas juntas para Spine Twist.",
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Inverted on the shoulder blades with arms pressing into the mat, hips high and both straight legs pointing vertically up toward the ceiling, body in a near-vertical line",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "media",
+        "verificar": "Apoyo en omóplatos, no en cuello; piernas verticales."
+      }
+    },
+    {
+      "id": "mat2-e14",
+      "nombre": "Kneeling Side Kicks",
+      "paginas_manual": [
+        38,
+        39
+      ],
+      "nivel": "Súper avanzado",
+      "repeticiones": "6–8 sets por lado",
+      "posicion_inicial": "De rodillas al ancho de caderas, brazos a los lados. Inclinarse hasta apoyar una mano en el mat (o sobre un bloque); la otra mano detrás de la cabeza; la rodilla contraria se despega. La cadera de apoyo queda alineada sobre la rodilla.",
+      "secuencia": [
+        {
+          "fase": "Inhala",
+          "accion": "Patear la pierna de arriba al frente con el tobillo flexionado y dos pulsos, sin doblar la ingle ni sacar la cola."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Llevarla atrás con el pie en punta. Para cambiar de lado: rodilla abajo, volver a la vertical e inclinarse al otro lado."
+        }
+      ],
+      "forma_optima": "Ambas caderas en el mismo plano mientras se mueve la pierna.",
+      "indicaciones": [
+        "El tronco contra un panel de vidrio: hombros y caderas lo tocan.",
+        "Pelvis estable."
+      ],
+      "variantes": [
+        {
+          "nombre": "Flexión lateral limitada",
+          "descripcion": "Bloque o agarradera bajo la mano."
+        },
+        {
+          "nombre": "Piernas",
+          "descripcion": "Añadir círculos o elevaciones."
+        }
+      ],
+      "proposito": [
+        "Fortalecer abductores, flexores y extensores de cadera",
+        "Fortalecer dorsal ancho, redondo mayor, manguito rotador y deltoides",
+        "Estabilidad pélvica",
+        "Flexibilidad de isquiotibiales y flexores de cadera",
+        "Equilibrio"
+      ],
+      "precauciones": {
+        "cadera": "Evitar.",
+        "hombro_codo_muneca": "Evitar."
+      },
+      "transicion": "Sentarse sobre una cadera para Twist y Side Series, o piernas juntas y rodar a supino para la serie Teaser.",
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Front view, kneeling on one knee with the torso tilted sideways and one hand on the mat, other hand behind the head, top leg extended straight out to the side at hip height kicking forward",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "media",
+        "verificar": "Rodilla de apoyo bajo la cadera; tronco de perfil al vidrio."
+      }
+    },
+    {
+      "id": "mat2-e15",
+      "nombre": "Twist (Seated Twist)",
+      "paginas_manual": [
+        40,
+        41
+      ],
+      "nivel": "Súper avanzado",
+      "repeticiones": "4 sets",
+      "posicion_inicial": "Sentado sobre una cadera con rodillas flexionadas, pierna de arriba delante de la de abajo, mano de apoyo bajo el hombro.",
+      "secuencia": [
+        {
+          "fase": "Inhala",
+          "accion": "Ombligo a la columna y caderas al techo estirando las piernas; el brazo libre sube al techo y luego baja rotando el tronco hacia los pies. El peso va en el pie de adelante."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Volver con suavidad flexionando las piernas y bajando las caderas."
+        }
+      ],
+      "forma_optima": "Llegar directo a la posición final con el hombro abajo y el brazo presionando el mat.",
+      "indicaciones": [
+        "Como si te levantaran del cinturón.",
+        "Cuello largo y pecho amplio.",
+        "Visualizar la posición final antes de llegar."
+      ],
+      "variantes": [
+        {
+          "nombre": "Muñeca",
+          "descripcion": "Agarraderas o apoyo en nudillos."
+        },
+        {
+          "nombre": "Two leg balance",
+          "descripcion": "Usar la pierna de atrás como apoyo."
+        },
+        {
+          "nombre": "Piernas",
+          "descripcion": "Pulsos o círculos con la pierna de atrás."
+        }
+      ],
+      "proposito": [
+        "Fortalecer todo el cuerpo",
+        "Fortalecer oblicuos, dorsal ancho y cuadrado lumbar",
+        "Fortalecer la cintura escapular (serrato, manguito)",
+        "Equilibrio, coordinación y control"
+      ],
+      "precauciones": {
+        "espalda": "Evitar.",
+        "hombro_codo_muneca": "Modificar el apoyo o evitar."
+      },
+      "transicion": "Subir a plancha lateral para Side Bend Twist y Side Bend, o sentarse con piernas juntas para Boomerang.",
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Side plank variation on one straight arm with hips lifted high, top foot in front of the bottom foot, torso rotated toward the floor with the free arm reaching toward the back foot",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "baja-media",
+        "verificar": "Pose compleja; verificar el brazo de apoyo recto bajo el hombro."
+      }
+    },
+    {
+      "id": "mat2-e16",
+      "nombre": "Side Bend Twist",
+      "paginas_manual": [
+        42,
+        43
+      ],
+      "nivel": "Súper avanzado",
+      "repeticiones": "4 sets (3 por lado en la secuencia)",
+      "posicion_inicial": "Plancha lateral con la muñeca bajo el hombro, pie de arriba delante del de abajo, mano libre hacia el techo.",
+      "secuencia": [
+        {
+          "fase": "Inhala",
+          "accion": "Brazo al techo alargando el tronco (entre dos paneles de vidrio)."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Rotar el tronco hacia el piso sin mover las caderas, pasando el brazo por debajo del cuerpo y siguiendo la mano con la mirada."
+        },
+        {
+          "fase": "Inhala",
+          "accion": "Rotar hacia el techo abriendo el pecho. Cambiar de lado pasando por plancha."
+        }
+      ],
+      "forma_optima": "Caderas al frente mientras rota el tronco; equilibrio con suavidad y control.",
+      "indicaciones": [
+        "Cabeza, caderas y pies en línea.",
+        "Para el instructor: la primera vez, asistir sosteniendo las caderas.",
+        "Empujar el piso con la mano de apoyo; cuello largo."
+      ],
+      "variantes": [
+        {
+          "nombre": "Muñeca",
+          "descripcion": "Agarradera bajo la mano."
+        },
+        {
+          "nombre": "Avanzada",
+          "descripcion": "Pie de arriba apilado sobre el de abajo."
+        }
+      ],
+      "proposito": [
+        "Fortalecer el tronco lateral",
+        "Fortalecer la cintura escapular",
+        "Equilibrio, coordinación y control"
+      ],
+      "precauciones": {
+        "espalda": "Evitar.",
+        "hombro_codo_muneca": "Modificar o evitar."
+      },
+      "transicion": "Side Bend, o sentarse para Boomerang.",
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Side plank on one straight arm with the wrist under the shoulder, top foot in front of the bottom foot, top arm threaded under the torso as the chest rotates toward the floor",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "media",
+        "verificar": "Caderas altas y alineadas; brazo de apoyo recto."
+      }
+    },
+    {
+      "id": "mat2-e17",
+      "nombre": "Side Bend (Mermaid)",
+      "paginas_manual": [
+        44,
+        45
+      ],
+      "nivel": "Súper avanzado",
+      "repeticiones": "4–6 sets",
+      "posicion_inicial": "Plancha lateral con la muñeca bajo el hombro y el pie de adelante delante del de apoyo; mano libre hacia el techo.",
+      "secuencia": [
+        {
+          "fase": "Inhala",
+          "accion": "Brazo al techo alargando el tronco."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Bajar las caderas hacia el mat mirando la mano mientras el brazo baja hacia las caderas."
+        },
+        {
+          "fase": "Inhala",
+          "accion": "Subir las caderas al techo y llevar el brazo sobre la cabeza, mirando la mano de apoyo. Cambiar de lado pasando por plancha."
+        }
+      ],
+      "indicaciones": [
+        "Cabeza, caderas y pies en línea.",
+        "Caderas sostenidas por una correa.",
+        "Hombros lejos de las orejas."
+      ],
+      "variantes": [
+        {
+          "nombre": "Muñeca",
+          "descripcion": "Agarradera."
+        },
+        {
+          "nombre": "Avanzada",
+          "descripcion": "Pies apilados."
+        }
+      ],
+      "proposito": [
+        "Fortalecer el tronco lateral",
+        "Fortalecer la cintura escapular",
+        "Equilibrio, coordinación y control"
+      ],
+      "precauciones": {
+        "espalda": "Evitar.",
+        "hombro_codo_muneca": "Modificar o evitar."
+      },
+      "transicion": "Sentarse con piernas al frente para Boomerang, o flexionar rodillas para Scissors/Bicycle/Shoulder Bridge.",
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Front view, side plank on one straight arm with hips lifted high into an arc, top arm reaching over the head, feet staggered, head in line with the spine",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "alta",
+        "verificar": "Arco lateral de las caderas hacia el techo."
+      }
+    },
+    {
+      "id": "mat2-e18",
+      "nombre": "Scissors",
+      "paginas_manual": [
+        46,
+        47
+      ],
+      "nivel": "Súper avanzado",
+      "repeticiones": "4–6 reps",
+      "posicion_inicial": "Supino, manos a los lados, piernas juntas y pies en punta.",
+      "secuencia": [
+        {
+          "fase": "Exhala",
+          "accion": "Rodar como en el Roll Over; con apoyo en los hombros, presionar los brazos y llevar las piernas al techo hasta que el tronco quede vertical (sin cargar el cuello)."
+        },
+        {
+          "fase": "Inhala",
+          "accion": "Manos detrás de la pelvis sosteniendo la zona lumbar (puente de hombros)."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Tijera: una pierna hacia la cabeza y la otra hacia el frente del mat, largas y en punta."
+        },
+        {
+          "fase": "Inhala",
+          "accion": "Volver al centro y alternar."
+        }
+      ],
+      "forma_optima": "Tijeras tan amplias como sea posible sin cargar peso en las manos.",
+      "indicaciones": [
+        "Apoyo en las manos lo más ligero posible.",
+        "El tronco se aligera cuando las piernas se abren.",
+        "Las piernas trazan líneas rectas en el techo."
+      ],
+      "variantes": [
+        {
+          "nombre": "Soporte de cadera (todos los niveles)",
+          "descripcion": "Caderas sobre un foam roller o baby arc, tronco estable."
+        }
+      ],
+      "proposito": [
+        "Control del centro, estabilidad pélvica, abdominales y espalda",
+        "Estirar isquiotibiales y flexores de cadera"
+      ],
+      "precauciones": {
+        "hombro_codo_muneca": "Solo con soporte de cadera.",
+        "lumbar": "Limitar el rango o soporte de cadera.",
+        "osteoporosis": "Soporte de cadera o evitar."
+      },
+      "transicion": "Quedarse arriba para Bicycle.",
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Shoulder stand with hands supporting the lower back, torso nearly vertical, straight legs split in a wide scissor, one leg toward the head and one away, feet pointed",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "media",
+        "verificar": "Peso en hombros y brazos, no en el cuello."
+      }
+    },
+    {
+      "id": "mat2-e19",
+      "nombre": "Bicycle",
+      "paginas_manual": [
+        48,
+        49
+      ],
+      "nivel": "Súper avanzado",
+      "repeticiones": "4–6 sets",
+      "posicion_inicial": "Desde Scissors o subiendo igual al puente de hombros con las manos en la pelvis.",
+      "secuencia": [
+        {
+          "fase": "Exhala",
+          "accion": "Tijera: una pierna hacia la cabeza, la otra al frente."
+        },
+        {
+          "fase": "Inhala",
+          "accion": "Flexionar la rodilla de la pierna de adelante como pedaleando, llevar el pie hacia el piso, traerla flexionada al pecho y extenderla hacia la cabeza mientras la otra baja al frente."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Repetir con la otra pierna."
+        }
+      ],
+      "forma_optima": "Bicicleta amplia con peso fuera de las manos y caderas altas.",
+      "indicaciones": [
+        "Poco peso en las manos; abdomen activo y tronco largo.",
+        "Alargar las piernas lejos del tronco para abrir el frente de la cadera."
+      ],
+      "variantes": [
+        {
+          "nombre": "Soporte de cadera",
+          "descripcion": "Sobre foam roller o baby arc."
+        }
+      ],
+      "proposito": [
+        "Control del centro, fuerza de espalda y estabilidad pélvica",
+        "Estirar isquiotibiales y flexores de cadera"
+      ],
+      "precauciones": {
+        "hombro_codo_muneca": "Solo con soporte de cadera.",
+        "osteoporosis": "Soporte de cadera o evitar."
+      },
+      "transicion": "Rodillas al pecho y bajar para Shoulder Bridge desde el piso, o desde arriba bajar una pierna a la vez al mat.",
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Shoulder stand with hands supporting the pelvis, one leg bent at the knee pedaling toward the floor behind, the other leg straight reaching overhead",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "baja-media",
+        "verificar": "La coordinación de piernas suele salir confusa."
+      }
+    },
+    {
+      "id": "mat2-e20",
+      "nombre": "Shoulder Bridge",
+      "paginas_manual": [
+        50,
+        51
+      ],
+      "nivel": "Súper avanzado",
+      "repeticiones": "3–4 sets",
+      "posicion_inicial": "Desde Bicycle (manos a los lados de la pelvis y bajar una pierna a la vez) o desde supino: rodillas flexionadas, caderas arriba y manos bajo la pelvis con dedos hacia afuera y codos bajo las manos.",
+      "secuencia": [
+        {
+          "fase": "Inhala",
+          "accion": "Estirar una pierna al techo con el pie flexionado."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Bajarla hacia el piso con las caderas arriba y poco peso en las manos."
+        },
+        {
+          "fase": "Inhala",
+          "accion": "Volver al techo. 3 veces por pierna; toda la secuencia 3–4 veces."
+        }
+      ],
+      "forma_optima": "Carga ligera en las manos; la pierna sube lo más posible sin alterar el tronco.",
+      "indicaciones": [
+        "Tronco suspendido desde el techo.",
+        "Caderas niveladas, como con una charola encima."
+      ],
+      "variantes": [
+        {
+          "nombre": "Low Bridge (intermedio)",
+          "descripcion": "Puente con las manos en el piso, subiendo una pierna al techo."
+        }
+      ],
+      "proposito": [
+        "Fortalecer la cadena posterior (isquiotibiales, glúteos, erectores)",
+        "Control del centro",
+        "Flexibilidad en extensión de columna"
+      ],
+      "precauciones": {
+        "hombro_codo_muneca": "Solo versión intermedia.",
+        "lumbar": "Versión intermedia o evitar.",
+        "osteoporosis": "Versión intermedia o evitar."
+      },
+      "transicion": "Encaja en distintas partes de una clase súper avanzada: serie abdominal, Spine Twist o Boomerang.",
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Bridge position with feet on the mat and hips lifted high, hands supporting under the pelvis with elbows on the floor, one straight leg extended vertically to the ceiling with foot flexed",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "media",
+        "verificar": "Caderas niveladas; codos bajo las manos."
+      }
+    },
+    {
+      "id": "mat2-e21",
+      "nombre": "Boomerang",
+      "paginas_manual": [
+        52,
+        53
+      ],
+      "nivel": "Súper avanzado",
+      "repeticiones": "4 reps",
+      "posicion_inicial": "Sentado con piernas largas al frente y un tobillo cruzado sobre el otro.",
+      "secuencia": [
+        {
+          "fase": "Inhala",
+          "accion": "Roll Over con brazos en el mat; separar las piernas y cruzarlas al revés."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Roll Up hasta el Teaser con piernas cruzadas y brazos hacia los pies."
+        },
+        {
+          "fase": "Inhala",
+          "accion": "En equilibrio, circular los brazos por encima de la cabeza y atrás para entrelazar las manos."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Soltar, bajar las piernas y flexionar el tronco sobre ellas."
+        }
+      ],
+      "forma_optima": "Control perfecto en cada momento.",
+      "indicaciones": [
+        "El impulso facilita; lento dificulta.",
+        "No pasar de los omóplatos.",
+        "Tronco como un sándwich balanceado: columna en medio, abdominales y espalda como el pan."
+      ],
+      "variantes": [
+        {
+          "nombre": "Hombros tensos",
+          "descripcion": "No entrelazar las manos atrás."
+        }
+      ],
+      "proposito": [
+        "Fortalecer abdominales y extensores",
+        "Fortalecer flexores de cadera",
+        "Flexibilidad de espalda, isquiotibiales y hombros",
+        "Equilibrio"
+      ],
+      "precauciones": {
+        "lumbar": "Evitar.",
+        "osteoporosis": "Evitar con osteoporosis/osteopenia."
+      },
+      "transicion": "Sentarse y rodar a prono para Swan Rocking o Rocking.",
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Teaser V-sit balance with straight legs crossed at the ankles, arms reaching behind the back with hands clasped, chest open",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "baja-media",
+        "verificar": "Secuencia compleja; mejor elegir un solo fotograma (el Teaser)."
+      }
+    },
+    {
+      "id": "mat2-e22",
+      "nombre": "Swan Dive y Swan Rocking",
+      "paginas_manual": [
+        54,
+        55
+      ],
+      "nivel": "Avanzado",
+      "repeticiones": "3–6 reps",
+      "posicion_inicial": "Prono, manos alineadas con los hombros y codos flexionados; piernas tan juntas como tolere la zona lumbar.",
+      "secuencia": [
+        {
+          "fase": "Inhala",
+          "accion": "Swan Dive: extender el tronco empujando el mat, omóplatos abajo, cabeza en línea."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Llevar los brazos en diagonal sobre la cabeza y mecer el tronco hacia adelante sin cambiar la curva ni iniciar con la cabeza."
+        },
+        {
+          "fase": "Inhala",
+          "accion": "Recibir el cuerpo con las manos de vuelta en Swan. Swan Rocking: mecerse adelante y atrás 6 veces con los brazos en diagonal, sin recibirse con las manos."
+        }
+      ],
+      "forma_optima": "El cuerpo mantiene su curva como una mecedora; la cabeza sigue en línea.",
+      "indicaciones": [
+        "Abdomen activo siempre.",
+        "Tortuga que saca la cabeza del caparazón; bebé que empuja el piso.",
+        "Alargar brazos y piernas desde el centro antes de extender."
+      ],
+      "proposito": [
+        "Aumentar la extensión de columna",
+        "Fortalecer extensores, isquiotibiales y glúteos"
+      ],
+      "precauciones": {
+        "lumbar": "Evitar.",
+        "cuello_hombro": "Evitar."
+      },
+      "transicion": "Caderas a los talones en Rest Position.",
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Lying face down rocking forward in a smooth back-extension arc like a rocking chair, chest low toward the mat, straight legs lifted behind, arms reaching forward on a diagonal",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "media",
+        "verificar": "Arco continuo sin quiebre lumbar."
+      }
+    },
+    {
+      "id": "mat2-e23",
+      "nombre": "Rocking",
+      "paginas_manual": [
+        56,
+        56
+      ],
+      "nivel": "Súper avanzado",
+      "repeticiones": "4–6 reps",
+      "posicion_inicial": "Prono, rodillas flexionadas y manos tomando los tobillos.",
+      "secuencia": [
+        {
+          "fase": "Inhala",
+          "accion": "Empujar las piernas hacia el techo hasta extender los brazos; extender la espalda con la cabeza alineada."
+        },
+        {
+          "fase": "Exhala",
+          "accion": "Mecerse hacia adelante llevando las piernas al techo, sin lanzar la cabeza."
+        },
+        {
+          "fase": "Inhala",
+          "accion": "Mecerse atrás llevando el peso a la pelvis. Terminar en Rest Position."
+        }
+      ],
+      "forma_optima": "Mecerse con suavidad, tronco centrado, sin impulsar con la cabeza.",
+      "variantes": [
+        {
+          "nombre": "Sin mecerse",
+          "descripcion": "Entrar y salir de la posición sin balancearse."
+        }
+      ],
+      "proposito": [
+        "Fortalecer extensores de columna y cadera",
+        "Fortalecer abdominales y flexores de cadera"
+      ],
+      "precauciones": {
+        "lumbar": "Evitar.",
+        "hombro": "Evitar.",
+        "osteoporosis": "Evitar con osteoporosis/osteopenia."
+      },
+      "figura": {
+        "prompt_imagen": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos. Lying face down in a bow shape, knees bent, hands gripping the ankles behind, chest and thighs lifted off the mat, head in line with the spine",
+        "prompt_negativo": "text, labels, watermark, logo, extra limbs, distorted hands, merged fingers, equipment not described",
+        "viabilidad_ia": "alta",
+        "verificar": "Manos en los tobillos; cabeza neutra, no echada atrás."
+      }
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "mat2-f01",
+      "frente": "¿Qué pasó con el estudio de Joseph Pilates en 1967?",
+      "reverso": "Un incendio lo destruyó; Joe murió poco después por inhalación de humo. Clara siguió enseñando hasta 1977.",
+      "paginas_manual": [
+        11
+      ]
+    },
+    {
+      "id": "mat2-f02",
+      "frente": "¿Qué maestra de primera generación creó uno de los primeros programas de formación en EE. UU.?",
+      "reverso": "Romana Kryzanowska.",
+      "paginas_manual": [
+        11
+      ]
+    },
+    {
+      "id": "mat2-f03",
+      "frente": "¿Quién llevó Pilates a la costa oeste con un estilo más 'bailado'?",
+      "reverso": "Ron Fletcher.",
+      "paginas_manual": [
+        11
+      ]
+    },
+    {
+      "id": "mat2-f04",
+      "frente": "Spine Twist: forma óptima",
+      "reverso": "Pies exactamente al mismo nivel y piernas unidas mientras la columna rota.",
+      "paginas_manual": [
+        15
+      ]
+    },
+    {
+      "id": "mat2-f05",
+      "frente": "Posición ideal de la zona lumbar en el Teaser",
+      "reverso": "Neutra o ligeramente flexionada, con igual esfuerzo en abdominales y espalda.",
+      "paginas_manual": [
+        17
+      ]
+    },
+    {
+      "id": "mat2-f06",
+      "frente": "Diferencia entre Teaser 1, 2 y 3",
+      "reverso": "1: baja y sube el tronco con piernas quietas. 2: baja y sube las piernas con tronco quieto. 3: bajan y suben ambos a la vez.",
+      "paginas_manual": [
+        18,
+        23
+      ]
+    },
+    {
+      "id": "mat2-f07",
+      "frente": "Roll Over: ¿dónde va el peso en la inversión?",
+      "reverso": "En los hombros/omóplatos, nunca en el cuello; brazos anclados al mat.",
+      "paginas_manual": [
+        26,
+        27
+      ]
+    },
+    {
+      "id": "mat2-f08",
+      "frente": "Versión principiante del Modified Corkscrew",
+      "reverso": "Windshield Wiper: piernas de lado a lado con las caderas ancladas.",
+      "paginas_manual": [
+        29
+      ]
+    },
+    {
+      "id": "mat2-f09",
+      "frente": "Neck Pull: ¿qué forma tiene la columna al volver hacia atrás?",
+      "reverso": "Primero bisagra con columna neutra; al perder el control abdominal, retroversión y bajar vértebra por vértebra.",
+      "paginas_manual": [
+        32
+      ]
+    },
+    {
+      "id": "mat2-f10",
+      "frente": "Leg Pull Down vs. Leg Pull Up",
+      "reverso": "Down: plancha boca abajo, patada hacia el techo. Up: plancha invertida boca arriba, caderas altas.",
+      "paginas_manual": [
+        34,
+        35
+      ]
+    },
+    {
+      "id": "mat2-f11",
+      "frente": "Jackknife: objetivo del regreso",
+      "reverso": "Mantener las piernas apuntando al techo el mayor tiempo posible mientras la columna rueda al mat.",
+      "paginas_manual": [
+        36
+      ]
+    },
+    {
+      "id": "mat2-f12",
+      "frente": "Modificación de Scissors y Bicycle apta para todos los niveles",
+      "reverso": "Caderas apoyadas en foam roller o baby arc.",
+      "paginas_manual": [
+        48
+      ]
+    },
+    {
+      "id": "mat2-f13",
+      "frente": "Swan Dive vs. Swan Rocking",
+      "reverso": "En el Dive las manos reciben el cuerpo al volver; en el Rocking se mece con los brazos en diagonal sin recibirse.",
+      "paginas_manual": [
+        54,
+        55
+      ]
+    },
+    {
+      "id": "mat2-f14",
+      "frente": "¿Qué programa avanzado no tiene inversiones y es más seguro para problemas lumbares?",
+      "reverso": "The Twist (Avanzado 4).",
+      "paginas_manual": [
+        61
+      ]
+    },
+    {
+      "id": "mat2-f15",
+      "frente": "Los 7 elementos de una clase balanceada",
+      "reverso": "Calentamiento, activación del core, retar al centro, columna, tren superior, tren inferior, distintas posiciones.",
+      "paginas_manual": [
+        66
+      ]
+    },
+    {
+      "id": "mat2-f16",
+      "frente": "Tres categorías de deportes según el manual",
+      "reverso": "Actividades de triatleta, deportes de pelota y actividades basadas en la danza.",
+      "paginas_manual": [
+        70,
+        72
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "id": "mat2-q01",
+      "pregunta": "¿Cuál de estos clientes NO debería hacer la secuencia 'Orden clásico avanzado'?",
+      "opciones": [
+        "Atleta joven con experiencia en Pilates",
+        "Persona con osteoporosis",
+        "Bailarina profesional",
+        "Instructora de Pilates"
+      ],
+      "correcta": 1,
+      "explicacion": "Incluye inversiones; no se recomienda con osteoporosis, edad avanzada, obesidad, lesiones lumbares o cervicales, ni sin experiencia.",
+      "paginas_manual": [
+        58
+      ]
+    },
+    {
+      "id": "mat2-q02",
+      "pregunta": "En Teaser 2, ¿qué se mueve?",
+      "opciones": [
+        "El tronco",
+        "Las piernas",
+        "Ambos a la vez",
+        "Los brazos en círculo"
+      ],
+      "correcta": 1,
+      "explicacion": "El tronco se queda en la V y bajan y suben solo las piernas.",
+      "paginas_manual": [
+        20
+      ]
+    },
+    {
+      "id": "mat2-q03",
+      "pregunta": "Un cliente con hombro lesionado quiere hacer Scissors. ¿Qué haces?",
+      "opciones": [
+        "Hacerlo normal con apoyo ligero",
+        "Usar la versión con caderas sobre foam roller",
+        "Cambiar a Jackknife",
+        "Hacer Boomerang"
+      ],
+      "correcta": 1,
+      "explicacion": "Con lesiones de hombro, codo o muñeca solo se hace con soporte de cadera.",
+      "paginas_manual": [
+        47
+      ]
+    },
+    {
+      "id": "mat2-q04",
+      "pregunta": "Kneeling Side Kicks: ¿dónde debe quedar la cadera de apoyo?",
+      "opciones": [
+        "Por delante de la rodilla",
+        "Alineada sobre la rodilla",
+        "Por detrás de la rodilla",
+        "Da igual"
+      ],
+      "correcta": 1,
+      "explicacion": "Así el tronco queda lo más estable posible, como contra un panel de vidrio.",
+      "paginas_manual": [
+        38
+      ]
+    },
+    {
+      "id": "mat2-q05",
+      "pregunta": "En Rocking, ¿qué inicia el balanceo?",
+      "opciones": [
+        "La cabeza",
+        "Piernas y tronco",
+        "Los brazos",
+        "El cuello"
+      ],
+      "correcta": 1,
+      "explicacion": "Nunca se lanza la cabeza; el cuerpo se mece como una silla mecedora.",
+      "paginas_manual": [
+        56
+      ]
+    },
+    {
+      "id": "mat2-q06",
+      "pregunta": "¿Qué caracteriza a los deportes de pelota según el manual?",
+      "opciones": [
+        "Movimientos bilaterales y sagitales",
+        "Movimientos unilaterales, rotacionales y reactivos",
+        "Movimientos estéticos y de rango extremo",
+        "Movimientos simples y repetitivos"
+      ],
+      "correcta": 1,
+      "explicacion": "Bilaterales y repetitivos corresponde a triatleta; estéticos y de rango extremo, a danza.",
+      "paginas_manual": [
+        71
+      ]
+    },
+    {
+      "id": "mat2-q07",
+      "pregunta": "Leg Pull Up con molestia en las rodillas por hiperextensión. Modificación:",
+      "opciones": [
+        "Rodillas flexionadas en el piso",
+        "Tobillos sobre un rodillo de 6\" o mat enrollado",
+        "Hacerlo más rápido",
+        "Solo una pierna apoyada"
+      ],
+      "correcta": 1,
+      "explicacion": "El rodillo evita que la rodilla quede en hiperextensión.",
+      "paginas_manual": [
+        35
+      ]
+    },
+    {
+      "id": "mat2-q08",
+      "pregunta": "¿Qué ejercicio de Mat 2 no aparece marcado para evitar en osteoporosis?",
+      "opciones": [
+        "Teaser 1",
+        "Roll Over",
+        "Leg Pull Down",
+        "Jackknife"
+      ],
+      "correcta": 2,
+      "explicacion": "El Leg Pull Down es trabajo en plancha, con carga de peso; los otros son flexión o inversión.",
+      "paginas_manual": [
+        34
+      ]
+    }
+  ],
+  "estilo_base_imagenes": "Clean educational fitness illustration, one adult in plain fitted athletic clothing on a simple exercise mat, plain light gray background, soft even lighting, full body visible, side view unless stated, no text, no logos"
+}

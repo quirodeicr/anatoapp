@@ -1,0 +1,39 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>galería de poses (control)</title>
+<style>
+body{zoom:.8;background:#1b1a20;color:#ddd;font:12px system-ui;margin:0;padding:8px}
+.ej{background:#24232b;border-radius:8px;padding:6px;margin:0 6px 8px 0;display:inline-block;vertical-align:top;max-width:100%}
+.ej h3{margin:0 0 4px;font-size:13px}
+.ok{color:#4ade80}.mal{color:#f87171}
+.tira{display:flex;flex-wrap:wrap;gap:3px}
+.tira>div{width:230px;background:#2d2c35;border-radius:6px;position:relative}
+.tira>div.m{width:150px;opacity:.85}
+.tira small{position:absolute;left:4px;top:2px;color:#aaa}
+ul{margin:4px 0 0 16px;color:#fca5a5;columns:2}
+.fig-svg{width:100%;display:block}
+.fig-mat{fill:#6d5fd0}.fig-mat-sombra{fill:rgba(0,0,0,.25)}.fig-sombra{fill:rgba(0,0,0,.35)}
+.fig-fantasma{opacity:.18}.fig-mat-arriba{fill:#6d5fd0;opacity:.35}.fig-mat-persp{fill:#6d5fd0;opacity:.45}
+.fig-cam{font:600 9px system-ui;fill:#999}.fig-silla{fill:#8a7a6a}
+#res{position:sticky;top:0;background:#1b1a20;padding:4px 0;z-index:2}
+</style>
+<div id="res"></div>
+<div id="g"></div>
+<script src="figura.js"></script>
+<script src="poses.js"></script>
+<script>
+window.addEventListener('hashchange', () => location.reload());
+const sel = (location.hash.slice(1) || '').split(',').filter(Boolean);
+const todas = Object.entries(POSES);
+const resumen = todas.map(([k, e]) => [k, FIGURA.validar(e).length]);
+document.getElementById('res').innerHTML = `<b>${resumen.filter(r => !r[1]).length}/${resumen.length} sin fallas</b> · con fallas: ` +
+  resumen.filter(r => r[1]).map(([k, n]) => `<a href="#${k}" style="color:#fca5a5">${k} (${n})</a>`).join(' · ');
+const lista = todas.filter(([k]) => !sel.length || sel.some(s => k.startsWith(s)));
+document.getElementById('g').innerHTML = lista.map(([k, ej]) => {
+  const fallas = FIGURA.validar(ej), n = ej.poses.length, cuadros = [];
+  for (let i = 0; i < n; i++) { cuadros.push({ i, f: 0 }); if (n > 1) for (const f of [0.33, 0.66]) cuadros.push({ i, f }); }
+  return `<div class="ej"><h3>${k} · ${ej.nom} <span class="${fallas.length ? 'mal' : 'ok'}">${fallas.length ? fallas.length + ' fallas' : 'sin fallas'}</span></h3>
+    <div class="tira">${cuadros.map(c => `<div class="${c.f ? 'm' : 'k'}">${FIGURA.svgEstatico(ej, c.i, c.f)}<small>${c.f ? '' : 'p' + c.i + (ej.poses[c.i].s != null ? ' · paso ' + ej.poses[c.i].s : '')}</small></div>`).join('')}</div>
+    ${fallas.length ? `<ul>${fallas.slice(0, 16).map(x => `<li>${x}</li>`).join('')}</ul>` : ''}</div>`;
+}).join('');
+</script>

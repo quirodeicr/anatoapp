@@ -1,0 +1,732 @@
+{
+  "modulo": 1,
+  "id": "m1-movimiento-todo-el-cuerpo",
+  "titulo": "Ver el cuerpo en movimiento: movimiento de todo el cuerpo, postura y entrenamiento",
+  "paginas_manual": [
+    1,
+    21
+  ],
+  "nota_paginacion": "Número de página impreso en el manual físico. En el PDF escaneado: página_pdf = página_manual + 6.",
+  "secciones": [
+    {
+      "id": "m1-s1",
+      "titulo": "Introducción y estructura del curso",
+      "paginas_manual": [
+        1,
+        3
+      ],
+      "resumen": "El curso busca darle al instructor herramientas prácticas para observar, analizar y mejorar el movimiento de sus clientes, apoyándose en anatomía, kinesiología, biomecánica y patrones de movimiento óptimos. Se organiza en cinco módulos que coinciden con las cinco categorías del sistema de programación de Balanced Body; un programa completo debería incluir ejercicios de las cinco. Cada sección combina anatomía esencial, ejercicios representativos (con progresiones, regresiones y modificaciones), consejos de enseñanza y criterios para armar clases.",
+      "puntos_clave": [
+        "Cinco módulos: movimiento de todo el cuerpo; integración del tronco; fuerza y potencia del tren inferior; fuerza y equilibrio del tren superior; movilidad, flexibilidad y recuperación.",
+        "La anatomía esencial cubre huesos y referencias óseas, mecánica articular, ubicación/acción/sinergias musculares y conexiones miofasciales.",
+        "Los ejercicios esenciales sirven para aprender a reconocer movimiento de calidad y transferir esos criterios a otros ejercicios y entornos, desde rehabilitación hasta rendimiento.",
+        "Enseñar bien exige también paciencia y lectura de la psicología del cliente: cuándo exigir, cuándo elogiar y cómo motivar."
+      ]
+    },
+    {
+      "id": "m1-s2",
+      "titulo": "Movimiento de todo el cuerpo: global, planar y local",
+      "paginas_manual": [
+        4,
+        5
+      ],
+      "resumen": "Moverse con facilidad depende de que cinco sistemas trabajen en sinergia: esquelético, muscular, fascial, cardiovascular y nervioso. Un patrón armonioso indica que todos colaboran; un patrón disfuncional revela una falla en alguna parte. Para ordenar la observación se usan tres niveles: global (el panorama completo: postura, estrategias de movimiento, desequilibrios de fuerza y dominancia de un lado, coordinación y equilibrio), planar (descomponer el movimiento en los planos sagital, frontal y transversal) y local o regional (una articulación o zona concreta, como el hombro en una flexión de brazos o la rodilla en una sentadilla). El buen instructor alterna continuamente entre los tres niveles: lo global señala dónde se interrumpe el patrón, lo local lo corrige y luego se vuelve a lo global para comprobar la mejora.",
+      "puntos_clave": [
+        "Cinco sistemas: esquelético, muscular, fascial, cardiovascular, nervioso.",
+        "Tres niveles de observación: global, planar y local/regional.",
+        "Global = ver el bosque antes que los árboles.",
+        "Planar = sagital (flexión/extensión, soporte postural), frontal (abducción/aducción, flexión lateral), transversal (rotación medial/lateral, rotación espinal).",
+        "Local = específico de articulación o de región.",
+        "Ciclo de trabajo: detectar en global → corregir en local → verificar en global."
+      ]
+    },
+    {
+      "id": "m1-s3",
+      "titulo": "Movimiento planar: sagital, frontal y transversal",
+      "paginas_manual": [
+        6,
+        8
+      ],
+      "resumen": "Mirar el cuerpo plano por plano quita una capa de complejidad al análisis. En el plano sagital, las cadenas anterior y posterior se contraponen para sostener la postura erguida y, juntas, forman un 'sándwich muscular' que estabiliza la columna en ejercicios como la plancha. El plano frontal funciona como dos columnas laterales (por el lado interno y externo de las piernas y los costados del tronco): mantiene la caja torácica sobre la pelvis y la pelvis nivelada sobre las piernas al transferir peso, por ejemplo al caminar, correr o estar en un pie, y permite arranques y frenadas laterales. El plano transversal (rotación) es el más complejo de reconocer y entrenar porque casi nunca aparece aislado; ocurre de forma global entre tórax y pelvis (la contrarrotación impulsa la marcha; en un lanzamiento o un swing todo el cuerpo genera la potencia y el brazo solo la entrega) y de forma local en hombros, caderas y extremidades. Al observar rotación se busca simetría entre ambos lados. La observación local, 'con lupa', se centra en amplitud de movimiento, mecánica articular y equilibrio muscular de una zona.",
+      "puntos_clave": [
+        "Sagital: flexión y extensión; soporte anterior y posterior.",
+        "Frontal: flexión lateral del tronco, abducción y aducción; estabilidad lateral y medial.",
+        "Transversal: rotación espinal y rotación medial/lateral de extremidades; control rotacional.",
+        "Estar en un solo pie: el sistema lateral evita que la pelvis caiga o se desplace hacia un lado.",
+        "Rotación global: la pelvis rota en oposición a la columna torácica al caminar.",
+        "Observación global de rotación: rotar de pie a cada lado y comparar; local: rotación glenohumeral y de cadera."
+      ],
+      "musculos_por_accion": {
+        "sagital_flexion": {
+          "cuello": "escalenos, esternocleidomastoideo, largo del cuello, largo de la cabeza",
+          "tronco": "recto abdominal, oblicuos interno y externo",
+          "cadera": "ilíaco, psoas mayor, sartorio, recto femoral, tensor de la fascia lata, aductores",
+          "rodilla": "isquiotibiales (bíceps femoral, semimembranoso, semitendinoso), gastrocnemio",
+          "tobillo_dorsiflexion_y_extension_dedos": "tibial anterior, extensor largo del dedo gordo, extensor largo de los dedos",
+          "hombro": "deltoides anterior, pectoral mayor (porción clavicular), bíceps braquial (cabeza larga), coracobraquial, redondo mayor, subescapular",
+          "codo": "braquial, bíceps braquial, braquiorradial, con ayuda de los flexores de muñeca",
+          "muneca_y_dedos": "flexores radial y cubital del carpo, palmar menor, flexores superficial y profundo de los dedos, flexor largo del pulgar, oponente del pulgar, lumbricales, interóseos, flexor corto del quinto dedo"
+        },
+        "sagital_extension": {
+          "columna_y_cuello": "erectores de la columna, extensores cervicales",
+          "cadera": "isquiotibiales, glúteo mayor",
+          "rodilla": "cuádriceps",
+          "tobillo_flexion_plantar_y_flexion_dedos": "gastrocnemio, sóleo, tibial posterior, peroneos, flexor largo del dedo gordo, flexor largo de los dedos",
+          "hombro": "dorsal ancho, redondo mayor, deltoides posterior, tríceps braquial",
+          "codo": "tríceps braquial, ancóneo",
+          "muneca_y_dedos": "extensores radiales largo y corto del carpo, extensor de los dedos, extensor del meñique, extensor cubital del carpo, extensores largo y corto del pulgar, extensor del índice, lumbricales"
+        },
+        "frontal_abduccion_y_soporte_lateral": {
+          "flexion_lateral_tronco": "oblicuos interno y externo, cuadrado lumbar, erectores de la columna, psoas mayor, intercostales",
+          "abduccion_cadera": "glúteos medio, menor y mayor, piriforme, tensor de la fascia lata",
+          "soporte_lateral_pierna_y_tobillo": "peroneos",
+          "abduccion_hombro": "deltoides, supraespinoso"
+        },
+        "frontal_aduccion_y_soporte_medial": {
+          "aduccion_cadera": "pectíneo, aductores corto, largo y mayor, grácil",
+          "soporte_medial_pierna_y_tobillo": "tibiales anterior y posterior, flexor largo del dedo gordo, flexor largo de los dedos",
+          "aduccion_hombro": "dorsal ancho, redondo mayor, coracobraquial, pectoral mayor"
+        },
+        "transversal_equilibrio_rotacional": "musculatura de la pierna, abductores y aductores de cadera, rotadores laterales y mediales de cadera, oblicuos, dorsal ancho con glúteo mayor, erectores y musculatura espinal profunda, serrato anterior y romboides, manguito rotador"
+      }
+    },
+    {
+      "id": "m1-s4",
+      "titulo": "Análisis de la postura: plomada vertical y alineación horizontal",
+      "paginas_manual": [
+        9,
+        13
+      ],
+      "resumen": "El análisis postural estudia la relación óptima del cuerpo con la gravedad. En la primera sesión conviene observar la postura general, notar irregularidades y limitaciones de movilidad: eso define en qué trabajar y qué ejercicios habrá que modificar. La postura neutral ideal tiene tres cualidades: facilidad, economía (mínima energía) y eficiencia (máximo rendimiento). Con los huesos bien apilados, el cuerpo gasta solo la energía necesaria para mantenerse contra la gravedad y queda listo para moverse en cualquier plano. La evaluación vertical usa una línea de plomada vista de lado, de frente y de espaldas; la horizontal compara niveles izquierda-derecha. El manual incluye un formulario de dos páginas para registrar una línea base y reevaluar periódicamente.",
+      "puntos_clave": [
+        "Tres criterios de calidad: facilidad, economía, eficiencia.",
+        "Plomada lateral: lóbulo de la oreja → parte superior del hombro → centro de la caja torácica → punto alto de la cresta ilíaca → punto medio lateral de la rodilla → ligeramente por delante del maléolo lateral (centro del cuboides).",
+        "Plomada frontal (tronco): nariz → centro del esternón → ombligo → centro del pubis.",
+        "Plomada frontal (piernas): interior de la EIAS → centro de la rótula → centro del frente del tobillo → espacio entre el 1.er y 2.º dedo.",
+        "Plomada posterior (tronco): centro del cráneo → columna recta → centro del sacro y cóccix.",
+        "Plomada posterior (piernas): centro del pliegue glúteo → centro del hueco poplíteo → centro del tendón de Aquiles.",
+        "Horizontal de frente: ojos, hombros, espacio brazo-tronco igual, EIAS, crestas ilíacas, trocánteres mayores, rodillas, apertura igual de ambos pies.",
+        "Horizontal de espaldas: orejas, escápulas, distancia columna-costados igual, EIPS, crestas ilíacas, rodillas.",
+        "Registrar una postura de referencia antes de iniciar y reevaluar periódicamente."
+      ]
+    },
+    {
+      "id": "m1-s5",
+      "titulo": "Desalineaciones comunes",
+      "paginas_manual": [
+        14,
+        17
+      ],
+      "resumen": "Cada desalineación resulta de una mezcla de estructura ósea, movilidad articular, hábitos, tensión y fuerza muscular. Los patrones sobre todo musculares cambian con más facilidad que los que tienen base ósea o articular; la meta es lograr tanto equilibrio como permita la estructura del cliente, de forma gradual. La lógica general: estirar lo que está corto o tenso y fortalecer lo que está largo o débil, y luego sostener el nuevo patrón en el movimiento funcional.",
+      "puntos_clave": [
+        "Escoliosis: desviación lateral de la columna, casi siempre con rotación; curva en C (una región) o en S (dos regiones en sentidos opuestos). Estirar con suavidad el lado cóncavo (cerrado), fortalecer el lado convexo (abierto); se recomienda formación específica.",
+        "Hiperlordosis lumbar: suele ir con extensores lumbares y flexores de cadera tensos, abdominales débiles y pelvis en anteversión. Movilizar lumbares y flexores de cadera, fortalecer abdominales e isquiotibiales, estabilizar en neutro.",
+        "Hipercifosis torácica: extensores torácicos y estabilizadores escapulares débiles, pectorales tensos. Estirar el pecho y fortalecer extensores torácicos y estabilizadores escapulares.",
+        "Anteversión pélvica (EIAS por delante del pubis): alargar flexores de cadera y extensores lumbares, fortalecer isquiotibiales y abdominales.",
+        "Retroversión pélvica (EIAS por detrás del pubis): lo inverso: fortalecer flexores de cadera y extensores lumbares, alargar isquiotibiales y abdominales.",
+        "Cadera alta / cadera baja (crestas ilíacas desniveladas): equilibrar el sistema lateral (abductores, aductores, cuadrado lumbar, musculatura lateral del tronco).",
+        "Rotación pélvica (una EIAS adelantada y más cerca de la línea media, la otra atrasada): implica contrarrotación de fémures y tronco; equilibrar oblicuos anteriores/posteriores y rotadores de cadera.",
+        "Rotación medial femoral (rótulas hacia adentro): fortalecer rotadores laterales, estirar aductores y rotadores mediales. Rotación lateral femoral (rótulas hacia afuera): lo inverso.",
+        "Hiperextensión de rodilla (rodillas por detrás de la plomada, por hipermovilidad): evitar bloquear rodillas bajo carga; equilibrar isquiotibiales y cuádriceps.",
+        "Torsión tibial (tibia rotada respecto al fémur) y arqueamiento tibial (tibia curvada): repartir fuerzas en rodilla y tobillo sin forzar las articulaciones.",
+        "Genu valgo (rodillas se tocan, bordes internos de los pies no; ángulo Q aumentado, más común en mujeres) y genu varo (bordes internos de los pies se tocan, rodillas no; ángulo Q disminuido, a veces con hiperextensión). Corregir lo posible durante el ejercicio y revisar rotación de cadera y equilibrio abductores/aductores.",
+        "Pronación (arco aplanado, Aquiles inclinado hacia medial, peso en el borde interno): falta de fuerza medial desde tobillo a pelvis; fortalecer el arco y la línea media de la pierna.",
+        "Supinación (arco alto, peso en el borde externo, pie rígido): estirar el arco y el lado medial de las piernas.",
+        "Juanete (dedo gordo desviado hacia el centro del pie): corregir la tendencia a rodar pies y piernas y el recorrido del pie en la marcha.",
+        "Escápula alada (borde medial separado de las costillas): serrato anterior débil o tórax poco profundo; fortalecer estabilizadores escapulares y extensores torácicos.",
+        "Escápula elevada (hacia las orejas): trapecio superior, pectoral menor y elevador de la escápula tensos; serrato inferior y trapecio inferior débiles. Fortalecer depresores y coordinar el ritmo escapulohumeral en la rotación ascendente."
+      ]
+    },
+    {
+      "id": "m1-s6",
+      "titulo": "Síndromes cruzados superior e inferior (Janda)",
+      "paginas_manual": [
+        18,
+        18
+      ],
+      "resumen": "Vladimir Janda describió dos patrones posturales frecuentes en los que músculos acortados y activos se oponen en diagonal a músculos alargados e inactivos. Identificar el patrón es el primer paso; el segundo es corregir los hábitos que lo mantienen: estirar lo corto, fortalecer lo largo y practicar el nuevo patrón hasta volverlo hábito. En ambos casos se enseña al cliente a sentarse y pararse mirando al frente, y se puede usar un bastón o rodillo contra la espalda para alinear sacro, zona media del tórax y cabeza.",
+      "puntos_clave": [
+        "Superior: cabeza adelantada y hombros redondeados.",
+        "Superior, cortos/activos: elevador de la escápula, trapecio superior y medio, esternocleidomastoideo, escalenos, subescapular, dorsal ancho, pectorales mayor y menor, flexores del brazo (sobre todo bíceps).",
+        "Superior, largos/inactivos: trapecio inferior, serrato anterior, romboides, supraespinoso, infraespinoso, deltoides, flexores profundos del cuello, extensores del brazo (sobre todo tríceps).",
+        "Superior, abordaje: estirar el pecho en varios ángulos, fortalecer estabilizadores y depresores escapulares y extensores de la espalda alta.",
+        "Inferior: anteversión pélvica con aumento de la lordosis lumbar.",
+        "Inferior, cortos/activos: iliopsoas, recto femoral, erectores de la columna, tensor de la fascia lata, aductores, cuadrado lumbar.",
+        "Inferior, largos/inactivos: recto abdominal, glúteos, vastos lateral y medial, piriforme, isquiotibiales.",
+        "Inferior, abordaje: estirar cadera anterior y zona lumbar; fortalecer abdominales y glúteos."
+      ]
+    },
+    {
+      "id": "m1-s7",
+      "titulo": "Pelvis neutra (posición lumbopélvica neutra)",
+      "paginas_manual": [
+        19,
+        19
+      ],
+      "resumen": "Según la biomecánica actual, el núcleo estabiliza mejor la pelvis y la columna lumbar en posición neutra: la gravedad reparte la carga de forma equilibrada entre la musculatura que rodea la columna y el abdomen, lo que reduce la tensión y ayuda a prevenir dolor lumbar. Se identifica con dos referencias: EIAS y pubis. Si ambos quedan en un plano perpendicular al suelo (de pie o sentado) o paralelo al suelo (en supino), la pelvis está neutra. La investigación se ha hecho sobre todo en bipedestación, así que en supino puede requerir ajustes. Lo neutro es dinámico: varía un poco según el movimiento.",
+      "puntos_clave": [
+        "Triángulo con las manos: talones de las manos en las EIAS y dedos en el pubis, punta hacia abajo; observar hacia dónde se inclina.",
+        "EIAS por delante del pubis = anteversión; EIAS por detrás = retroversión.",
+        "Imagen: la pelvis es un tazón con agua; si se derrama hacia delante hay anteversión, hacia atrás retroversión.",
+        "Mantener las curvas de la columna y la pelvis neutra durante el movimiento entrena la fuerza dinámica del núcleo y su integración con las extremidades."
+      ]
+    },
+    {
+      "id": "m1-s8",
+      "titulo": "Cómo funciona el entrenamiento: crear cambio físico",
+      "paginas_manual": [
+        20,
+        21
+      ],
+      "resumen": "Los clientes llegan esperando un cambio, sea reducir dolor, verse mejor o mejorar una habilidad. Hay que escucharlos y validar sus metas mientras se evalúan su nivel físico, su edad y su estilo de aprendizaje. El nivel físico se lee con cuatro pistas: postura estática, calidad del movimiento dinámico (por ejemplo, la marcha), fuerza y movilidad (incluido el historial de ejercicio) y coordinación/propiocepción. La edad y la etapa de vida cambian las necesidades aunque el objetivo sea similar. El control motor es la coordinación entre sistema nervioso central y sistema musculoesquelético; el aprendizaje motor es cómo incorporamos nuevas habilidades, en cuatro etapas. Para generar cambio hay que desafiar al cuerpo más allá de su capacidad actual, dosificando con la regla 80/20.",
+      "puntos_clave": [
+        "Marcha: ¿balanceo igual de brazos?, ¿rotan tronco y pelvis?, ¿hay extensión de cadera en la pierna de impulso?, ¿qué hacen los pies al cargar peso?",
+        "Etapa 1, incompetente inconsciente: 'no puedo y no sé que no puedo'. Hay que crear conciencia del déficit y darle valor a la nueva habilidad.",
+        "Etapa 2, incompetente consciente: 'no puedo y lo sé'. Los errores seguros son parte útil del aprendizaje.",
+        "Etapa 3, competente consciente: 'puedo si me concentro'. Ideal para pulir matices.",
+        "Etapa 4, competente inconsciente: 'puedo sin pensarlo'. Automático; se puede hacer mientras se hace otra cosa.",
+        "Estilos de aprendizaje: auditivo/visual/kinestésico; orientado a resultados o a procesos; responde mejor a elogio o a exigencia.",
+        "Los desafíos pueden sumar complejidad, resistencia, duración o intensidad; llevar al cliente al borde de la competencia consciente.",
+        "Consistencia: el entrenamiento debe ser interesante, útil y exitoso; definir, evaluar y redefinir metas.",
+        "Regla 80/20: 80 % de la sesión refuerza lo que el cliente ya logra (con variedad, no repetición vacía) y construye confianza e independencia; 20 % introduce retos y habilidades nuevas, siempre del lado seguro."
+      ]
+    }
+  ],
+  "notas_manuscritas_de_la_usuaria": [
+    {
+      "pagina_manual": 4,
+      "nota": "Función de cada sistema: esquelético = estructural; muscular y fascial = movedores; cardiovascular = energía; nervioso = centro de mando. Movimiento global = varios sistemas en armonía."
+    },
+    {
+      "pagina_manual": 5,
+      "nota": "Componentes de una vida activa: capacidad cardiorrespiratoria, capacidad muscular, flexibilidad. Secundarios: tiempo de reacción, coordinación, capacidad mental, agilidad, equilibrio, ejercicios de potencia, velocidad. Global: simetría, equilibrio, coordinación, ROM, alineación, calidad de movimiento, eficacia. Local: coordinación en hombros, columna, caderas y tobillos. Eje perpendicular al plano (sagital y eje transversal)."
+    },
+    {
+      "pagina_manual": 11,
+      "nota": "Evalúe al cliente → defina las metas → cree un programa que alcance los objetivos → evalúe. Postura = posición del cuerpo; alineación = relación de las partes entre sí. El objetivo es mejorar bienestar, condición física y rendimiento, en progresión."
+    },
+    {
+      "pagina_manual": 21,
+      "nota": "Aprendizaje motor marcado como tema de EXAMEN. La etapa 1 (incompetente inconsciente) anotada como el proceso más difícil. 'Enseñando movimientos puedo inspirar, transformar y mejorar; los principios de movimiento me ayudan en el proceso de aprendizaje.'"
+    }
+  ],
+  "notas_de_traduccion": [
+    "El manual en español usa 'posición lumbopélvica fija' y 'pelvis fija'; el término técnico correcto es pelvis NEUTRA (en inglés, neutral). Neutra no significa inmóvil.",
+    "Pág. 14: el texto dice que la lordosis lumbar va con 'pelvis inclinada hacia atrás', pero la ilustración y la pág. 18 indican anteversión (inclinación anterior). Lo correcto es anteversión.",
+    "EIAS = espina ilíaca anterosuperior (ASIS en inglés); el OCR/traducción a veces pone 'ElAS' o 'EAS'. PSIS = EIPS, espina ilíaca posterosuperior.",
+    "'Deslizamiento pélvico hacia arriba/abajo' equivale a cadera elevada/descendida (hip hike/drop).",
+    "'Movimiento frontal (coronal)' se refiere al plano frontal.",
+    "'Escápulas elevadoras' (pág. 17) debe leerse como músculo elevador de la escápula; 'roladores' (pág. 15) como rotadores."
+  ],
+  "flashcards": [
+    {
+      "id": "m1-f01",
+      "frente": "¿Cuáles son los cinco sistemas que deben trabajar en sinergia para moverse con facilidad?",
+      "reverso": "Esquelético, muscular, fascial, cardiovascular y nervioso.",
+      "paginas_manual": [
+        4
+      ]
+    },
+    {
+      "id": "m1-f02",
+      "frente": "¿Cuáles son los tres niveles de observación del movimiento?",
+      "reverso": "Global (todo el cuerpo), planar (por planos) y local o regional (una articulación o zona).",
+      "paginas_manual": [
+        4,
+        5
+      ]
+    },
+    {
+      "id": "m1-f03",
+      "frente": "¿Qué movimientos definen el plano sagital?",
+      "reverso": "Flexión y extensión; además da el soporte anterior-posterior de la postura erguida.",
+      "paginas_manual": [
+        6
+      ]
+    },
+    {
+      "id": "m1-f04",
+      "frente": "¿Qué es el 'sándwich muscular' de la columna?",
+      "reverso": "La acción conjunta de la musculatura anterior y posterior que mantiene la columna alineada, por ejemplo en la plancha.",
+      "paginas_manual": [
+        6
+      ]
+    },
+    {
+      "id": "m1-f05",
+      "frente": "¿Qué hace el sistema lateral cuando estás en un solo pie?",
+      "reverso": "Mantiene la pelvis alineada sobre el fémur y evita que caiga o se desplace hacia un lado.",
+      "paginas_manual": [
+        7
+      ]
+    },
+    {
+      "id": "m1-f06",
+      "frente": "¿Por qué la rotación es el patrón más difícil de observar y entrenar?",
+      "reverso": "Porque casi nunca ocurre aislada: suele combinarse con componentes sagitales y frontales y exige coordinación multiplanar.",
+      "paginas_manual": [
+        8
+      ]
+    },
+    {
+      "id": "m1-f07",
+      "frente": "Al caminar, ¿qué genera el impulso rotacional?",
+      "reverso": "La rotación de la pelvis en oposición a la columna torácica.",
+      "paginas_manual": [
+        8
+      ]
+    },
+    {
+      "id": "m1-f08",
+      "frente": "¿Cuáles son las tres cualidades de una postura neutral eficiente?",
+      "reverso": "Facilidad, economía y eficiencia.",
+      "paginas_manual": [
+        9
+      ]
+    },
+    {
+      "id": "m1-f09",
+      "frente": "Puntos de la plomada vista lateral (de arriba abajo)",
+      "reverso": "Lóbulo de la oreja, parte superior del hombro, centro de la caja torácica, punto alto de la cresta ilíaca, punto medio lateral de la rodilla, ligeramente delante del maléolo lateral.",
+      "paginas_manual": [
+        10
+      ]
+    },
+    {
+      "id": "m1-f10",
+      "frente": "Puntos de la plomada frontal del tronco",
+      "reverso": "Nariz, centro del esternón, ombligo, centro del pubis.",
+      "paginas_manual": [
+        10
+      ]
+    },
+    {
+      "id": "m1-f11",
+      "frente": "Puntos de la plomada posterior de las piernas",
+      "reverso": "Centro del pliegue glúteo, centro del hueco poplíteo, centro del tendón de Aquiles.",
+      "paginas_manual": [
+        10
+      ]
+    },
+    {
+      "id": "m1-f12",
+      "frente": "Escoliosis en C vs. en S",
+      "reverso": "C: la curva ocupa una sola región. S: dos curvas en regiones distintas y en sentidos opuestos (p. ej., torácica derecha y lumbar izquierda).",
+      "paginas_manual": [
+        14
+      ]
+    },
+    {
+      "id": "m1-f13",
+      "frente": "Escoliosis: ¿qué lado se estira y cuál se fortalece?",
+      "reverso": "Se estira con suavidad el lado cerrado (cóncavo) de la curva y se fortalece el lado abierto (convexo).",
+      "paginas_manual": [
+        14
+      ]
+    },
+    {
+      "id": "m1-f14",
+      "frente": "¿Cómo se define la anteversión pélvica?",
+      "reverso": "Cuando la EIAS queda por delante del pubis.",
+      "paginas_manual": [
+        15
+      ]
+    },
+    {
+      "id": "m1-f15",
+      "frente": "Anteversión pélvica: ¿qué alargar y qué fortalecer?",
+      "reverso": "Alargar flexores de cadera y extensores lumbares; fortalecer isquiotibiales y abdominales.",
+      "paginas_manual": [
+        15
+      ]
+    },
+    {
+      "id": "m1-f16",
+      "frente": "Rotación medial femoral: ¿cómo se ve y cómo se aborda?",
+      "reverso": "Rótulas apuntando hacia la línea media. Fortalecer rotadores laterales; estirar aductores y rotadores mediales.",
+      "paginas_manual": [
+        15
+      ]
+    },
+    {
+      "id": "m1-f17",
+      "frente": "Genu valgo vs. genu varo",
+      "reverso": "Valgo: rodillas se tocan, bordes internos de los pies no (ángulo Q aumentado). Varo: bordes internos de los pies se tocan, rodillas no (ángulo Q disminuido).",
+      "paginas_manual": [
+        16
+      ]
+    },
+    {
+      "id": "m1-f18",
+      "frente": "Pronación del pie: signos y abordaje",
+      "reverso": "Arco aplanado, Aquiles inclinado hacia medial, peso en el borde interno. Fortalecer el arco y la línea media de la pierna.",
+      "paginas_manual": [
+        17
+      ]
+    },
+    {
+      "id": "m1-f19",
+      "frente": "Escápula alada: posible causa",
+      "reverso": "Serrato anterior débil o caja torácica poco profunda.",
+      "paginas_manual": [
+        17
+      ]
+    },
+    {
+      "id": "m1-f20",
+      "frente": "Síndrome cruzado superior: presentación",
+      "reverso": "Cabeza adelantada y hombros redondeados.",
+      "paginas_manual": [
+        18
+      ]
+    },
+    {
+      "id": "m1-f21",
+      "frente": "Síndrome cruzado inferior: músculos cortos/activos",
+      "reverso": "Iliopsoas, recto femoral, erectores de la columna, tensor de la fascia lata, aductores, cuadrado lumbar.",
+      "paginas_manual": [
+        18
+      ]
+    },
+    {
+      "id": "m1-f22",
+      "frente": "Síndrome cruzado inferior: músculos largos/inactivos",
+      "reverso": "Recto abdominal, glúteos, vastos lateral y medial, piriforme, isquiotibiales.",
+      "paginas_manual": [
+        18
+      ]
+    },
+    {
+      "id": "m1-f23",
+      "frente": "¿Qué referencias óseas definen la pelvis neutra y cómo deben quedar?",
+      "reverso": "EIAS y pubis: en un plano perpendicular al suelo de pie o sentado, y paralelo al suelo en supino.",
+      "paginas_manual": [
+        19
+      ]
+    },
+    {
+      "id": "m1-f24",
+      "frente": "Las cuatro etapas del aprendizaje motor",
+      "reverso": "Incompetente inconsciente → incompetente consciente → competente consciente → competente inconsciente.",
+      "paginas_manual": [
+        21
+      ],
+      "marcado_examen": true
+    },
+    {
+      "id": "m1-f25",
+      "frente": "Regla 80/20",
+      "reverso": "80 % de la sesión refuerza habilidades que el cliente domina (con variedad); 20 % introduce retos y habilidades nuevas.",
+      "paginas_manual": [
+        21
+      ]
+    },
+    {
+      "id": "m1-f26",
+      "frente": "Cuatro pistas para evaluar el nivel físico actual",
+      "reverso": "Postura estática y alineación, calidad del movimiento dinámico, fuerza y movilidad, coordinación y propiocepción.",
+      "paginas_manual": [
+        20
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "id": "m1-q01",
+      "pregunta": "Un cliente camina y notas que solo un brazo balancea. Según el modelo de tres niveles, ¿qué sigue?",
+      "opciones": [
+        "Ignorarlo, es un detalle local",
+        "Analizar local/planar para encontrar dónde se interrumpe el patrón, corregir y volver a verificar en global",
+        "Pasar directamente a ejercicios de potencia",
+        "Evaluar solo el plano sagital"
+      ],
+      "correcta": 1,
+      "explicacion": "Lo global detecta la interrupción, lo local la corrige y se vuelve a lo global para comprobar la mejora.",
+      "paginas_manual": [
+        4,
+        5
+      ]
+    },
+    {
+      "id": "m1-q02",
+      "pregunta": "La abducción de cadera y la flexión lateral del tronco pertenecen al plano:",
+      "opciones": [
+        "Sagital",
+        "Frontal",
+        "Transversal",
+        "Oblicuo"
+      ],
+      "correcta": 1,
+      "explicacion": "El plano frontal incluye abducción/aducción y flexión lateral.",
+      "paginas_manual": [
+        7
+      ]
+    },
+    {
+      "id": "m1-q03",
+      "pregunta": "¿Qué músculos aparecen en el manual como abductores de cadera?",
+      "opciones": [
+        "Pectíneo y grácil",
+        "Glúteos medio, menor y mayor, piriforme y TFL",
+        "Isquiotibiales y gastrocnemio",
+        "Iliopsoas y sartorio"
+      ],
+      "correcta": 1,
+      "explicacion": "Pectíneo y grácil son aductores; glúteos, piriforme y tensor de la fascia lata abducen.",
+      "paginas_manual": [
+        7
+      ]
+    },
+    {
+      "id": "m1-q04",
+      "pregunta": "En la plomada lateral, el último punto de referencia está:",
+      "opciones": [
+        "En el centro del talón",
+        "Ligeramente por delante del maléolo lateral",
+        "En el primer metatarsiano",
+        "Detrás del maléolo medial"
+      ],
+      "correcta": 1,
+      "explicacion": "Ligeramente por delante del maléolo lateral, aproximadamente en el centro del cuboides.",
+      "paginas_manual": [
+        10
+      ]
+    },
+    {
+      "id": "m1-q05",
+      "pregunta": "Un cliente tiene la EIAS por detrás del pubis. ¿Qué abordaje corresponde?",
+      "opciones": [
+        "Alargar flexores de cadera y fortalecer abdominales",
+        "Fortalecer flexores de cadera y extensores lumbares; alargar isquiotibiales y abdominales",
+        "Solo estirar cuádriceps",
+        "Fortalecer isquiotibiales"
+      ],
+      "correcta": 1,
+      "explicacion": "Es retroversión pélvica; el abordaje es el inverso al de la anteversión.",
+      "paginas_manual": [
+        15
+      ]
+    },
+    {
+      "id": "m1-q06",
+      "pregunta": "¿Qué patrón es más difícil de modificar?",
+      "opciones": [
+        "Uno principalmente muscular",
+        "Uno arraigado en la estructura ósea y articular",
+        "Uno de hábito reciente",
+        "Todos cambian igual"
+      ],
+      "correcta": 1,
+      "explicacion": "Los patrones estructurales cambian menos; se busca el mejor equilibrio que permita la estructura.",
+      "paginas_manual": [
+        14
+      ]
+    },
+    {
+      "id": "m1-q07",
+      "pregunta": "La hiperextensión de rodilla se asocia generalmente a:",
+      "opciones": [
+        "Rigidez articular",
+        "Hipermovilidad de la rodilla",
+        "Pronación del pie",
+        "Escoliosis"
+      ],
+      "correcta": 1,
+      "explicacion": "Las rodillas quedan por detrás de la plomada, normalmente por hipermovilidad.",
+      "paginas_manual": [
+        16
+      ]
+    },
+    {
+      "id": "m1-q08",
+      "pregunta": "En el síndrome cruzado superior, ¿cuál de estos músculos está largo e inactivo?",
+      "opciones": [
+        "Pectoral menor",
+        "Elevador de la escápula",
+        "Serrato anterior",
+        "Esternocleidomastoideo"
+      ],
+      "correcta": 2,
+      "explicacion": "Serrato anterior, trapecio inferior, romboides y flexores profundos del cuello quedan largos e inactivos.",
+      "paginas_manual": [
+        18
+      ]
+    },
+    {
+      "id": "m1-q09",
+      "pregunta": "En la imagen del tazón con agua, si el agua se derrama hacia delante la pelvis está en:",
+      "opciones": [
+        "Neutro",
+        "Retroversión",
+        "Anteversión",
+        "Rotación"
+      ],
+      "correcta": 2,
+      "explicacion": "Derrame hacia delante = inclinación anterior (anteversión).",
+      "paginas_manual": [
+        19
+      ]
+    },
+    {
+      "id": "m1-q10",
+      "pregunta": "Un cliente dice: 'Lo logro, pero solo si me concentro mucho'. ¿En qué etapa está?",
+      "opciones": [
+        "Incompetente inconsciente",
+        "Incompetente consciente",
+        "Competente consciente",
+        "Competente inconsciente"
+      ],
+      "correcta": 2,
+      "explicacion": "Competente consciente: puede hacerlo con atención; es la etapa ideal para pulir detalles.",
+      "paginas_manual": [
+        21
+      ],
+      "marcado_examen": true
+    },
+    {
+      "id": "m1-q11",
+      "pregunta": "Según la regla 80/20, el 80 % de la sesión debe:",
+      "opciones": [
+        "Introducir ejercicios nuevos",
+        "Reforzar con variedad las habilidades que el cliente ya logra",
+        "Ser siempre las mismas repeticiones",
+        "Dedicarse a estiramientos"
+      ],
+      "correcta": 1,
+      "explicacion": "Refuerza lo que ya logra, sin repetición vacía, construyendo confianza e independencia; el 20 % es para retos.",
+      "paginas_manual": [
+        21
+      ]
+    },
+    {
+      "id": "m1-q12",
+      "pregunta": "¿Por qué el manual prefiere trabajar el núcleo con la pelvis en neutro?",
+      "opciones": [
+        "Porque es más cómodo visualmente",
+        "Porque la carga se reparte de forma equilibrada entre la musculatura de columna y abdomen, reduciendo tensión lumbar",
+        "Porque elimina la necesidad de estabilizar",
+        "Porque es una posición fija que no cambia"
+      ],
+      "correcta": 1,
+      "explicacion": "En neutro el acoplamiento muscular es equilibrado; además, lo neutro es dinámico, no fijo.",
+      "paginas_manual": [
+        19
+      ]
+    }
+  ],
+  "figuras": [
+    {
+      "id": "m1-fig01",
+      "pagina_manual": 5,
+      "que_muestra": "Diagrama circular de los tres niveles de observación (global, planar integrado, local/regional) con flechas que los conectan en ciclo.",
+      "formato_recomendado": "svg_codigo",
+      "viabilidad_ia": "baja",
+      "motivo": "Es un diagrama conceptual con texto; se hace mejor y más exacto como SVG propio.",
+      "prompt_imagen": null
+    },
+    {
+      "id": "m1-fig02",
+      "pagina_manual": 6,
+      "que_muestra": "Plancha como ejemplo del 'sándwich muscular' anterior-posterior.",
+      "formato_recomendado": "ia_imagen",
+      "viabilidad_ia": "alta",
+      "prompt_imagen": "Clean educational fitness illustration, side view, an adult in plain fitted dark athletic clothing holding a forearm plank on a mat, body in one straight line from head to heels, neutral neck, shoulders stacked over elbows, plain light gray background, soft even lighting, full body visible, no text, no logos",
+      "prompt_negativo": "sagging hips, raised hips, arched lower back, text, watermark, logo, extra limbs, distorted hands",
+      "verificar": "Línea recta cabeza-talones, hombros sobre codos, sin caída ni elevación de caderas."
+    },
+    {
+      "id": "m1-fig03",
+      "pagina_manual": 7,
+      "que_muestra": "Persona en apoyo monopodal mostrando la línea lateral que mantiene la pelvis nivelada.",
+      "formato_recomendado": "ia_imagen",
+      "viabilidad_ia": "media",
+      "prompt_imagen": "Clean educational fitness illustration, front view, an adult in plain fitted athletic clothing standing on the right leg with the left knee lifted to hip height, pelvis level, torso upright, arms relaxed at sides, plain light background, full body visible, no text, no logos",
+      "prompt_negativo": "tilted pelvis, leaning torso, text, watermark, logo, extra limbs",
+      "verificar": "Pelvis nivelada (crestas a la misma altura) y tronco centrado; la IA tiende a inclinar la pelvis sin querer."
+    },
+    {
+      "id": "m1-fig04",
+      "pagina_manual": 8,
+      "que_muestra": "Rotación del tronco de pie, buscando simetría a ambos lados.",
+      "formato_recomendado": "ia_imagen",
+      "viabilidad_ia": "media",
+      "prompt_imagen": "Clean educational fitness illustration, front view, an adult in plain fitted athletic clothing standing with feet hip-width apart, rotating the upper torso to the left while the pelvis stays facing forward, arms crossed over the chest, plain light background, full body, no text, no logos",
+      "prompt_negativo": "pelvis rotated, feet turned, text, watermark, logo, distorted anatomy",
+      "verificar": "Que rote el tórax y no la pelvis ni los pies; generar también la versión al otro lado."
+    },
+    {
+      "id": "m1-fig05",
+      "pagina_manual": 10,
+      "que_muestra": "Figura humana de perfil con línea de plomada y los seis puntos de referencia laterales; además vistas frontal y posterior con sus puntos.",
+      "formato_recomendado": "svg_codigo",
+      "viabilidad_ia": "baja",
+      "motivo": "La IA no coloca con precisión referencias anatómicas ni líneas rectas sobre ellas. Un SVG con silueta simple, línea vertical y puntos rotulados es exacto e interactivo (tocar un punto muestra su nombre).",
+      "prompt_imagen": null
+    },
+    {
+      "id": "m1-fig06",
+      "pagina_manual": 11,
+      "que_muestra": "Vistas frontal y posterior con líneas horizontales en ojos/orejas, hombros, EIAS/EIPS, crestas, rodillas.",
+      "formato_recomendado": "svg_codigo",
+      "viabilidad_ia": "baja",
+      "motivo": "Mismo motivo: precisión de niveles.",
+      "prompt_imagen": null
+    },
+    {
+      "id": "m1-fig07",
+      "pagina_manual": 14,
+      "que_muestra": "Escoliosis (radiografía) y siluetas de perfil con hiperlordosis y con hipercifosis.",
+      "formato_recomendado": "svg_codigo",
+      "viabilidad_ia": "baja-media",
+      "motivo": "Una columna esquemática en SVG (curva C, curva S, lordosis, cifosis) es más clara para estudiar que una imagen generada. Si se quiere una figura humana de perfil, usar el prompt y revisar.",
+      "prompt_imagen": "Simple clean line-art educational illustration, side view silhouette of an adult standing, exaggerated inward curve of the lower back with the pelvis tilted forward and belly pushed out, plain white background, no text, no logos",
+      "prompt_negativo": "text, labels, watermark, logo, realistic skin, clothing patterns",
+      "verificar": "Que la curva lumbar esté aumentada y la pelvis en anteversión, no solo el abdomen hacia fuera."
+    },
+    {
+      "id": "m1-fig08",
+      "pagina_manual": 15,
+      "que_muestra": "Pelvis en anteversión y en retroversión (perfil).",
+      "formato_recomendado": "svg_codigo",
+      "viabilidad_ia": "baja",
+      "motivo": "Las inclinaciones pélvicas son sutiles y la IA suele ignorarlas. Un SVG de pelvis que rota con un deslizador (con EIAS y pubis marcados) enseña mucho mejor.",
+      "prompt_imagen": null
+    },
+    {
+      "id": "m1-fig09",
+      "pagina_manual": 16,
+      "que_muestra": "Hiperextensión de rodilla (perfil) y genu valgo / genu varo (frente).",
+      "formato_recomendado": "svg_codigo",
+      "viabilidad_ia": "baja",
+      "motivo": "La IA tiende a dibujar piernas rectas aunque se le pida lo contrario.",
+      "prompt_imagen": null
+    },
+    {
+      "id": "m1-fig10",
+      "pagina_manual": 17,
+      "que_muestra": "Pie derecho visto desde atrás en supinación, neutro y pronación; escápulas aladas y elevadas.",
+      "formato_recomendado": "svg_codigo",
+      "viabilidad_ia": "baja",
+      "motivo": "Ángulo del Aquiles y borde escapular requieren precisión; SVG esquemático.",
+      "prompt_imagen": null
+    },
+    {
+      "id": "m1-fig11",
+      "pagina_manual": 18,
+      "que_muestra": "Síndromes cruzados superior e inferior: silueta de perfil con dos líneas en X que unen músculos tensos y débiles.",
+      "formato_recomendado": "svg_codigo",
+      "viabilidad_ia": "baja",
+      "motivo": "Es un diagrama esquemático; se dibuja fácil en SVG con etiquetas tocables.",
+      "prompt_imagen": null
+    },
+    {
+      "id": "m1-fig12",
+      "pagina_manual": 19,
+      "que_muestra": "Tres fotos de perfil: pelvis neutra, anteversión y retroversión, con una línea que marca la inclinación.",
+      "formato_recomendado": "svg_codigo",
+      "viabilidad_ia": "baja",
+      "motivo": "Mejor el mismo SVG interactivo de la fig08 con la analogía del tazón de agua animada.",
+      "prompt_imagen": null
+    }
+  ]
+}
