@@ -61,7 +61,7 @@ como un único archivo HTML. Textos en **voseo rioplatense y sin género** ("Tod
 ## Otras decisiones
 
 - Neuropedagogía: FSRS-5, práctica de recuperación, retroalimentación elaborada, reaprendizaje en la misma sesión, andamiaje que se retira (reconocer → producir), intercalado, calibración metacognitiva, hipercorrección, errores sin castigo.
-- Música instrumental opcional (la música no mejora el aprendizaje por sí misma; se baja sola en la retroalimentación). En iPhone el audio se desbloquea en touchend/pointerup/click y usa `navigator.audioSession='playback'` o un `<audio>` silencioso para sonar con el interruptor de silencio (confirmado que funciona).
+- Música instrumental opcional (la música no mejora el aprendizaje por sí misma; se baja sola en la retroalimentación). En iPhone el audio se desbloquea en touchend/pointerup/click y usa `navigator.audioSession='playback'` y además, siempre en iPhone/iPad, un `<audio>` silencioso en bucle (48 kHz estéreo; si la página bloquea `data:`, pasa a `blob:`) para sonar con el interruptor de silencio. WebKit ignora `audioSession` dentro de un iframe sin permiso de micrófono (la versión web de claude.ai): ahí depende del `<audio>`.
 - Mapa corporal: cada forma lleva los nombres EXACTOS de REGIONES (datos.js); si se agregan músculos, darles forma en mapa.js. Zoom con pellizco, doble toque y botones.
 
 ## Pendiente conocido

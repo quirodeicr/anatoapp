@@ -11056,34 +11056,40 @@ const MUSICA = (() => {
      El desbloqueo reproduce un sonido vacío dentro de ese gesto.
    · En iOS el audio web respeta el interruptor de silencio del costado,
      aunque el volumen esté alto. Declarar la sesión como "playback"
-     (lo que hace un reproductor de música) hace que suene igual.
-     En versiones de iOS sin esa API, un <audio> en silencio y en bucle
-     logra lo mismo. */
+     (lo que hace un reproductor de música) hace que suene igual, pero
+     WebKit ignora ese ajuste dentro de un iframe sin permiso de micrófono,
+     como la versión web publicada en claude.ai. Por eso en iPhone y iPad
+     también suena siempre un <audio> en silencio y en bucle, que pasa el
+     audio al canal de reproducción. Va en 48 kHz, 16 bits y estéreo:
+     iOS mezcla la música con la calidad de ese <audio>. */
+const esIOS = /iP(hone|ad|od)|Macintosh/.test(navigator.userAgent) && 'ontouchend' in document;
 let audioSilencioso = null;
 function wavSilencio() {
-  const sr = 8000, n = 2000, v = new DataView(new ArrayBuffer(44 + n));
+  const sr = 48000, n = 1024 * 4, v = new DataView(new ArrayBuffer(44 + n));
   const w = (o, t) => [...t].forEach((c, i) => v.setUint8(o + i, c.charCodeAt(0)));
   w(0, 'RIFF'); v.setUint32(4, 36 + n, true); w(8, 'WAVE'); w(12, 'fmt ');
-  v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
-  v.setUint32(24, sr, true); v.setUint32(28, sr, true); v.setUint16(32, 1, true); v.setUint16(34, 8, true);
+  v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 2, true);
+  v.setUint32(24, sr, true); v.setUint32(28, sr * 4, true); v.setUint16(32, 4, true); v.setUint16(34, 16, true);
   w(36, 'data'); v.setUint32(40, n, true);
-  for (let i = 0; i < n; i++) v.setUint8(44 + i, 128);
-  let bin = '';
-  new Uint8Array(v.buffer).forEach(b => { bin += String.fromCharCode(b); });
-  return 'data:audio/wav;base64,' + btoa(bin);
+  return v.buffer;
 }
 function sesionReproduccion() {
-  try {
-    if (navigator.audioSession) { navigator.audioSession.type = 'playback'; return; }
-  } catch (e) {}
-  if (!/iP(hone|ad|od)|Macintosh/.test(navigator.userAgent) || !('ontouchend' in document)) return;
+  try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+  if (!esIOS) return;
   try {
     if (!audioSilencioso) {
-      audioSilencioso = document.createElement('audio');
-      audioSilencioso.src = wavSilencio();
-      audioSilencioso.loop = true;
-      audioSilencioso.setAttribute('playsinline', '');
-      audioSilencioso.setAttribute('x-webkit-airplay', 'deny');
+      const a = audioSilencioso = document.createElement('audio');
+      a.loop = true; a.preload = 'auto'; a.disableRemotePlayback = true;
+      a.setAttribute('playsinline', '');
+      a.setAttribute('x-webkit-airplay', 'deny');
+      /* si la página no admite audio "data:" (política de contenido), prueba con "blob:";
+         el próximo toque lo reproduce */
+      a.onerror = () => {
+        if (a.src.startsWith('data:')) a.src = URL.createObjectURL(new Blob([wavSilencio()], { type: 'audio/wav' }));
+      };
+      let bin = '';
+      new Uint8Array(wavSilencio()).forEach(b => { bin += String.fromCharCode(b); });
+      a.src = 'data:audio/wav;base64,' + btoa(bin);
     }
     if (audioSilencioso.paused) audioSilencioso.play().catch(() => {});
   } catch (e) {}
