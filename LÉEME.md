@@ -1,7 +1,7 @@
 # AnatoApp 2
 
 App de estudio construida a partir de tu material de **Anatomía aplicada al método Pilates**:
-376 ejercicios en 16 unidades.
+444 ejercicios en 18 unidades.
 
 ## Fuentes del contenido
 
@@ -11,12 +11,20 @@ App de estudio construida a partir de tu material de **Anatomía aplicada al mé
 | `Analisis MAT 1.pdf` / `Mat 1.xlsx` (son el mismo material) | 25 fichas del MAT 1: series, posición, principio, objetivo, progresiones, regresiones y accesorios que asisten o resisten | `datos-mat1.js` |
 | `Principios Movimiento y Posiciones.xlsx` | 99 ejercicios Pre-Pilates con posición, principio, componente, objetivo y 109 fotos | `datos-premat.js` e `imagenes.js`, generados por `importar_premat.py` |
 | Material Balanced Body (`fuentes/modulo-01.json`, `mat1.json`, `mat2.json`) | Principios del Movimiento (módulo 1), Mat 1 (25 ejercicios) y Mat 2 (23 ejercicios): secciones, 64 flashcards, 30 preguntas, tus notas a mano y notas de traducción, cada cosa con su página del manual | `datos-bb.js`, generado por `importar_bb.py`; práctica en `contenido-bb.js` |
+| Tus 4 exámenes previos (revisiones en PDF: Principios del Movimiento 35/37, Mat 1 77/96, Mat 2 62/116, Mat 3 30/77) | 68 ejercicios con lo que te preguntaron, lo que marcó la corrección y las preguntas falladas. Transcripción en `fuentes/examenes-previos.md` | `datos-examenes.js` |
 
 Las 30 preguntas del material se reescribieron (`fuentes/quiz_revisado.json`): en 20 la respuesta correcta
 era mucho más larga que las demás y se delataba sola. Ahora mide lo mismo que las otras opciones, y los
 distractores son errores plausibles del mismo capítulo, nunca algo que en realidad sea cierto.
 
 Los **"Por qué"** y la revisión de distractores son elaboración propia, no texto de tus archivos.
+
+Con las preguntas de los exámenes se hizo lo mismo. Además, **"Todas las anteriores"**, **"A y B"** o
+**"Ninguna"** dejan de tener sentido cuando las opciones se mezclan: esas preguntas pasaron a
+*seleccioná las correctas* o a *emparejar*, que obligan a reconocer cada parte (en la hoja de respuesta se
+aclara cómo era en el examen). Lo que la revisión no dejó claro —las respuestas de la grilla de la bola en
+Mat 3, el tercer ejercicio escapular de Mat 2, el entrenamiento completo con accesorios que quedó "requiere
+revisión"— **no se pregunta**: figura en Apuntes → Tus exámenes como pendiente de confirmar con el manual.
 
 ### Qué no se usa para preguntas
 
@@ -51,8 +59,33 @@ Funciona sin internet. Tu progreso de la versión anterior se migra solo, sin pe
 
 ## Qué hay adentro
 
-**Inicio** — una ruta de 13 unidades, como en Duolingo. Cada nodo muestra cuánto viste, tus estrellas y
-cuánto recordás hoy. Arriba: meta diaria, racha y el **Repaso del día**.
+**Inicio** — una ruta de 18 unidades, como en Duolingo. Cada nodo muestra cuánto viste, tus estrellas y
+cuánto recordás hoy. Arriba: tu personaje, meta diaria, racha y el **Repaso del día**.
+
+**Tus exámenes** — dos unidades con lo que te preguntaron en los cuatro exámenes (*Examen: Principios* y
+*Exámenes de Mat*); lo que fallaste aparece primero y lleva la etiqueta "La fallaste en tu examen". En
+**Práctica → Simulacro de examen** salen mezcladas, también con lo fallado adelante. En **Apuntes → Tus
+exámenes** están tus notas, lo que marcó la corrección convertido en reglas ("si cada opción es cierta,
+es *Todas las anteriores*", "repeticiones exactas, no rangos", "decí dónde va el aro"…) y cada pregunta
+fallada con tu respuesta, lo correcto, el comentario de la corrección y un botón para practicarla.
+
+**Armá tu clase** (en Práctica) — diseñar la clase fue lo que más puntos costó (17 de 30 en Mat 1 y 0 de 50
+en Mat 2). Elegís la consigna (Mat 1 con 15 ejercicios o Mat 1 y 2 de una hora, con 20 a 25), sumás
+ejercicios del manual y Pre-Pilates de calentamiento, los ordenás y escribís un número de repeticiones por
+ejercicio. Entre dos posiciones distintas aparece la transición (la del manual cuando la hay). **Revisar mi
+clase** controla lo mismo que la corrección: cantidad, repeticiones exactas, orden de posiciones del manual
+(sin volver a supino después del prono), cantidad de cambios de posición, calentamiento y balance
+(flexión, movilidad, extensión, rotación o lateral, tren superior, tren inferior). La clase queda guardada.
+
+**Tu personaje y tu estudio** (pestaña Estudio) — un personaje con nombre propio (el 🎲 propone juegos de
+palabras: *Core-azón*, *Pelvis Presley*, *Glúteo Máximo*, *Teaser Rex*…) que se viste a gusto: piel, pelo,
+ropa, medias antideslizantes y accesorios. Vive en un estudio que se va llenando con el progreso: la pelota
+con la primera lección, la banda, el Magic circle con 3 días seguidos, el rodillo, la pizarra al aprobar una
+clase, el Spine corrector, la Wunda chair, el Ladder barrel, el Reformer, el diploma al terminar tus
+exámenes y el Cadillac en el nivel 8; también prendas, colores y accesorios. Cada aparato tiene su ficha
+y, cuando corresponde, lo que se vio de él en los exámenes. En Inicio te cuenta qué te falta para lo
+próximo, al terminar una lección festeja con vos, y si lo tocás, charla. Todo está dibujado en código
+(`estudio.js`): no usa imágenes.
 
 **Nueve formatos de ejercicio**
 
@@ -67,6 +100,7 @@ cuánto recordás hoy. Arriba: meta diaria, racha y el **Repaso del día**.
 | Flashcard | Predecís si la sabés, girás la tarjeta y calificás qué tan bien salió |
 | De memoria | Escribís la lista sin ayuda |
 | ¿Qué ejercicio es? | Ves la foto de un ejercicio Pre-Pilates y elegís su nombre |
+| Armá tu clase | Diseñás una clase completa y la app la corrige como en el examen |
 
 **Gamificación** — XP, 10 niveles (de *Célula* a *Maestría del movimiento*), racha con protectores,
 meta diaria configurable, combos, 15 logros y cierre de lección con estadísticas.
@@ -113,7 +147,7 @@ del texto: plomada lateral y frontal con puntos que se tocan, pelvis con desliza
 curvas de la columna y escoliosis, rodillas (hiperextensión, valgo, varo), pie visto desde atrás,
 escápulas, síndromes cruzados de Janda, etapas del aprendizaje motor y orden de posiciones de una clase.
 
-**Práctica libre** — elegís formato y unidad. **Mapa corporal** (con zoom: pellizcá, tocá dos veces o usá + / −), **Apuntes** con buscador y
+**Práctica libre** — Armá tu clase, Simulacro de examen, o elegís formato y unidad. **Mapa corporal** (con zoom: pellizcá, tocá dos veces o usá + / −), **Apuntes** con buscador y
 **Perfil** con tu memoria por unidad, calibración, ajustes, copias y respaldo.
 
 ---
@@ -176,7 +210,8 @@ El progreso vive en el navegador y **no se sincroniza con Google Drive**.
 
 ## Agregar o corregir contenido
 
-El contenido está en **`datos.js`** (apuntes) y **`datos-mat1.js`** (fichas del MAT 1), comentados.
+El contenido está en **`datos.js`** (apuntes), **`datos-mat1.js`** (fichas del MAT 1) y
+**`datos-examenes.js`** (tus exámenes), comentados.
 Además de las tarjetas (`CARDS`) hay `CLOZES` (completar), `PARES` (emparejar), `CLASIFICACIONES` y
 `SECUENCIAS` (ordenar). Los ejercicios Pre-Pilates no se editan a mano: corregí la planilla y corré
 `python importar_premat.py "ruta/a/Principios Movimiento y Posiciones.xlsx"`.

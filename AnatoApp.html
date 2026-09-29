@@ -818,6 +818,161 @@ html[data-fx="suaves"] .fin-trofeo .ico,html[data-fx="suaves"] .sube-badge,html[
 .dg-esc i{font-size:11.5px;color:var(--tx2);line-height:1.25}
 .dg-esc.e0{border-color:#dc2626}.dg-esc.e3{border-color:#16a34a}
 .dg-fo b{display:block;font-weight:800;margin-bottom:2px}.dg-fo i{color:var(--tx2)}
+/* ===== tus exámenes (datos-examenes.js) ===== */
+.tag.examen{background:var(--azul-cl);color:var(--azul);text-transform:none;letter-spacing:0}
+.tag.examen.fallada{background:var(--mal-cl);color:var(--mal-tx)}
+.ex-notas{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 12px}
+.ex-nota{background:var(--sup);border:2px solid var(--linea);border-radius:var(--r);padding:10px 12px;display:grid;gap:2px}
+.ex-nota small{font-size:11.5px;color:var(--tx3);font-weight:700}
+.ex-nota b{font-size:14.5px;font-weight:800;line-height:1.25}
+.ex-pts{font-size:24px;font-weight:800;letter-spacing:-.02em}
+.ex-pts i{font-style:normal;font-size:14px;color:var(--tx3)}
+.ex-nota.media .barra span{background:var(--xp)}
+.ex-nota.baja .barra span{background:var(--mal)}
+.lecciones{list-style:none;display:grid;gap:8px}
+.lecciones li{display:flex;gap:10px;background:var(--sup);border:2px solid var(--linea);border-radius:12px;padding:10px 12px}
+.lecciones li>span{font-size:20px;line-height:1.2}
+.lecciones b{display:block;font-size:14.5px;font-weight:800;line-height:1.35}
+.lecciones small{display:block;font-size:12.5px;color:var(--tx2);margin-top:3px;line-height:1.45}
+article.ex-rev{margin-bottom:10px}
+.ex-rev h4{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px}
+.ex-p{font-weight:800;color:var(--mal);white-space:nowrap}
+.ex-rev.pendiente .ex-p{color:var(--tx3)}
+.ex-q{font-weight:700;font-size:14.5px;line-height:1.4;margin:4px 0}
+.ex-tu,.ex-ok,.ex-com{font-size:13.5px;line-height:1.45;margin-top:4px}
+.ex-tu b{color:var(--mal)}
+.ex-ok b{color:var(--ok)}
+.ex-rev.pendiente .ex-ok b{color:var(--tx2)}
+.ex-com{color:var(--tx2);font-style:italic}
+.ex-rev .btn{margin:10px 6px 0 0}
+
+/* ===== armá tu clase (clase.js) ===== */
+.volver{background:none;border:0;color:var(--tx2);font-weight:700;font-size:14px;cursor:pointer;padding:4px 0;margin-bottom:6px}
+.modo.destacado{width:100%;margin:18px 0 10px;border-color:color-mix(in srgb,var(--mag) 55%,transparent);background:var(--mag-cl)}
+.modo.destacado i{color:var(--mag)}
+.cl-lista{list-style:none;display:grid;gap:6px}
+.cl-fila{display:flex;gap:10px;align-items:center;background:var(--sup);border:2px solid var(--linea);border-radius:12px;padding:8px 10px}
+.cl-n{font-weight:800;color:var(--tx3);min-width:20px;text-align:right}
+.cl-info{flex:1;min-width:0}
+.cl-info b{display:block;font-size:14.5px;font-weight:800;line-height:1.25}
+.cl-info small{font-size:12px;color:var(--tx2)}
+.cl-pos{font-weight:700}
+.cl-reps{display:flex;flex-direction:column;align-items:center}
+.cl-reps input{width:54px;font:inherit;font-weight:800;text-align:center;border:2px solid var(--linea2);border-radius:10px;padding:4px;background:var(--bg);color:var(--tx)}
+.cl-reps input:placeholder-shown{border-color:var(--xp);border-style:dashed}
+.cl-reps small{font-size:10.5px;color:var(--tx3)}
+.cl-mover{display:flex;flex-direction:column;gap:2px}
+.cl-mover button{background:var(--sup2);border:0;border-radius:6px;width:28px;height:22px;cursor:pointer;font-size:12px;font-weight:800}
+.cl-mover button:disabled{opacity:.3;cursor:default}
+@media(min-width:520px){.cl-mover{flex-direction:row}}
+.cl-trans{font-size:12.5px;color:var(--tx2);padding:0 8px 0 40px;line-height:1.4}
+.cl-trans.aviso{color:var(--mal)}
+.cl-trans i{font-style:normal;color:var(--tx3)}
+.cl-acc{margin-top:12px}
+.cl-pre{font-size:11px;text-transform:none;letter-spacing:0;color:var(--tx3)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.chips button{background:var(--sup);border:2px solid var(--linea2);border-radius:99px;padding:5px 11px;font-size:13px;font-weight:700;cursor:pointer}
+.chips button.on{border-color:var(--verde);background:var(--verde-cl);color:var(--verde-o)}
+.cl-pool{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.cl-ej{background:var(--sup);border:2px solid var(--linea2);border-bottom-width:4px;border-radius:12px;padding:8px 10px;text-align:left;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:0 8px;align-items:center}
+.cl-ej:hover{border-color:var(--verde)}
+.cl-ej .cl-pos{grid-row:span 2;font-size:20px}
+.cl-ej b{font-size:13.5px;font-weight:800;line-height:1.25}
+.cl-ej small{font-size:11.5px;color:var(--tx2)}
+.cl-ej.usado{opacity:.55}
+.cl-res{margin-top:16px;background:var(--sup);border:2px solid var(--linea);border-radius:var(--r);padding:14px 16px}
+.cl-res.ok{border-color:var(--ok);background:var(--ok-cl)}
+.cl-res h3{font-size:17px;font-weight:800;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.cl-check{list-style:none;display:grid;gap:10px;margin-top:12px}
+.cl-check li{display:flex;gap:10px}
+.cl-check li>span{flex-shrink:0;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:13px;color:#fff}
+.cl-check li.ok>span{background:var(--ok)}
+.cl-check li.aviso>span{background:var(--xp);color:#1c1405}
+.cl-check li.mal>span{background:var(--mal)}
+.cl-check b{font-size:14.5px}
+.cl-check p{font-size:13.5px;color:var(--tx2);line-height:1.45;margin-top:1px}
+
+/* ===== personaje y estudio (estudio.js) ===== */
+.pj-card{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:var(--sup);border:2px solid var(--linea);border-bottom-width:4px;border-radius:var(--r);padding:8px 14px 8px 6px;margin-bottom:12px;cursor:pointer}
+.pj-card:hover{border-color:var(--verde)}
+.pj-card-av{width:62px;flex-shrink:0}
+.pj-card-av .pj-svg{width:62px;height:108px;display:block}
+.pj-card-txt{display:grid;gap:5px;min-width:0;flex:1}
+.pj-card-txt>b{font-size:15px;font-weight:800}
+.pj-globo{position:relative;background:var(--verde-cl);color:var(--tx);font-size:13.5px;line-height:1.4;border-radius:12px;padding:7px 10px}
+.pj-globo::before{content:"";position:absolute;left:-7px;top:12px;border:7px solid transparent;border-right-color:var(--verde-cl);border-left:0}
+.pj-prox small{font-size:12px;color:var(--tx2)}
+.pj-prox .barra{margin-top:3px;display:block}
+.pj-prox .barra span{background:var(--mag)}
+.pj-nuevo{font-size:11px;font-weight:800;color:#fff;background:var(--mag);border-radius:99px;padding:2px 8px;margin-left:4px;vertical-align:2px}
+.pj-svg .pj-ojos,.escena .pj-ojos{transform-box:fill-box;transform-origin:center;animation:parpadeo 4.6s infinite}
+@keyframes parpadeo{0%,93%,100%{transform:scaleY(1)}95%{transform:scaleY(.12)}}
+.pj-escena{cursor:pointer;transform-box:fill-box;transform-origin:50% 100%;animation:respira 3.8s ease-in-out infinite}
+@keyframes respira{0%,100%{transform:scale(1,1)}50%{transform:scale(1.012,.986)}}
+.pj-escena.salta{animation:salto .6s cubic-bezier(.3,.7,.4,1)}
+.pj-svg.salta{transform-origin:50% 100%;animation:salto .7s .35s cubic-bezier(.3,.7,.4,1) 2}
+@keyframes salto{0%{transform:translateY(0)}35%{transform:translateY(-14%) scale(1.02,.98)}70%{transform:translateY(0) scale(1.04,.95)}100%{transform:none}}
+.pj-escena:focus,.escena .ap:focus{outline:none}
+.pj-escena:focus-visible,.escena .ap:focus-visible{outline:3px solid var(--azul);outline-offset:3px}
+.pj-cab .pj-nombre{display:flex;gap:8px;align-items:center}
+.pj-nombre input{flex:1;min-width:0;font:inherit;font-size:25px;font-weight:800;letter-spacing:-.02em;color:var(--tx);background:transparent;border:2px dashed transparent;border-radius:10px;padding:2px 6px;margin-left:-6px}
+.pj-nombre input:hover,.pj-nombre input:focus{border-color:var(--linea2);outline:none;background:var(--sup)}
+.pj-nombre .btn{font-size:18px;padding:6px 10px}
+.escena-wrap{position:relative;margin-top:14px;border-radius:var(--r);overflow:hidden;border:2px solid var(--linea)}
+.escena{display:block;width:100%;height:auto}
+.esc-pared{fill:color-mix(in srgb,var(--verde-cl) 60%,var(--bg))}
+.esc-piso{fill:color-mix(in srgb,#c8a27a 62%,var(--bg))}
+.esc-zocalo{stroke:color-mix(in srgb,#9c6c43 70%,var(--bg));stroke-width:4}
+.esc-tabla{stroke:rgba(0,0,0,.07);stroke-width:1.5}
+.esc-ventana rect{fill:color-mix(in srgb,#7dd3fc 65%,var(--bg));stroke:color-mix(in srgb,#fff 80%,var(--bg));stroke-width:4}
+.esc-ventana path{stroke:color-mix(in srgb,#fff 80%,var(--bg));stroke-width:3}
+.esc-sol{fill:#fde68a}
+.escena .ap{cursor:pointer;transition:filter .15s}
+.escena .ap:hover{filter:brightness(1.12) drop-shadow(0 0 3px rgba(255,255,255,.7))}
+.globo-pj{position:absolute;left:50%;top:3%;transform:translateX(-50%);width:max-content;max-width:min(80%,340px);background:var(--sup);color:var(--tx);border:2px solid var(--linea2);border-radius:14px;padding:7px 12px;font-size:14px;font-weight:600;line-height:1.35;box-shadow:var(--sombra);text-align:center}
+.globo-pj::after{content:"";position:absolute;left:50%;bottom:-9px;margin-left:-8px;border:8px solid transparent;border-top-color:var(--linea2);border-bottom:0}
+.globo-pj.entra{animation:globo .3s ease-out}
+@keyframes globo{from{opacity:0;transform:translate(-50%,6px) scale(.95)}}
+.pj-progreso{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;justify-content:space-between;margin:12px 0 4px;font-size:14px}
+.pj-progreso .pj-prox{flex:1;min-width:210px}
+.pj-h{font-size:12px;font-weight:800;margin:20px 0 8px;color:var(--tx2);text-transform:uppercase;letter-spacing:.08em}
+.pj-h small{text-transform:none;letter-spacing:0;font-weight:600}
+.sws{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.sw{width:36px;height:36px;border-radius:50%;background:var(--sw);border:3px solid var(--sup);box-shadow:0 0 0 2px var(--linea2);cursor:pointer;font-size:12px;display:grid;place-items:center;padding:0}
+.sw.on{box-shadow:0 0 0 3px var(--azul)}
+.sw.bloq{filter:saturate(.35) opacity(.55);cursor:not-allowed}
+.recien{animation:recien 1.2s ease-in-out 3}
+@keyframes recien{50%{box-shadow:0 0 0 4px var(--mag)}}
+.pj-ops{display:flex;flex-wrap:wrap;gap:8px}
+.pj-op{background:var(--sup);border:2px solid var(--linea2);border-bottom-width:4px;border-radius:12px;padding:7px 12px;font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.pj-op.on{border-color:var(--azul);background:var(--azul-cl);color:var(--azul)}
+.pj-op.bloq{opacity:.5;cursor:not-allowed}
+.ap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:14px}
+.ap-card{background:var(--sup);border:2px solid var(--linea2);border-bottom-width:4px;border-radius:var(--r);padding:10px;display:grid;gap:4px;justify-items:center;align-content:start;text-align:center;cursor:pointer}
+.ap-card:hover{border-color:var(--verde)}
+.ap-card .ap-mini{width:100%;height:70px}
+.ap-card b{font-size:14px;font-weight:800}
+.ap-card small{font-size:12px;color:var(--tx2);line-height:1.35}
+.ap-card .barra{width:100%}
+.ap-card .barra span{background:var(--mag)}
+.ap-card.bloq .ap-mini{filter:grayscale(1) opacity(.35)}
+.ap-ficha{text-align:center}
+.ap-ficha h3{font-size:20px;font-weight:800;margin-top:6px}
+.ap-ficha-dib .ap-mini{width:100%;max-width:260px;height:120px}
+.ap-ficha>p{text-align:left;font-size:14.5px;line-height:1.55;margin-top:8px}
+.ap-ficha .barra{margin-top:10px}
+.ap-ficha .barra span{background:var(--mag)}
+.ap-ficha .btn{margin-top:10px}
+.ap-examen{margin-top:12px;background:var(--azul-cl);border-radius:12px;padding:10px 12px;text-align:left}
+.ap-examen b{color:var(--azul);font-size:13px}
+.ap-examen p{margin-top:4px;font-size:14px;line-height:1.5}
+.ap-bloq{font-weight:700;color:var(--tx2)}
+.fin-pj{display:flex;gap:12px;align-items:center;text-align:left;margin:16px auto 0;max-width:420px;background:var(--sup);border:2px solid var(--linea);border-radius:var(--r);padding:8px 14px 8px 8px}
+.fin-pj.con-nuevos{border-color:color-mix(in srgb,var(--mag) 50%,transparent);background:var(--mag-cl)}
+.fin-pj-av .pj-svg{width:56px;height:98px;display:block}
+.fin-pj b{display:block;font-weight:800;line-height:1.3}
+.fin-pj small{display:block;color:var(--tx2);font-size:13px;margin-top:2px}
+.fin-pj ul{list-style:none;margin-top:4px;font-size:14px;font-weight:600;display:grid;gap:2px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -839,6 +994,7 @@ html[data-fx="suaves"] .fin-trofeo .ico,html[data-fx="suaves"] .sube-badge,html[
   <button type="button" data-v="practica"><span>🎯</span>Práctica</button>
   <button type="button" data-v="mapa"><span>🧍</span>Mapa</button>
   <button type="button" data-v="apuntes"><span>📒</span>Apuntes</button>
+  <button type="button" data-v="estudio"><span>🧘</span>Estudio</button>
   <button type="button" data-v="perfil"><span>🏅</span>Perfil</button>
 </nav>
 
@@ -9484,6 +9640,462 @@ const ANIMS = [];
 </script>
 <script>
 /* ============================================================
+   AnatoApp — tus exámenes previos de Balanced Body
+
+   Fuente: las revisiones de los exámenes que se rindieron en la
+   formación (transcripción completa en fuentes/examenes-previos.md):
+     · Principios del Movimiento (20/12/2025) 35/37
+     · Mat 1 (10/2/2026)  77/96
+     · Mat 2 (21/3/2026)  62/116
+     · Mat 3 (1/5/2026)   30/77
+
+   Qué se hizo con las preguntas:
+     · Las de opción múltiple se reescribieron con los criterios de la
+       app: la correcta no se delata por el largo, los distractores
+       cambian un dato y nunca son algo anatómicamente cierto.
+     · "Todas las anteriores", "A y B" y "Ninguna" no sobreviven a
+       mezclar las opciones: esas preguntas pasaron a "seleccioná las
+       correctas" (o a emparejar), que obliga a reconocer cada parte.
+     · Las de respuesta abierta pasaron a listas, clasificaciones,
+       emparejar y ordenar, con lo que la corrección aceptó.
+     · Lo que la corrección no dejó claro (la grilla de la bola de
+       Mat 3, el tercer ejercicio escapular de Mat 2) NO se pregunta:
+       queda en la revisión como pendiente de confirmar.
+   Las falladas van primero: son las que la lección presenta antes.
+   ============================================================ */
+'use strict';
+
+const EXAMENES = [
+  { id: 'pm', nom: 'Principios del Movimiento', fecha: '20/12/2025', pts: 35, de: 37, tiempo: '32:22' },
+  { id: 'mat1', nom: 'Mat 1', fecha: '10/2/2026', pts: 77, de: 96, tiempo: '85:23' },
+  { id: 'mat2', nom: 'Mat 2', fecha: '21/3/2026', pts: 62, de: 116, tiempo: '85:42' },
+  { id: 'mat3', nom: 'Mat 3 (accesorios)', fecha: '1/5/2026', pts: 30, de: 77, tiempo: '83:29' }
+];
+const EXAMEN = Object.fromEntries(EXAMENES.map(e => [e.id, e]));
+
+/* Lo que marcó la corrección, en forma de reglas para la próxima vez. */
+const LECCIONES_EXAMEN = [
+  { ico: '☑️', t: 'Si cada opción es cierta, la respuesta es "Todas las anteriores".', de: 'Principios · la unidad interna reacciona de forma refleja, consciente y al impulsar el cuerpo: elegiste solo la refleja.' },
+  { ico: '🔎', t: 'En las preguntas con "excepto", buscá lo que pertenece a OTRO principio.', de: 'Principios · la integración de la unidad interna y externa es del tronco, no del tren inferior.' },
+  { ico: '🦵', t: 'Tren inferior y tren superior piden ejercicios distintos: no repitas la respuesta.', de: 'Mat 1 · para el tren inferior pusiste Plank, Push ups y Swan (tren superior): 1 de 4.' },
+  { ico: '🔢', t: 'En una clase, repeticiones exactas: "6", no "4 a 8".', de: 'Mat 1 y Mat 2 · "Indicar # de repeticiones específicas, no un rango".' },
+  { ico: '🔀', t: 'Pensá cómo pasa el cuerpo de un ejercicio al siguiente.', de: 'Mat 1 · "¿Cómo transicionás de 8 a 9?" (de Saw, sentado, a Swan, prono): pasar de medio lado a prono.' },
+  { ico: '🌊', t: 'Clase balanceada y fluida: seguí el orden de posiciones del manual (de pie, cuatro apoyos, supino, sentado, prono, plancha, costado, cierre).', de: 'Mat 2 · 0 de 50, "más balanceada y fluida": después de la serie de prono volvías a supino con Teaser, Roll over y Shoulder bridge.' },
+  { ico: '⭕', t: 'Con accesorios, decí siempre DÓNDE va el aro, la bola o la banda.', de: 'Mat 3 · "¿Aro adónde?": 0 de 3 en tres principios.' },
+  { ico: '📚', t: 'Solo ejercicios del curso.', de: 'Mat 3 · "Control balance no lo vimos en este curso".' },
+  { ico: '🦴', t: 'Cuello: Roll over, Neck pull… y también Boomerang.', de: 'Mat 2 · marcaste Roll over y Neck pull; faltó Boomerang.' },
+  { ico: '🪚', t: 'Seated twist prepara para el Saw; ojo con el principio del movimiento.', de: 'Mat 2 · 4 de 5 en la programación del Seated twist.' }
+];
+
+/* Las preguntas falladas o con puntaje parcial, para la revisión. */
+const REVISION_EXAMEN = [
+  { ex: 'pm', n: 11, pts: '0/1', q: 'En un cuerpo sano, la unidad interna reacciona…',
+    tu: 'Reflexivamente, ante los cambios posturales y la carga', ok: 'Todas las anteriores (refleja, consciente y al impulsar el cuerpo)', item: 'exq-pm11' },
+  { ex: 'pm', n: 20, pts: '0/1', q: 'Protocolos del tren inferior: todo lo siguiente, excepto…',
+    tu: 'Agilidad, equilibrio y coordinación', ok: 'Integración de la unidad interna y externa (es del tronco)', item: 'exq-pm20' },
+  { ex: 'mat1', pts: '1/4', q: 'Principio Respiración: 1 Pre-Pilates y 3 de Mat 1',
+    tu: 'Respiración diafragmática · Hundred, Roll up, Spine stretch forward', ok: 'Solo aceptaron el Hundred', com: 'Hundred sí', item: 'exm-resp' },
+  { ex: 'mat1', pts: '1/4', q: 'Principio Fuerza y balance del cuerpo inferior',
+    tu: 'Plank · Push ups, Swan, Double leg kicks (apertura de pecho)', ok: 'Ejercicios del tren inferior (ver la lista de la app)', com: 'Plank no, ni Push ups ni Swan. Si esa es la razón de Double leg kicks, no', item: 'exm-inf' },
+  { ex: 'mat1', pts: '17/30', q: 'Clase corta de 15 ejercicios de Mat, en orden y con repeticiones',
+    tu: 'Rangos de repeticiones (3–6, 4–8…) y de Saw (sentado) a Swan (prono) sin transición', ok: 'Números exactos y transiciones pensadas',
+    com: '3 antes que 2 y 6 después de 3. ¿Cómo transicionás de 8 a 9? Pasar de medio lado a prono. Indicar # de repeticiones específicas, no un rango', clase: true },
+  { ex: 'mat2', pts: '4/5', q: 'Programación para el Seated twist (principio + 2 Pre-Pilates + 2 de Mat)',
+    tu: 'Movilidad espinal e integración del tronco · Torsión sentado, Abdominales oblicuos · Saw, Criss cross', ok: 'Seated twist prepara para el Saw', com: 'Seated twist prepara para Saw y ojo con el PM' },
+  { ex: 'mat2', pts: '4/6', q: 'Precaución con lesión cervical',
+    tu: 'Rollover y Neck pull', ok: 'Rollover, Neck pull y Boomerang', com: 'Boomerang también', item: 'exm-cerv' },
+  { ex: 'mat2', pts: '2/3', q: '3 ejercicios de Mat 2 que aumenten la estabilidad escapular',
+    tu: 'Leg pull down, Leg pull up, Side bend', ok: 'Leg pull down y Leg pull up; Side bend quedó en duda', com: 'Side bend?', item: 'exm-escap' },
+  { ex: 'mat2', pts: '0/50', q: 'Clase de una hora con 20 a 25 ejercicios de Mat 1 y 2',
+    tu: 'Serie de prono (Swan, kicks, Swimming) y después otra vez supino (Teaser, Roll over, Shoulder bridge); repeticiones en rango', ok: 'Secuencia balanceada y fluida',
+    com: 'Reorganizar la secuencia de la clase para que sea más balanceada y fluida y volvérmela a enviar', clase: true },
+  { ex: 'mat3', pts: '2/8', q: '¿Dónde va la bola en Hundred, Single leg stretch, Criss cross y Bicycle?',
+    tu: 'Criss cross: detrás de la espalda · Bicycle: debajo de la pelvis y entre tobillos', ok: 'La revisión no muestra las correctas: confirmalo con el manual de Mat 3', pendiente: true },
+  { ex: 'mat3', pts: '0/3 ×3', q: 'Entrenamiento con el aro: integración del tronco, tren inferior y tren superior',
+    tu: 'Hundred, Roll up, Leg circles · Footwork, Side kicks, Bridge · Push ups, Leg pull front, Plank', ok: 'Cada ejercicio con el aro y dónde va', com: '¿Aro adónde?' },
+  { ex: 'mat3', pts: '1/3', q: 'Movimiento de todo el cuerpo con el aro',
+    tu: 'Teaser, Boomerang, Control balance', ok: 'Ejercicios que se vieron en el curso', com: 'Control balance no lo vimos en este curso, ¿de dónde sacaste esto?' },
+  { ex: 'mat3', pts: 'sin nota', q: 'Entrenamiento completo con cada accesorio y cada principio (30 puntos)',
+    tu: '10 grupos de 3 ejercicios con su accesorio', ok: 'Quedó "Requiere revisión" en el PDF', pendiente: true }
+];
+
+(() => {
+  TEMAS['ex-pm'] = { nom: 'Examen: Principios del Movimiento', color: 'verde', icono: '📝' };
+  TEMAS['ex-mat'] = { nom: 'Exámenes de Mat 1, 2 y 3', color: 'magenta', icono: '🎓' };
+
+  const iFin = UNIDADES.findIndex(u => u.id === 'u11');
+  UNIDADES.splice(iFin < 0 ? UNIDADES.length : iFin, 0,
+    { id: 'u17', nom: 'Examen: Principios', temas: ['ex-pm'], icono: '📝' },
+    { id: 'u18', nom: 'Exámenes de Mat', temas: ['ex-mat'], icono: '🎓' });
+
+  const PM = 'Principios del Movimiento';
+  /* pregunta de opción múltiple: la primera opción es la correcta (se mezclan al mostrarse) */
+  const quiz = (n, q, ops, porque, extra = {}) => CARDS.push({
+    id: 'exq-pm' + n, tema: 'ex-pm', tipo: 'quiz', q, a: [ops[0]], ops, correcta: ops[0], porque,
+    examen: { ex: 'pm', n, fallada: !!extra.fallada, formato: extra.formato }, pag: extra.pag
+  });
+  /* "seleccioná las correctas" (lo que en el examen era "Todas las anteriores") */
+  const lista = (id, tema, ex, q, a, dist, porque, extra = {}) => CARDS.push({
+    id, tema, tipo: 'lista', q, a, dist, porque, noDonar: true,
+    examen: { ex, n: extra.n, fallada: !!extra.fallada, formato: extra.formato }, pag: extra.pag
+  });
+  const simple = (id, tema, ex, q, a, dist, porque, extra = {}) => CARDS.push({
+    id, tema, tipo: 'simple', q, a: [a], dist, porque,
+    examen: { ex, n: extra.n, fallada: !!extra.fallada }, pag: extra.pag
+  });
+
+  /* ---------------- PRINCIPIOS DEL MOVIMIENTO ---------------- */
+
+  /* falladas primero */
+  lista('exq-pm11', 'ex-pm', 'pm',
+    'En un cuerpo sano, ¿cómo reacciona la unidad interna del núcleo?',
+    ['De forma refleja ante la postura y la carga', 'De forma consciente cuando hace falta soporte', 'Al impulsar el cuerpo hacia adelante'],
+    ['Recién después de mover brazos y piernas', 'Solo cuando se contrae el recto abdominal', 'Solo con la respiración forzada', 'Solo cuando se la activa a propósito'],
+    'La unidad interna se activa sola, de forma refleja y anticipatoria, cada vez que cambian la postura o la carga sobre la columna; también se puede activar a voluntad para dar soporte, y acompaña el impulso del cuerpo hacia adelante. En el examen la respuesta era "Todas las anteriores": elegiste solo la refleja.',
+    { n: 11, fallada: true, formato: 'Todas las anteriores' });
+
+  quiz(20, 'Protocolos para el tren inferior: ¿qué NO es foco de ese principio (pertenece a otro)?',
+    ['Integrar la unidad interna y la externa', 'Alineación óptima de la pierna', 'Equilibrar rango articular y fuerza', 'Agilidad, equilibrio y coordinación'],
+    'Integrar la unidad interna y la externa es el principio 2, Integración del tronco. El tren inferior trabaja la alineación de la pierna, el equilibrio entre rango y fuerza, y agilidad, equilibrio y coordinación. En el examen elegiste "agilidad, equilibrio y coordinación", que sí es parte del tren inferior.',
+    { fallada: true, formato: 'excepto' });
+
+  /* Módulo 1: movimiento de todo el cuerpo */
+  quiz(1, '¿Cuáles son los tres niveles de observación para analizar los patrones de movimiento?',
+    ['Global, planar integrado y local', 'Anterior, lateral y posterior', 'Global, transversal y sagital', 'Rango, integridad y estabilidad articular'],
+    'De lo general a lo particular: el patrón completo (global), cada plano de movimiento (planar integrado) y la articulación o el músculo puntual (local). Después se vuelve a lo global para comprobar el cambio.',
+    { pag: `${PM}, págs. 4–5` });
+  quiz(2, 'Vista de lado, ¿qué puntos se alinean con la línea vertical de gravedad?',
+    ['Oreja, hombro, centro del tórax, cresta ilíaca, rodilla y tobillo',
+     'Nariz, esternón, ombligo, sínfisis púbica, rótulas y tobillos',
+     'Hombros nivelados, tórax sobre la pelvis y EIAS niveladas',
+     'Occipital, apófisis espinosas, pliegue glúteo, rodillas y talones'],
+    'De lado, la plomada pasa por la cara LATERAL del cuerpo: lóbulo de la oreja, punta del hombro, centro de la caja torácica, punto alto de la cresta ilíaca, cara lateral de la rodilla y maléolo lateral. Nariz, esternón y ombligo son marcas de la vista de frente; el occipital y las espinosas, de la de atrás; y el nivel de hombros y EIAS es alineación horizontal.',
+    { pag: `${PM}, págs. 9–13`, formato: 'Todo lo anterior (incorrecta)' });
+  quiz(3, '¿Qué desequilibrio muscular se asocia con la cifosis torácica?',
+    ['Extensores torácicos y escapulares débiles o largos; pecho corto',
+     'Extensores torácicos cortos y fuertes; pecho débil y largo',
+     'Pecho y estabilizadores escapulares fuertes y acortados',
+     'Pecho débil y largo; estabilizadores escapulares cortos'],
+    'En la cifosis se acorta lo de adelante (pectorales) y queda estirado y débil lo de atrás (extensores torácicos y estabilizadores de la escápula). Por eso se estira el pecho y se fortalecen la extensión y la escápula.',
+    { pag: `${PM}, págs. 14–17` });
+  quiz(4, 'Al planificar el programa de ejercicios de un cliente, ¿qué factores clave se consideran?',
+    ['Estado físico actual, edad, control motor y estilo de aprendizaje',
+     'Control inconsciente del movimiento, velocidad, resistencia y edad',
+     'Competencia total, equilibrio y control en todos los ejercicios',
+     'Capacidad de reacción, adaptación a la variación y condición general'],
+    'Se planifica para la persona que está adelante: cómo está hoy, su edad, cuánto control del movimiento tiene y cómo aprende mejor (viendo, escuchando o sintiendo).',
+    { pag: `${PM}, págs. 20–21` });
+  quiz(5, '¿A qué filosofía se refiere la regla 80/20 del entrenamiento?',
+    ['80 % perfeccionar lo aprendido y 20 % habilidades nuevas', '80 % habilidades nuevas y 20 % perfeccionar lo aprendido',
+     '80 % trabajo de fuerza y 20 % de flexibilidad', '80 % de la clase en el mat y 20 % en aparatos'],
+    'La mayor parte de la sesión consolida lo que ya se sabe hacer, que es donde se gana calidad, y una parte chica presenta algo nuevo: desafío suficiente sin perder el control.',
+    { pag: `${PM}, págs. 20–21` });
+
+  /* Módulo 2: integración del tronco */
+  quiz(6, '¿Cuáles son los cuatro elementos de la integración del tronco?',
+    ['Respiración, unidad interna, unidad externa y movilidad espinal', 'Respiración, núcleo, tronco y columna vertebral',
+     'Diafragma, suelo pélvico, multífidos y transverso', 'Movilidad cervical, torácica, lumbar y sacra'],
+    'Primero se respira, después se estabiliza desde adentro (unidad interna), se suman las cadenas que producen fuerza (unidad externa) y todo protege a una columna que se mueve (movilidad espinal). Diafragma, suelo pélvico, multífidos y transverso son solo la unidad interna.');
+  quiz(7, 'En la inhalación, el diafragma se contrae y su cúpula se mueve…',
+    ['Hacia abajo, y entra el aire', 'Hacia arriba, y entra el aire', 'Hacia abajo, y sale el aire', 'Hacia arriba, y sale el aire'],
+    'Al contraerse, el diafragma se aplana y desciende: el tórax gana volumen, baja la presión y entra el aire. En la exhalación se relaja y la cúpula vuelve a subir.');
+  quiz(8, '¿Qué movimiento de la columna suele facilitar la inhalación?',
+    ['Extensión', 'Flexión', 'Ninguno: la respiración no influye'],
+    'Al inhalar el tórax se expande y la columna torácica tiende a extenderse; al exhalar las costillas bajan y se facilita la flexión. Para la flexión lateral y la rotación sirve cualquiera de las dos fases, según el ejercicio.',
+    { formato: 'Tanto A como B / Ninguno' });
+  quiz(9, '¿Qué músculos forman la unidad interna o núcleo?',
+    ['Suelo pélvico, transverso del abdomen, multífidos y diafragma', 'Erector espinal, fascia toracolumbar y transverso del abdomen',
+     'Suelo pélvico, oblicuo externo y recto del abdomen', 'Oblicuos interno y externo, multífidos y diafragma'],
+    'Son la "caja" profunda: el diafragma arriba, el suelo pélvico abajo, el transverso adelante y a los costados, los multífidos atrás. Oblicuos, recto y erectores son unidad externa.');
+  lista('exq-pm10', 'ex-pm', 'pm',
+    'Ejercicios fundamentales que traen conciencia a la respiración en relación con el transverso del abdomen',
+    ['Fingertip abdominals', 'All four abdominals'],
+    ['Sternum drops', 'Tail wag', 'Bridge marching', 'Angels in the snow'],
+    'Los dos trabajan la unidad interna con la respiración: Fingertip abdominals en supino, con las yemas de los dedos sobre el abdomen para sentir el transverso, y All four abdominals en cuatro apoyos. En el examen la respuesta era "A y B".',
+    { n: 10, formato: 'A y B' });
+  quiz(12, '¿Qué ejercicios en supino enseñan la estabilidad lumbopélvica?',
+    ['Marching, Toe taps y Dead bug', 'Cat/Cow, Tail wag y Opposite arm and leg', 'Marching, Mini swan y Swimming', 'Bridging, Standing march y Standing diagonal press'],
+    'Son la progresión en supino: Marching, Toe taps, Diagonal press, Dead bug y Bridge marching. Mini swan y Swimming son en prono; Cat/Cow, Tail wag y Opposite arm and leg, en cuatro apoyos; los "Standing", de pie.');
+  quiz(13, '¿Qué ejercicio enseña la estabilidad lumbopélvica en prono?',
+    ['Swimming', 'Diagonal press', 'Dead bug', 'Bridge'],
+    'Swimming se hace boca abajo: brazos y piernas alternados sin que la pelvis se mueva. Diagonal press, Dead bug y Bridge se hacen en supino.');
+  quiz(14, 'En supino, ¿qué ejercicio fortalece isquiotibiales y glúteos mientras entrena la estabilidad de las cadenas cruzadas?',
+    ['Bridge marching', 'Articulated bridge', 'Reverse plank', 'Opposite arm and leg'],
+    'En el puente, levantar un pie obliga a la pelvis a no rotar: glúteos e isquiotibiales sostienen y las cadenas oblicuas estabilizan. El Articulated bridge moviliza la columna vértebra por vértebra; Opposite arm and leg es en cuatro apoyos.');
+  quiz(15, '¿Cuáles son las funciones primarias de la columna vertebral?',
+    ['Movimiento, transferencia de fuerza y protección de la médula', 'Movimiento, regulación de la temperatura y protección de la médula',
+     'Transferencia de fuerza, bombeo de la linfa y protección de la médula', 'Movimiento, transferencia de fuerza y absorción de nutrientes'],
+    'La columna mueve el tronco, transmite la fuerza entre la parte superior y la inferior del cuerpo, y protege la médula espinal y las raíces nerviosas que salen entre las vértebras. En el examen la respuesta era "Todas las anteriores".',
+    { formato: 'Todas las anteriores' });
+  quiz(16, '¿Cómo se llama la primera vértebra cervical?',
+    ['Atlas', 'Axis', 'Cóndilo occipital', 'Apófisis odontoides'],
+    'C1 es el atlas: sostiene el cráneo, como el titán de la mitología sostiene el mundo. C2 es el axis, con la apófisis odontoides sobre la que gira el atlas. El cóndilo occipital es parte del cráneo.');
+  quiz(17, 'Tail wag y Seated side stretch buscan mejorar ¿qué movimiento de la columna?',
+    ['Flexión lateral', 'Rotación axial', 'Flexión anterior', 'Extensión torácica'],
+    'Tail wag (en cuatro apoyos, la "cola" va de un lado al otro) y Seated side stretch trabajan la columna en el plano frontal.');
+  quiz(18, '¿Qué movimientos de la columna ocurren en el plano sagital?',
+    ['Flexión y extensión', 'Flexión lateral y rotación', 'Rotación y extensión', 'Flexión lateral y flexión'],
+    'El plano sagital divide el cuerpo en derecha e izquierda: en él la columna se flexiona y se extiende. La flexión lateral es frontal y la rotación, transversal.',
+    { pag: `${PM}, págs. 6–8` });
+  quiz(19, '¿Qué es el núcleo pulposo?',
+    ['El centro blando y gelatinoso del disco intervertebral', 'La médula ósea del interior del cuerpo vertebral',
+     'El agujero central del arco vertebral', 'La vértebra ubicada en el centro de la columna'],
+    'El disco tiene un anillo fibroso por fuera y el núcleo pulposo, gelatinoso, por dentro: reparte la presión entre las vértebras como un amortiguador.');
+
+  /* Módulo 3: tren inferior */
+  /* la 21 era "Todas las anteriores" con una vista por opción: pasó a emparejar */
+  PARES.push({
+    id: 'exp-pm21', tema: 'ex-pm', q: 'Alineación ideal de las piernas de pie: uní cada vista con lo que se observa',
+    pares: [['De lado', 'Cadera, rodilla y tobillo, uno sobre otro'],
+            ['De frente', 'Por dentro de la EIAS, centro de la rótula y 2.º dedo'],
+            ['De atrás', 'Pliegue glúteo, hueco poplíteo, Aquiles y talón']],
+    porque: 'Las tres descripciones eran correctas: en el examen la respuesta era "Todas las anteriores".',
+    examen: { ex: 'pm', n: 21, formato: 'Todas las anteriores' }
+  });
+  quiz(22, 'El trabajo de pie y tobillo, como la elevación de talones y los saltos, sirve para…',
+    ['Estabilizar y fortalecer el tobillo y mejorar el equilibrio', 'Fortalecer el tobillo, activar el core y movilizar la columna',
+     'Mejorar el equilibrio, retar la columna y movilizar la cadera', 'Estirar el tendón de Aquiles y movilizar la columna'],
+    'Elevar los talones y saltar cargan el tobillo sobre su propio eje: más estabilidad, más fuerza y mejor equilibrio. La columna y la cadera no son el objetivo de ese trabajo.');
+  quiz(23, 'Si los flexores de cadera están muy contracturados, los isquiotibiales no tienen rango y cuesta ganarles fuerza. ¿De qué es ejemplo?',
+    ['Inhibición recíproca', 'Entrenamiento recíproco', 'Aislamiento inhibido', 'Activación recíproca'],
+    'Cuando un músculo se contrae, su opuesto se relaja: es la inhibición recíproca. El manual la usa para explicar que un lado acortado de la articulación limita al otro: primero se equilibra el rango y después se busca fuerza.');
+  quiz(24, '¿Cuál de estas articulaciones del miembro inferior es una enartrosis?',
+    ['Cadera', 'Rodilla', 'Tobillo', 'Sacroilíaca'],
+    'Enartrosis es la articulación esférica, una cabeza dentro de una cavidad, que se mueve en los tres planos: la cadera. La rodilla funciona sobre todo como bisagra, el tobillo es una tróclea y la sacroilíaca casi no se mueve.');
+  quiz(25, 'Sobre la articulación sacroilíaca, ¿qué afirmación es FALSA?',
+    ['Es una articulación fija, sin movimiento', 'A menudo es un área de disfunción', 'Permite un movimiento mínimo', 'Está unida por ligamentos muy fuertes'],
+    'La sacroilíaca se mueve poco (pequeños deslizamientos de nutación y contranutación), pero se mueve. Sus ligamentos fuertes la estabilizan, y cuando falla aparece dolor.',
+    { formato: 'excepto' });
+  quiz(26, 'La marcha con movimiento del brazo contrario entrena…',
+    ['La contrarrotación de tronco y pelvis al mover brazos y piernas', 'La fuerza de los flexores de cadera con carga externa',
+     'La coordinación de los brazos sin demanda de estabilidad', 'La movilidad de la escápula en elevación completa'],
+    'Al marchar con el brazo opuesto, la pelvis y el tórax giran en sentidos contrarios, como al caminar: se entrena esa contrarrotación con el tronco estable.');
+  quiz(27, '¿Qué ejercicios potentes del tren inferior desarrollan una fuerza equilibrada en piernas y caderas?',
+    ['Sentadillas y zancadas', 'Standing multifidi', 'Marcha de pie', 'Stepping out'],
+    'Sentadillas y zancadas cargan cadera, rodilla y tobillo a la vez con el propio peso: son el trabajo de potencia del tren inferior. Standing multifidi y la marcha de pie apuntan sobre todo a la estabilidad.');
+
+  /* Módulo 4: tren superior */
+  quiz(28, '¿Qué movimiento NO pertenece a la articulación glenohumeral?',
+    ['Rotación hacia arriba y abajo', 'Flexión y extensión', 'Abducción y aducción', 'Rotación medial y lateral'],
+    'La rotación hacia arriba y hacia abajo es de la ESCÁPULA sobre el tórax. El húmero, en la glenoides, se flexiona, se extiende, abduce, aduce y rota hacia medial y lateral.',
+    { formato: 'excepto' });
+  quiz(29, '¿A qué se refiere el ritmo escapulohumeral?',
+    ['Al movimiento de la escápula en relación con el del húmero', 'Al movimiento de una escápula en relación con la otra',
+     'Al movimiento de la clavícula en relación con el esternón', 'Al movimiento del húmero en relación con el antebrazo'],
+    'Al elevar el brazo, el húmero y la escápula se mueven coordinados (aproximadamente 2 grados de húmero por cada grado de escápula): si la escápula no rota hacia arriba, el hombro se pinza.');
+  quiz(30, 'Protocolo para el tren superior: ¿qué NO corresponde?',
+    ['Priorizar los motores grandes sobre la estabilidad', 'Estabilidad y resistencia glenohumeral', 'Movilidad escapular y coordinación', 'Estabilidad escapular y control dinámico'],
+    'El orden es al revés: primero la estabilidad glenohumeral y escapular, después la fuerza de los músculos grandes (pectoral, dorsal ancho, deltoides). Fuerza sin estabilidad carga el hombro.',
+    { formato: 'excepto' });
+  quiz(31, '¿Qué patrón funcional NO es del tren superior?',
+    ['Striding (dar zancadas)', 'Pushing (empujar)', 'Pulling (tirar)', 'Lifting (levantar)'],
+    'Empujar, tirar y levantar son los patrones del tren superior; dar zancadas es un patrón del tren inferior.',
+    { formato: 'excepto' });
+  quiz(32, 'Sternum drops mueve las escápulas principalmente en…',
+    ['Protracción y retracción', 'Elevación y depresión', 'Elevación y retracción', 'Depresión y protracción'],
+    'En cuatro apoyos y con los codos estirados, el esternón baja entre los brazos (las escápulas se juntan: retracción) y vuelve a subir (se separan: protracción).');
+  quiz(33, 'La rotación hacia arriba de las escápulas ocurre cuando los brazos…',
+    ['Suben por delante o por el costado', 'Se llevan por detrás del cuerpo', 'Descansan a los costados del cuerpo', 'Bajan desde arriba hasta los costados'],
+    'Para que el brazo suba por encima de la cabeza, la escápula gira y su ángulo inferior se va hacia afuera: rotación hacia arriba. Al bajar los brazos o llevarlos atrás, rota hacia abajo.');
+
+  /* Módulo 5: flexibilidad dinámica */
+  lista('exq-pm34', 'ex-pm', 'pm', '¿De qué es responsable el reflejo de estiramiento?',
+    ['Moderar la longitud del músculo', 'Evitar que la articulación se estire de más'],
+    ['Hacer que el músculo se estire solo', 'Relajar el músculo ante un tirón rápido', 'Ganar flexibilidad con cada rebote', 'Aumentar la fuerza del antagonista'],
+    'Si un músculo se estira demasiado o muy rápido, el huso muscular lo hace contraer: frena el estiramiento y protege la articulación. Por eso se estira despacio y sin rebotes. En el examen la respuesta era "Solo A y B".',
+    { n: 34, formato: 'Solo A y B' });
+  quiz(35, '¿Qué NO es un objetivo de la liberación miofascial?',
+    ['Mejorar la fuerza muscular', 'Relajar los músculos', 'Mejorar la circulación sanguínea y linfática', 'Disminuir la "pegajosidad" entre tejidos'],
+    'La liberación miofascial (por ejemplo, con el rodillo) relaja, mejora la circulación y ayuda a que los tejidos se deslicen entre sí. La fuerza se gana con carga, no con presión.',
+    { formato: 'excepto' });
+  quiz(36, '¿En qué consiste el estiramiento activo aislado?',
+    ['Contraer el músculo opuesto para liberar el músculo objetivo', 'Contraer isométricamente el músculo objetivo antes de soltar',
+     'Mantener el estiramiento entre 40 y 60 segundos', 'Rebotar suavemente al final del rango de movimiento'],
+    'Usa la inhibición recíproca: contraer el antagonista relaja el músculo que se quiere estirar, en repeticiones cortas. Contraer el propio músculo antes de soltar es FNP (contracción-relajación); sostener la posición es el estiramiento estático; rebotar es balístico.');
+  quiz(37, '¿Qué NO forma parte de la recuperación?',
+    ['Clase aeróbica', 'Respiración', 'Descanso', 'Relajación'],
+    'Recuperar es bajar la carga: respirar, descansar y relajar. Una clase aeróbica es más estímulo, no recuperación.',
+    { formato: 'excepto' });
+
+  /* ---------------- MAT 1, 2 y 3 ---------------- */
+
+  /* falladas primero */
+  simple('exm-resp', 'ex-mat', 'mat1',
+    'Examen de Mat 1, principio Respiración: de estos ejercicios de Mat 1, ¿cuál te aceptaron?',
+    'The Hundred', ['The Roll up', 'Spine stretch forward', 'Rolling like a ball'],
+    'El Hundred es el ejercicio de la respiración: 5 tiempos de inhalación y 5 de exhalación con el bombeo de brazos, 10 ciclos. Roll up y Spine stretch forward no se aceptaron para este principio.',
+    { fallada: true, pag: 'Mat 1, págs. 14–17' });
+  lista('exm-inf', 'ex-mat', 'mat1',
+    'Ejercicios de Mat 1 para Fuerza y potencia del tren INFERIOR (según tu Análisis MAT 1)',
+    ['Side leg kicks', 'Side leg circles', 'Single leg kicks', 'Side leg lifts'],
+    ['Push ups', 'Swan', 'The Hundred', 'Spine stretch forward', 'Saw'],
+    'Tu Análisis MAT 1 ubica en el tren inferior la serie de costado (lifts, circles, kicks, bicycle) y Single leg kicks; Double leg kicks también, si se justifica por los isquiotibiales y no por la apertura de pecho. En el examen pusiste Plank, Push ups y Swan, que son del tren superior.',
+    { fallada: true });
+  lista('exm-cerv', 'ex-mat', 'mat2',
+    'Ejercicios de Mat que requieren precaución con una lesión cervical (examen Mat 2)',
+    ['Roll over', 'Neck pull', 'Boomerang'],
+    ['Spine twist', 'Leg pull down', 'Side bend', 'Modified corkscrew'],
+    'Los tres cargan el cuello: Roll over y Boomerang ruedan hasta apoyarse sobre los hombros, y Neck pull tira de la cabeza con las manos detrás. En el examen marcaste Roll over y Neck pull: faltó Boomerang.',
+    { fallada: true });
+  lista('exm-escap', 'ex-mat', 'mat2',
+    'Ejercicios de Mat 2 que aumentan la estabilidad escapular (confirmados en el examen)',
+    ['Leg pull down', 'Leg pull up'],
+    ['Spine twist', 'Neck pull', 'Teaser preparation', 'Roll over'],
+    'Los dos son planchas: boca abajo (Leg pull down) y boca arriba (Leg pull up). Sostener el peso sobre las manos exige estabilidad escapular. Side bend quedó en duda en la corrección.',
+    { fallada: true });
+
+  lista('exm-9p', 'ex-mat', 'mat1', 'Los 9 principios de Pilates (según Balanced Body)',
+    ['Respiración', 'Concentración', 'Control', 'Centrar', 'Precisión', 'Desarrollo muscular balanceado', 'Ritmo / fluir', 'Movimiento de todo el cuerpo', 'Relajación'],
+    ['Integración del tronco', 'Flexibilidad dinámica', 'Potencia del tren inferior', 'Estabilidad escapular'],
+    'Son los principios de la práctica. No confundirlos con los 5 principios del movimiento de Balanced Body (integración del tronco, tren inferior, tren superior, movimiento de todo el cuerpo y flexibilidad dinámica): "Movimiento de todo el cuerpo" es el único nombre que está en las dos listas.',
+    { pag: 'Mat 1, pág. 12' });
+  CLASIFICACIONES.push({
+    id: 'exc-9y5', tema: 'ex-mat', q: '¿Es uno de los 9 principios de Pilates o uno de los principios del movimiento de Balanced Body?',
+    grupos: {
+      '9 principios de Pilates': ['Respiración', 'Concentración', 'Control', 'Centrar', 'Precisión', 'Desarrollo muscular balanceado', 'Ritmo / fluir', 'Relajación'],
+      'Principios del movimiento (BB)': ['Integración del tronco', 'Tren inferior: fuerza y potencia', 'Tren superior: fuerza y equilibrio', 'Flexibilidad dinámica']
+    },
+    porque: 'Los 9 principios describen cómo se practica; los principios del movimiento, qué se entrena. "Movimiento de todo el cuerpo" está en las dos listas, por eso no aparece acá.',
+    examen: { ex: 'mat1' }
+  });
+  CLOZES.push({
+    id: 'exz-jp', tema: 'ex-mat',
+    t: 'Joseph Pilates nació en [Alemania], se mudó a los Estados Unidos en [1926] y vivió y enseñó en [Nueva York].',
+    dist: [['Inglaterra', 'Suiza'], ['1945', '1967'], ['Los Ángeles', 'Boston']],
+    examen: { ex: 'mat1' }
+  });
+  CLASIFICACIONES.push({
+    id: 'exc-osteo', tema: 'ex-mat', q: 'Examen de Mat 1: con osteoporosis, ¿contraindicado o no?',
+    grupos: {
+      'Contraindicado': ['Hundred', 'Rolling like a ball', 'Double straight leg stretch'],
+      'No contraindicado': ['Swan', 'Side leg series', 'Single leg kicks']
+    },
+    porque: 'Los tres contraindicados flexionan la columna con carga, lo que concentra la presión en la parte anterior de las vértebras. Swan es extensión, y la serie de costado y los kicks no flexionan la columna.',
+    pag: 'Mat 1, págs. 79–82', examen: { ex: 'mat1' }
+  });
+  simple('exm-teaser-osteo', 'ex-mat', 'mat2', 'Cliente con osteoporosis: ¿cómo se modifica el Teaser?',
+    'No se modifica: se evita', ['Con las rodillas flexionadas y los pies apoyados', 'Con una pelota detrás de la espalda', 'Con menos rango y menos repeticiones'],
+    'El Teaser exige una flexión fuerte de la columna con carga, contraindicada con osteoporosis por el riesgo de fractura vertebral. No hay versión segura: se reemplaza por otro ejercicio. La corrección lo calificó "Excelente".');
+  simple('exm-pelvis', 'ex-mat', 'mat1', '¿Qué puntos óseos anteriores definen la pelvis neutra?',
+    'Las EIAS y la sínfisis púbica, en un mismo plano', ['Las EIAS y el ombligo, en un mismo plano', 'Las crestas ilíacas y el pubis, a la misma altura', 'Las EIPS y el sacro, en un mismo plano'],
+    'En pelvis neutra, las espinas ilíacas anterosuperiores (EIAS) y la sínfisis púbica quedan en el mismo plano. Las EIPS y el sacro están atrás.',
+    { pag: 'Principios del Movimiento, pág. 19' });
+  lista('exm-spine-isq', 'ex-mat', 'mat1', 'Formas de modificar el Spine stretch para isquiotibiales tensos',
+    ['Flexionar un poco las rodillas', 'Sentarse sobre un alza (mat enrollado o toalla)'],
+    ['Estirar los brazos más fuerte hacia adelante', 'Hacer el ejercicio más rápido', 'Juntar las piernas del todo', 'Apoyar las manos detrás de la cadera'],
+    'Con isquiotibiales cortos, la pelvis se va hacia atrás y la columna no puede articular. Flexionar las rodillas o elevar la cadera sobre un alza devuelve la pelvis a neutra. Lo preguntaron en Mat 1 y en Mat 2.');
+  lista('exm-lumbar1', 'ex-mat', 'mat1', 'Ejercicios de Mat 1 que requieren precaución con problemas de espalda baja',
+    ['Roll up', 'Rolling like a ball', 'Double leg stretch', 'Double leg kicks'],
+    ['Saw', 'Side leg circles', 'Push ups', 'Side leg kicks'],
+    'Los cuatro cargan la zona lumbar: el Roll up y el Rolling en flexión, el Double leg stretch con la palanca de las piernas lejos y el Double leg kicks en extensión. El manual indica precaución lumbar en cada uno.');
+  lista('exm-lumbar2', 'ex-mat', 'mat2', 'Ejercicios de Mat 2 que requieren precaución con problemas de espalda baja',
+    ['Roll over', 'Jackknife', 'Corkscrew', 'Boomerang'],
+    ['Leg pull down', 'Leg pull up', 'Kneeling side kicks', 'Bicycle'],
+    'Todos ruedan o se invierten sobre la parte alta de la espalda con las piernas por encima de la cabeza: mucha flexión y carga lumbar.');
+  lista('exm-cuello2', 'ex-mat', 'mat2', 'Ejercicios de Mat 2 que requieren precaución con lesiones de cuello y hombros',
+    ['Roll over', 'Neck pull', 'Jackknife'],
+    ['Spine twist', 'Modified corkscrew', 'Hip circles', 'Teaser preparation'],
+    'Roll over y Jackknife apoyan el peso sobre los hombros y el cuello en la inversión; Neck pull flexiona la columna con las manos detrás de la cabeza.');
+  lista('exm-munecas', 'ex-mat', 'mat2', 'Ejercicios de Mat 2 que requieren modificación con lesiones de muñeca',
+    ['Kneeling side kicks', 'Leg pull up', 'Leg pull down'],
+    ['Spine twist', 'Teaser preparation', 'Neck pull', 'Roll over'],
+    'Los tres cargan el peso del cuerpo sobre la mano: se pueden hacer apoyando los antebrazos o con el puño cerrado.');
+  lista('exm-resp-mov', 'ex-mat', 'mat2', '¿Cómo facilita la respiración el movimiento?',
+    ['Inhalar facilita la extensión', 'Exhalar facilita la flexión', 'Flexión lateral y rotación, con cualquiera'],
+    ['Inhalar facilita la flexión', 'Exhalar facilita la extensión', 'Retener el aire facilita la rotación', 'Exhalar bloquea la flexión lateral'],
+    'Inhalar expande el tórax y acompaña la extensión; exhalar baja las costillas y acompaña la flexión. En la flexión lateral y la rotación se usa una u otra fase según el ejercicio.');
+  lista('exm-core', 'ex-mat', 'mat2', 'Ejercicios de Pre-Pilates que se enfocan en la activación del core',
+    ['Pelvic clock', 'Toe taps'],
+    ['Sternum drops', 'Angels in the snow', 'Telescope arms', 'Seated side stretch'],
+    'Pelvic clock enseña a mover la pelvis desde la unidad interna y Toe taps suma el peso de la pierna sin perder la estabilidad. Sternum drops, Angels in the snow y Telescope arms son del tren superior (escápula).');
+  lista('exm-escap-pre', 'ex-mat', 'mat2', 'Ejercicios de Pre-Pilates para la movilidad y la estabilidad escapular',
+    ['Sternum drops', 'Angels in the snow', 'Telescope arms'],
+    ['Pelvic clock', 'Toe taps', 'Tail wag', 'Seated side stretch'],
+    'Los tres son del principio Fuerza y equilibrio del tren superior: Sternum drops (estabilidad escapular, en cuatro apoyos), Angels in the snow y Telescope arms (ritmo escapular).');
+  lista('exm-pelvica', 'ex-mat', 'mat2', 'Ejercicios de Pre-Pilates que enseñan la estabilidad pélvica',
+    ['Marching', 'Opposite arm and leg reach', 'Pelvic clock'],
+    ['Sternum drops', 'Angels in the snow', 'Telescope arms', 'Seated side stretch'],
+    'Marching y Opposite arm and leg reach piden que la pelvis no se mueva mientras se mueven los miembros; Pelvic clock enseña a encontrarla y controlarla.');
+  PARES.push({
+    id: 'exp-estir', tema: 'ex-mat', q: 'Técnicas de estiramiento: uní cada una con cómo se hace',
+    pares: [['Estático', 'Sostener la posición de elongación'],
+            ['Activo aislado', 'Contraer el antagonista en repeticiones cortas'],
+            ['Contracción-relajación (FNP)', 'Contracción isométrica en elongación y después soltar'],
+            ['Liberación miofascial', 'Presión sostenida, por ejemplo con el rodillo']],
+    porque: 'El activo aislado usa la inhibición recíproca; la FNP aprovecha la relajación que sigue a una contracción isométrica.',
+    examen: { ex: 'mat2' }
+  });
+  SECUENCIAS.push({
+    id: 'exo-teaser', tema: 'ex-mat', q: 'Ordená la secuencia para ir del Pelvic clock al Teaser',
+    pasos: ['Pelvic clock', 'The Hundred', 'The Roll up', 'Teaser preparation', 'Teaser'],
+    porque: 'De la activación del core al desafío máximo en flexión: cada paso alarga la palanca y pide más control. La corrección la aceptó completa (4/4).',
+    examen: { ex: 'mat2' }
+  });
+  SECUENCIAS.push({
+    id: 'exo-rocking', tema: 'ex-mat', q: 'Ordená la secuencia para ir del Bridge al Rocking',
+    pasos: ['Bridge', 'Swan', 'Double leg kicks', 'Swan dive', 'Rocking'],
+    porque: 'Una progresión en extensión: de la cadena posterior en supino (Bridge) al prono, sumando dinámica hasta el Rocking. Aceptada completa (4/4).',
+    examen: { ex: 'mat2' }
+  });
+  PARES.push({
+    id: 'exp-prog', tema: 'ex-mat', q: 'Programación de Mat 2: uní cada ejercicio con su foco',
+    pares: [['Teaser', 'Unidad interna y articulación de la columna'],
+            ['Boomerang', 'Todo el cuerpo: coordinación y equilibrio'],
+            ['Leg pull up', 'Estabilidad escapular y extensores de cadera']],
+    porque: 'Así lo programaste en el examen y la corrección lo aceptó completo (5/5 cada uno).',
+    examen: { ex: 'mat2' }
+  });
+
+  /* Mat 3: accesorios */
+  simple('exm-aro-rolling', 'ex-mat', 'mat3', 'En los ejercicios de rodar (Rolling like a ball, Open leg rocker, Boomerang), ¿dónde va el aro?',
+    'Entre los tobillos o las rodillas', ['En las manos, con los brazos estirados', 'Detrás de la espalda, a la altura del brasier', 'Debajo de la pelvis'],
+    'Entre los tobillos o las rodillas: las piernas presionan el aro y se activan los aductores mientras se rueda. Lo contestaste bien en el examen de Mat 3 (6/6).');
+  CLASIFICACIONES.push({
+    id: 'exc-curl', tema: 'ex-mat', q: 'Abdominal curl: ¿con la bola detrás de la espalda o con el aro entre las manos?',
+    grupos: {
+      'Bola detrás de la espalda': ['Da soporte al tronco', 'Asiste la articulación de la columna', 'Facilita la extensión torácica', 'Movilidad segmentaria'],
+      'Aro entre las manos': ['Organiza la cintura escapular', 'Sin soporte para el tronco', 'Integra la línea media', 'Isometría de brazos y centro']
+    },
+    porque: 'La bola sostiene y acompaña a la columna; el aro no sostiene: conecta los brazos con el centro con una contracción isométrica. Así lo contestaste en Mat 3 (2/2).',
+    examen: { ex: 'mat3' }
+  });
+  lista('exm-banda-dlk', 'ex-mat', 'mat3', 'Con la banda, ¿por qué el Double leg kicks se hace más fácil?',
+    ['La banda asiste la elevación del pecho', 'Da soporte a los brazos'],
+    ['Aumenta la carga de los isquiotibiales', 'Obliga a flexionar la columna', 'Quita el trabajo de la escápula', 'Acorta el rango de las piernas'],
+    'La tensión de la banda ayuda a levantar el pecho (extensión torácica) y sostiene los brazos para mantener abierto el pecho y organizados los hombros.');
+  PARES.push({
+    id: 'exp-roller', tema: 'ex-mat', q: 'Estiramiento dinámico en el roller: uní cada estiramiento con cómo se usa el roller',
+    pares: [['Pectorales', 'A lo largo, bajo la columna'],
+            ['Flexores de cadera', 'Bajo el sacro'],
+            ['Extensión torácica', 'Transversal, bajo la espalda alta'],
+            ['Dorsales', 'De costado sobre el roller'],
+            ['Glúteos y piramidal', 'Sentado sobre el roller']],
+    porque: 'La secuencia que armaste en Mat 3 (5/5): el roller cambia de posición para abrir cada zona.',
+    examen: { ex: 'mat3' }
+  });
+  lista('exm-banda-sup', 'ex-mat', 'mat3', 'Ejercicios con la banda para la fuerza del tren superior',
+    ['Bicep curl', 'Tricep press', 'Chest expansion'],
+    ['Scissors', 'Heel beats', 'Single leg circles', 'Side kick series'],
+    'Los tres trabajan el brazo contra la resistencia de la banda: flexión de codo, extensión de codo y extensión de hombro con apertura de pecho.');
+  lista('exm-flex-din', 'ex-mat', 'mat3', 'Ejercicios de Mat para el principio Flexibilidad dinámica',
+    ['Spine stretch forward', 'Saw', 'Mermaid', 'Open leg rocker', 'Single straight leg stretch'],
+    ['Push ups', 'Side leg lifts', 'The Hundred', 'Leg pull down'],
+    'Todos estiran en movimiento: la columna (Spine stretch, Saw, Mermaid) o los isquiotibiales (Open leg rocker, Single straight leg stretch). Fueron aceptados en Mat 1 y en Mat 3.');
+  lista('exm-clase', 'ex-mat', 'mat2', 'Al escribir una clase en el examen, ¿qué pidió la corrección?',
+    ['Repeticiones exactas, no rangos', 'Pensar la transición entre ejercicios', 'Secuencia balanceada y fluida'],
+    ['Copiar el rango de repeticiones del manual', 'Cambiar de posición en cada ejercicio', 'Dejar todos los abdominales para el final', 'Empezar por los ejercicios más difíciles'],
+    'Lo marcaron en Mat 1 (17/30) y en Mat 2 (0/50). Practicalo en Práctica → Armá tu clase: la app revisa las mismas cosas.');
+  SECUENCIAS.push({
+    id: 'exo-posiciones', tema: 'ex-mat', q: 'Ordená las posiciones de una clase de Mat según el manual',
+    pasos: ['De pie', 'Cuatro apoyos', 'Supino', 'Sentado', 'Prono', 'Plancha', 'De costado', 'Cierre de pie'],
+    porque: 'Así ordenan el manual y sus secuencias de muestra. Tu clase del examen de Mat 2 volvía a supino después del prono, y la corrección pidió reorganizarla para que fuera más balanceada y fluida.',
+    pag: 'Mat 1, págs. 65–67', examen: { ex: 'mat2' }
+  });
+})();
+
+</script>
+<script>
+/* ============================================================
    AnatoApp — figuras del manual dibujadas en código (SVG)
 
    Son las figuras que el material marca como "svg_codigo": dependen de
@@ -10652,6 +11264,959 @@ function confeti(n = 110) {
 </script>
 <script>
 /* ============================================================
+   AnatoApp — tu personaje y tu estudio de Pilates
+
+   Un personaje propio (nombre, piel, pelo, ropa, accesorios) que vive
+   en un estudio. Con el progreso se desbloquean prendas, accesorios y
+   aparatos: del mat y los accesorios chicos al Reformer y el Cadillac.
+   Cada aparato tiene su ficha y, cuando corresponde, lo que se vio de
+   él en los exámenes (dónde va el aro, para qué sirve la banda…).
+
+   Los desbloqueos salen de lo que ya mide la app (nivel, lecciones,
+   racha, logros, clases armadas): premian la constancia y el dominio,
+   nunca castigan. Todo el dibujo es SVG propio, sin imágenes.
+   El estado vive en S.pj (se guarda con el progreso).
+   ============================================================ */
+'use strict';
+
+/* ---------------- catálogo ---------------- */
+
+const PIELES = ['#f7dcc8', '#eec1a0', '#d9a07a', '#b97c56', '#8d5a3b', '#5e3a26'];
+const COLORES_PELO = {
+  negro:     { nom: 'Negro',          c: '#2b2220' },
+  oscuro:    { nom: 'Castaño oscuro', c: '#4a2f22' },
+  castano:   { nom: 'Castaño',        c: '#7a4a2a' },
+  rubio:     { nom: 'Rubio',          c: '#d8b25a' },
+  colorado:  { nom: 'Colorado',       c: '#b5532b' },
+  canoso:    { nom: 'Canoso',         c: '#cfccc7' },
+  rosa:      { nom: 'Rosa',           c: '#ec80ad', cond: { t: 'nivel', n: 2 } },
+  violeta:   { nom: 'Violeta',        c: '#8b5cf6', cond: { t: 'racha', n: 3 } },
+  turquesa:  { nom: 'Turquesa',       c: '#14b8a6', cond: { t: 'nivel', n: 5 } },
+  azul:      { nom: 'Azul',           c: '#3b82f6', cond: { t: 'resp', n: 500 } }
+};
+const PELOS = {
+  rodete:  'Rodete', corto: 'Corto', largo: 'Largo', colitas: 'Dos colitas',
+  rulos: 'Rulos', trenza: 'Trenza', rapado: 'Rapado'
+};
+const COLORES_ROPA = {
+  verde:    { nom: 'Verde agua', c: '#0d9488' },
+  negro:    { nom: 'Negro',      c: '#2d2d35' },
+  gris:     { nom: 'Gris',       c: '#9ca3af' },
+  blanco:   { nom: 'Blanco',     c: '#f1f1ee' },
+  coral:    { nom: 'Coral',      c: '#f97362' },
+  lila:     { nom: 'Lila',       c: '#a78bfa' },
+  amarillo: { nom: 'Amarillo',   c: '#facc15', cond: { t: 'nivel', n: 2 } },
+  rosa:     { nom: 'Rosa',       c: '#ec4899', cond: { t: 'logro', id: 'meta_5' } },
+  azul:     { nom: 'Azul',       c: '#2563eb', cond: { t: 'nivel', n: 4 } },
+  dorado:   { nom: 'Dorado',     c: '#d4a017', cond: { t: 'logro', id: 'unidad_3' } }
+};
+const ARRIBAS = {
+  remera:    { nom: 'Remera' },
+  musculosa: { nom: 'Musculosa' },
+  top:       { nom: 'Top deportivo' },
+  buzo:      { nom: 'Buzo con capucha', cond: { t: 'nivel', n: 3 } }
+};
+const ABAJOS = {
+  calza:  { nom: 'Calza' },
+  short:  { nom: 'Short' },
+  jogger: { nom: 'Jogging', cond: { t: 'sesiones', n: 5 } }
+};
+const ACCESORIOS_PJ = {
+  lentes:      { nom: 'Lentes', ico: '👓' },
+  vincha:      { nom: 'Vincha', ico: '🎀', cond: { t: 'sesiones', n: 1 } },
+  auriculares: { nom: 'Auriculares', ico: '🎧', cond: { t: 'nivel', n: 2 } },
+  botella:     { nom: 'Botella de agua', ico: '💧', cond: { t: 'racha', n: 3 } },
+  munequeras:  { nom: 'Muñequeras', ico: '🩹', cond: { t: 'logro', id: 'combo_10' } },
+  toalla:      { nom: 'Toalla', ico: '🧣', cond: { t: 'logro', id: 'meta_5' } },
+  medalla:     { nom: 'Medalla', ico: '🥇', cond: { t: 'logro', id: 'perfecta' } },
+  laurel:      { nom: 'Corona de laurel', ico: '🌿', cond: { t: 'logro', id: 'unidad_3' } }
+};
+
+/* Aparatos y objetos del estudio, en el orden en que suelen llegar.
+   `info` es la ficha; `examen`, lo que salió en tus exámenes. */
+const APARATOS = {
+  mat: { nom: 'Mat', info: 'La base de todo el método. Joseph Pilates publicó su repertorio de suelo, 34 ejercicios, en 1945, en «Return to Life Through Contrology». Todo tu Mat 1, Mat 2 y Mat 3 sale de ahí.' },
+  pelota: { nom: 'Pelota', cond: { t: 'sesiones', n: 1 },
+    info: 'Una pelota blanda que puede asistir o resistir. En tu Análisis MAT 1, en el Hundred va entre las piernas (activa los aductores) o detrás de la espalda, en la línea del brasier, para asistir el curl.',
+    examen: 'Mat 3: la bola detrás de la espalda da soporte y asiste la articulación de la columna; el aro entre las manos no sostiene el tronco.' },
+  banda: { nom: 'Banda elástica', cond: { t: 'sesiones', n: 3 },
+    info: 'Resiste o asiste según cómo se la use. Abierta en la planta del pie ayuda a sostener la pierna; cerrada en las muñecas o los tobillos agrega resistencia.',
+    examen: 'Mat 3: Bicep curl, Tricep press y Chest expansion para el tren superior; en el Double leg kicks asiste la elevación del pecho y sostiene los brazos.' },
+  aro: { nom: 'Magic circle', cond: { t: 'racha', n: 3 },
+    info: 'Un aro flexible con dos almohadillas. Se cuenta que Joseph lo hizo con el aro de metal de un barril de cerveza. Se presiona entre las manos, los tobillos o las rodillas: activa los aductores y conecta los brazos con el centro.',
+    examen: 'Mat 3: en Rolling like a ball, Open leg rocker y Boomerang va entre los tobillos o las rodillas. Y siempre decí dónde va: la corrección preguntó «¿aro adónde?».' },
+  rodillo: { nom: 'Rodillo', cond: { t: 'nivel', n: 3 },
+    info: 'Un cilindro de espuma. Da inestabilidad (el cuerpo tiene que controlarlo), apoyo, o sirve para la liberación miofascial.',
+    examen: 'Mat 3, estiramiento dinámico: pectorales (a lo largo de la columna), flexores de cadera (bajo el sacro), extensión torácica (transversal), dorsales (de costado) y glúteos (sentado).' },
+  pizarra: { nom: 'Pizarra de clases', cond: { t: 'clases', n: 1 },
+    info: 'Tu pizarra para planificar. Una clase para el examen lleva repeticiones exactas, transiciones pensadas y el orden de posiciones del manual.', clase: true },
+  spine: { nom: 'Spine corrector', cond: { t: 'nivel', n: 4 },
+    info: 'Un arco con un escalón que acompaña a la columna: la sostiene en extensión para abrir el pecho y le da apoyo en la flexión y en la flexión lateral.' },
+  chair: { nom: 'Wunda chair', cond: { t: 'nivel', n: 5 },
+    info: 'Una caja con un pedal a resortes. Se trabaja sentado, de pie, de costado o boca abajo, y exige mucho equilibrio y fuerza. Se cuenta que Joseph la pensó para departamentos chicos: dada vuelta, era un sillón.' },
+  barrel: { nom: 'Ladder barrel', cond: { t: 'racha', n: 7 },
+    info: 'Una escalera de barras unida a un barril curvo; la distancia entre los dos se ajusta al largo de las piernas. Ideal para la extensión, la flexión lateral y los estiramientos.' },
+  reformer: { nom: 'Reformer', cond: { t: 'nivel', n: 6 },
+    info: 'Un carro que se desliza sobre rieles, con resortes que dan la resistencia, barra de pies, correas y hombreras. Nació de una idea de Joseph en la Isla de Man: usar resortes como resistencia para quienes no podían levantarse de la cama.' },
+  diploma: { nom: 'Diploma', cond: { t: 'unidades', ids: ['u17', 'u18'] },
+    info: 'Pasaste por todo lo que te preguntaron en tus cuatro exámenes. Lo que fallaste allá ya lo practicaste acá.' },
+  planta: { nom: 'Planta', cond: { t: 'logro', id: 'meta_5' },
+    info: 'Cinco días con la meta cumplida. Como las plantas: poco, pero todos los días.' },
+  espejo: { nom: 'Espejo', cond: { t: 'resp', n: 100 },
+    info: 'Cien ejercicios respondidos. En el estudio, el espejo ayuda a ver la alineación; acá, tu calibración en el Perfil te muestra qué tan bien sabés lo que sabés.' },
+  cadillac: { nom: 'Cadillac', cond: { t: 'nivel', n: 8 },
+    info: 'También llamado trapeze table: una camilla elevada con un marco de cuatro postes, barras y resortes. Es el aparato más versátil: sirve para asistir a quien recién empieza y para el repertorio más avanzado.' }
+};
+
+/* nombres con juego de palabras (el 🎲 los va proponiendo) */
+const NOMBRES_PJ = ['Core-azón', 'Pelvis Presley', 'Glúteo Máximo', 'Mat-emática', 'Teaser Rex', 'Pili Plomada',
+  'Rolling Stone', 'Swan Lake', 'Cien-cia', 'Ada Ductora', 'Powerhouse', 'Roll-Upa', 'Reformín', 'Contrología'];
+
+const FRASES_PJ = [
+  'Inhalá… y exhalá. Así arranca todo.',
+  '¿Sabías que Joseph llamaba a su método «Contrología»?',
+  'Columna larga, hombros lejos de las orejas.',
+  'El Hundred son 100 bombeos: 10 ciclos de 5 y 5.',
+  'Pelvis neutra: EIAS y pubis en el mismo plano.',
+  'Repeticiones exactas, no rangos. Lo pidió la corrección.',
+  'Pocas repeticiones con atención valen más que muchas sin ella.',
+  'Mi ejercicio favorito es el Teaser… cuando me sale.',
+  'Un recuerdo que cuesta traer es un recuerdo que se fija.',
+  'Con osteoporosis, el Teaser no se modifica: se evita.',
+  '«Todas las anteriores» también puede ser la correcta. Ojo.',
+  'Aro entre los tobillos para rodar. ¡Y decí dónde va!'
+];
+
+const PJ_BASE = () => ({
+  nombre: 'Core-azón', piel: 2, pelo: 'rodete', colorPelo: 'castano',
+  arriba: 'remera', colorArriba: 'verde', abajo: 'calza', colorAbajo: 'negro', medias: 'coral',
+  acc: [], vistos: []
+});
+function pj() {
+  S.pj = Object.assign(PJ_BASE(), S.pj || {});
+  if (!Array.isArray(S.pj.acc)) S.pj.acc = [];
+  if (!Array.isArray(S.pj.vistos)) S.pj.vistos = [];
+  return S.pj;
+}
+
+/* ---------------- condiciones ---------------- */
+
+function cumple(c) {
+  if (!c) return true;
+  switch (c.t) {
+    case 'nivel': return nivelDe(S.xp) >= c.n;
+    case 'sesiones': return S.sesiones >= c.n;
+    case 'racha': return !!S.logros['racha_' + c.n] || rachaVigente() >= c.n;
+    case 'logro': return !!S.logros[c.id];
+    case 'resp': return S.totalResp >= c.n;
+    case 'clases': return (S.clasesOk || 0) >= c.n;
+    case 'unidades': return c.ids.every(id => { const u = UNIDADES.find(x => x.id === id); if (!u) return false; const i = infoUnidad(u); return i.intro >= i.total; });
+  }
+  return false;
+}
+function progresoCond(c) {
+  if (!c) return 1;
+  const r = x => Math.max(0, Math.min(1, x));
+  switch (c.t) {
+    case 'nivel': return r(S.xp / xpNivel(c.n));
+    case 'sesiones': return r(S.sesiones / c.n);
+    case 'racha': return cumple(c) ? 1 : r(rachaVigente() / c.n);
+    case 'resp': return r(S.totalResp / c.n);
+    case 'clases': return r((S.clasesOk || 0) / c.n);
+    case 'unidades': {
+      const us = c.ids.map(id => UNIDADES.find(x => x.id === id)).filter(Boolean).map(infoUnidad);
+      const tot = us.reduce((a, i) => a + i.total, 0);
+      return tot ? r(us.reduce((a, i) => a + i.intro, 0) / tot) : 0;
+    }
+  }
+  return cumple(c) ? 1 : 0;
+}
+function textoCond(c) {
+  if (!c) return 'Disponible desde el principio';
+  switch (c.t) {
+    case 'nivel': return `Llegá al nivel ${c.n} (${nombreNivel(c.n)})`;
+    case 'sesiones': return c.n === 1 ? 'Completá tu primera lección' : `Completá ${c.n} lecciones`;
+    case 'racha': return `Estudiá ${c.n} días seguidos`;
+    case 'resp': return `Respondé ${c.n} ejercicios`;
+    case 'clases': return 'Armá una clase que pase la revisión (Práctica → Armá tu clase)';
+    case 'unidades': return 'Pasá por todo lo de tus dos unidades de exámenes';
+    case 'logro': { const l = LOGROS.find(x => x.id === c.id); return l ? `Logro «${l.nom}»: ${l.desc.charAt(0).toLowerCase() + l.desc.slice(1)}` : 'Un logro'; }
+  }
+  return '';
+}
+function faltaCond(c) {
+  if (!c || cumple(c)) return '';
+  switch (c.t) {
+    case 'nivel': return `faltan ${xpNivel(c.n) - S.xp} XP`;
+    case 'sesiones': { const n = c.n - S.sesiones; return `${n === 1 ? 'falta 1 lección' : 'faltan ' + n + ' lecciones'}`; }
+    case 'racha': return `llevás ${rachaVigente()} de ${c.n}`;
+    case 'resp': return `llevás ${S.totalResp} de ${c.n}`;
+    case 'unidades': return `${Math.round(progresoCond(c) * 100)} % visto`;
+  }
+  return '';
+}
+
+/* todo lo desbloqueable, con un id único por categoría */
+function catalogoPJ() {
+  const out = [];
+  for (const [k, a] of Object.entries(APARATOS)) out.push({ id: 'ap:' + k, k, cat: 'aparato', nom: a.nom, cond: a.cond });
+  for (const [k, a] of Object.entries(ARRIBAS)) out.push({ id: 'ar:' + k, k, cat: 'arriba', nom: a.nom, cond: a.cond });
+  for (const [k, a] of Object.entries(ABAJOS)) out.push({ id: 'ab:' + k, k, cat: 'abajo', nom: a.nom, cond: a.cond });
+  for (const [k, a] of Object.entries(ACCESORIOS_PJ)) out.push({ id: 'ac:' + k, k, cat: 'accesorio', nom: a.nom, ico: a.ico, cond: a.cond });
+  for (const [k, a] of Object.entries(COLORES_ROPA)) out.push({ id: 'cr:' + k, k, cat: 'color', nom: 'Color ' + a.nom.toLowerCase(), cond: a.cond });
+  for (const [k, a] of Object.entries(COLORES_PELO)) out.push({ id: 'cp:' + k, k, cat: 'pelo', nom: 'Pelo ' + a.nom.toLowerCase(), cond: a.cond });
+  return out;
+}
+const desbloqueado = it => cumple(it.cond);
+function nuevosDesbloqueos() {
+  const p = pj();
+  return catalogoPJ().filter(it => it.cond && desbloqueado(it) && !p.vistos.includes(it.id));
+}
+function marcarVistos(items) {
+  const p = pj();
+  items.forEach(it => { if (!p.vistos.includes(it.id)) p.vistos.push(it.id); });
+  guardar();
+}
+/* el próximo objetivo: lo bloqueado que está más cerca */
+function proximoDesbloqueo() {
+  const cat = catalogoPJ();
+  const pend = cat.filter(it => it.cond && !desbloqueado(it) && it.cond.t !== 'logro');
+  /* el más avanzado; a igual avance, los aparatos y lo que llega antes en el catálogo */
+  const orden = it => [-progresoCond(it.cond), it.cat === 'aparato' ? 0 : 1, cat.indexOf(it)];
+  pend.sort((a, b) => { const x = orden(a), y = orden(b); return x[0] - y[0] || x[1] - y[1] || x[2] - y[2]; });
+  return pend[0] || null;
+}
+function avisarDesbloqueos() {
+  const nuevos = nuevosDesbloqueos();
+  nuevos.slice(0, 3).forEach((it, i) => setTimeout(() => {
+    toast(`🎁 Nuevo para ${esc(pj().nombre)}: <b>${esc(it.nom)}</b>`, 'toast-logro');
+    SND.logro();
+  }, 600 + i * 900));
+  if (nuevos.length) marcarVistos(nuevos);
+}
+
+/* lo equipado, cayendo en lo básico si quedó algo bloqueado */
+function equipado() {
+  const p = pj();
+  const ok = (tabla, k, base) => tabla[k] && cumple(tabla[k].cond) ? k : base;
+  return {
+    piel: PIELES[p.piel] || PIELES[2],
+    pelo: PELOS[p.pelo] ? p.pelo : 'rodete',
+    colorPelo: COLORES_PELO[ok(COLORES_PELO, p.colorPelo, 'castano')].c,
+    arriba: ok(ARRIBAS, p.arriba, 'remera'),
+    colorArriba: COLORES_ROPA[ok(COLORES_ROPA, p.colorArriba, 'verde')].c,
+    abajo: ok(ABAJOS, p.abajo, 'calza'),
+    colorAbajo: COLORES_ROPA[ok(COLORES_ROPA, p.colorAbajo, 'negro')].c,
+    medias: COLORES_ROPA[ok(COLORES_ROPA, p.medias, 'coral')].c,
+    acc: p.acc.filter(a => ACCESORIOS_PJ[a] && cumple(ACCESORIOS_PJ[a].cond))
+  };
+}
+
+/* ---------------- dibujo del personaje ---------------- */
+
+function tono(hex, k) {
+  const n = parseInt(hex.slice(1), 16);
+  const f = v => Math.max(0, Math.min(255, Math.round(k < 0 ? v * (1 + k) : v + (255 - v) * k)));
+  return '#' + [n >> 16, (n >> 8) & 255, n & 255].map(f).map(v => v.toString(16).padStart(2, '0')).join('');
+}
+
+/* <g> del personaje en un cuadro de 120 × 210 */
+function avatarG(e, pose = 'quieto') {
+  const piel = e.piel, pelo = e.colorPelo, top = e.colorArriba, bot = e.colorAbajo;
+  const pielO = tono(piel, -0.14), topO = tono(top, -0.18), botO = tono(bot, -0.2);
+  const arriba = pose === 'festeja';
+  const brazos = arriba
+    ? [['M42 84 Q31 66 27 47', 26, 44], ['M78 84 Q89 66 93 47', 94, 44]]
+    : [['M42 84 Q33 104 31 127', 31, 129], ['M78 84 Q87 104 89 127', 89, 129]];
+  const mangaCorta = arriba ? ['M42 84 Q38 77 36 71', 'M78 84 Q82 77 84 71'] : ['M42 84 Q38 93 36 100', 'M78 84 Q82 93 84 100'];
+  const tiene = a => e.acc.includes(a);
+  const g = [];
+
+  /* pelo de atrás */
+  const atras = {
+    largo: `<path d="M37 36 Q40 14 60 15 Q82 14 84 36 L88 98 Q74 104 60 102 Q46 104 32 98 Z" fill="${pelo}"/>`,
+    rodete: `<circle cx="60" cy="18" r="10.5" fill="${pelo}"/><path d="M52 24 Q60 28 68 24" stroke="${tono(pelo, -0.25)}" stroke-width="1.6" fill="none"/>`,
+    colitas: `<ellipse cx="30" cy="58" rx="6.5" ry="14" transform="rotate(14 30 58)" fill="${pelo}"/><ellipse cx="90" cy="58" rx="6.5" ry="14" transform="rotate(-14 90 58)" fill="${pelo}"/>
+      <circle cx="34" cy="45" r="2.6" fill="#f43f5e"/><circle cx="86" cy="45" r="2.6" fill="#f43f5e"/>`,
+    rulos: `<circle cx="60" cy="42" r="32" fill="${pelo}"/>`,
+    trenza: [66, 76, 86, 96].map((y, i) => `<ellipse cx="${84 + i * 1.2}" cy="${y}" rx="5" ry="6" fill="${pelo}" stroke="${tono(pelo, -0.25)}" stroke-width="1"/>`).join('') +
+      `<circle cx="88.6" cy="103.5" r="2.4" fill="#f43f5e"/>`
+  }[e.pelo] || '';
+  g.push(atras);
+
+  /* piernas */
+  const pierna = (d, color, w) => `<path d="${d}" stroke="${color}" stroke-width="${w}" stroke-linecap="round" fill="none"/>`;
+  const piernas = ['M51 128 L49 185', 'M69 128 L71 185'];
+  if (e.abajo === 'short') {
+    piernas.forEach(d => g.push(pierna(d, piel, 12.5)));
+    g.push(pierna('M51 128 L50.4 148', bot, 14.5), pierna('M69 128 L69.6 148', bot, 14.5));
+  } else if (e.abajo === 'jogger') {
+    piernas.forEach(d => g.push(pierna(d, bot, 15)));
+    g.push(pierna('M49.3 178 L49 185', botO, 14), pierna('M70.7 178 L71 185', botO, 14));
+  } else piernas.forEach(d => g.push(pierna(d, bot, 13)));
+  /* medias antideslizantes */
+  g.push(`<ellipse cx="46" cy="189" rx="8.5" ry="4.8" fill="${e.medias}"/><ellipse cx="74" cy="189" rx="8.5" ry="4.8" fill="${e.medias}"/>
+    <path d="M38.5 191 Q46 194 53.5 191 M66.5 191 Q74 194 81.5 191" stroke="${tono(e.medias, -0.25)}" stroke-width="1.2" fill="none"/>`);
+  /* cadera y cintura */
+  g.push(`<path d="M41 121 L79 121 L80.5 138 Q60 145 39.5 138 Z" fill="${bot}"/><path d="M41 123.5 L79 123.5" stroke="${botO}" stroke-width="2"/>`);
+
+  /* cuello y tronco */
+  g.push(`<rect x="54" y="64" width="12" height="15" rx="4" fill="${pielO}"/>`);
+  const tronco = 'M38 85 Q38 77 46 76 L74 76 Q82 77 82 85 L79 124 L41 124 Z';
+  g.push(`<path d="${tronco}" fill="${piel}"/>`);
+  if (e.arriba === 'musculosa') g.push(`<path d="M45 77 L52 77 Q60 85 68 77 L75 77 Q78 92 79 124 L41 124 Q42 92 45 77 Z" fill="${top}"/>`);
+  else if (e.arriba === 'top') g.push(`<path d="M42 81 Q44 77 50 77 Q60 84 70 77 Q76 77 78 81 L78 106 Q60 110 42 106 Z" fill="${top}"/>
+    <path d="M42 104 Q60 108 78 104" stroke="${topO}" stroke-width="2" fill="none"/>`);
+  else {
+    if (e.arriba === 'buzo') g.push(`<path d="M43 79 Q60 94 77 79 Q73 69 60 69 Q47 69 43 79 Z" fill="${topO}"/>`);
+    g.push(`<path d="${tronco}" fill="${top}"/>`);
+    if (e.arriba === 'remera') g.push(`<path d="M53 76 Q60 83 67 76 Z" fill="${piel}"/>`);
+    else g.push(`<path d="M53 77 Q60 86 67 77" stroke="${topO}" stroke-width="2" fill="none"/>
+      <path d="M49 108 L71 108 L69 120 L51 120 Z" fill="${topO}" opacity=".55"/>
+      <path d="M57 84 L56 96 M63 84 L64 96" stroke="#f8fafc" stroke-width="1.3" stroke-linecap="round"/>`);
+  }
+
+  /* brazos, mangas y manos */
+  brazos.forEach(([d]) => g.push(pierna(d, e.arriba === 'buzo' ? top : piel, e.arriba === 'buzo' ? 12 : 10)));
+  if (e.arriba === 'remera') mangaCorta.forEach(d => g.push(pierna(d, top, 13)));
+  if (e.arriba === 'buzo') brazos.forEach(([, x, y]) => g.push(`<circle cx="${x}" cy="${y + (arriba ? 5 : -5)}" r="6.2" fill="${topO}"/>`));
+  if (tiene('munequeras')) brazos.forEach(([, x, y]) => g.push(`<circle cx="${x}" cy="${y + (arriba ? 6 : -6)}" r="5.8" fill="#f43f5e"/>`));
+  brazos.forEach(([, x, y]) => g.push(`<circle cx="${x}" cy="${y}" r="5.6" fill="${piel}"/>`));
+
+  /* accesorios del cuerpo */
+  if (tiene('toalla')) g.push(`<path d="M68 75 Q80 75 83 86 L79 113 L71.5 111 L74.5 89 Q71 82 63 80 Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+    <path d="M73 104 L79.6 105.5" stroke="#38bdf8" stroke-width="2"/>`);
+  if (tiene('medalla')) g.push(`<path d="M54 77 L60 97 L66 77" stroke="#2563eb" stroke-width="3.2" fill="none" stroke-linejoin="round"/>
+    <circle cx="60" cy="101" r="6" fill="#facc15" stroke="#b7791f" stroke-width="1.4"/><path d="M60 97.5 L61 100 L63.5 100.2 L61.6 101.8 L62.2 104.3 L60 102.9 L57.8 104.3 L58.4 101.8 L56.5 100.2 L59 100 Z" fill="#fff7cc"/>`);
+
+  /* cabeza */
+  g.push(`<circle cx="36.5" cy="49" r="4.6" fill="${pielO}"/><circle cx="83.5" cy="49" r="4.6" fill="${pielO}"/>
+    <circle cx="60" cy="46" r="24" fill="${piel}"/>`);
+  /* cara */
+  g.push(`<g class="pj-ojos"><ellipse cx="51" cy="48" rx="2.7" ry="3.4" fill="#2a2230"/><ellipse cx="69" cy="48" rx="2.7" ry="3.4" fill="#2a2230"/>
+    <circle cx="51.9" cy="46.8" r=".95" fill="#fff"/><circle cx="69.9" cy="46.8" r=".95" fill="#fff"/></g>
+    <path d="M46.5 41.5 Q51 39.2 55.5 41.2 M64.5 41.2 Q69 39.2 73.5 41.5" stroke="${tono(pelo, -0.2)}" stroke-width="1.7" stroke-linecap="round" fill="none"/>
+    <ellipse cx="45" cy="55" rx="3.8" ry="2.3" fill="#f472b6" opacity=".32"/><ellipse cx="75" cy="55" rx="3.8" ry="2.3" fill="#f472b6" opacity=".32"/>
+    ${arriba ? '<path d="M53 56 Q60 67 67 56 Z" fill="#7a2e2e"/><path d="M56.5 61.5 Q60 64.5 63.5 61.5" fill="#f87171"/>'
+             : '<path d="M54 57 Q60 62.5 66 57" stroke="#7a3a3a" stroke-width="1.9" stroke-linecap="round" fill="none"/>'}`);
+
+  /* pelo de adelante */
+  const frente = {
+    corto: 'M36 46 Q34 21 58 20 Q83 19 85 44 Q83 35 75 31 Q69 38 57 36 Q48 35 44 40 Q40 42 36 46 Z',
+    largo: 'M36 50 Q33 21 60 20 Q87 20 85 48 Q80 33 66 30 Q60 38 48 38 Q40 40 36 50 Z',
+    rodete: 'M36 44 Q36 21 60 21 Q84 21 84 44 Q78 30 60 29 Q42 30 36 44 Z',
+    colitas: 'M36 44 Q36 21 60 21 Q84 21 84 44 Q80 33 70 31 Q66 36 58 33 Q46 31 36 44 Z',
+    trenza: 'M36 48 Q34 21 60 20 Q86 20 84 46 Q78 30 60 28 Q46 30 40 38 Q37 42 36 48 Z',
+    rapado: 'M37 42 Q38 22 60 22 Q82 22 83 42 Q72 30 60 30 Q48 30 37 42 Z'
+  }[e.pelo];
+  if (e.pelo === 'rulos') g.push([[40, 33, 8], [49, 25, 9], [61, 22, 9.5], [72, 25, 9], [81, 33, 8], [36, 43, 6], [84, 43, 6]]
+    .map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${pelo}"/>`).join(''));
+  else if (frente) g.push(`<path d="${frente}" fill="${pelo}" ${e.pelo === 'rapado' ? 'opacity=".85"' : ''}/>`);
+
+  /* accesorios de la cabeza */
+  if (tiene('laurel')) g.push([195, 210, 225, 240, 255, 285, 300, 315, 330, 345].map(a => {
+    const r = a * Math.PI / 180, x = (60 + 27 * Math.cos(r)).toFixed(1), y = (46 + 27 * Math.sin(r)).toFixed(1);
+    return `<ellipse cx="${x}" cy="${y}" rx="4.8" ry="2.2" transform="rotate(${a + 90} ${x} ${y})" fill="${a < 270 ? '#65a30d' : '#4d7c0f'}"/>`;
+  }).join(''));
+  if (tiene('vincha')) g.push('<path d="M36.5 40 Q60 21 83.5 40" stroke="#f43f5e" stroke-width="4.2" stroke-linecap="round" fill="none"/>');
+  if (tiene('auriculares')) g.push(`<path d="M35 46 Q35 15 60 14 Q85 15 85 46" stroke="#374151" stroke-width="3.4" fill="none"/>
+    <rect x="30" y="41" width="9" height="15" rx="3.5" fill="#1f2937"/><rect x="81" y="41" width="9" height="15" rx="3.5" fill="#1f2937"/>`);
+  if (tiene('lentes')) g.push(`<g fill="rgba(255,255,255,.18)" stroke="#1f2937" stroke-width="1.7"><circle cx="51" cy="48" r="6.2"/><circle cx="69" cy="48" r="6.2"/></g>
+    <path d="M57.2 47.5 Q60 46 62.8 47.5" stroke="#1f2937" stroke-width="1.6" fill="none"/>`);
+  if (tiene('botella')) g.push(`<rect x="99" y="170" width="11" height="21" rx="3.5" fill="#38bdf8" opacity=".92"/><rect x="100.5" y="165" width="8" height="6" rx="1.5" fill="#0f172a"/>
+    <rect x="101" y="176" width="3" height="10" rx="1.5" fill="#fff" opacity=".5"/>`);
+  return g.join('');
+}
+
+function avatarSVG(pose = 'quieto', clase = '') {
+  return `<svg class="pj-svg ${clase}" viewBox="0 0 120 210" role="img" aria-label="${esc(pj().nombre)}">${avatarG(equipado(), pose)}</svg>`;
+}
+
+/* ---------------- dibujo de los aparatos ---------------- */
+
+const MADERA = '#c89b6d', MADERA_O = '#9c6c43', METAL = '#a3adb9', METAL_O = '#6b7684', TAPIZ = '#0f766e', TAPIZ_C = '#14b8a6', RESORTE = '#cbd5e1';
+const resorte = (x1, y1, x2, y2, n = 7) => {
+  const pts = [];
+  for (let i = 0; i <= n * 2; i++) {
+    const t = i / (n * 2), x = x1 + (x2 - x1) * t, y = y1 + (y2 - y1) * t;
+    const dx = -(y2 - y1), dy = x2 - x1, l = Math.hypot(dx, dy) || 1, o = i % 2 ? 3 : -3;
+    pts.push(`${(x + dx / l * (i && i < n * 2 ? o : 0)).toFixed(1)},${(y + dy / l * (i && i < n * 2 ? o : 0)).toFixed(1)}`);
+  }
+  return `<polyline points="${pts.join(' ')}" fill="none" stroke="${RESORTE}" stroke-width="1.6" stroke-linejoin="round"/>`;
+};
+
+/* cada aparato en su caja local; `caja` = [ancho, alto] */
+const DIBUJOS = {
+  mat: { caja: [130, 14], svg: `<path d="M9 1 L130 1 L121 13 L0 13 Z" fill="#8b7cf6"/><path d="M0 13 L121 13 L121 14.5 L0 14.5 Z" fill="#6d5fd0"/>` },
+  pelota: { caja: [24, 24], svg: `<circle cx="12" cy="12" r="11" fill="#fb923c"/><path d="M3 9 Q12 15 21 9" stroke="#ea580c" stroke-width="1.2" fill="none"/><ellipse cx="8" cy="7.5" rx="3.6" ry="2.3" fill="#fff" opacity=".45"/>` },
+  banda: { caja: [44, 16], svg: `<path d="M3 11 Q11 1 21 8 Q31 15 40 5" stroke="#22c55e" stroke-width="4.5" stroke-linecap="round" fill="none"/><path d="M3 11 Q12 16 22 12" stroke="#16a34a" stroke-width="3" stroke-linecap="round" fill="none"/>` },
+  aro: { caja: [32, 32], svg: `<circle cx="16" cy="16" r="12" fill="none" stroke="#7c3aed" stroke-width="3.6"/><rect x="0.5" y="10" width="6" height="12" rx="2.5" fill="#c4b5fd"/><rect x="25.5" y="10" width="6" height="12" rx="2.5" fill="#c4b5fd"/>` },
+  rodillo: { caja: [58, 18], svg: `<rect x="0" y="1" width="58" height="17" rx="8.5" fill="#60a5fa"/><ellipse cx="50" cy="9.5" rx="6" ry="8.5" fill="#93c5fd"/><path d="M6 5 L44 5" stroke="#fff" stroke-width="1.5" opacity=".5" stroke-linecap="round"/>` },
+  pizarra: { caja: [84, 56], svg: `<rect x="0" y="0" width="84" height="54" rx="4" fill="#78716c"/><rect x="4" y="4" width="76" height="46" rx="2" fill="#fbfaf7"/>
+    <text x="9" y="15" font-size="7.5" font-weight="800" fill="#0d9488">MI CLASE</text>
+    ${['1. Hundred · 10', '2. Roll up · 5', '3. Leg circles · 5', '4. Swan · 4'].map((t, i) => `<text x="9" y="${25 + i * 7.5}" font-size="5.6" fill="#44403c">${t}</text>`).join('')}
+    <path d="M60 30 L66 36 L76 22" stroke="#16a34a" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>` },
+  spine: { caja: [62, 36], svg: `<path d="M0 36 L0 23 Q0 17 7 17 L17 17 L18 25 Q30 2 49 8 Q62 14 62 36 Z" fill="${TAPIZ}"/><path d="M0 34 L62 34 L62 36 L0 36 Z" fill="${MADERA_O}"/><path d="M24 20 Q35 8 49 12" stroke="${TAPIZ_C}" stroke-width="2" fill="none" opacity=".7"/>` },
+  chair: { caja: [66, 60], svg: `<rect x="0" y="12" width="48" height="48" rx="3" fill="${MADERA}"/><rect x="-2" y="7" width="52" height="7" rx="3" fill="${TAPIZ}"/>
+    <rect x="5" y="20" width="38" height="30" rx="2" fill="${MADERA_O}" opacity=".35"/>${resorte(12, 52, 36, 52, 5)}
+    <path d="M47 55 L64 45" stroke="${METAL_O}" stroke-width="4" stroke-linecap="round"/><rect x="58" y="40" width="8" height="5" rx="2" transform="rotate(-30 62 42)" fill="${TAPIZ}"/>` },
+  barrel: { caja: [100, 82], svg: `<rect x="0" y="76" width="100" height="6" rx="2" fill="${MADERA_O}"/>
+    <rect x="4" y="6" width="5" height="72" rx="2" fill="${MADERA}"/><rect x="21" y="6" width="5" height="72" rx="2" fill="${MADERA}"/>
+    ${[14, 25, 36, 47, 58].map(y => `<rect x="4" y="${y}" width="22" height="3.4" rx="1.7" fill="${MADERA_O}"/>`).join('')}
+    <path d="M40 77 L40 46 Q40 18 68 18 Q96 18 96 46 L96 77 Z" fill="${TAPIZ}"/><path d="M47 40 Q52 25 68 24" stroke="${TAPIZ_C}" stroke-width="3" fill="none" opacity=".6" stroke-linecap="round"/>` },
+  reformer: { caja: [172, 62], svg: `<rect x="6" y="50" width="7" height="12" rx="2" fill="${MADERA_O}"/><rect x="159" y="50" width="7" height="12" rx="2" fill="${MADERA_O}"/>
+    <rect x="0" y="40" width="172" height="12" rx="4" fill="${MADERA}"/><path d="M8 43 L164 43" stroke="${MADERA_O}" stroke-width="1.5"/>
+    <rect x="0" y="8" width="6" height="34" rx="2" fill="${MADERA}"/><circle cx="3" cy="11" r="3.2" fill="${METAL_O}"/>
+    <path d="M5 12 L44 29 M5 15 L44 31" stroke="#334155" stroke-width="1.2"/>
+    <rect x="40" y="27" width="60" height="12" rx="3.5" fill="${TAPIZ}"/><rect x="31" y="29" width="11" height="9" rx="3" fill="${TAPIZ_C}"/>
+    <rect x="86" y="15" width="7" height="14" rx="2.5" fill="${TAPIZ_C}"/>
+    ${resorte(100, 35, 144, 35, 8)}
+    <path d="M152 41 L147 14" stroke="${METAL_O}" stroke-width="3.2" stroke-linecap="round"/><circle cx="147" cy="13" r="3.8" fill="${METAL}"/>` },
+  cadillac: { caja: [142, 132], svg: `<rect x="6" y="100" width="7" height="32" rx="2" fill="${MADERA_O}"/><rect x="129" y="100" width="7" height="32" rx="2" fill="${MADERA_O}"/>
+    <rect x="0" y="88" width="142" height="13" rx="4" fill="${TAPIZ}"/><rect x="2" y="100" width="138" height="5" rx="2" fill="${MADERA}"/>
+    <rect x="4" y="0" width="5" height="90" rx="2" fill="${METAL}"/><rect x="133" y="0" width="5" height="90" rx="2" fill="${METAL}"/>
+    <rect x="4" y="0" width="134" height="5" rx="2" fill="${METAL}"/>
+    <path d="M58 5 L61 44 M86 5 L83 44" stroke="#334155" stroke-width="1.4"/><rect x="56" y="43" width="32" height="4.5" rx="2" fill="${MADERA}"/>
+    <rect x="9" y="56" width="42" height="4" rx="2" fill="${METAL_O}"/>${resorte(30, 5, 30, 56, 6)}
+    ${resorte(114, 5, 114, 42, 5)}<rect x="108" y="42" width="12" height="4" rx="2" fill="${TAPIZ_C}"/>` },
+  diploma: { caja: [34, 42], svg: `<rect x="0" y="0" width="34" height="40" rx="2" fill="${MADERA}"/><rect x="3" y="3" width="28" height="34" fill="#fffdf5"/>
+    <path d="M8 11 L26 11 M8 16 L26 16 M8 21 L20 21" stroke="#a8a29e" stroke-width="1.4"/><circle cx="17" cy="29" r="5" fill="#facc15" stroke="#ca8a04"/><path d="M14 33 L12 40 L17 37 L22 40 L20 33" fill="#dc2626"/>` },
+  planta: { caja: [30, 46], svg: `<path d="M5 30 L25 30 L22 46 L8 46 Z" fill="#c2410c"/><path d="M4 28 L26 28 L26 32 L4 32 Z" fill="#ea580c"/>
+    <path d="M15 28 Q4 20 3 6 Q13 12 15 28 Q14 12 22 1 Q25 16 15 28 Q24 18 29 16 Q27 26 15 28" fill="#16a34a"/>` },
+  espejo: { caja: [28, 112], svg: `<rect x="0" y="0" width="28" height="112" rx="4" fill="${MADERA}"/><rect x="3" y="3" width="22" height="106" rx="2" fill="#dbeafe"/>
+    <path d="M7 20 L14 10 M7 34 L20 18" stroke="#fff" stroke-width="2.4" opacity=".8" stroke-linecap="round"/>` }
+};
+/* dónde va cada cosa en la escena (420 × 262; el piso empieza en y = 158) */
+const LUGARES = {
+  espejo: [96, 18], diploma: [134, 24], pizarra: [176, 18], cadillac: [274, 40], reformer: [6, 116, 0.86],
+  planta: [4, 212], chair: [26, 166], spine: [86, 206], barrel: [318, 150], mat: [146, 232],
+  banda: [48, 244], pelota: [288, 226], aro: [318, 222], rodillo: [356, 238]
+};
+
+function aparatoMini(k) {
+  const d = DIBUJOS[k];
+  const m = 6, w = d.caja[0] + m * 2, h = d.caja[1] + m * 2;
+  return `<svg viewBox="${-m} ${-m} ${w} ${h}" class="ap-mini" aria-hidden="true">${d.svg}</svg>`;
+}
+
+let pjPose = 'quieto';
+function escenaSVG() {
+  const aps = Object.keys(APARATOS).filter(k => cumple(APARATOS[k].cond));
+  const orden = ['espejo', 'diploma', 'pizarra', 'cadillac', 'reformer', 'barrel', 'chair', 'planta', 'spine', 'mat', 'banda', 'pelota', 'aro', 'rodillo'];
+  const visibles = orden.filter(k => aps.includes(k));
+  const pieza = k => {
+    const [x, y, s = 1] = LUGARES[k];
+    return `<g transform="translate(${x} ${y}) scale(${s})"><g class="ap" data-ap="${k}" tabindex="0" role="button" aria-label="${esc(APARATOS[k].nom)}">${DIBUJOS[k].svg}</g></g>`;
+  };
+  /* lo que está detrás del personaje se dibuja antes; los accesorios del piso, delante */
+  const iMat = orden.indexOf('mat');
+  const antes = visibles.filter(k => orden.indexOf(k) <= iMat).map(pieza);
+  const despues = visibles.filter(k => orden.indexOf(k) > iMat).map(pieza);
+  return `<svg class="escena" viewBox="0 0 420 262" role="group" aria-label="Estudio de ${esc(pj().nombre)}">
+    <rect x="0" y="0" width="420" height="160" class="esc-pared"/>
+    <rect x="0" y="158" width="420" height="104" class="esc-piso"/>
+    <path d="M0 158 L420 158" class="esc-zocalo"/>
+    ${[196, 226].map(y => `<path d="M0 ${y} L420 ${y}" class="esc-tabla"/>`).join('')}
+    <g class="esc-ventana"><rect x="22" y="20" width="62" height="70" rx="4"/><path d="M53 20 L53 90 M22 55 L84 55"/></g>
+    <circle cx="44" cy="40" r="7" class="esc-sol"/>
+    ${antes.join('')}
+    <g transform="translate(151 44)"><g class="pj-escena" data-pj tabindex="0" role="button" aria-label="${esc(pj().nombre)}: tocá para charlar">${avatarG(equipado(), pjPose)}</g></g>
+    ${despues.join('')}
+  </svg>`;
+}
+
+/* ---------------- vistas ---------------- */
+
+function frasePJ() {
+  const due = vencidos().length, racha = rachaVigente(), e = S.log[HOY()] || {};
+  const ctx = [];
+  if (due) ctx.push(`Tenés ${due} ${due === 1 ? 'repaso' : 'repasos'} esperando. ¿Arrancamos?`);
+  if (racha > 0 && S.ultimoDia !== HOY()) ctx.push(`¡No cortemos la racha de ${racha} ${racha === 1 ? 'día' : 'días'}!`);
+  if (e.metaOk) ctx.push('Meta de hoy cumplida. Lo que sumemos ahora es extra.');
+  const prox = proximoDesbloqueo();
+  if (prox && progresoCond(prox.cond) >= 0.6) ctx.push(`Estamos cerca: ${prox.nom} (${faltaCond(prox.cond)}).`);
+  return ctx.length && Math.random() < 0.7 ? azar(ctx) : azar(FRASES_PJ);
+}
+
+/* tarjeta chica en Inicio */
+function tarjetaPJ() {
+  const p = pj(), prox = proximoDesbloqueo(), nuevos = nuevosDesbloqueos().length;
+  return `<button type="button" class="pj-card" id="pjCard" aria-label="Ir al estudio de ${esc(p.nombre)}">
+    <span class="pj-card-av">${avatarSVG('quieto')}</span>
+    <span class="pj-card-txt">
+      <b>${esc(p.nombre)} ${nuevos ? `<span class="pj-nuevo">${nuevos} nuevo${nuevos === 1 ? '' : 's'}</span>` : ''}</b>
+      <span class="pj-globo">${esc(frasePJ())}</span>
+      ${prox ? `<span class="pj-prox"><small>Próximo: ${esc(prox.nom)} · ${esc(faltaCond(prox.cond) || textoCond(prox.cond))}</small>
+        <span class="barra"><span style="width:${Math.round(progresoCond(prox.cond) * 100)}%"></span></span></span>` : ''}
+    </span>
+  </button>`;
+}
+
+/* en el cierre de la lección */
+function bloqueFinPJ() {
+  const nuevos = nuevosDesbloqueos();
+  const p = pj();
+  const html = `<div class="fin-pj ${nuevos.length ? 'con-nuevos' : ''}">
+    <span class="fin-pj-av">${avatarSVG('festeja', 'salta')}</span>
+    <div>${nuevos.length
+      ? `<b>¡Nuevo para el estudio de ${esc(p.nombre)}!</b><ul>${nuevos.slice(0, 5).map(it =>
+          `<li>${it.cat === 'aparato' ? '🏋️' : it.ico || '👕'} ${esc(it.nom)}</li>`).join('')}${nuevos.length > 5 ? `<li>y ${nuevos.length - 5} más</li>` : ''}</ul>`
+      : `<b>${esc(p.nombre)} festeja con vos</b><small>${esc(azar(FRASES_PJ))}</small>`}</div>
+  </div>`;
+  if (nuevos.length) marcarVistos(nuevos);
+  return html;
+}
+
+let pestanaEstudio = 'vestuario';
+function vEstudio() {
+  const p = pj();
+  const cat = catalogoPJ(), total = cat.filter(it => it.cond).length, ya = cat.filter(it => it.cond && desbloqueado(it)).length;
+  const prox = proximoDesbloqueo();
+  const recien = new Set(nuevosDesbloqueos().map(it => it.id));
+  app().innerHTML = `
+    <div class="pj-cab">
+      <div class="pj-nombre">
+        <input id="pjNombre" value="${esc(p.nombre)}" maxlength="24" aria-label="Nombre de tu personaje" spellcheck="false">
+        <button type="button" class="btn small" id="pjDado" title="Otro nombre" aria-label="Proponer otro nombre">🎲</button>
+      </div>
+      <p class="sub">Tu estudio de Pilates. Con cada lección, racha y logro se suman prendas, accesorios y aparatos. Tocá a ${esc(p.nombre)} para charlar y cada aparato para ver su ficha.</p>
+    </div>
+    <div class="escena-wrap">
+      ${escenaSVG()}
+      <div class="globo-pj" id="pjGlobo" hidden></div>
+    </div>
+    <div class="pj-progreso">
+      <div><b>${ya} de ${total}</b> desbloqueados</div>
+      ${prox ? `<div class="pj-prox"><small>Próximo: <b>${esc(prox.nom)}</b> · ${esc(textoCond(prox.cond))}${faltaCond(prox.cond) ? ' · ' + esc(faltaCond(prox.cond)) : ''}</small>
+        <span class="barra"><span style="width:${Math.round(progresoCond(prox.cond) * 100)}%"></span></span></div>` : '<div><small>¡Tenés todo el estudio!</small></div>'}
+    </div>
+    <div class="seg pestanas" role="tablist">${[['vestuario', 'Vestuario'], ['aparatos', 'Aparatos y objetos']].map(([k, t]) =>
+      `<button type="button" role="tab" aria-selected="${pestanaEstudio === k}" class="${pestanaEstudio === k ? 'on' : ''}" data-p="${k}"><b>${t}</b></button>`).join('')}</div>
+    <div id="pjPanel">${pestanaEstudio === 'vestuario' ? panelVestuario(recien) : panelAparatos(recien)}</div>`;
+
+  $('#pjNombre').onchange = e => { p.nombre = e.target.value.trim().slice(0, 24) || 'Core-azón'; guardar(); };
+  $('#pjDado').onclick = () => {
+    const otros = NOMBRES_PJ.filter(n => n !== p.nombre);
+    p.nombre = otros[(NOMBRES_PJ.indexOf(p.nombre) + 1) % otros.length] || azar(otros);
+    guardar(); SND.toque();
+    $('#pjNombre').value = p.nombre;
+    hablar(`¿«${p.nombre}»? ¡Me encanta!`);
+  };
+  $$('.pestanas button').forEach(b => b.onclick = () => { pestanaEstudio = b.dataset.p; redibujarEstudio(); });
+  conectarEscena();
+  conectarPanel();
+  if (recien.size) setTimeout(() => marcarVistos(catalogoPJ().filter(it => recien.has(it.id))), 400);
+}
+function redibujarEstudio() { const y = window.scrollY; vEstudio(); window.scrollTo(0, y); }
+
+function hablar(txt) {
+  const g = $('#pjGlobo');
+  if (!g) return;
+  g.textContent = txt;
+  g.hidden = false;
+  g.classList.remove('entra'); void g.offsetWidth; g.classList.add('entra');
+  clearTimeout(hablar.t);
+  hablar.t = setTimeout(() => { g.hidden = true; }, 4200);
+}
+
+function conectarEscena() {
+  const fig = $('.pj-escena');
+  const tocarPJ = () => {
+    fig.classList.remove('salta'); void fig.getBBox(); fig.classList.add('salta');
+    SND.bien(1);
+    hablar(frasePJ());
+  };
+  fig.addEventListener('click', tocarPJ);
+  fig.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tocarPJ(); } });
+  $$('.escena .ap').forEach(a => {
+    const abrir = () => fichaAparato(a.dataset.ap);
+    a.addEventListener('click', abrir);
+    a.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrir(); } });
+  });
+}
+
+function fichaAparato(k) {
+  const a = APARATOS[k], ok = cumple(a.cond);
+  const m = abrirModal(`<div class="ap-ficha">
+    <div class="ap-ficha-dib">${aparatoMini(k)}</div>
+    <h3>${esc(a.nom)}</h3>
+    ${ok ? `<p>${esc(a.info)}</p>${a.examen ? `<div class="ap-examen"><b>📝 En tus exámenes</b><p>${esc(a.examen)}</p></div>` : ''}`
+         : `<p class="ap-bloq">🔒 ${esc(textoCond(a.cond))}${faltaCond(a.cond) ? ` · ${esc(faltaCond(a.cond))}` : ''}</p>
+            <div class="barra gruesa"><span style="width:${Math.round(progresoCond(a.cond) * 100)}%"></span></div>`}
+    ${ok && a.clase ? '<button type="button" class="btn3d verde ancho" id="apClase">Armar una clase</button>' : ''}
+    <button type="button" class="btn ghost ancho" id="apCerrar">Cerrar</button>
+  </div>`);
+  $('#apCerrar', m).onclick = cerrarModal;
+  if ($('#apClase', m)) $('#apClase', m).onclick = () => { cerrarModal(); ir('clase'); };
+}
+
+const swatch = (grupo, k, color, nom, cond, on, nuevo) => {
+  const ok = cumple(cond);
+  return `<button type="button" class="sw ${on ? 'on' : ''} ${ok ? '' : 'bloq'} ${nuevo ? 'recien' : ''}" data-g="${grupo}" data-k="${k}"
+    style="--sw:${color}" title="${esc(nom)}${ok ? '' : ' · 🔒 ' + esc(textoCond(cond))}" aria-label="${esc(nom)}${ok ? '' : ', bloqueado'}" aria-pressed="${on}">${ok ? '' : '🔒'}</button>`;
+};
+const opcion = (grupo, k, nom, cond, on, nuevo, ico = '') => {
+  const ok = cumple(cond);
+  return `<button type="button" class="pj-op ${on ? 'on' : ''} ${ok ? '' : 'bloq'} ${nuevo ? 'recien' : ''}" data-g="${grupo}" data-k="${k}" aria-pressed="${on}"
+    title="${ok ? '' : '🔒 ' + esc(textoCond(cond))}">${ico ? `<span>${ico}</span>` : ''}${esc(nom)}${ok ? '' : ' 🔒'}</button>`;
+};
+
+function panelVestuario(recien) {
+  const p = pj();
+  const colores = (g, sel, pref) => Object.entries(COLORES_ROPA).map(([k, c]) => swatch(g, k, c.c, c.nom, c.cond, sel === k, recien.has(pref + k))).join('');
+  return `<div class="pj-panel">
+    <h3 class="pj-h">Piel</h3><div class="sws">${PIELES.map((c, i) => swatch('piel', i, c, 'Tono ' + (i + 1), null, p.piel === i)).join('')}</div>
+    <h3 class="pj-h">Pelo</h3><div class="pj-ops">${Object.entries(PELOS).map(([k, n]) => opcion('pelo', k, n, null, p.pelo === k)).join('')}</div>
+    <div class="sws">${Object.entries(COLORES_PELO).map(([k, c]) => swatch('colorPelo', k, c.c, c.nom, c.cond, p.colorPelo === k, recien.has('cp:' + k))).join('')}</div>
+    <h3 class="pj-h">Arriba</h3><div class="pj-ops">${Object.entries(ARRIBAS).map(([k, a]) => opcion('arriba', k, a.nom, a.cond, p.arriba === k, recien.has('ar:' + k))).join('')}</div>
+    <div class="sws">${colores('colorArriba', p.colorArriba, 'cr:')}</div>
+    <h3 class="pj-h">Abajo</h3><div class="pj-ops">${Object.entries(ABAJOS).map(([k, a]) => opcion('abajo', k, a.nom, a.cond, p.abajo === k, recien.has('ab:' + k))).join('')}</div>
+    <div class="sws">${colores('colorAbajo', p.colorAbajo, 'cr:')}</div>
+    <h3 class="pj-h">Medias antideslizantes</h3><div class="sws">${colores('medias', p.medias, 'cr:')}</div>
+    <h3 class="pj-h">Accesorios <small>(podés combinar varios)</small></h3>
+    <div class="pj-ops">${Object.entries(ACCESORIOS_PJ).map(([k, a]) => opcion('acc', k, a.nom, a.cond, p.acc.includes(k), recien.has('ac:' + k), a.ico)).join('')}</div>
+  </div>`;
+}
+
+function panelAparatos(recien) {
+  return `<div class="ap-grid">${Object.entries(APARATOS).map(([k, a]) => {
+    const ok = cumple(a.cond);
+    return `<button type="button" class="ap-card ${ok ? '' : 'bloq'} ${recien.has('ap:' + k) ? 'recien' : ''}" data-ficha="${k}">
+      ${aparatoMini(k)}<b>${esc(a.nom)}</b>
+      ${ok ? `<small>${recien.has('ap:' + k) ? '¡Nuevo!' : 'En tu estudio'}</small>`
+           : `<small>🔒 ${esc(textoCond(a.cond))}</small><span class="barra"><span style="width:${Math.round(progresoCond(a.cond) * 100)}%"></span></span>`}
+    </button>`;
+  }).join('')}</div>`;
+}
+
+function conectarPanel() {
+  const p = pj();
+  $$('#pjPanel [data-g]').forEach(b => b.onclick = () => {
+    const g = b.dataset.g, k = b.dataset.k;
+    if (b.classList.contains('bloq')) {
+      toast(`🔒 ${esc(b.title.replace(/^.*🔒\s*/, '') || 'Todavía no')}`, 'toast-suave');
+      SND.parMal();
+      return;
+    }
+    if (g === 'piel') p.piel = +k;
+    else if (g === 'acc') p.acc = p.acc.includes(k) ? p.acc.filter(x => x !== k) : [...p.acc, k];
+    else p[g] = k;
+    guardar(); SND.toque();
+    pjPose = g === 'acc' && p.acc.includes(k) ? 'festeja' : 'quieto';
+    redibujarEstudio();
+    pjPose = 'quieto';
+  });
+  $$('#pjPanel [data-ficha]').forEach(b => b.onclick = () => fichaAparato(b.dataset.ficha));
+}
+
+</script>
+<script>
+/* ============================================================
+   AnatoApp — Armá tu clase
+
+   En los exámenes, diseñar la clase fue lo que más puntos costó:
+   Mat 1, 17 de 30 y Mat 2, 0 de 50. Acá se arma una clase con los
+   ejercicios del manual y la app la revisa con lo mismo que marcó
+   la corrección:
+     · repeticiones exactas, no rangos
+     · el orden de posiciones del manual (de pie → cuatro apoyos →
+       supino → sentado → prono → plancha → de costado → cierre),
+       sin volver a supino después del prono
+     · la transición pensada cada vez que cambia la posición
+     · una clase balanceada: los 7 elementos (Mat 2, págs. 66–69)
+   La clase en curso se guarda con el progreso (S.clase).
+   ============================================================ */
+'use strict';
+
+const POS_CLASE = {
+  pie:       { nom: 'De pie',        ico: '🧍', grupo: 0 },
+  cuatro:    { nom: 'Cuatro apoyos', ico: '🐈', grupo: 1 },
+  supino:    { nom: 'Supino',        ico: '🛌', grupo: 2 },
+  inversion: { nom: 'Inversión',     ico: '🙃', grupo: 2 },
+  sentado:   { nom: 'Sentado',       ico: '🪑', grupo: 2 },
+  prono:     { nom: 'Prono',         ico: '🦢', grupo: 3 },
+  plancha:   { nom: 'Plancha',       ico: '➖', grupo: 4 },
+  costado:   { nom: 'De costado',    ico: '🦵', grupo: 5 }
+};
+const MODOS_CLASE = {
+  mat1:  { nom: 'Mat 1 · clase corta', min: 15, max: 15, fuentes: ['mat1'],
+           consigna: '15 ejercicios de Mat 1 con variedad de posiciones, en orden y con el número de repeticiones (examen de Mat 1).' },
+  mat12: { nom: 'Mat 1 y 2 · una hora', min: 20, max: 25, fuentes: ['mat1', 'mat2'],
+           consigna: 'De 20 a 25 ejercicios de Mat 1 y Mat 2, en orden y con repeticiones, balanceada y fluida (examen de Mat 2).' }
+};
+
+/* Pre-Pilates que las secuencias del manual usan de calentamiento */
+const PRE_CLASE = [
+  ['Pelvic Clock', 'supino'], ['Marching', 'supino'], ['Toe Taps', 'supino'], ['Bridge with Marching', 'supino'],
+  ['Cat Cow', 'cuatro'], ['Sternum Drops', 'cuatro'], ['Squats', 'pie'], ['Standing Roll Down', 'pie']
+];
+
+/* Cómo pasar de una posición a otra (la corrección de Mat 1 preguntó
+   "¿cómo transicionás de 8 a 9?": de sentado a prono, por medio lado) */
+const TRANSICIONES = {
+  'supino>sentado': 'Enrollá la columna hasta sentarte, como en el Roll up.',
+  'sentado>supino': 'Bajá vértebra por vértebra hasta apoyar la espalda.',
+  'sentado>prono': 'Pasá por medio lado: girá hacia un costado, apoyá las manos y bajá a prono.',
+  'supino>prono': 'Rodá hacia un costado y seguí hasta quedar boca abajo.',
+  'prono>costado': 'Girá hacia un lado y alineá hombros, cadera y tobillos.',
+  'prono>plancha': 'Apoyá las manos debajo de los hombros y empujá el piso hasta la plancha.',
+  'plancha>prono': 'Bajá las rodillas y apoyá el cuerpo con control.',
+  'prono>cuatro': 'Empujá con las manos y llevá la cadera hacia atrás hasta cuatro apoyos.',
+  'cuatro>prono': 'Deslizá las manos hacia adelante y bajá el cuerpo con control.',
+  'costado>sentado': 'Apoyá la mano de abajo y subí a sentarte.',
+  'costado>prono': 'Girá hacia el piso sin perder la línea del cuerpo.',
+  'costado>plancha': 'Girá hacia el piso, apoyá las manos y subí a la plancha.',
+  'plancha>costado': 'Rotá el cuerpo sobre una mano hasta el costado.',
+  'sentado>pie': 'Cruzá las piernas o rodá hacia adelante para ponerte de pie, como al final del Seal.',
+  'plancha>pie': 'Caminá con las manos hacia los pies y enrollá la columna hasta quedar de pie.',
+  'pie>plancha': 'Enrollá la columna hacia abajo y caminá con las manos hasta la plancha.',
+  'pie>supino': 'Bajá a sentarte y rodá la espalda hasta el mat.',
+  'pie>cuatro': 'Bajá las manos al mat y apoyá las rodillas.',
+  'cuatro>supino': 'Sentate de costado y rodá la espalda hasta el mat.',
+  'supino>inversion': 'Desde supino, llevá las piernas por encima de la cabeza con control.',
+  'inversion>supino': 'Bajá vértebra por vértebra hasta apoyar la pelvis.',
+  'sentado>inversion': 'Rodá hacia atrás hasta apoyarte sobre los hombros.',
+  'inversion>sentado': 'Rodá hacia adelante hasta sentarte sobre los isquiones.'
+};
+
+/* Los elementos de una clase balanceada (Mat 2, págs. 66–69; Mat 1, págs. 76–78) */
+const ELEMENTOS_CLASE = [
+  { k: 'flexion',   nom: 'Abdominales en flexión',          re: /hundred|roll up|leg stretch|criss|teaser|neck pull|abdominal|toe taps|pelvic clock/ },
+  { k: 'movilidad', nom: 'Movilidad de columna',            re: /roll up|rolling|rocker|seal|spine stretch|saw|cat cow|roll down|swan|boomerang|roll over|mermaid/ },
+  { k: 'extension', nom: 'Extensión (prono)',               re: /swan|leg kicks|swimming|rocking/ },
+  { k: 'rotacion',  nom: 'Rotación o trabajo lateral',      re: /saw|criss|twist|corkscrew|hip circles|side|mermaid|kneeling/ },
+  { k: 'superior',  nom: 'Tren superior (escápula, planchas)', re: /push up|leg pull|sternum|^twist|side bend|plank/ },
+  { k: 'inferior',  nom: 'Tren inferior',                   re: /side leg|single leg kicks|double leg kicks|shoulder bridge|scissors|^bicycle|squat|bridge|kneeling side/ }
+];
+
+const rangoReps = txt => {
+  const m = String(txt || '').match(/(\d+)\s*(?:–|-|a)\s*(\d+)/);
+  if (m) return [+m[1], +m[2]];
+  const u = String(txt || '').match(/(\d+)/);
+  return u ? [+u[1], +u[1]] : null;
+};
+const unidadReps = txt => /c[ií]rculo/i.test(txt) ? 'círculos' : /sets?\b/i.test(txt) ? 'sets' : 'reps';
+
+/* catálogo de ejercicios para armar la clase */
+function ejerciciosClase() {
+  const bb = BB.ejercicios.map(e => ({ id: e.id, n: e.n, pos: e.pos, f: e.f, reps: e.reps, trans: e.trans, osteo: e.osteo, nivel: e.nivel }));
+  const pre = PRE_CLASE.map(([n, pos]) => {
+    const p = PREMAT.find(x => norm(x.n) === norm(n));
+    return { id: 'pre-' + norm(n).replace(/ /g, '-'), n, pos, f: 'pre', reps: (p && p.reps) || '' };
+  });
+  return [...pre, ...bb];
+}
+let CATALOGO_CLASE = null;
+const ejClase = id => (CATALOGO_CLASE || (CATALOGO_CLASE = ejerciciosClase())).find(e => e.id === id);
+
+function claseActual() {
+  if (!S.clase || !MODOS_CLASE[S.clase.modo]) S.clase = { modo: 'mat1', items: [] };
+  S.clase.items = S.clase.items.filter(x => ejClase(x.id));
+  return S.clase;
+}
+let filtroClase = { pos: '', f: '' };
+
+function vClase() {
+  const c = claseActual(), m = MODOS_CLASE[c.modo];
+  const nMat = c.items.filter(x => ejClase(x.id).f !== 'pre').length;
+  app().innerHTML = `
+    <button type="button" class="volver" id="clVolver">← Práctica</button>
+    <h1 class="tit">Armá tu clase</h1>
+    <p class="sub">Lo que más puntos te costó en los exámenes: 17 de 30 en Mat 1 y 0 de 50 en Mat 2. Armala acá y la app la revisa con lo mismo que marcó la corrección.</p>
+    <div class="seg" id="clModo">${Object.entries(MODOS_CLASE).map(([k, x]) =>
+      `<button type="button" data-v="${k}" class="${c.modo === k ? 'on' : ''}"><b>${x.nom}</b><small>${x.min === x.max ? x.min : x.min + ' a ' + x.max} ejercicios</small></button>`).join('')}</div>
+    <p class="micro">${esc(m.consigna)}</p>
+
+    <h2 class="secc">Tu clase · ${nMat} de ${m.min === m.max ? m.min : m.min + '–' + m.max}${c.items.length > nMat ? ` <small class="cl-pre">+ ${c.items.length - nMat} de Pre-Pilates</small>` : ''}</h2>
+    <ol class="cl-lista" id="clLista">${c.items.length ? filasClase(c) : '<li class="vacio">Todavía está vacía. Tocá ejercicios de la lista de abajo para sumarlos en orden.</li>'}</ol>
+    <div class="fila cl-acc">
+      <button type="button" class="btn3d verde" id="clRevisar" ${c.items.length ? '' : 'disabled'}>Revisar mi clase</button>
+      <button type="button" class="btn ghost" id="clVaciar" ${c.items.length ? '' : 'disabled'}>Vaciar</button>
+    </div>
+    <div id="clRes"></div>
+
+    <h2 class="secc">Sumar ejercicios</h2>
+    <div class="cl-filtros">
+      <div class="chips" id="clPos"><button type="button" data-p="" class="${filtroClase.pos ? '' : 'on'}">Todas</button>${Object.entries(POS_CLASE).map(([k, p]) =>
+        `<button type="button" data-p="${k}" class="${filtroClase.pos === k ? 'on' : ''}">${p.ico} ${p.nom}</button>`).join('')}</div>
+      <div class="chips" id="clF">${[['', 'Todo'], ['pre', 'Pre-Pilates'], ...m.fuentes.map(f => [f, f === 'mat1' ? 'Mat 1' : 'Mat 2'])].map(([k, t]) =>
+        `<button type="button" data-f="${k}" class="${filtroClase.f === k ? 'on' : ''}">${t}</button>`).join('')}</div>
+    </div>
+    <div class="cl-pool" id="clPool"></div>`;
+  pintarPoolClase();
+  $('#clVolver').onclick = () => ir('practica');
+  $$('#clModo button').forEach(b => b.onclick = () => {
+    c.modo = b.dataset.v;
+    if (filtroClase.f && filtroClase.f !== 'pre' && !MODOS_CLASE[c.modo].fuentes.includes(filtroClase.f)) filtroClase.f = '';
+    guardar(); vClase();
+  });
+  $$('#clPos button').forEach(b => b.onclick = () => { filtroClase.pos = b.dataset.p; vClase(); });
+  $$('#clF button').forEach(b => b.onclick = () => { filtroClase.f = b.dataset.f; vClase(); });
+  $('#clRevisar').onclick = revisarClase;
+  $('#clVaciar').onclick = async () => {
+    if (!(await confirmar('¿Vaciar la clase y empezar de nuevo?', 'Vaciar'))) return;
+    c.items = []; guardar(); vClase();
+  };
+  conectarFilasClase();
+}
+
+function filasClase(c) {
+  return c.items.map((x, i) => {
+    const e = ejClase(x.id), p = POS_CLASE[e.pos], r = rangoReps(e.reps);
+    const prev = i ? ejClase(c.items[i - 1].id) : null;
+    const trans = prev && prev.pos !== e.pos ? transicionHTML(prev, e) : '';
+    return `${trans}<li class="cl-fila" data-i="${i}">
+      <span class="cl-n">${i + 1}</span>
+      <div class="cl-info"><b>${esc(e.n)}</b>
+        <small><span class="cl-pos p-${e.pos}">${p.ico} ${p.nom}</span> ${e.f === 'pre' ? 'Pre-Pilates' : e.f === 'mat1' ? 'Mat 1' : 'Mat 2'}${e.reps ? ` · manual: ${esc(e.reps)}` : ''}</small></div>
+      <label class="cl-reps"><input type="number" inputmode="numeric" min="1" max="100" step="1" value="${x.reps || ''}" placeholder="${r ? r[0] + (r[1] > r[0] ? '–' + r[1] : '') : '#'}" aria-label="Repeticiones de ${esc(e.n)}"><small>${unidadReps(e.reps)}</small></label>
+      <div class="cl-mover">
+        <button type="button" data-a="sube" aria-label="Subir" ${i ? '' : 'disabled'}>↑</button>
+        <button type="button" data-a="baja" aria-label="Bajar" ${i < c.items.length - 1 ? '' : 'disabled'}>↓</button>
+        <button type="button" data-a="quita" aria-label="Quitar">✕</button>
+      </div>
+    </li>`;
+  }).join('');
+}
+
+function transicionHTML(a, b) {
+  const regreso = POS_CLASE[b.pos].grupo === 2 && b.pos !== 'sentado' && POS_CLASE[a.pos].grupo >= 3;
+  const delManual = a.trans && norm(a.trans).includes(norm(b.n).split(' ').slice(0, 2).join(' ')) ? a.trans : '';
+  const txt = delManual || TRANSICIONES[a.pos + '>' + b.pos] || `Pensá cómo pasa el cuerpo de ${POS_CLASE[a.pos].nom.toLowerCase()} a ${POS_CLASE[b.pos].nom.toLowerCase()} sin cortar el flujo.`;
+  return `<li class="cl-trans ${regreso ? 'aviso' : ''}" aria-hidden="true">↳ ${POS_CLASE[a.pos].nom} → ${POS_CLASE[b.pos].nom}: ${esc(txt)}${delManual ? ' <i>(manual)</i>' : ''}${regreso ? ' <b>Vuelve a supino después del prono.</b>' : ''}</li>`;
+}
+
+function conectarFilasClase() {
+  const c = claseActual();
+  $$('.cl-fila').forEach(li => {
+    const i = +li.dataset.i;
+    $('input', li).onchange = e => {
+      const v = Math.round(+e.target.value);
+      c.items[i].reps = v > 0 ? v : null;
+      guardar();
+    };
+    $$('[data-a]', li).forEach(b => b.onclick = () => {
+      const a = b.dataset.a;
+      if (a === 'quita') c.items.splice(i, 1);
+      else {
+        const j = a === 'sube' ? i - 1 : i + 1;
+        [c.items[i], c.items[j]] = [c.items[j], c.items[i]];
+      }
+      SND.toque(); guardar();
+      const y = window.scrollY; vClase(); window.scrollTo(0, y);
+    });
+  });
+}
+
+function pintarPoolClase() {
+  const c = claseActual(), m = MODOS_CLASE[c.modo];
+  const usados = new Set(c.items.map(x => x.id));
+  const lista = ejerciciosClase().filter(e => (e.f === 'pre' || m.fuentes.includes(e.f)) &&
+    (!filtroClase.pos || e.pos === filtroClase.pos) && (!filtroClase.f || e.f === filtroClase.f));
+  $('#clPool').innerHTML = lista.length ? lista.map(e => `<button type="button" class="cl-ej ${usados.has(e.id) ? 'usado' : ''}" data-id="${e.id}">
+      <span class="cl-pos p-${e.pos}">${POS_CLASE[e.pos].ico}</span><b>${esc(e.n)}</b><small>${e.f === 'pre' ? 'Pre-Pilates' : e.f === 'mat1' ? 'Mat 1' : 'Mat 2'}${usados.has(e.id) ? ' · ya está' : ''}</small></button>`).join('')
+    : '<p class="vacio">No hay ejercicios con ese filtro.</p>';
+  $$('.cl-ej').forEach(b => b.onclick = () => {
+    c.items.push({ id: b.dataset.id, reps: null });
+    guardar(); SND.soltar();
+    const y = window.scrollY; vClase(); window.scrollTo(0, y);
+    toast(`Sumado: <b>${esc(ejClase(b.dataset.id).n)}</b> (n.º ${c.items.length})`, 'toast-suave');
+  });
+}
+
+/* ---------------- revisión ---------------- */
+
+function analizarClase(c) {
+  const m = MODOS_CLASE[c.modo];
+  const es = c.items.map(x => ({ ...ejClase(x.id), rep: x.reps }));
+  const mat = es.filter(e => e.f !== 'pre');
+  const out = [];
+  const add = (estado, t, d) => out.push({ estado, t, d });
+
+  /* cantidad */
+  const nOk = mat.length >= m.min && mat.length <= m.max;
+  add(nOk ? 'ok' : 'mal', `Cantidad: ${mat.length} ejercicios de Mat`,
+    nOk ? 'Justo lo que pide la consigna.' : `La consigna pide ${m.min === m.max ? m.min : 'de ' + m.min + ' a ' + m.max}. ${mat.length < m.min ? 'Faltan ' + (m.min - mat.length) + '.' : 'Sobran ' + (mat.length - m.max) + '.'}`);
+  const deOtroNivel = mat.filter(e => !m.fuentes.includes(e.f));
+  if (deOtroNivel.length) add('mal', 'Ejercicios de otro nivel', `${deOtroNivel.map(e => e.n).join(', ')} no es de ${m.fuentes.map(f => f === 'mat1' ? 'Mat 1' : 'Mat 2').join(' ni ')}.`);
+
+  /* repeticiones exactas */
+  const sinReps = es.filter(e => !(e.rep > 0));
+  add(sinReps.length ? 'mal' : 'ok', 'Repeticiones exactas',
+    sinReps.length ? `Falta el número en: ${sinReps.map(e => e.n).join(', ')}. La corrección pidió "# de repeticiones específicas, no un rango".`
+      : 'Cada ejercicio tiene un número, no un rango.');
+  const fuera = es.filter(e => e.rep > 0 && rangoReps(e.reps) && (e.rep < rangoReps(e.reps)[0] || e.rep > rangoReps(e.reps)[1]));
+  if (fuera.length) add('aviso', 'Repeticiones fuera de lo que indica el manual',
+    fuera.map(e => `${e.n}: ${e.rep} (manual: ${e.reps})`).join(' · '));
+
+  /* orden de posiciones */
+  const regresos = [];
+  let fueAtras = null;
+  es.forEach((e, i) => {
+    if (POS_CLASE[e.pos].grupo >= 3 && !fueAtras) fueAtras = e;
+    if (fueAtras && (e.pos === 'supino' || e.pos === 'inversion')) regresos.push(`${i + 1}. ${e.n}`);
+  });
+  add(regresos.length ? 'mal' : 'ok', 'Orden de posiciones',
+    regresos.length ? `Después de ${fueAtras.n} (${POS_CLASE[fueAtras.pos].nom.toLowerCase()}) volvés a supino con: ${regresos.join(', ')}. El manual ordena de pie → cuatro apoyos → supino → sentado → prono → plancha → de costado → cierre. Fue lo que la corrección de Mat 2 pidió reorganizar.`
+      : 'Sigue el orden del manual: no vuelve a supino después del prono.');
+  const cambios = es.slice(1).filter((e, i) => e.pos !== es[i].pos).length;
+  const muchos = cambios > Math.max(6, Math.round(es.length / 2.5));
+  add(muchos ? 'aviso' : 'ok', `Transiciones: ${cambios} cambios de posición`,
+    muchos ? 'Son muchos para una clase fluida: agrupá los ejercicios de la misma posición.'
+      : cambios ? 'Mirá cada "↳" en tu lista: ¿cómo pasa el cuerpo de uno al otro? En el examen lo tenés que poder explicar.' : 'Todavía no cambia de posición.');
+
+  /* calentamiento */
+  const primero = es[0];
+  const calienta = primero && (primero.f === 'pre' || /hundred/i.test(primero.n));
+  add(calienta ? 'ok' : 'aviso', 'Calentamiento',
+    calienta ? `Arranca con ${primero.n}.` : 'Joe empezaba con el Hundred para despertar la circulación; también sirve un Pre-Pilates de activación (Mat 1, págs. 76–78).');
+
+  /* balance: los elementos */
+  const tiene = ELEMENTOS_CLASE.map(el => ({ ...el, ej: es.filter(e => el.re.test(norm(e.n))) }));
+  const faltan = tiene.filter(t => !t.ej.length);
+  add(faltan.length ? (faltan.some(f => f.k === 'extension') || faltan.length > 1 ? 'mal' : 'aviso') : 'ok', 'Clase balanceada',
+    faltan.length ? `Falta: ${faltan.map(f => f.nom.toLowerCase()).join(', ')}.${faltan.some(f => f.k === 'extension') ? ' Sin extensión, la clase queda toda en flexión.' : ''}`
+      : 'Tiene flexión, movilidad, extensión, rotación o lateral, tren superior y tren inferior.');
+  const posiciones = new Set(es.map(e => e.pos === 'inversion' ? 'supino' : e.pos));
+  add(posiciones.size >= 4 ? 'ok' : 'aviso', `Variedad de posiciones: ${posiciones.size}`,
+    posiciones.size >= 4 ? [...posiciones].map(p => POS_CLASE[p].nom.toLowerCase()).join(', ') + '.' : 'La consigna pide variedad de posiciones: sumá prono, de costado o plancha.');
+
+  const aprobada = out.every(x => x.estado !== 'mal');
+  return { out, aprobada };
+}
+
+function revisarClase() {
+  const c = claseActual();
+  const { out, aprobada } = analizarClase(c);
+  const nMal = out.filter(x => x.estado === 'mal').length;
+  let premio = '';
+  if (aprobada) {
+    S.clasesOk = (S.clasesOk || 0) + 1;
+    const hoy = HOY();
+    if (S.claseXpDia !== hoy) {
+      S.claseXpDia = hoy;
+      ganarXP(30);
+      premio = '<span class="xp-pop">+30 XP</span>';
+    }
+    guardar(); pintarHud();
+  }
+  $('#clRes').innerHTML = `<div class="cl-res ${aprobada ? 'ok' : ''}">
+    <h3>${aprobada ? '¡Clase lista para el examen!' : nMal === 1 ? 'Casi: hay un punto para corregir' : `Hay ${nMal} puntos para corregir`} ${premio}</h3>
+    <ul class="cl-check">${out.map(x => `<li class="${x.estado}"><span>${x.estado === 'ok' ? '✓' : x.estado === 'aviso' ? '!' : '✕'}</span>
+      <div><b>${esc(x.t)}</b><p>${esc(x.d)}</p></div></li>`).join('')}</ul>
+    ${aprobada ? '<p class="micro">Escribila así en el examen: cada ejercicio con su número de repeticiones y, si cambia la posición, cómo pasás al siguiente.</p>' : ''}
+  </div>`;
+  if (aprobada) {
+    SND.fin();
+    if (fxCompletos()) FX.chispasEn($('#clRes h3'), { n: 22, dist: 90 });
+    if (typeof avisarDesbloqueos === 'function') avisarDesbloqueos();
+  } else SND.mal();
+  $('#clRes').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+</script>
+<script>
+/* ============================================================
    AnatoApp 2 — motor de estudio
 
    Principios que implementa (ver "Cómo aprende tu cerebro acá"
@@ -10801,6 +12366,8 @@ function estadoInicial() {
     racha: 0, ultimoDia: null, protectores: 0,
     xp: 0, logros: {}, mapa: [],
     sesiones: 0, perfectas: 0, combosMax: 0, totalResp: 0,
+    pj: PJ_BASE(),      // personaje y estudio (estudio.js)
+    clase: null, clasesOk: 0, claseXpDia: null,   // Armá tu clase (clase.js)
     cfg: { retencion: 0.9, meta: 50, sonido: true, sesion: 15,
            musica: true, estiloMusica: 'lofi', volMusica: 0.35, volSonido: 0.8, vibracion: true,
            efectos: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'suaves' : 'completos' }
@@ -11419,7 +12986,7 @@ function ejFoto(it) {
    correcta no se delate por ser la más larga --- */
 function ejQuiz(it) {
   const c = it.ref;
-  return opcionesUI({ consigna: 'Pregunta del manual', pregunta: esc(c.q), opciones: mezclar(c.ops), correcta: c.correcta, reconocimiento: true });
+  return opcionesUI({ consigna: c.examen ? 'Pregunta de tu examen' : 'Pregunta del manual', pregunta: esc(c.q), opciones: mezclar(c.ops), correcta: c.correcta, reconocimiento: true });
 }
 
 /* --- ¿qué ejercicio es? (animación) ---
@@ -11956,7 +13523,8 @@ const sesionRepaso = () => intercalar(vencidos().sort(porMemoria).slice(0, S.cfg
 const MODOS = {
   flash:    { nom: 'Flashcards', ico: '🃏', desc: 'Recordá, girá la tarjeta y calificá qué tan bien salió.', tipos: ['simple', 'lista', 'flash'], fmt: 'flash' },
   anim:     { nom: '¿Qué ejercicio es? (animación)', ico: '🎬', desc: 'Mirá la figura hacer el ejercicio de Mat 1 o Mat 2 y reconocelo.', tipos: ['anim'] },
-  quiz:     { nom: 'Preguntas del manual', ico: '📖', desc: 'Principios del Movimiento, Mat 1 y Mat 2, con la página del libro.', tipos: ['quiz'] },
+  examen:   { nom: 'Simulacro de examen', ico: '📝', desc: 'Lo que te preguntaron en Principios, Mat 1, Mat 2 y Mat 3. Lo que fallaste sale primero.', temas: ['ex-pm', 'ex-mat'] },
+  quiz:     { nom: 'Preguntas del manual', ico: '📖', desc: 'Principios del Movimiento, Mat 1 y Mat 2, con la página del libro.', tipos: ['quiz'], sinTemas: ['ex-pm', 'ex-mat'] },
   pares:    { nom: 'Emparejar', ico: '🔗', desc: 'Tocá los pares: músculo y acción, cadena y función.', tipos: ['pares'] },
   orden:    { nom: 'Ordenar', ico: '↕️', desc: 'Arrastrá los pasos de cada progresión a su lugar.', tipos: ['orden'] },
   clasif:   { nom: 'Clasificar', ico: '🗂️', desc: 'Arrastrá cada ficha al grupo que le corresponde.', tipos: ['clasif'] },
@@ -11968,7 +13536,8 @@ const MODOS = {
 };
 function poolModo(k, uId) {
   const m = MODOS[k];
-  let pool = ITEMS.filter(i => m.tipos.includes(i.tipo));
+  let pool = m.temas ? ITEMS.filter(i => m.temas.includes(i.tema)) : ITEMS.filter(i => m.tipos.includes(i.tipo));
+  if (m.sinTemas) pool = pool.filter(i => !m.sinTemas.includes(i.tema));
   if (k === 'escribir') pool = pool.filter(i => i.tipo === 'lista');
   if (uId) { const u = UNIDADES.find(x => x.id === uId); pool = pool.filter(i => u.temas.includes(i.tema)); }
   return pool;
@@ -11979,10 +13548,15 @@ function sesionPractica(k, uId) {
     entrada({ id: null, tipo: 'gen', gen: m.gen, tema: m.gen === 'semaforo' ? 'osteo' : 'repertorio', ref: {} }, 'gen'));
   const pool = poolModo(k, uId);
   const vistos = pool.filter(i => S.items[i.id]).sort(porMemoria);
-  const lote = [...vistos, ...mezclar(pool.filter(i => !S.items[i.id]))].slice(0, 8);
+  /* en el simulacro, lo que se falló en el examen va primero */
+  const fallada = i => !!(i.ref && i.ref.examen && i.ref.examen.fallada);
+  const sinVer = mezclar(pool.filter(i => !S.items[i.id]));
+  const lote = (k === 'examen'
+    ? [...sinVer.filter(fallada), ...vistos, ...sinVer.filter(i => !fallada(i))].slice(0, 10)
+    : [...vistos, ...sinVer].slice(0, 8));
   /* las fotos se sortean en cada pregunta: el mismo grupo puede repetirse */
   while (k === 'foto' && pool.length && lote.length < 10) lote.push(azar(pool));
-  return mezclar(lote).map(it => entrada(it, m.fmt || null));
+  return (k === 'examen' ? lote : mezclar(lote)).map(it => entrada(it, m.fmt || null));
 }
 
 function iniciarSesion(tipo, entradas, titulo) {
@@ -11990,7 +13564,7 @@ function iniciarSesion(tipo, entradas, titulo) {
   L = { tipo, titulo, cola: entradas, total: entradas.length, hechos: 0, xp: 0, combo: 0, comboMax: 0,
         primeras: 0, primerasOk: 0, inicio: Date.now(), nuevosLogros: [],
         metaAntes: !!(S.log[HOY()] || {}).metaOk, nivelAntes: nivelDe(S.xp), rachaAntes: rachaVigente(), pctAnt: 0 };
-  vistaPrevia = ['inicio', 'practica', 'mapa', 'apuntes', 'perfil'].includes(vista) ? vista : 'inicio';
+  vistaPrevia = ['inicio', 'practica', 'mapa', 'apuntes', 'perfil', 'estudio'].includes(vista) ? vista : 'inicio';
   vista = 'sesion';
   cerrarModal();
   document.body.classList.add('en-sesion');
@@ -12021,6 +13595,7 @@ function pintarEjercicio() {
       <div class="ses-tags">
         ${L.actual.nuevo ? '<span class="tag nuevo">Nuevo</span>' : ''}
         ${reintento ? '<span class="tag repite">Otra vez</span>' : ''}
+        ${tagExamen(en.it)}
         ${en.it.tema && TEMAS[en.it.tema] && fmt !== 'anim' ? `<span class="tag tag-tema c-${TEMAS[en.it.tema].color}">${TEMAS[en.it.tema].icono} ${TEMAS[en.it.tema].nom}</span>` : ''}
       </div>
       <p class="ses-consigna">${ej.consigna}</p>
@@ -12053,6 +13628,13 @@ function pintarEjercicio() {
   if (ej.auto) ej.alCompletar = procesar;
   if (ej.manual) ej.alCalificar = procesar;
   if (ej.enfocar) setTimeout(ej.enfocar, 60);
+}
+
+/* Ítems que salen de un examen previo: de cuál, y si ahí se falló */
+function tagExamen(it) {
+  const x = it.ref && it.ref.examen;
+  if (!x || typeof EXAMEN === 'undefined') return '';
+  return `<span class="tag examen ${x.fallada ? 'fallada' : ''}">📝 ${x.fallada ? 'La fallaste en' : 'De'} tu examen de ${esc(EXAMEN[x.ex].nom)}</span>`;
 }
 
 /* Botón principal / Enter: comprobar o continuar */
@@ -12166,6 +13748,7 @@ function mostrarHoja(res, nota, exito, xp, info, reencolar) {
     ${porque ? `<div class="hoja-pq"><b>Por qué</b><p>${esc(porque)}</p></div>` : ''}
     ${prox ? `<p class="hoja-prox">${prox}</p>` : ''}
     ${it.ref && it.ref.pag ? `<p class="hoja-pag">📖 Ver manual: ${esc(it.ref.pag)}</p>` : ''}
+    ${it.ref && it.ref.examen && typeof EXAMEN !== 'undefined' ? `<p class="hoja-pag">📝 Examen de ${esc(EXAMEN[it.ref.examen.ex].nom)} (${esc(EXAMEN[it.ref.examen.ex].fecha)})${it.ref.examen.n ? ', pregunta ' + it.ref.examen.n : ''}${it.ref.examen.formato ? ` · allá era «${esc(it.ref.examen.formato)}»` : ''}</p>` : ''}
     <button type="button" class="btn3d ${exito ? 'verde' : clase === 'parcial' ? 'naranja' : 'rojo'} ancho" id="continuar">Continuar</button>
   </div>`;
   $('.sesion').appendChild(h);
@@ -12221,6 +13804,7 @@ function finSesion() {
     <div class="fin-trofeo"><span class="rayos"></span><span class="ico">${perfecta ? '💎' : precision >= 0.7 ? '🏅' : '🌱'}</span></div>
     <h1>${perfecta ? '¡Lección perfecta!' : '¡Lección completa!'}</h1>
     <p class="sub centro">${frase}</p>
+    ${bloqueFinPJ()}
     <div class="fin-stats">
       <div class="fs xp"><small>XP</small><b data-cuenta="${xpSes}" data-pre="+">+${xpSes}</b></div>
       <div class="fs ok"><small>Precisión</small><b data-cuenta="${Math.round(precision * 100)}" data-suf=" %">${Math.round(precision * 100)} %</b></div>
@@ -12242,6 +13826,7 @@ function finSesion() {
     FX.contar(el, +el.dataset.cuenta, 900, el.dataset.suf || '', el.dataset.pre || ''), 250 + i * 120));
   if (rachaSube) setTimeout(SND.racha, 1100);
   $$('.logro-nuevo').forEach((el, i) => setTimeout(() => { el.classList.add('entra'); SND.logro(); }, 1300 + i * 500));
+  if ($('.fin-pj.con-nuevos')) setTimeout(() => { SND.logro(); FX.chispasEn($('.fin-pj-av'), { n: 20, dist: 80 }); }, 900);
   if (nivelNuevo) setTimeout(() => FX.nivel(nivelNuevo, nombreNivel(nivelNuevo)), 1500 + logros.length * 500);
   $('#finOk').onclick = () => { document.body.classList.remove('en-sesion'); ir(volver); };
   setTimeout(() => { const b = $('#finOk'); if (b) b.focus({ preventScroll: true }); }, 50);
@@ -12258,13 +13843,13 @@ function ir(v) {
   juegoMapa = null;
   vista = v;
   document.body.classList.remove('en-sesion');
-  $$('.nav button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  $$('.nav button').forEach(b => b.classList.toggle('on', b.dataset.v === (v === 'clase' ? 'practica' : v)));
   cerrarModal();
   window.scrollTo(0, 0);
   render();
 }
 function render() {
-  ({ inicio: vInicio, practica: vPractica, mapa: vMapa, apuntes: vApuntes, perfil: vPerfil }[vista] || vInicio)();
+  ({ inicio: vInicio, practica: vPractica, mapa: vMapa, apuntes: vApuntes, perfil: vPerfil, estudio: vEstudio, clase: vClase }[vista] || vInicio)();
   pintarHud();
 }
 function pintarHud() {
@@ -12290,6 +13875,7 @@ function vInicio() {
   const manana = ITEMS.filter(i => S.items[i.id] && S.items[i.id].due === DIAS(1)).length;
   const offs = [0, 56, 84, 56, 0, -56, -84, -56];
   app().innerHTML = `
+    ${tarjetaPJ()}
     <section class="meta-card">
       <div class="anillo grande" style="--p:${metaPct}"><span><b>${e.xp || 0}</b><small>/${S.cfg.meta} XP</small></span></div>
       <div class="meta-txt">
@@ -12327,6 +13913,7 @@ function vInicio() {
     </div>`;
   const r = $('#repasar');
   if (r) r.onclick = () => iniciarSesion('repaso', sesionRepaso(), 'Repaso del día');
+  $('#pjCard').onclick = () => ir('estudio');
   $$('.nodo').forEach(b => b.onclick = () => hojaUnidad(UNIDADES.find(u => u.id === b.dataset.u)));
 }
 
@@ -12355,6 +13942,10 @@ function vPractica() {
       <select id="selU"><option value="">Todas</option>${UNIDADES.map(u =>
         `<option value="${u.id}" ${practicaUnidad === u.id ? 'selected' : ''}>${esc(u.nom)}</option>`).join('')}</select>
     </label>
+    <button type="button" class="modo destacado" id="armaClase">
+      <span class="modo-ico">🧩</span><b>Armá tu clase</b>
+      <small>Diseñá una clase de Mat como en el examen. La app revisa lo mismo que la corrección: repeticiones exactas, orden de posiciones, transiciones y balance.</small>
+      <i>lo que más puntos te costó en Mat 1 y Mat 2</i></button>
     <div class="modos">${Object.entries(MODOS).map(([k, m]) => {
       const n = m.gen ? null : poolModo(k, practicaUnidad).length;
       return `<button type="button" class="modo" data-m="${k}" ${n === 0 ? 'disabled' : ''}>
@@ -12362,7 +13953,8 @@ function vPractica() {
         <i>${m.gen ? 'se genera al azar' : n + ' disponibles'}</i></button>`;
     }).join('')}</div>`;
   $('#selU').onchange = e => { practicaUnidad = e.target.value; vPractica(); };
-  $$('.modo').forEach(b => b.onclick = () =>
+  $('#armaClase').onclick = () => ir('clase');
+  $$('.modo[data-m]').forEach(b => b.onclick = () =>
     iniciarSesion('practica', sesionPractica(b.dataset.m, practicaUnidad), MODOS[b.dataset.m].nom));
 }
 
@@ -12674,19 +14266,19 @@ let temaAbierto = null;
 let pestanaApuntes = 'tarjetas';
 function vApuntes() {
   const pestanas = [['tarjetas', 'Tarjetas'], ['repertorio', `Repertorio · ${BB.ejercicios.length}`], ['premat', `Pre-Pilates · ${PREMAT.length}`],
-    ['manual', 'Manual'], ['posiciones', 'Posiciones']];
+    ['manual', 'Manual'], ['posiciones', 'Posiciones'], ['examenes', 'Tus exámenes']];
   if (pestanaApuntes === 'mat1') pestanaApuntes = 'repertorio';
   app().innerHTML = `
     <h1 class="tit">Apuntes</h1>
     <p class="sub">Tus apuntes y fichas. Usalos para reparar lo que falló, no para releer de corrido: releer se siente productivo y casi no deja huella.</p>
     <div class="seg pestanas" role="tablist">${pestanas.map(([k, t]) =>
       `<button type="button" role="tab" aria-selected="${pestanaApuntes === k}" class="${pestanaApuntes === k ? 'on' : ''}" data-p="${k}"><b>${t}</b></button>`).join('')}</div>
-    <input class="buscador" id="q" type="search" placeholder="${{ tarjetas: 'Buscar músculo, ejercicio, concepto…', manual: 'Buscar en el manual…', posiciones: 'Buscar posición…' }[pestanaApuntes] || 'Buscar ejercicio, posición, accesorio…'}" aria-label="Buscar">
+    <input class="buscador" id="q" type="search" placeholder="${{ tarjetas: 'Buscar músculo, ejercicio, concepto…', manual: 'Buscar en el manual…', posiciones: 'Buscar posición…', examenes: 'Buscar en tus exámenes…' }[pestanaApuntes] || 'Buscar ejercicio, posición, accesorio…'}" aria-label="Buscar">
     <div id="lista"></div>`;
   $$('.pestanas button').forEach(b => b.onclick = () => { pestanaApuntes = b.dataset.p; vApuntes(); });
   const activa = $('.pestanas .on');
   if (activa) activa.scrollIntoView({ inline: 'center', block: 'nearest' });
-  const pintar = { tarjetas: pintarApuntes, repertorio: pintarRepertorio, premat: pintarPremat, manual: pintarManual, posiciones: pintarPosiciones }[pestanaApuntes];
+  const pintar = { tarjetas: pintarApuntes, repertorio: pintarRepertorio, premat: pintarPremat, manual: pintarManual, posiciones: pintarPosiciones, examenes: pintarExamenes }[pestanaApuntes];
   $('#q').oninput = () => pintar($('#q').value);
   pintar('');
   if (temaAbierto && pestanaApuntes === 'tarjetas') setTimeout(() => { const a = $('.acord.open'); if (a) a.scrollIntoView({ block: 'start' }); }, 30);
@@ -12959,6 +14551,38 @@ function pintarApuntes(filtro) {
     temaAbierto = temaAbierto === b.dataset.k ? null : b.dataset.k;
     pintarApuntes('');
   });
+}
+
+/* --- TUS EXÁMENES (datos-examenes.js) --- */
+function pintarExamenes(filtro) {
+  const f = norm(filtro), cont = $('#lista');
+  const revs = REVISION_EXAMEN.filter(r => !f || norm([r.q, r.tu, r.ok, r.com || ''].join(' ')).includes(f));
+  const lecs = LECCIONES_EXAMEN.filter(l => !f || norm(l.t + ' ' + l.de).includes(f));
+  cont.innerHTML = `
+    ${f ? '' : `<div class="ex-notas">${EXAMENES.map(e => {
+      const pct = Math.round(100 * e.pts / e.de);
+      return `<div class="ex-nota ${pct >= 80 ? 'alta' : pct >= 60 ? 'media' : 'baja'}"><small>${esc(e.fecha)}</small><b>${esc(e.nom)}</b>
+        <span class="ex-pts">${e.pts}<i>/${e.de}</i></span><div class="barra"><span style="width:${pct}%"></span></div></div>`;
+    }).join('')}</div>
+    <button type="button" class="btn3d azul ancho" id="exSimulacro">📝 Simulacro: lo que te preguntaron, primero lo fallado</button>`}
+    ${lecs.length ? `<h3 class="secc">Lo que marcó la corrección</h3>
+    <ul class="lecciones">${lecs.map(l => `<li><span>${l.ico}</span><div><b>${esc(l.t)}</b><small>${esc(l.de)}</small></div></li>`).join('')}</ul>` : ''}
+    ${revs.length ? `<h3 class="secc">Preguntas falladas o con puntaje parcial</h3>
+    ${revs.map(r => `<article class="nota ex-rev ${r.pendiente ? 'pendiente' : ''}">
+      <h4><span class="tag">${esc(EXAMEN[r.ex].nom)}${r.n ? ' · ' + r.n : ''}</span> <span class="ex-p">${esc(r.pts)}</span></h4>
+      <p class="ex-q">${esc(r.q)}</p>
+      <p class="ex-tu"><b>Tu respuesta:</b> ${esc(r.tu)}</p>
+      <p class="ex-ok"><b>${r.pendiente ? 'Pendiente:' : 'Lo correcto:'}</b> ${esc(r.ok)}</p>
+      ${r.com ? `<p class="ex-com">💬 «${esc(r.com)}»</p>` : ''}
+      ${r.item && ITEM[r.item] ? `<button type="button" class="btn small" data-ex-item="${r.item}">Practicar esta</button>` : ''}
+      ${r.clase ? '<button type="button" class="btn small" data-ex-clase>Armá tu clase</button>' : ''}
+    </article>`).join('')}` : ''}
+    ${!revs.length && !lecs.length ? '<p class="vacio">Nada con ese término.</p>' : ''}
+    <p class="micro">Transcripción completa de los cuatro exámenes en <code>fuentes/examenes-previos.md</code>. Lo que la revisión no dejó claro no se pregunta en la app.</p>`;
+  const sim = $('#exSimulacro');
+  if (sim) sim.onclick = () => iniciarSesion('practica', sesionPractica('examen'), MODOS.examen.nom);
+  $$('[data-ex-item]', cont).forEach(b => b.onclick = () => iniciarSesion('practica', [entrada(ITEM[b.dataset.exItem])], 'Pregunta de examen'));
+  $$('[data-ex-clase]', cont).forEach(b => b.onclick = () => ir('clase'));
 }
 
 /* --- PERFIL --- */

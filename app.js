@@ -148,6 +148,8 @@ function estadoInicial() {
     racha: 0, ultimoDia: null, protectores: 0,
     xp: 0, logros: {}, mapa: [],
     sesiones: 0, perfectas: 0, combosMax: 0, totalResp: 0,
+    pj: PJ_BASE(),      // personaje y estudio (estudio.js)
+    clase: null, clasesOk: 0, claseXpDia: null,   // Armá tu clase (clase.js)
     cfg: { retencion: 0.9, meta: 50, sonido: true, sesion: 15,
            musica: true, estiloMusica: 'lofi', volMusica: 0.35, volSonido: 0.8, vibracion: true,
            efectos: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'suaves' : 'completos' }
@@ -766,7 +768,7 @@ function ejFoto(it) {
    correcta no se delate por ser la más larga --- */
 function ejQuiz(it) {
   const c = it.ref;
-  return opcionesUI({ consigna: 'Pregunta del manual', pregunta: esc(c.q), opciones: mezclar(c.ops), correcta: c.correcta, reconocimiento: true });
+  return opcionesUI({ consigna: c.examen ? 'Pregunta de tu examen' : 'Pregunta del manual', pregunta: esc(c.q), opciones: mezclar(c.ops), correcta: c.correcta, reconocimiento: true });
 }
 
 /* --- ¿qué ejercicio es? (animación) ---
@@ -1303,7 +1305,8 @@ const sesionRepaso = () => intercalar(vencidos().sort(porMemoria).slice(0, S.cfg
 const MODOS = {
   flash:    { nom: 'Flashcards', ico: '🃏', desc: 'Recordá, girá la tarjeta y calificá qué tan bien salió.', tipos: ['simple', 'lista', 'flash'], fmt: 'flash' },
   anim:     { nom: '¿Qué ejercicio es? (animación)', ico: '🎬', desc: 'Mirá la figura hacer el ejercicio de Mat 1 o Mat 2 y reconocelo.', tipos: ['anim'] },
-  quiz:     { nom: 'Preguntas del manual', ico: '📖', desc: 'Principios del Movimiento, Mat 1 y Mat 2, con la página del libro.', tipos: ['quiz'] },
+  examen:   { nom: 'Simulacro de examen', ico: '📝', desc: 'Lo que te preguntaron en Principios, Mat 1, Mat 2 y Mat 3. Lo que fallaste sale primero.', temas: ['ex-pm', 'ex-mat'] },
+  quiz:     { nom: 'Preguntas del manual', ico: '📖', desc: 'Principios del Movimiento, Mat 1 y Mat 2, con la página del libro.', tipos: ['quiz'], sinTemas: ['ex-pm', 'ex-mat'] },
   pares:    { nom: 'Emparejar', ico: '🔗', desc: 'Tocá los pares: músculo y acción, cadena y función.', tipos: ['pares'] },
   orden:    { nom: 'Ordenar', ico: '↕️', desc: 'Arrastrá los pasos de cada progresión a su lugar.', tipos: ['orden'] },
   clasif:   { nom: 'Clasificar', ico: '🗂️', desc: 'Arrastrá cada ficha al grupo que le corresponde.', tipos: ['clasif'] },
@@ -1315,7 +1318,8 @@ const MODOS = {
 };
 function poolModo(k, uId) {
   const m = MODOS[k];
-  let pool = ITEMS.filter(i => m.tipos.includes(i.tipo));
+  let pool = m.temas ? ITEMS.filter(i => m.temas.includes(i.tema)) : ITEMS.filter(i => m.tipos.includes(i.tipo));
+  if (m.sinTemas) pool = pool.filter(i => !m.sinTemas.includes(i.tema));
   if (k === 'escribir') pool = pool.filter(i => i.tipo === 'lista');
   if (uId) { const u = UNIDADES.find(x => x.id === uId); pool = pool.filter(i => u.temas.includes(i.tema)); }
   return pool;
@@ -1326,10 +1330,15 @@ function sesionPractica(k, uId) {
     entrada({ id: null, tipo: 'gen', gen: m.gen, tema: m.gen === 'semaforo' ? 'osteo' : 'repertorio', ref: {} }, 'gen'));
   const pool = poolModo(k, uId);
   const vistos = pool.filter(i => S.items[i.id]).sort(porMemoria);
-  const lote = [...vistos, ...mezclar(pool.filter(i => !S.items[i.id]))].slice(0, 8);
+  /* en el simulacro, lo que se falló en el examen va primero */
+  const fallada = i => !!(i.ref && i.ref.examen && i.ref.examen.fallada);
+  const sinVer = mezclar(pool.filter(i => !S.items[i.id]));
+  const lote = (k === 'examen'
+    ? [...sinVer.filter(fallada), ...vistos, ...sinVer.filter(i => !fallada(i))].slice(0, 10)
+    : [...vistos, ...sinVer].slice(0, 8));
   /* las fotos se sortean en cada pregunta: el mismo grupo puede repetirse */
   while (k === 'foto' && pool.length && lote.length < 10) lote.push(azar(pool));
-  return mezclar(lote).map(it => entrada(it, m.fmt || null));
+  return (k === 'examen' ? lote : mezclar(lote)).map(it => entrada(it, m.fmt || null));
 }
 
 function iniciarSesion(tipo, entradas, titulo) {
@@ -1337,7 +1346,7 @@ function iniciarSesion(tipo, entradas, titulo) {
   L = { tipo, titulo, cola: entradas, total: entradas.length, hechos: 0, xp: 0, combo: 0, comboMax: 0,
         primeras: 0, primerasOk: 0, inicio: Date.now(), nuevosLogros: [],
         metaAntes: !!(S.log[HOY()] || {}).metaOk, nivelAntes: nivelDe(S.xp), rachaAntes: rachaVigente(), pctAnt: 0 };
-  vistaPrevia = ['inicio', 'practica', 'mapa', 'apuntes', 'perfil'].includes(vista) ? vista : 'inicio';
+  vistaPrevia = ['inicio', 'practica', 'mapa', 'apuntes', 'perfil', 'estudio'].includes(vista) ? vista : 'inicio';
   vista = 'sesion';
   cerrarModal();
   document.body.classList.add('en-sesion');
@@ -1368,6 +1377,7 @@ function pintarEjercicio() {
       <div class="ses-tags">
         ${L.actual.nuevo ? '<span class="tag nuevo">Nuevo</span>' : ''}
         ${reintento ? '<span class="tag repite">Otra vez</span>' : ''}
+        ${tagExamen(en.it)}
         ${en.it.tema && TEMAS[en.it.tema] && fmt !== 'anim' ? `<span class="tag tag-tema c-${TEMAS[en.it.tema].color}">${TEMAS[en.it.tema].icono} ${TEMAS[en.it.tema].nom}</span>` : ''}
       </div>
       <p class="ses-consigna">${ej.consigna}</p>
@@ -1400,6 +1410,13 @@ function pintarEjercicio() {
   if (ej.auto) ej.alCompletar = procesar;
   if (ej.manual) ej.alCalificar = procesar;
   if (ej.enfocar) setTimeout(ej.enfocar, 60);
+}
+
+/* Ítems que salen de un examen previo: de cuál, y si ahí se falló */
+function tagExamen(it) {
+  const x = it.ref && it.ref.examen;
+  if (!x || typeof EXAMEN === 'undefined') return '';
+  return `<span class="tag examen ${x.fallada ? 'fallada' : ''}">📝 ${x.fallada ? 'La fallaste en' : 'De'} tu examen de ${esc(EXAMEN[x.ex].nom)}</span>`;
 }
 
 /* Botón principal / Enter: comprobar o continuar */
@@ -1513,6 +1530,7 @@ function mostrarHoja(res, nota, exito, xp, info, reencolar) {
     ${porque ? `<div class="hoja-pq"><b>Por qué</b><p>${esc(porque)}</p></div>` : ''}
     ${prox ? `<p class="hoja-prox">${prox}</p>` : ''}
     ${it.ref && it.ref.pag ? `<p class="hoja-pag">📖 Ver manual: ${esc(it.ref.pag)}</p>` : ''}
+    ${it.ref && it.ref.examen && typeof EXAMEN !== 'undefined' ? `<p class="hoja-pag">📝 Examen de ${esc(EXAMEN[it.ref.examen.ex].nom)} (${esc(EXAMEN[it.ref.examen.ex].fecha)})${it.ref.examen.n ? ', pregunta ' + it.ref.examen.n : ''}${it.ref.examen.formato ? ` · allá era «${esc(it.ref.examen.formato)}»` : ''}</p>` : ''}
     <button type="button" class="btn3d ${exito ? 'verde' : clase === 'parcial' ? 'naranja' : 'rojo'} ancho" id="continuar">Continuar</button>
   </div>`;
   $('.sesion').appendChild(h);
@@ -1568,6 +1586,7 @@ function finSesion() {
     <div class="fin-trofeo"><span class="rayos"></span><span class="ico">${perfecta ? '💎' : precision >= 0.7 ? '🏅' : '🌱'}</span></div>
     <h1>${perfecta ? '¡Lección perfecta!' : '¡Lección completa!'}</h1>
     <p class="sub centro">${frase}</p>
+    ${bloqueFinPJ()}
     <div class="fin-stats">
       <div class="fs xp"><small>XP</small><b data-cuenta="${xpSes}" data-pre="+">+${xpSes}</b></div>
       <div class="fs ok"><small>Precisión</small><b data-cuenta="${Math.round(precision * 100)}" data-suf=" %">${Math.round(precision * 100)} %</b></div>
@@ -1589,6 +1608,7 @@ function finSesion() {
     FX.contar(el, +el.dataset.cuenta, 900, el.dataset.suf || '', el.dataset.pre || ''), 250 + i * 120));
   if (rachaSube) setTimeout(SND.racha, 1100);
   $$('.logro-nuevo').forEach((el, i) => setTimeout(() => { el.classList.add('entra'); SND.logro(); }, 1300 + i * 500));
+  if ($('.fin-pj.con-nuevos')) setTimeout(() => { SND.logro(); FX.chispasEn($('.fin-pj-av'), { n: 20, dist: 80 }); }, 900);
   if (nivelNuevo) setTimeout(() => FX.nivel(nivelNuevo, nombreNivel(nivelNuevo)), 1500 + logros.length * 500);
   $('#finOk').onclick = () => { document.body.classList.remove('en-sesion'); ir(volver); };
   setTimeout(() => { const b = $('#finOk'); if (b) b.focus({ preventScroll: true }); }, 50);
@@ -1605,13 +1625,13 @@ function ir(v) {
   juegoMapa = null;
   vista = v;
   document.body.classList.remove('en-sesion');
-  $$('.nav button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  $$('.nav button').forEach(b => b.classList.toggle('on', b.dataset.v === (v === 'clase' ? 'practica' : v)));
   cerrarModal();
   window.scrollTo(0, 0);
   render();
 }
 function render() {
-  ({ inicio: vInicio, practica: vPractica, mapa: vMapa, apuntes: vApuntes, perfil: vPerfil }[vista] || vInicio)();
+  ({ inicio: vInicio, practica: vPractica, mapa: vMapa, apuntes: vApuntes, perfil: vPerfil, estudio: vEstudio, clase: vClase }[vista] || vInicio)();
   pintarHud();
 }
 function pintarHud() {
@@ -1637,6 +1657,7 @@ function vInicio() {
   const manana = ITEMS.filter(i => S.items[i.id] && S.items[i.id].due === DIAS(1)).length;
   const offs = [0, 56, 84, 56, 0, -56, -84, -56];
   app().innerHTML = `
+    ${tarjetaPJ()}
     <section class="meta-card">
       <div class="anillo grande" style="--p:${metaPct}"><span><b>${e.xp || 0}</b><small>/${S.cfg.meta} XP</small></span></div>
       <div class="meta-txt">
@@ -1674,6 +1695,7 @@ function vInicio() {
     </div>`;
   const r = $('#repasar');
   if (r) r.onclick = () => iniciarSesion('repaso', sesionRepaso(), 'Repaso del día');
+  $('#pjCard').onclick = () => ir('estudio');
   $$('.nodo').forEach(b => b.onclick = () => hojaUnidad(UNIDADES.find(u => u.id === b.dataset.u)));
 }
 
@@ -1702,6 +1724,10 @@ function vPractica() {
       <select id="selU"><option value="">Todas</option>${UNIDADES.map(u =>
         `<option value="${u.id}" ${practicaUnidad === u.id ? 'selected' : ''}>${esc(u.nom)}</option>`).join('')}</select>
     </label>
+    <button type="button" class="modo destacado" id="armaClase">
+      <span class="modo-ico">🧩</span><b>Armá tu clase</b>
+      <small>Diseñá una clase de Mat como en el examen. La app revisa lo mismo que la corrección: repeticiones exactas, orden de posiciones, transiciones y balance.</small>
+      <i>lo que más puntos te costó en Mat 1 y Mat 2</i></button>
     <div class="modos">${Object.entries(MODOS).map(([k, m]) => {
       const n = m.gen ? null : poolModo(k, practicaUnidad).length;
       return `<button type="button" class="modo" data-m="${k}" ${n === 0 ? 'disabled' : ''}>
@@ -1709,7 +1735,8 @@ function vPractica() {
         <i>${m.gen ? 'se genera al azar' : n + ' disponibles'}</i></button>`;
     }).join('')}</div>`;
   $('#selU').onchange = e => { practicaUnidad = e.target.value; vPractica(); };
-  $$('.modo').forEach(b => b.onclick = () =>
+  $('#armaClase').onclick = () => ir('clase');
+  $$('.modo[data-m]').forEach(b => b.onclick = () =>
     iniciarSesion('practica', sesionPractica(b.dataset.m, practicaUnidad), MODOS[b.dataset.m].nom));
 }
 
@@ -2021,19 +2048,19 @@ let temaAbierto = null;
 let pestanaApuntes = 'tarjetas';
 function vApuntes() {
   const pestanas = [['tarjetas', 'Tarjetas'], ['repertorio', `Repertorio · ${BB.ejercicios.length}`], ['premat', `Pre-Pilates · ${PREMAT.length}`],
-    ['manual', 'Manual'], ['posiciones', 'Posiciones']];
+    ['manual', 'Manual'], ['posiciones', 'Posiciones'], ['examenes', 'Tus exámenes']];
   if (pestanaApuntes === 'mat1') pestanaApuntes = 'repertorio';
   app().innerHTML = `
     <h1 class="tit">Apuntes</h1>
     <p class="sub">Tus apuntes y fichas. Usalos para reparar lo que falló, no para releer de corrido: releer se siente productivo y casi no deja huella.</p>
     <div class="seg pestanas" role="tablist">${pestanas.map(([k, t]) =>
       `<button type="button" role="tab" aria-selected="${pestanaApuntes === k}" class="${pestanaApuntes === k ? 'on' : ''}" data-p="${k}"><b>${t}</b></button>`).join('')}</div>
-    <input class="buscador" id="q" type="search" placeholder="${{ tarjetas: 'Buscar músculo, ejercicio, concepto…', manual: 'Buscar en el manual…', posiciones: 'Buscar posición…' }[pestanaApuntes] || 'Buscar ejercicio, posición, accesorio…'}" aria-label="Buscar">
+    <input class="buscador" id="q" type="search" placeholder="${{ tarjetas: 'Buscar músculo, ejercicio, concepto…', manual: 'Buscar en el manual…', posiciones: 'Buscar posición…', examenes: 'Buscar en tus exámenes…' }[pestanaApuntes] || 'Buscar ejercicio, posición, accesorio…'}" aria-label="Buscar">
     <div id="lista"></div>`;
   $$('.pestanas button').forEach(b => b.onclick = () => { pestanaApuntes = b.dataset.p; vApuntes(); });
   const activa = $('.pestanas .on');
   if (activa) activa.scrollIntoView({ inline: 'center', block: 'nearest' });
-  const pintar = { tarjetas: pintarApuntes, repertorio: pintarRepertorio, premat: pintarPremat, manual: pintarManual, posiciones: pintarPosiciones }[pestanaApuntes];
+  const pintar = { tarjetas: pintarApuntes, repertorio: pintarRepertorio, premat: pintarPremat, manual: pintarManual, posiciones: pintarPosiciones, examenes: pintarExamenes }[pestanaApuntes];
   $('#q').oninput = () => pintar($('#q').value);
   pintar('');
   if (temaAbierto && pestanaApuntes === 'tarjetas') setTimeout(() => { const a = $('.acord.open'); if (a) a.scrollIntoView({ block: 'start' }); }, 30);
@@ -2306,6 +2333,38 @@ function pintarApuntes(filtro) {
     temaAbierto = temaAbierto === b.dataset.k ? null : b.dataset.k;
     pintarApuntes('');
   });
+}
+
+/* --- TUS EXÁMENES (datos-examenes.js) --- */
+function pintarExamenes(filtro) {
+  const f = norm(filtro), cont = $('#lista');
+  const revs = REVISION_EXAMEN.filter(r => !f || norm([r.q, r.tu, r.ok, r.com || ''].join(' ')).includes(f));
+  const lecs = LECCIONES_EXAMEN.filter(l => !f || norm(l.t + ' ' + l.de).includes(f));
+  cont.innerHTML = `
+    ${f ? '' : `<div class="ex-notas">${EXAMENES.map(e => {
+      const pct = Math.round(100 * e.pts / e.de);
+      return `<div class="ex-nota ${pct >= 80 ? 'alta' : pct >= 60 ? 'media' : 'baja'}"><small>${esc(e.fecha)}</small><b>${esc(e.nom)}</b>
+        <span class="ex-pts">${e.pts}<i>/${e.de}</i></span><div class="barra"><span style="width:${pct}%"></span></div></div>`;
+    }).join('')}</div>
+    <button type="button" class="btn3d azul ancho" id="exSimulacro">📝 Simulacro: lo que te preguntaron, primero lo fallado</button>`}
+    ${lecs.length ? `<h3 class="secc">Lo que marcó la corrección</h3>
+    <ul class="lecciones">${lecs.map(l => `<li><span>${l.ico}</span><div><b>${esc(l.t)}</b><small>${esc(l.de)}</small></div></li>`).join('')}</ul>` : ''}
+    ${revs.length ? `<h3 class="secc">Preguntas falladas o con puntaje parcial</h3>
+    ${revs.map(r => `<article class="nota ex-rev ${r.pendiente ? 'pendiente' : ''}">
+      <h4><span class="tag">${esc(EXAMEN[r.ex].nom)}${r.n ? ' · ' + r.n : ''}</span> <span class="ex-p">${esc(r.pts)}</span></h4>
+      <p class="ex-q">${esc(r.q)}</p>
+      <p class="ex-tu"><b>Tu respuesta:</b> ${esc(r.tu)}</p>
+      <p class="ex-ok"><b>${r.pendiente ? 'Pendiente:' : 'Lo correcto:'}</b> ${esc(r.ok)}</p>
+      ${r.com ? `<p class="ex-com">💬 «${esc(r.com)}»</p>` : ''}
+      ${r.item && ITEM[r.item] ? `<button type="button" class="btn small" data-ex-item="${r.item}">Practicar esta</button>` : ''}
+      ${r.clase ? '<button type="button" class="btn small" data-ex-clase>Armá tu clase</button>' : ''}
+    </article>`).join('')}` : ''}
+    ${!revs.length && !lecs.length ? '<p class="vacio">Nada con ese término.</p>' : ''}
+    <p class="micro">Transcripción completa de los cuatro exámenes en <code>fuentes/examenes-previos.md</code>. Lo que la revisión no dejó claro no se pregunta en la app.</p>`;
+  const sim = $('#exSimulacro');
+  if (sim) sim.onclick = () => iniciarSesion('practica', sesionPractica('examen'), MODOS.examen.nom);
+  $$('[data-ex-item]', cont).forEach(b => b.onclick = () => iniciarSesion('practica', [entrada(ITEM[b.dataset.exItem])], 'Pregunta de examen'));
+  $$('[data-ex-clase]', cont).forEach(b => b.onclick = () => ir('clase'));
 }
 
 /* --- PERFIL --- */

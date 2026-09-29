@@ -8,6 +8,7 @@ como un único archivo HTML. Textos en **voseo rioplatense y sin género** ("Tod
 ## Entorno y reglas de trabajo
 
 - El proyecto vive en el repo de GitHub `quirodeicr/anatoapp` (raíz del repo; antes era la carpeta `Anatoapp`). Finales de línea LF (`.gitattributes`); `publicar/` no se versiona.
+- Orden de carga (index.html): datos… → contenido-bb.js → datos-examenes.js → diagramas/mapa/efectos → estudio.js → clase.js → app.js (estadoInicial usa `PJ_BASE` de estudio.js).
 - **Sin Node.js ni build tools.** JavaScript plano; los scripts auxiliares son Python 3 (pymupdf, openpyxl, Pillow para los importadores).
 - `index.html` carga los `.js` sueltos (versión de carpeta). **Después de cualquier cambio** correr:
   ```
@@ -28,13 +29,16 @@ como un único archivo HTML. Textos en **voseo rioplatense y sin género** ("Tod
 | `datos-premat.js`, `imagenes.js` | 99 ejercicios Pre-Pilates y 109 fotos. **Generados** por `importar_premat.py` desde la planilla "Principios Movimiento y Posiciones.xlsx". |
 | `datos-bb.js` | Material Balanced Body. **Generado** por `importar_bb.py` desde `fuentes/*.json` (+ `fuentes/quiz_revisado.json`). |
 | `contenido-bb.js` | Convierte datos-bb en práctica: temas bb-mov/bb-mat1/bb-mat2, unidades u14–u16, flashcards, preguntas, ordenar, osteoporosis, ANIMS ("¿Qué ejercicio es?" animado). |
+| `datos-examenes.js` | Los 4 exámenes previos de BB (Principios 35/37, Mat 1 77/96, Mat 2 62/116, Mat 3 30/77): temas ex-pm/ex-mat, unidades u17/u18 (68 ítems, `examen: {ex, n, fallada, formato}`), EXAMENES, LECCIONES_EXAMEN y REVISION_EXAMEN (Apuntes → Tus exámenes). Fuente: `fuentes/examenes-previos.md`. |
+| `clase.js` | "Armá tu clase" (Práctica): arma una clase con BB.ejercicios + Pre-Pilates y la revisa como la corrección (cantidad, reps exactas, orden de posiciones, transiciones, calentamiento, balance). Estado en `S.clase`, `S.clasesOk`. |
+| `estudio.js` | Personaje y estudio (pestaña Estudio, tarjeta en Inicio, festejo en el cierre de lección): avatar SVG personalizable, aparatos/prendas/accesorios que se desbloquean por nivel, lecciones, racha, logros, clases aprobadas. Estado en `S.pj` (`vistos` = desbloqueos ya anunciados). |
 | `figura.js` | Motor de la figura articulada (v2). |
 | `poses.js` | Poses de 48 ejercicios de Mat 1/Mat 2 y 13 posiciones. |
 | `diagramas.js` | Figuras del manual en SVG (plomada, pelvis con deslizador, columna, rodillas, pies, escápulas, Janda, aprendizaje motor, orden de clase). |
 | `mapa.js` | Lámina anatómica del mapa corporal (LAMINA): frente/espalda, mitad superficial y mitad profunda. |
 | `efectos.js` | Música generativa, sonidos (Web Audio, sin archivos) y efectos visuales. |
 | `_galeria.html` | Herramienta de control de poses (no se empaqueta): `_galeria.html#mat1-e0` muestra cada transición y las fallas del validador. |
-| `fuentes/` | JSON del material Balanced Body y `quiz_revisado.json` (preguntas rebalanceadas). |
+| `fuentes/` | JSON del material Balanced Body, `quiz_revisado.json` (preguntas rebalanceadas) y `examenes-previos.md` (transcripción de los exámenes; los PDF no se versionan porque tienen datos personales). |
 | `LÉEME.md` | Documentación para la usuaria (fuentes, formatos, principios con referencias). |
 
 ## Criterios de contenido (importantes)
@@ -43,6 +47,8 @@ como un único archivo HTML. Textos en **voseo rioplatense y sin género** ("Tod
 - La usuaria se quejó de que **la respuesta correcta a veces era obvia**. Reglas: la correcta no debe medir más de ~1,3× la opción más larga ni tener palabras exclusivas de la pregunta; en opción múltiple usar `op` (respuesta corta) + `dist` paralelos que cambian un dato; listas con `dist` propio no se rellenan con listas ajenas (`noDonar`); cloze con `dist` por hueco; fotos y animaciones con distractores de la misma posición. Las 30 preguntas del material BB se reescribieron por esto (`fuentes/quiz_revisado.json`): no volver a las originales.
 - Datos inconsistentes de las planillas (columnas de músculos/plano autogeneradas, Push Up del MAT 1 que copia accesorios del Seal) se muestran marcados **revisar** pero no se preguntan. Fotos con el nombre escrito se recortan en `importar_premat.py` (CON_TEXTO); fotos casi iguales en PARECIDAS; dudosas en FOTO_DUDOSA.
 - Los "Por qué" son elaboración propia, no texto de los apuntes.
+- Exámenes: "Todas las anteriores" / "A y B" / "Ninguna" no sobreviven a mezclar opciones → pasan a lista ("seleccioná las correctas") o a emparejar. Lo que la revisión no aclara (grilla de la bola de Mat 3, 3.er ejercicio escapular de Mat 2) no se pregunta. Las falladas van primero en su tema.
+- Personaje: nada de género en los textos; los tonos de piel y los peinados son todos libres (se desbloquean colores de fantasía, prendas, accesorios y aparatos). Las fichas de aparatos solo afirman lo que está en el material o es conocimiento general ("se cuenta que…" para las anécdotas).
 - Las fotos Pre-Pilates parecen del manual del curso: advertir antes de compartir públicamente.
 
 ## Gráficos y animaciones (la usuaria insiste: deben ser precisos y exactos)
