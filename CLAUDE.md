@@ -81,5 +81,8 @@ como un único archivo HTML. Textos en **voseo rioplatense y sin género** ("Tod
   - **Sacar la capa "Columna vertebral"** del laboratorio (se ve rara y no está en todos los ejercicios).
   - **Piquito en el frente del tronco antes del busto** (unión cuello/clavícula con el pecho, se nota boca arriba y de perfil): suavizarlo.
   - **Cuerpo muy slim y grácil**: priorizar una silueta fina y elegante aunque difiera levemente de un cuerpo real.
+  - **Pico de la rodilla**: la rótula (`convexo` en `piernaAnat`) hace punta en la calza; redondearla o achicarla.
+  - **Línea del hombro**: la curva de detalle sobre el deltoides (en `brazoAnat`) se ve rara; sacarla o hacerla mucho más sutil.
+  - **Manos y pies más agradables**: la mano parece un mitón con un bulto de pulgar y el pie se ve tosco; dibujarlos más finos y elegantes.
 
 - Material BB: faltan los módulos 2 a 5 de Principios del Movimiento (el material de origen los marca como pendientes). Cuando lleguen: copiarlos a `fuentes/`, sumarlos a FUENTES en `importar_bb.py` y correrlo.
