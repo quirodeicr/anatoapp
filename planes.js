@@ -219,7 +219,7 @@ function conectarFilasPlan(p) {
       x[k] = k === 'reps' ? (Math.round(+el.value) > 0 ? Math.round(+el.value) : null) : el.value;
       tocar(p);
       if (k === 'reps') $('#plResumen').innerHTML = resumenPlanHTML(p);
-      if (k === 'prop') { const y = window.scrollY; vPlan(p.id); window.scrollTo(0, y); }
+      if (k === 'prop') rehacerPlan(p, `.pl-fila[data-i="${i}"]`);
     });
     const bf = $('.pl-foto', li);
     if (bf) bf.onclick = () => verFoto(fotosDe(x.id), +bf.dataset.foto);
@@ -228,7 +228,7 @@ function conectarFilasPlan(p) {
       if (a === 'quita') p.items.splice(i, 1);
       else { const j = a === 'sube' ? i - 1 : i + 1; [p.items[i], p.items[j]] = [p.items[j], p.items[i]]; }
       SND.toque(); tocar(p);
-      const y = window.scrollY; vPlan(p.id); window.scrollTo(0, y);
+      rehacerPlan(p, a === 'quita' ? '#plLista' : `.pl-fila[data-i="${a === 'quita' ? i : a === 'sube' ? i - 1 : i + 1}"]`);
     });
   });
 }
@@ -244,48 +244,117 @@ function pintarPoolPlan(p) {
   $$('#plPool .cl-ej').forEach(b => b.onclick = () => {
     p.items.push({ id: b.dataset.id, reps: null, prop: '', nota: '' });
     tocar(p); SND.soltar();
-    const y = window.scrollY; vPlan(p.id); window.scrollTo(0, y);
+    /* lo que se está mirando (el buscador) no se mueve aunque la lista de arriba crezca */
+    rehacerPlan(p, `#plPool [data-id="${b.dataset.id}"]`);
     toast(`Sumado: <b>${esc(ejPlan(b.dataset.id).n)}</b> (n.º ${p.items.length})`, 'toast-suave');
   });
 }
 
 /* ---------------- revisión (los criterios de "Armá tu clase", sin la cantidad del examen) ---------------- */
+/* por qué importa cada elemento del balance (elaboración propia, no texto del manual) */
+const POR_QUE_BALANCE = {
+  flexion: 'trabaja la estabilidad del centro con la columna en flexión',
+  movilidad: 'articula la columna vértebra por vértebra',
+  extension: 'compensa la flexión y fortalece los extensores de la espalda',
+  rotacion: 'suma oblicuos y mueve la columna en rotación o flexión lateral',
+  superior: 'trabaja la estabilidad escapular y la fuerza de brazos',
+  inferior: 'trabaja glúteos, isquiotibiales y aductores con la pelvis estable'
+};
+const nomPos = e => `${POS_CLASE[e.pos].ico} ${POS_CLASE[e.pos].nom}`;
+/* sugerencias del catálogo para un criterio: primero las de posiciones que la sesión ya
+   tiene (no suman transiciones), sin repetir y respetando el foco de osteoporosis */
+function sugerirPlan(p, filtro, n = 3) {
+  const usados = new Set(p.items.map(x => x.id)), posTiene = new Set(p.items.map(x => (ejPlan(x.id) || {}).pos));
+  const osteo = p.focos.some(f => /osteoporosis/i.test(f));
+  return catalogoPlan().filter(e => !usados.has(e.id) && filtro(e) && !(osteo && /evitar/i.test(e.osteo || '')))
+    .sort((a, b) => (posTiene.has(b.pos) - posTiene.has(a.pos)) || (POS_CLASE[a.pos].grupo - POS_CLASE[b.pos].grupo) || (a.f === 'pre') - (b.f === 'pre'))
+    .slice(0, n).map(e => e.id);
+}
+/* dónde entra un ejercicio nuevo: después del último de su grupo de posiciones (orden del manual) */
+function insertarOrdenado(p, id) {
+  const g = POS_CLASE[ejPlan(id).pos].grupo;
+  let k = p.items.length;
+  for (let i = p.items.length - 1; i >= 0; i--) { const e = ejPlan(p.items[i].id); if (e && POS_CLASE[e.pos].grupo <= g) { k = i + 1; break; } if (i === 0) k = 0; }
+  p.items.splice(k, 0, { id, reps: null, prop: '', nota: '' });
+  return k;
+}
 function analizarPlan(p) {
-  const es = p.items.map(x => ({ ...ejPlan(x.id), rep: x.reps })).filter(e => e.id);
-  const out = [], add = (estado, t, d) => out.push({ estado, t, d });
+  const es = p.items.map((x, i) => ({ ...ejPlan(x.id), rep: x.reps, i })).filter(e => e.id);
+  const out = [], add = (estado, t, d, extra = {}) => out.push({ estado, t, d, ...extra });
+  const n = e => `${e.i + 1}. ${e.n}`;
+  /* repeticiones */
   const sinReps = es.filter(e => !(e.rep > 0));
-  add(sinReps.length ? 'aviso' : 'ok', 'Repeticiones',
-    sinReps.length ? `Falta el número en: ${sinReps.map(e => e.n).join(', ')}.` : 'Cada ejercicio tiene su número.');
+  add(sinReps.length ? 'aviso' : 'ok', sinReps.length ? `Repeticiones: faltan en ${sinReps.length} de ${es.length}` : 'Repeticiones',
+    sinReps.length ? `Escribí el número en ${sinReps.map(n).join(', ')}. Un número exacto, no un rango: la casilla muestra lo que indica el material.` : 'Cada ejercicio tiene su número.');
   const fuera = es.filter(e => e.rep > 0 && rangoReps(e.reps) && (e.rep < rangoReps(e.reps)[0] || e.rep > rangoReps(e.reps)[1]));
-  if (fuera.length) add('aviso', 'Fuera de lo que indica el material', fuera.map(e => `${e.n}: ${e.rep} (${e.reps})`).join(' · '));
+  if (fuera.length) add('aviso', 'Repeticiones fuera de lo que indica el material',
+    fuera.map(e => `${n(e)}: pusiste ${e.rep}, el material indica ${e.reps}`).join(' · ') + '. Si es a propósito (una adaptación), anotalo en la nota del ejercicio.');
+  /* orden de posiciones */
   const regresos = []; let fueAtras = null;
-  es.forEach((e, i) => { if (POS_CLASE[e.pos].grupo >= 3 && !fueAtras) fueAtras = e; if (fueAtras && (e.pos === 'supino' || e.pos === 'inversion')) regresos.push(`${i + 1}. ${e.n}`); });
+  es.forEach(e => { if (POS_CLASE[e.pos].grupo >= 3 && !fueAtras) fueAtras = e; if (fueAtras && (e.pos === 'supino' || e.pos === 'inversion')) regresos.push(e); });
   add(regresos.length ? 'mal' : 'ok', 'Orden de posiciones',
-    regresos.length ? `Después de ${fueAtras.n} volvés a supino con: ${regresos.join(', ')}. El manual ordena de pie → cuatro apoyos → supino → sentado → prono → plancha → de costado.` : 'Sigue el orden del manual.');
-  const cambios = es.slice(1).filter((e, i) => e.pos !== es[i].pos).length;
-  add(cambios > Math.max(6, Math.round(es.length / 2.5)) ? 'aviso' : 'ok', `Transiciones: ${cambios} cambios de posición`,
-    cambios > Math.max(6, Math.round(es.length / 2.5)) ? 'Agrupá los ejercicios de la misma posición para que fluya.' : 'Mirá cada "↳" de la lista: así pasa el cuerpo de uno al otro.');
-  const primero = es[0];
-  add(primero && (primero.f === 'pre' || /hundred|breath/i.test(primero.n)) ? 'ok' : 'aviso', 'Calentamiento',
-    primero && (primero.f === 'pre' || /hundred|breath/i.test(primero.n)) ? `Arranca con ${primero.n}.` : 'Conviene arrancar con un Pre-Pilates de activación o respiración, o con el Hundred.');
+    regresos.length ? `${regresos.map(n).join(', ')} ${regresos.length > 1 ? 'vuelven' : 'vuelve'} a supino después de ${n(fueAtras)} (${POS_CLASE[fueAtras.pos].nom.toLowerCase()}). Subilo${regresos.length > 1 ? 's' : ''} con ↑ antes de ${fueAtras.n}: el manual ordena de pie → cuatro apoyos → supino → sentado → prono → plancha → de costado.` : 'Sigue el orden del manual.');
+  /* transiciones */
+  const cambios = es.slice(1).filter((e, i) => e.pos !== es[i].pos), tope = Math.max(6, Math.round(es.length / 2.5));
+  const vueltas = [...new Set(es.map(e => e.pos))].filter(pz => { let bloques = 0; es.forEach((e, i) => { if (e.pos === pz && (i === 0 || es[i - 1].pos !== pz)) bloques++; }); return bloques > 1; });
+  add(cambios.length > tope || vueltas.length ? 'aviso' : 'ok', `Transiciones: ${cambios.length} cambios de posición`,
+    vueltas.length ? `Volvés más de una vez a ${vueltas.map(pz => POS_CLASE[pz].nom.toLowerCase()).join(' y ')}: juntá esos ejercicios en un solo bloque para que la clase fluya.`
+      : cambios.length > tope ? 'Son muchos para la cantidad de ejercicios: agrupá los de la misma posición.' : 'Mirá cada "↳" de la lista: así pasa el cuerpo de uno al otro.');
+  /* calentamiento */
+  const primero = es[0], calienta = primero && (primero.f === 'pre' || /hundred|breath/i.test(primero.n));
+  add(calienta ? 'ok' : 'aviso', 'Calentamiento',
+    calienta ? `Arranca con ${primero.n}.` : `Arranca con ${primero ? primero.n : 'nada'}. Conviene empezar con respiración o activación de Pre-Pilates (o con el Hundred) para preparar el centro; tocá uno para ponerlo primero.`,
+    calienta ? {} : { sug: sugerirPlan(p, e => e.f === 'pre' && /breath|respir|pelvic|imprint|toe tap|clock/i.test(e.n), 3), donde: 'inicio' });
+  /* balance: cada elemento que falta con su porqué y ejercicios que lo cubren */
   const faltan = ELEMENTOS_CLASE.filter(el => !es.some(e => el.re.test(norm(e.n))));
-  add(faltan.length > 1 ? 'aviso' : 'ok', 'Balance', faltan.length ? `Falta: ${faltan.map(f => f.nom.toLowerCase()).join(', ')}.` : 'Tiene flexión, movilidad, extensión, rotación o lateral, tren superior y tren inferior.');
+  if (!faltan.length) add('ok', 'Balance', 'Tiene flexión, movilidad, extensión, rotación o lateral, tren superior y tren inferior.');
+  else faltan.forEach(el => add('aviso', `Balance: falta ${el.nom.toLowerCase()}`,
+    `Ningún ejercicio de la sesión ${POR_QUE_BALANCE[el.k]}.${el.k === 'extension' ? ' Sin extensión la clase queda toda en flexión.' : ''} Por ejemplo:`,
+    { sug: sugerirPlan(p, e => el.re.test(norm(e.n)), 3), donde: 'orden' }));
+  /* osteoporosis */
   if (p.focos.some(f => /osteoporosis/i.test(f))) {
     const ojo = es.filter(e => /evitar/i.test(e.osteo || ''));
-    add(ojo.length ? 'mal' : 'ok', 'Osteoporosis', ojo.length ? `El manual indica evitar: ${ojo.map(e => e.n).join(', ')} (flexión de columna con carga).` : 'Ningún ejercicio marcado para evitar en osteoporosis.');
+    add(ojo.length ? 'mal' : 'ok', 'Osteoporosis', ojo.length ? `El manual indica evitar ${ojo.map(n).join(', ')} (flexión de columna con carga). Quitalos con ✕; podés reemplazarlos por:` : 'Ningún ejercicio marcado para evitar en osteoporosis.',
+      ojo.length ? { sug: sugerirPlan(p, e => /apto/i.test(e.osteo || '') && ojo.some(o => o.pos === e.pos), 3), donde: 'orden' } : {});
   }
+  /* duración */
   const min = duracionPlan(p);
-  if (p.dur) add(min > p.dur + 8 ? 'aviso' : 'ok', `Duración: ≈ ${min} de ${p.dur} min`, min > p.dur + 8 ? 'Se pasa del tiempo buscado.' : min < p.dur - 12 ? 'Sobra tiempo: podés sumar ejercicios o repeticiones.' : 'Entra en el tiempo.');
+  if (p.dur) {
+    const sobra = p.dur - min;
+    add(min > p.dur + 8 ? 'aviso' : 'ok', `Duración: ≈ ${min} de ${p.dur} min`,
+      min > p.dur + 8 ? `Te pasás ≈ ${min - p.dur} min: sacá ${Math.max(1, Math.round((min - p.dur) / 2))} ejercicio${min - p.dur > 3 ? 's' : ''} o bajá repeticiones.`
+        : sobra > 12 ? `Sobran ≈ ${sobra} min: alcanza para ${Math.round(sobra / 2)} ejercicios más (≈ 2 min cada uno) o más repeticiones.` : 'Entra en el tiempo.');
+  }
   return out;
 }
-function revisarPlan(p) {
+function revisarPlan(p, silencio = false) {
   const out = analizarPlan(p), nMal = out.filter(x => x.estado === 'mal').length, nAv = out.filter(x => x.estado === 'aviso').length;
-  $('#plRes').innerHTML = `<div class="cl-res ${nMal ? '' : 'ok'}">
-    <h3>${nMal ? (nMal === 1 ? 'Hay un punto para corregir' : `Hay ${nMal} puntos para corregir`) : nAv ? 'Bien armada, con algunos detalles' : '¡Sesión bien armada!'}</h3>
-    <ul class="cl-check">${out.map(x => `<li class="${x.estado}"><span>${x.estado === 'ok' ? '✓' : x.estado === 'aviso' ? '!' : '✕'}</span><div><b>${esc(x.t)}</b><p>${esc(x.d)}</p></div></li>`).join('')}</ul>
+  $('#plRes').innerHTML = `<div class="cl-res ${nMal ? '' : nAv ? 'detalles' : 'ok'}">
+    <h3>${nMal ? (nMal === 1 ? 'Hay un punto para corregir' : `Hay ${nMal} puntos para corregir`) : nAv ? `Bien armada: ${nAv === 1 ? 'un detalle' : nAv + ' detalles'} para mejorar` : '¡Sesión bien armada!'}</h3>
+    <ul class="cl-check">${out.map(x => `<li class="${x.estado}"><span>${x.estado === 'ok' ? '✓' : x.estado === 'aviso' ? '!' : '✕'}</span><div><b>${esc(x.t)}</b><p>${esc(x.d)}</p>${x.sug && x.sug.length ? `<div class="pl-sug">${x.sug.map(id => { const e = ejPlan(id); return `<button type="button" data-sumar="${id}" data-donde="${x.donde}">＋ ${esc(e.n)} <small>${nomPos(e)} · ${fuenteNom(e.f)}</small></button>`; }).join('')}</div>` : ''}</div></li>`).join('')}</ul>
   </div>`;
+  $$('#plRes [data-sumar]').forEach(b => b.onclick = () => {
+    const id = b.dataset.sumar;
+    const k = b.dataset.donde === 'inicio' ? (p.items.unshift({ id, reps: null, prop: '', nota: '' }), 0) : insertarOrdenado(p, id);
+    tocar(p); SND.soltar();
+    /* la revisión queda donde estaba y se actualiza */
+    rehacerPlan(p, '#plRes', () => revisarPlan(p, true));
+    toast(`Sumado en el lugar ${k + 1}: <b>${esc(ejPlan(id).n)}</b>`, 'toast-suave');
+  });
+  if (silencio) return;
   nMal ? SND.mal() : SND.fin();
   $('#plRes').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+/* vuelve a dibujar el editor sin que se mueva lo que se está mirando: el elemento
+   ancla queda a la misma altura de la pantalla aunque la lista de arriba crezca */
+function rehacerPlan(p, ancla, despues = null) {
+  const el = typeof ancla === 'string' ? $(ancla) : ancla, antes = el ? el.getBoundingClientRect().top : null;
+  const sel = typeof ancla === 'string' ? ancla : null, y = window.scrollY;
+  vPlan(p.id);
+  if (despues) despues();
+  const nuevo = sel ? $(sel) : null;
+  if (antes != null && nuevo) window.scrollTo(0, y + nuevo.getBoundingClientRect().top - antes);
+  else window.scrollTo(0, y);
 }
 
 /* ---------------- copiar como texto (para mandar o imprimir) ---------------- */

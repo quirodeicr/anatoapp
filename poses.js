@@ -31,7 +31,8 @@ const POSES = (() => {
   const PRONO = { tr: 0, fl: 0, cab: 0, bc: [178, 0, 0], bl: [179, 0, 0], pc: [180, 0, 90], pl: [180, 0, 90], apoyo: ['pelvis', 'tronco', 'puntaC', 'puntaL'] };
   const SENTADO = { tr: -90, fl: 0, cab: 0, bc: [95, 10, 0], bl: [97, 10, 0], pc: [0, 0, -5], pl: [0, 0, -5], apoyo: ['pelvis', 'talonC', 'talonL', 'manoC', 'manoL'] };
   const CUADRUPEDIA = { tr: -15, fl: 0, cab: 0, bc: [90, 0, 0], bl: [91, 0, 0], pc: [90, 90, 90], pl: [91, 90, 90], apoyo: ['rodillaC', 'rodillaL', 'manoC', 'manoL'] };
-  const PLANCHA = { tr: -12, fl: 0, cab: 0, bc: [82, 0, 0], bl: [83, 0, 0], pc: [168, 0, 22], pl: [168, 0, 22], apoyo: ['manoC', 'manoL', 'puntaC', 'puntaL'] };
+  /* plancha: brazos estirados bajo los hombros y el cuerpo en una línea de la cabeza a los talones */
+  const PLANCHA = { tr: -19, fl: 0, cab: 0, bc: [81, 0, 0], bl: [82, 0, 0], pc: [160, 0, 40], pl: [160, 0, 40], apoyo: ['manoC', 'manoL', 'puntaC', 'puntaL'] };
   const PL_SUPINA = { tr: -165, fl: 0, cab: 6, bc: [95, 0, 0], bl: [96, 0, 0], pc: [14, 0, 70], pl: [15, 0, 70], apoyo: ['manoC', 'manoL', 'talonC', 'talonL'] };
   /* abdominal: cabeza y espalda alta despegadas hasta la punta de los omóplatos;
      la lumbar y la torácica baja siguen en el mat (la curva va arriba) */
@@ -40,10 +41,14 @@ const POSES = (() => {
   const V = { tr: -128, fl: 12, cab: 4, bc: [-50, 0, 0], bl: [-49, 0, 0], pc: [-55, 0, 85], pl: [-54, 0, 85], apoyo: ['pelvis'] };
   /* de costado, vista de frente: lado C = el de abajo */
   const COSTADO = { tr: -166, fl: 0, cab: 6, bc: [165, -100, 0], bl: [95, 0, 0], pc: [2, 0, 90], pl: [10, 0, 90], k: { pc: [1, 1, 0.5], pl: [1, 1, 0.5] }, ik: { bc: 'sien' }, apoyo: ['pelvis', 'tronco', 'manoL'] };
-  /* de costado, vista desde arriba (patadas adelante y atrás) */
-  const COSTADO_ARRIBA = { tr: 180, fl: 0, cab: 0, bc: [180, 100, 0], bl: [-95, 0, 0], pc: [-15, 0, 85], pl: [-12, 0, 85], k: { bc: [1, 0.4, 1], bl: [0.8, 0.8, 1] } };
-  /* sentado visto de frente: piernas hacia quien mira */
-  const SENTADO_FRENTE = { tr: -90, fl: 0, cab: 0, bc: [178, 0, 0], bl: [2, 0, 0], pc: [114, 0, -100], pl: [66, 0, -100], k: { pc: [0.55, 0.6, 1.1], pl: [0.55, 0.6, 1.1] }, apoyo: ['pelvis'] };
+  /* de costado, vista desde arriba: se ve la silueta sagital (el frente del cuerpo hacia
+     arriba de la imagen). Tronco en línea con el borde posterior del mat, caderas
+     flexionadas para que los pies lleguen al borde anterior. Brazo de abajo: el codo en
+     el mat más allá de la cabeza y la cabeza en la mano (el antebrazo en escorzo); brazo
+     de arriba: la mano apoyada en el mat delante del pecho. Patea la pierna de arriba (pc). */
+  const COSTADO_ARRIBA = { tr: 180, fl: 0, cab: 0, bc: [-74, 12, 6], bl: [180, 160, 0], pc: [-34, 0, 82], pl: [-37, 0, 84], k: { bc: [0.34, 0.6, 0.9], bl: [1.1, 0.28, 0.5] } };
+  /* sentado visto de frente: piernas hacia quien mira (muy en escorzo: se acercan) */
+  const SENTADO_FRENTE = { tr: -90, fl: 0, cab: 0, bc: [178, 0, 0], bl: [2, 0, 0], pc: [118, 0, -100], pl: [62, 0, -100], k: { pc: [0.36, 0.4, 1.1], pl: [0.36, 0.4, 1.1] }, apoyo: ['pelvis'] };
   /* Roll Over: apoyo en los omóplatos (nunca en el cuello), la pelvis apilada
      sobre los hombros y las piernas paralelas al piso por encima de la cabeza;
      la flexión se concentra en la torácica alta, que queda casi en el mat */
@@ -53,6 +58,9 @@ const POSES = (() => {
   const VERTICAL = { tr: 96, fl: 90, cur: TOP, cab: 18, bc: [0, 0, 0], bl: [1, 0, 0], pc: [-90, 0, 88], pl: [-89, 0, 88], apoyo: ['hombros', 'manoC', 'manoL'] };
   const VERTICAL_MANOS = X(VERTICAL, { ik: { bc: 'pelvis', bl: 'pelvis' }, apoyo: ['hombros'] });
   /* plancha lateral, vista de frente (lado C = brazo de apoyo, abajo) */
+  /* de frente, el brazo cercano (bc) va detrás de la cabeza: la mano bajo la sien
+     acostada de costado, o en la nuca */
+  const DEBAJO = ['BC', 'PL', 'PC', 'T', 'C', 'BL'];
   const PL_LATERAL = { tr: -160, fl: 0, cab: 0, bc: [90, 0, 0], bl: [-90, 0, 0], pc: [19, 0, 90], pl: [21, 0, 90], k: { pc: [1, 1, 0.5], pl: [1, 1, 0.5] }, apoyo: ['manoC', 'pieC', 'pieL'] };
 
   const P = {};
@@ -70,7 +78,7 @@ const POSES = (() => {
   ej('pos-4-puntos', '4 puntos (cuadrupedia)', {}, [CUADRUPEDIA]);
   ej('pos-plancha', 'Plancha prona', {}, [PLANCHA]);
   ej('pos-plancha-supina', 'Plancha supina', {}, [PL_SUPINA]);
-  ej('pos-lateral', 'Decúbito lateral', { vista: 'frente' }, [COSTADO]);
+  ej('pos-lateral', 'Decúbito lateral', { vista: 'frente', orden: DEBAJO }, [COSTADO]);
   ej('pos-rodillas', 'De rodillas', {}, [{ tr: -90, fl: 0, cab: 0, bc: [90, 5, 0], bl: [92, 5, 0], pc: [87, 101, 90], pl: [88, 101, 90], apoyo: ['rodillaC', 'rodillaL'] }]);
 
   /* ================= MAT 1 ================= */
@@ -89,13 +97,24 @@ const POSES = (() => {
     X(MESA, { ...CURL, bc: [4, 0, 0], bl: [3, 0, 0], pc: [-42, 0, 80], pl: [-41, 0, 80], apoyo: ['pelvis'], s: 4, dur: 500, pausa: 60 }),
     X(MESA, { ...CURL, bc: [16, 0, 0], bl: [15, 0, 0], pc: [-42, 0, 80], pl: [-41, 0, 80], apoyo: ['pelvis'], s: 4, dur: 500, pausa: 60 })
   ]);
-  const RU0 = X(SUPINO_FLEX, { bc: [-172, 0, 0], bl: [-171, 0, 0], apoyo: ['pelvis', 'tronco', 'talonC', 'talonL'] });
+  /* Roll Up — brazos por encima de la cabeza solo hasta donde las costillas bajas
+     siguen en el mat (no apoyados); piernas juntas, pies en punta suave */
+  const RU0 = { tr: 180, fl: 0, cab: 0, bc: [-158, 0, 0], bl: [-157, 0, 0], pc: [1, 0, 30], pl: [1, 0, 30], apoyo: ['pelvis', 'tronco', 'talonC', 'talonL'] };
+  const PIES_FLEX = { pc: [1, 0, -10], pl: [1, 0, -10] };
   ej('mat1-e03', 'The Roll Up', {}, [
     RU0,
-    X(RU0, { ...CURL, bc: [-80, 8, 0], bl: [-79, 8, 0], apoyo: ['pelvis', 'talonC', 'talonL'], s: 1 }),
-    X(RU0, { tr: -38, fl: 80, cab: 25, bc: [8, 0, 0], bl: [9, 0, 0], apoyo: ['pelvis', 'talonC', 'talonL'], s: 2, dur: 1900 }),
-    X(RU0, { tr: -112, fl: 85, cab: 25, bc: [0, 0, 0], bl: [1, 0, 0], apoyo: ['pelvis', 'talonC', 'talonL'], s: 3 }),
-    X(RU0, { s: 4, dur: 1700 })
+    /* 1 · inhala: brazos al techo, pies flexionados (el talón se desliza un poco), la cabeza asiente… */
+    X(RU0, { bc: [-90, 0, 0], bl: [-89, 0, 0], ...PIES_FLEX, cab: 10, libre: ['talonC', 'talonL'], s: 1, dur: 1300 }),
+    /* …y enrolla cabeza y espalda alta */
+    X(RU0, { ...CURL, bc: [-62, 0, 0], bl: [-61, 0, 0], ...PIES_FLEX, apoyo: ['pelvis', 'talonC', 'talonL'], s: 1, dur: 1200 }),
+    /* 2 · exhala: vértebra por vértebra hasta la C sobre las piernas, abrazando una pelota */
+    X(RU0, { tr: -46, fl: 96, cab: 18, bc: [2, 6, 0], bl: [3, 6, 0], ...PIES_FLEX, apoyo: ['pelvis', 'talonC', 'talonL'], s: 2, dur: 2100 }),
+    /* 3 · inhala: abdominales y glúteos redondean la pelvis (retroversión) manteniendo la C */
+    X(RU0, { tr: -104, fl: 92, cab: 22, bc: [-2, 8, 0], bl: [-1, 8, 0], ...PIES_FLEX, apoyo: ['pelvis', 'talonC', 'talonL'], s: 3, dur: 1500 }),
+    /* 4 · exhala: termina de bajar vértebra por vértebra… */
+    X(RU0, { bc: [-90, 0, 0], bl: [-89, 0, 0], ...PIES_FLEX, s: 4, dur: 2100 }),
+    /* …y los brazos vuelven por encima de la cabeza */
+    X(RU0, { libre: ['talonC', 'talonL'], s: 4, dur: 1200 })
   ]);
   const SLC = X(SUPINO, { pc: [-90, 0, 80], pl: [1, 0, 60], apoyo: ['pelvis', 'tronco', 'talonL', 'manoC', 'manoL'] });
   ej('mat1-e04', 'Single Leg Circles', {}, [
@@ -174,10 +193,16 @@ const POSES = (() => {
   ]);
   const CODOS_AFUERA = { bc: [0.6, 0.78, 1], bl: [0.6, 0.78, 1] };
   const SWAN0 = X(PRONO, { bc: [-150, 150, 0], bl: [-149, 150, 0], k: CODOS_AFUERA, pc: [180, 0, 85], pl: [180, 0, 85], apoyo: ['pelvis', 'tronco', 'puntaC', 'puntaL', 'manoC', 'manoL'] });
+  /* la extensión se concentra en la torácica; la lumbar acompaña poco */
+  const ARCO = [-0.1, 0.05, 0.35, 0.7];
   ej('mat1-e15', 'Swan', {}, [
     SWAN0,
-    X(SWAN0, { tr: -26, fl: -62, cab: 0, apoyo: ['pelvis', 'puntaC', 'puntaL', 'manoC', 'manoL'], s: 1, dur: 1700 }),
-    X(SWAN0, { s: 2, dur: 1700 })
+    /* 1 · inhala: omóplatos hacia abajo, se alarga la columna y empieza a despegar el esternón… */
+    X(SWAN0, { tr: -6, fl: -24, cur: ARCO, cab: 0, apoyo: ['pelvis', 'puntaC', 'puntaL', 'manoC', 'manoL'], s: 1, dur: 1100 }),
+    /* …empuja el mat y extiende la espalda alta, cabeza en línea, pubis en el mat */
+    X(SWAN0, { tr: -20, fl: -58, cur: ARCO, cab: -4, apoyo: ['pelvis', 'puntaC', 'puntaL', 'manoC', 'manoL'], s: 1, dur: 1500 }),
+    /* 2 · exhala: baja con control */
+    X(SWAN0, { s: 2, dur: 1800 })
   ]);
   const SLK = X(PRONO, { tr: -14, fl: -28, cab: 0, bc: [95, 95, 0], bl: [96, 95, 0], pc: [180, 0, 90], pl: [180, 0, 90], apoyo: ['pelvis', 'antebrazoC', 'antebrazoL', 'puntaC', 'puntaL'] });
   const kickC = f => X(SLK, { pc: [180, f, 90], apoyo: ['pelvis', 'antebrazoC', 'antebrazoL', 'rodillaC', 'puntaL'], s: 1, dur: 550, pausa: 80 });
@@ -197,33 +222,39 @@ const POSES = (() => {
     X(SWIM, { bc: [-14, 0, 0], pl: [-168, 0, 90], s: 1, dur: 500, pausa: 40 }),
     X(SWIM, { bl: [-12, 0, 0], pc: [-168, 0, 90], s: 1, dur: 500, pausa: 40 })
   ]);
-  ej('mat1-e19', 'Side Leg Lifts', { vista: 'frente' }, [
+  ej('mat1-e19', 'Side Leg Lifts', { vista: 'frente', orden: DEBAJO }, [
     COSTADO,
     X(COSTADO, { pl: [-16, 0, 90], s: 1 }),
     X(COSTADO, { s: 2 })
   ]);
+  /* la pierna de arriba levantada a la altura de la cadera dibuja un círculo: desde
+     arriba se ve ir adelante y atrás, y acortarse cuando sube (escorzo) */
+  const CIRC = (a, k) => X(COSTADO_ARRIBA, { pc: [a, 0, 84], k: { ...COSTADO_ARRIBA.k, pc: [k, k, 1] } });
   ej('mat1-e20', 'Side Leg Circles (Small & Big)', { camara: 'arriba' }, [
     COSTADO_ARRIBA,
-    X(COSTADO_ARRIBA, { pl: [-45, 0, 75], k: { ...COSTADO_ARRIBA.k, pl: [0.9, 0.9, 1] }, s: 1, dur: 900 }),
-    X(COSTADO_ARRIBA, { pl: [-20, 0, 85], k: { ...COSTADO_ARRIBA.k, pl: [0.82, 0.82, 1] }, s: 2, dur: 900 }),
-    X(COSTADO_ARRIBA, { pl: [8, 0, 90], k: { ...COSTADO_ARRIBA.k, pl: [0.92, 0.92, 1] }, s: 2, dur: 900 })
+    X(CIRC(-46, 0.9), { s: 1, dur: 900 }),
+    X(CIRC(-30, 0.8), { s: 2, dur: 900 }),
+    X(CIRC(-16, 0.92), { s: 2, dur: 900 })
   ]);
   ej('mat1-e21', 'Side Leg Kicks', { camara: 'arriba' }, [
     COSTADO_ARRIBA,
-    X(COSTADO_ARRIBA, { pl: [-50, 0, -10], s: 1, dur: 700 }),
-    X(COSTADO_ARRIBA, { pl: [-62, 0, -10], s: 1, dur: 400, pausa: 60 }),
-    X(COSTADO_ARRIBA, { pl: [28, 0, 90], s: 2, dur: 1100 })
+    /* 1 · inhala: patea al frente con el pie flexionado… */
+    X(COSTADO_ARRIBA, { pc: [-74, 0, -8], s: 1, dur: 800 }),
+    /* …y un segundo pulso, un poco más lejos */
+    X(COSTADO_ARRIBA, { pc: [-86, 0, -12], s: 1, dur: 380, pausa: 70 }),
+    /* 2 · exhala: patea atrás con el pie en punta, sin mover el tronco */
+    X(COSTADO_ARRIBA, { pc: [22, 0, 88], s: 2, dur: 1300 })
   ]);
   ej('mat1-e22', 'Side Leg Bicycle', { camara: 'arriba' }, [
     COSTADO_ARRIBA,
-    X(COSTADO_ARRIBA, { pl: [-55, 95, 80], s: 1 }),
-    X(COSTADO_ARRIBA, { pl: [-55, 0, 85], s: 1 }),
-    X(COSTADO_ARRIBA, { pl: [28, 0, 90], s: 2 }),
-    X(COSTADO_ARRIBA, { pl: [28, 130, 90], s: 2 }),
-    X(COSTADO_ARRIBA, { pl: [-50, 130, 90], s: 2 })
+    X(COSTADO_ARRIBA, { pc: [-70, 95, 80], s: 1 }),
+    X(COSTADO_ARRIBA, { pc: [-74, 0, 85], s: 1 }),
+    X(COSTADO_ARRIBA, { pc: [22, 0, 88], s: 2 }),
+    X(COSTADO_ARRIBA, { pc: [22, 130, 88], s: 2 }),
+    X(COSTADO_ARRIBA, { pc: [-50, 130, 88], s: 2 })
   ]);
   const BAN0 = X(COSTADO, { tr: -172, cab: 0, bc: [180, 0, 0], bl: [0, 0, 0], ik: {}, pc: [0, 0, 90], pl: [8, 0, 90], apoyo: ['pelvis', 'tronco'] });
-  ej('mat1-e23', 'Side Leg Bananas', { vista: 'frente' }, [
+  ej('mat1-e23', 'Side Leg Bananas', { vista: 'frente', orden: DEBAJO }, [
     BAN0,
     X(BAN0, { tr: -174, fl: 18, cab: 4, bc: [-168, 0, 0], bl: [-163, 0, 0], pc: [-16, 0, 90], pl: [-10, 0, 90], apoyo: ['pelvis'], s: 1, dur: 1500 }),
     X(BAN0, { s: 2, dur: 1500 })
@@ -241,7 +272,8 @@ const POSES = (() => {
     X(DE_PIE, { bc: [-90, 0, 0], bl: [-88, 0, 0] }),
     X(PU_ROLL, { s: 1, dur: 1800 }),
     X(PLANCHA, { libre: ['manoC', 'manoL'], s: 2, dur: 1800 }),
-    X(PLANCHA, { tr: -4, s: 3 }),
+    /* 3 · baja en bloque (codos flexionados): el cuerpo sigue recto de la cabeza a los talones */
+    X(PLANCHA, { tr: -8, pc: [172, 0, 40], pl: [172, 0, 40], s: 3 }),
     X(PLANCHA, { s: 4 }),
     X(PU_ROLL, { libre: ['manoC', 'manoL'], s: 4, dur: 1800 })
   ]);
@@ -249,16 +281,20 @@ const POSES = (() => {
   /* ================= MAT 2 ================= */
   /* sentado visto desde arriba: el tronco en escorzo, piernas hacia abajo de la imagen;
      la rotación se ve como la línea de los hombros y los brazos que gira */
-  const TW = { tr: -90, fl: 0, cab: 0, bc: [180, 0, 0], bl: [0, 0, 0], pc: [94, 0, 90], pl: [86, 0, 90], k: { tronco: 0.14, pc: [1, 1, 0.3], pl: [1, 1, 0.3] } };
-  const girar = g => X(TW, { tr: -90 + g, bc: [180 + g, 0, 0], bl: [g, 0, 0] });
+  /* piernas juntas y estiradas con los pies flexionados (dedos al techo), brazos abiertos a
+     la altura de los hombros. La columna rota sobre la pelvis quieta (rot): giran los
+     hombros, los brazos en línea y la cabeza; las caderas y los pies quedan parejos */
+  const TW = { tr: -90, fl: 0, cab: 0, rot: 0, bc: [180, 0, 0], bl: [0, 0, 0], pc: [86.4, 0, 90], pl: [93.6, 0, 90], k: { tronco: 0.04, pc: [1, 1, 0.32], pl: [1, 1, 0.32] } };
+  const girar = g => X(TW, { rot: g, bc: [180 + g, 0, 0], bl: [g, 0, 0] });
   ej('mat2-e01', 'Spine Twist', { vista: 'frente', camara: 'arriba', matV: true }, [
     TW,
-    X(girar(-38), { s: 1, dur: 900 }),
-    X(girar(-48), { s: 1, dur: 400, pausa: 60 }),
-    X(TW, { s: 2 }),
-    X(girar(38), { s: 1, dur: 900 }),
-    X(girar(48), { s: 1, dur: 400, pausa: 60 }),
-    X(TW, { s: 2 })
+    /* 1 · inhala: rota de un solo movimiento continuo hasta el final del giro */
+    X(girar(-48), { s: 1, dur: 1600 }),
+    /* 2 · exhala: vuelve al centro (ahí cambia la respiración: se detiene antes del otro lado) */
+    X(TW, { s: 2, dur: 1400, alto: true }),
+    /* al otro lado */
+    X(girar(48), { s: 1, dur: 1600 }),
+    X(TW, { s: 2, dur: 1400 })
   ]);
   const MESA_BRAZOS = X(MESA, { bc: [-168, 0, 0], bl: [-167, 0, 0], apoyo: ['pelvis', 'tronco'] });
   ej('mat2-e02', 'Teaser Preparation', {}, [
@@ -332,12 +368,12 @@ const POSES = (() => {
   ej('mat2-e13', 'Jackknife', { ancla: 'S' }, [
     X(RO0, { pc: [-90, 0, 88], pl: [-89, 0, 88], apoyo: ['pelvis', 'tronco', 'manoC', 'manoL'] }),
     X(ROLL_OVER, { s: 1, dur: 1800 }),
-    X(ROLL_OVER, { tr: 105, fl: 88, cab: 44, pc: [150, 0, 90], pl: [151, 0, 90], apoyo: ['hombros', 'manoC', 'manoL', 'puntaC', 'puntaL'], s: 2 }),
+    X(ROLL_OVER, { tr: 105, fl: 88, cab: 44, pc: [155, 0, 90], pl: [156, 0, 90], apoyo: ['hombros', 'manoC', 'manoL', 'puntaC', 'puntaL'], s: 2 }),
     X(VERTICAL, { s: 3, dur: 1600 }),
     X(RO0, { tr: 160, fl: 30, cab: 12, pc: [-98, 0, 88], pl: [-97, 0, 88], apoyo: ['manoC', 'manoL'], s: 4, dur: 1900 })
   ]);
   const KSK = { tr: -35, fl: 0, cab: 0, bl: [86, 0, 0], ik: { bc: 'nuca' }, pl: [92, 88, 90], pc: [180, 0, 90], k: { pl: [1, 0.3, 0.3] }, apoyo: ['manoL', 'rodillaL'] };
-  ej('mat2-e14', 'Kneeling Side Kicks', { vista: 'frente' }, [
+  ej('mat2-e14', 'Kneeling Side Kicks', { vista: 'frente', orden: DEBAJO }, [
     KSK,
     X(KSK, { pc: [182, 0, -5], k: { ...KSK.k, pc: [0.72, 0.72, 0.8] }, s: 1 }),
     X(KSK, { pc: [176, 0, 90], k: { ...KSK.k, pc: [0.84, 0.84, 1] }, s: 2 })

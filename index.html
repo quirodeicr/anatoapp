@@ -20,6 +20,7 @@
   --rojo:#e11d48; --rojo-cl:#ffe4e9; --mag:#c026d3; --mag-cl:#fae8ff;
   --on:#ffffff;
   --r:16px; --sombra:0 1px 2px rgba(0,0,0,.05),0 10px 30px -14px rgba(0,0,0,.18);
+  --ap-calza:#6d3d68; --ap-calza-l:#4f2b4c; --ap-borde:rgba(60,34,20,.6);
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
@@ -34,6 +35,7 @@
     --rojo:#fb7185; --rojo-cl:#43121f; --mag:#e879f9; --mag-cl:#3d1043;
     --on:#0b0b10;
     --sombra:0 1px 2px rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.7);
+  --ap-calza:#8a4f84; --ap-calza-l:#6a3c66; --ap-borde:rgba(255,238,226,.55);
   }
 }
 :root[data-theme="dark"]{
@@ -48,6 +50,7 @@
   --rojo:#fb7185; --rojo-cl:#43121f; --mag:#e879f9; --mag-cl:#3d1043;
   --on:#0b0b10;
   --sombra:0 1px 2px rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.7);
+  --ap-calza:#8a4f84; --ap-calza-l:#6a3c66; --ap-borde:rgba(255,238,226,.55);
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -585,10 +588,11 @@ article.nota li::before{content:'';position:absolute;left:0;top:.6em;width:6px;h
 .pm-fotos img{max-width:100%;max-height:220px;border-radius:10px;background:#fff;border:1px solid var(--linea)}
 
 /* ===== avisos, toasts, confeti ===== */
-.aviso{position:fixed;left:16px;right:16px;bottom:96px;z-index:70;max-width:520px;margin:0 auto;
+div.aviso{position:fixed;left:16px;right:16px;bottom:96px;z-index:70;max-width:520px;margin:0 auto;
   background:var(--mal);color:#fff;padding:13px 16px;border-radius:14px;font-size:13px;line-height:1.5;box-shadow:0 8px 30px -8px rgba(0,0,0,.5)}
-.aviso button{background:rgba(255,255,255,.22);border:0;color:inherit;cursor:pointer;width:24px;height:24px;border-radius:7px;font-size:13px;float:right;margin-left:10px}
-.aviso.ok{background:var(--verde);color:var(--on)}
+div.aviso button{background:rgba(255,255,255,.22);border:0;color:inherit;cursor:pointer;width:24px;height:24px;border-radius:7px;font-size:13px;float:right;margin-left:10px}
+div.aviso.ok{background:var(--verde);color:var(--on)}
+/* div.aviso: el aviso flotante; los ítems de revisión y las transiciones (li.aviso) van en su lista */
 .toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:80;background:var(--tx);color:var(--bg);
   padding:10px 18px;border-radius:99px;font-size:14px;font-weight:600;box-shadow:var(--sombra);
   animation:toastIn .25s ease-out,toastOut .3s ease-in 2.4s forwards;max-width:calc(100vw - 32px);text-align:center}
@@ -676,7 +680,8 @@ html[data-fx="suaves"] .fin-trofeo .ico,html[data-fx="suaves"] .sube-badge,html[
 .fig-mat-persp{fill:var(--mat,#7b6de0);opacity:.32}
 .fig-cam{font:700 8.5px system-ui,sans-serif;fill:var(--tx3);letter-spacing:.04em;text-transform:uppercase}
 .fig-silla{fill:#9b8b7a}
-.fig-fantasma{opacity:.09}
+.fig-fantasma{opacity:.12}
+.fig-mat-raya{stroke:rgba(255,255,255,.35);stroke-width:.6}
 .fig-sombra{fill:rgba(0,0,0,.28)}
 .fig-ej{background:var(--sup2);border-radius:14px;margin-bottom:12px;padding:4px 6px;max-width:520px;margin-inline:auto}
 /* ===== repertorio con animación ===== */
@@ -720,6 +725,7 @@ html[data-fx="suaves"] .fin-trofeo .ico,html[data-fx="suaves"] .sube-badge,html[
 .vel{display:inline-flex;gap:2px;background:var(--sup3);border-radius:99px;padding:2px;margin-left:4px}
 .chip-vel{border:0;background:transparent;color:var(--tx2);font:inherit;font-size:12.5px;font-weight:800;min-width:38px;min-height:32px;border-radius:99px;cursor:pointer}
 .chip-vel.on{background:var(--sup);color:var(--tx);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.chip-vel[data-ritmo]{padding:0 11px}
 .visor-capas{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:4px 0 6px}
 .chip-capa{border:1.5px solid var(--linea2);background:var(--sup);color:var(--tx2);font:inherit;font-size:12.5px;font-weight:700;padding:6px 10px;min-height:34px;border-radius:99px;cursor:pointer}
 .chip-capa.on{border-color:var(--mag);color:var(--tx);background:var(--mag-cl)}
@@ -955,8 +961,10 @@ article.ex-rev{margin-bottom:10px}
 .cl-info small{font-size:12px;color:var(--tx2)}
 .cl-pos{font-weight:700}
 .cl-reps{display:flex;flex-direction:column;align-items:center}
-.cl-reps input{width:54px;font:inherit;font-weight:800;text-align:center;border:2px solid var(--linea2);border-radius:10px;padding:4px;background:var(--bg);color:var(--tx)}
+.cl-reps input{width:62px;-moz-appearance:textfield;appearance:textfield;font:inherit;font-weight:800;text-align:center;border:2px solid var(--linea2);border-radius:10px;padding:4px;background:var(--bg);color:var(--tx)}
 .cl-reps input:placeholder-shown{border-color:var(--xp);border-style:dashed}
+.cl-reps input::placeholder{color:var(--tx2);opacity:1}
+.cl-reps input::-webkit-inner-spin-button,.cl-reps input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 .cl-reps small{font-size:10.5px;color:var(--tx3)}
 .cl-mover{display:flex;flex-direction:column;gap:2px}
 .cl-mover button{background:var(--sup2);border:0;border-radius:6px;width:28px;height:22px;cursor:pointer;font-size:12px;font-weight:800}
@@ -1007,6 +1015,12 @@ article.ex-rev{margin-bottom:10px}
 .cl-ej .cl-mini{grid-column:1/-1;width:100%;height:auto;aspect-ratio:16/9;margin-bottom:6px}
 .cl-res{margin-top:16px;background:var(--sup);border:2px solid var(--linea);border-radius:var(--r);padding:14px 16px}
 .cl-res.ok{border-color:var(--ok);background:var(--ok-cl)}
+.cl-res.detalles{border-color:var(--xp);background:var(--xp-cl)}
+.pl-sug{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+.pl-sug button{display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left;border:1.5px solid var(--linea2);background:var(--sup);color:var(--tx);border-radius:12px;padding:7px 11px;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer;min-height:40px}
+.pl-sug button small{font-size:11.5px;font-weight:600;color:var(--tx2)}
+.pl-sug button:hover{border-color:var(--verde)}
+.pl-sug button:focus-visible{outline:3px solid var(--mag);outline-offset:2px}
 .cl-res h3{font-size:17px;font-weight:800;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .cl-check{list-style:none;display:grid;gap:10px;margin-top:12px}
 .cl-check li{display:flex;gap:10px}

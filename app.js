@@ -793,7 +793,7 @@ function ejAnim(it) {
   const fig = document.createElement('div');
   fig.className = 'fig-ej';
   ej.el.prepend(fig);
-  FIGURA.reproductor(fig, { ...POSES[e.id], nom: '' }, { fantasma: false });
+  FIGURA.reproductor(fig, { ...POSES[e.id], nom: '' }, { fantasma: false, fluido: ritmoFluido() });
   /* después de responder se puede ver el ejercicio paso a paso, con sus fases */
   const comprobar = ej.comprobar;
   ej.comprobar = () => {
@@ -1737,7 +1737,7 @@ function conectarEjDelDia() {
   const c = $('#ejDia');
   if (!c) return;
   const e = ejDelDia();
-  FIGURA.reproductor($('.dia-fig', c), { ...POSES[e.id], nom: e.n }, { fantasma: false,
+  FIGURA.reproductor($('.dia-fig', c), { ...POSES[e.id], nom: e.n }, { fantasma: false, fluido: ritmoFluido(),
     resp: POSES[e.id].poses.map((_, k) => { const p = pasoDePose(POSES[e.id], (k + 1) % POSES[e.id].poses.length); return p > 0 && e.seq[p - 1] ? respDeFase(e.seq[p - 1].fase) : null; }) });
   $('#ejDiaVer').onclick = () => { SND.toque(); abrirVisorGrande(e); };
 }
@@ -2200,6 +2200,8 @@ function visorHTML(e, grande = false) {
       ${grande ? '' : '<button type="button" class="btn small ghost" data-acc="grande" aria-label="Ver en grande, paso a paso">⤢</button>'}
     </div>` : ''}
     <div class="visor-capas">
+      ${n > 1 ? `<span class="vel" role="group" aria-label="Ritmo">${[['fluido', 'Fluido'], ['pasos', 'Por pasos']].map(([r, t]) =>
+        `<button type="button" class="chip-vel${(r === 'fluido') === ritmoFluido() ? ' on' : ''}" data-ritmo="${r}" aria-pressed="${(r === 'fluido') === ritmoFluido()}">${t}</button>`).join('')}</span>` : ''}
       ${n > 1 ? '<button type="button" class="chip-capa" data-capa="tray" aria-pressed="false">〰️ Trayectoria</button>' : ''}
       <button type="button" class="chip-capa" data-capa="fisica" aria-pressed="false">⚖️ Centro de masa</button>
       ${n > 1 ? '<button type="button" class="chip-capa on" data-capa="fantasma" aria-pressed="true">👻 Hacia dónde va</button>' : ''}
@@ -2208,6 +2210,10 @@ function visorHTML(e, grande = false) {
     </div>
   </div>`;
 }
+/* ritmo de las animaciones: fluido (frena solo donde el movimiento empieza o
+   termina) o por pasos (frena en cada paso del manual); se recuerda en este navegador */
+function ritmoFluido() { try { return localStorage.getItem('anatoapp.ritmo') !== 'pasos'; } catch { return true; } }
+function guardarRitmo(fluido) { try { localStorage.setItem('anatoapp.ritmo', fluido ? 'fluido' : 'pasos'); } catch { /* sin almacenamiento */ } }
 /* conecta un visor; pasos = <li data-paso> de la lista de pasos (opcional) */
 function activarVisor(raiz, e, pasos = []) {
   const ej = POSES[e.id], n = ej.poses.length, fig = $('.rep-fig', raiz), fase = $('.rep-fase', raiz);
@@ -2223,7 +2229,7 @@ function activarVisor(raiz, e, pasos = []) {
   };
   const tiraOn = k => tiraEl && $$('.tira-p', tiraEl).forEach(b => { b.classList.toggle('on', +b.dataset.k === k); b.setAttribute('aria-current', +b.dataset.k === k ? 'step' : 'false'); });
   const rep = FIGURA.reproductor(fig, ej, {
-    resp, capas: { fantasma: n > 1 },
+    resp, capas: { fantasma: n > 1 }, fluido: ritmoFluido(),
     alCambiar: i => { marcar(pasoDePose(ej, i)); tiraOn(i); },
     alAvanzar: pos => {
       if (rango && !arrastrando) rango.value = pos;
@@ -2244,6 +2250,12 @@ function activarVisor(raiz, e, pasos = []) {
   $$('[data-vel]', raiz).forEach(b => b.onclick = () => {
     rep.velocidad = +b.dataset.vel;
     $$('[data-vel]', raiz).forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); });
+    SND.toque();
+  });
+  $$('[data-ritmo]', raiz).forEach(b => b.onclick = () => {
+    const fl = b.dataset.ritmo === 'fluido';
+    rep.fluido = fl; guardarRitmo(fl);
+    $$('[data-ritmo]', raiz).forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); });
     SND.toque();
   });
   $$('[data-capa]', raiz).forEach(b => b.onclick = () => {

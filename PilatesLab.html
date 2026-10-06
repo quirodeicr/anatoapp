@@ -20,6 +20,7 @@
   --rojo:#e11d48; --rojo-cl:#ffe4e9; --mag:#c026d3; --mag-cl:#fae8ff;
   --on:#ffffff;
   --r:16px; --sombra:0 1px 2px rgba(0,0,0,.05),0 10px 30px -14px rgba(0,0,0,.18);
+  --ap-calza:#6d3d68; --ap-calza-l:#4f2b4c; --ap-borde:rgba(60,34,20,.6);
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
@@ -34,6 +35,7 @@
     --rojo:#fb7185; --rojo-cl:#43121f; --mag:#e879f9; --mag-cl:#3d1043;
     --on:#0b0b10;
     --sombra:0 1px 2px rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.7);
+  --ap-calza:#8a4f84; --ap-calza-l:#6a3c66; --ap-borde:rgba(255,238,226,.55);
   }
 }
 :root[data-theme="dark"]{
@@ -48,6 +50,7 @@
   --rojo:#fb7185; --rojo-cl:#43121f; --mag:#e879f9; --mag-cl:#3d1043;
   --on:#0b0b10;
   --sombra:0 1px 2px rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.7);
+  --ap-calza:#8a4f84; --ap-calza-l:#6a3c66; --ap-borde:rgba(255,238,226,.55);
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -585,10 +588,11 @@ article.nota li::before{content:'';position:absolute;left:0;top:.6em;width:6px;h
 .pm-fotos img{max-width:100%;max-height:220px;border-radius:10px;background:#fff;border:1px solid var(--linea)}
 
 /* ===== avisos, toasts, confeti ===== */
-.aviso{position:fixed;left:16px;right:16px;bottom:96px;z-index:70;max-width:520px;margin:0 auto;
+div.aviso{position:fixed;left:16px;right:16px;bottom:96px;z-index:70;max-width:520px;margin:0 auto;
   background:var(--mal);color:#fff;padding:13px 16px;border-radius:14px;font-size:13px;line-height:1.5;box-shadow:0 8px 30px -8px rgba(0,0,0,.5)}
-.aviso button{background:rgba(255,255,255,.22);border:0;color:inherit;cursor:pointer;width:24px;height:24px;border-radius:7px;font-size:13px;float:right;margin-left:10px}
-.aviso.ok{background:var(--verde);color:var(--on)}
+div.aviso button{background:rgba(255,255,255,.22);border:0;color:inherit;cursor:pointer;width:24px;height:24px;border-radius:7px;font-size:13px;float:right;margin-left:10px}
+div.aviso.ok{background:var(--verde);color:var(--on)}
+/* div.aviso: el aviso flotante; los ítems de revisión y las transiciones (li.aviso) van en su lista */
 .toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:80;background:var(--tx);color:var(--bg);
   padding:10px 18px;border-radius:99px;font-size:14px;font-weight:600;box-shadow:var(--sombra);
   animation:toastIn .25s ease-out,toastOut .3s ease-in 2.4s forwards;max-width:calc(100vw - 32px);text-align:center}
@@ -676,7 +680,8 @@ html[data-fx="suaves"] .fin-trofeo .ico,html[data-fx="suaves"] .sube-badge,html[
 .fig-mat-persp{fill:var(--mat,#7b6de0);opacity:.32}
 .fig-cam{font:700 8.5px system-ui,sans-serif;fill:var(--tx3);letter-spacing:.04em;text-transform:uppercase}
 .fig-silla{fill:#9b8b7a}
-.fig-fantasma{opacity:.09}
+.fig-fantasma{opacity:.12}
+.fig-mat-raya{stroke:rgba(255,255,255,.35);stroke-width:.6}
 .fig-sombra{fill:rgba(0,0,0,.28)}
 .fig-ej{background:var(--sup2);border-radius:14px;margin-bottom:12px;padding:4px 6px;max-width:520px;margin-inline:auto}
 /* ===== repertorio con animación ===== */
@@ -720,6 +725,7 @@ html[data-fx="suaves"] .fin-trofeo .ico,html[data-fx="suaves"] .sube-badge,html[
 .vel{display:inline-flex;gap:2px;background:var(--sup3);border-radius:99px;padding:2px;margin-left:4px}
 .chip-vel{border:0;background:transparent;color:var(--tx2);font:inherit;font-size:12.5px;font-weight:800;min-width:38px;min-height:32px;border-radius:99px;cursor:pointer}
 .chip-vel.on{background:var(--sup);color:var(--tx);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.chip-vel[data-ritmo]{padding:0 11px}
 .visor-capas{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:4px 0 6px}
 .chip-capa{border:1.5px solid var(--linea2);background:var(--sup);color:var(--tx2);font:inherit;font-size:12.5px;font-weight:700;padding:6px 10px;min-height:34px;border-radius:99px;cursor:pointer}
 .chip-capa.on{border-color:var(--mag);color:var(--tx);background:var(--mag-cl)}
@@ -955,8 +961,10 @@ article.ex-rev{margin-bottom:10px}
 .cl-info small{font-size:12px;color:var(--tx2)}
 .cl-pos{font-weight:700}
 .cl-reps{display:flex;flex-direction:column;align-items:center}
-.cl-reps input{width:54px;font:inherit;font-weight:800;text-align:center;border:2px solid var(--linea2);border-radius:10px;padding:4px;background:var(--bg);color:var(--tx)}
+.cl-reps input{width:62px;-moz-appearance:textfield;appearance:textfield;font:inherit;font-weight:800;text-align:center;border:2px solid var(--linea2);border-radius:10px;padding:4px;background:var(--bg);color:var(--tx)}
 .cl-reps input:placeholder-shown{border-color:var(--xp);border-style:dashed}
+.cl-reps input::placeholder{color:var(--tx2);opacity:1}
+.cl-reps input::-webkit-inner-spin-button,.cl-reps input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 .cl-reps small{font-size:10.5px;color:var(--tx3)}
 .cl-mover{display:flex;flex-direction:column;gap:2px}
 .cl-mover button{background:var(--sup2);border:0;border-radius:6px;width:28px;height:22px;cursor:pointer;font-size:12px;font-weight:800}
@@ -1007,6 +1015,12 @@ article.ex-rev{margin-bottom:10px}
 .cl-ej .cl-mini{grid-column:1/-1;width:100%;height:auto;aspect-ratio:16/9;margin-bottom:6px}
 .cl-res{margin-top:16px;background:var(--sup);border:2px solid var(--linea);border-radius:var(--r);padding:14px 16px}
 .cl-res.ok{border-color:var(--ok);background:var(--ok-cl)}
+.cl-res.detalles{border-color:var(--xp);background:var(--xp-cl)}
+.pl-sug{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+.pl-sug button{display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left;border:1.5px solid var(--linea2);background:var(--sup);color:var(--tx);border-radius:12px;padding:7px 11px;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer;min-height:40px}
+.pl-sug button small{font-size:11.5px;font-weight:600;color:var(--tx2)}
+.pl-sug button:hover{border-color:var(--verde)}
+.pl-sug button:focus-visible{outline:3px solid var(--mag);outline-offset:2px}
 .cl-res h3{font-size:17px;font-weight:800;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .cl-check{list-style:none;display:grid;gap:10px;margin-top:12px}
 .cl-check li{display:flex;gap:10px}
@@ -4391,6 +4405,8 @@ const FOTOS = [];   // ¿Qué ejercicio es? (se llena abajo)
 
 const FIGURA = (() => {
   const W = 320, H = 200, PISO = 180;
+  /* sentada vista de frente con perspectiva: la pelvis apoya a mitad del mat */
+  const PISO_P = PISO - 14;
   /* proporciones antropométricas (fracción de la altura, Drillis y Contini),
      para una figura de ~154 de alto: cadera→hombro 0,29 · brazo 0,19 ·
      antebrazo 0,15 · muslo 0,25 · pierna 0,25 · cabeza 0,13 */
@@ -4439,7 +4455,7 @@ const FIGURA = (() => {
     const offH = (p, d) => ({ x: p.x + latH.x * d, y: p.y + latH.y * d });
     const hombro = pol(S, aTop + 180, 3.5);
     const E = {
-      vista, fr, anch, g: P.g || 0, rot: P.rot || 0, latH, col, angs, S, C, H: Hc, aTop, aCue,
+      vista, fr, anch, kt, g: P.g || 0, rot: P.rot || 0, latH, col, angs, S, C, H: Hc, aTop, aCue,
       ant: { x: Math.cos(rad(aTop + 90)), y: Math.sin(rad(aTop + 90)) },
       antCab: { x: Math.cos(rad(aCue + 90)), y: Math.sin(rad(aCue + 90)) },
       arriba: { x: Math.cos(rad(aCue)), y: Math.sin(rad(aCue)) },
@@ -4585,7 +4601,7 @@ const FIGURA = (() => {
     for (const [b] of agarres) excl.add(b);
     /* sentado visto de frente: las piernas vienen hacia quien mira, delante del mat */
     if (ej.persp) { excl.add('pc'); excl.add('pl'); }
-    const piso = ej.persp ? PISO - 24 : PISO;
+    const piso = ej.persp ? PISO_P : PISO;
     const dyCuerpo = piso - Math.max(...contorno(E, excl).map(p => p.y));
     let dy;
     const tronco = rig.filter(n => RIGIDOS.includes(n)), uni = rig.filter(n => UNIHUESO.test(n));
@@ -4710,10 +4726,24 @@ const FIGURA = (() => {
         E.seg[clave] = brazoFK(m2.raiz, [m2.a0, m2.a0 - m2.aA, sentido - m2.aA], m2.e);
         break;
       }
-      /* talón o punta: se corrige el tobillo hasta que el punto toque */
-      const actual = tipo === 'talon' ? m.talon : m.punta, r = tipo === 'talon' ? RPIE : RPIE * 0.7;
-      const des = { x: x - (actual.x - m.tobillo.x), y: PISO - r - (actual.y - m.tobillo.y) };
-      ok = ubicarMiembro(E, clave, des, P, PISO);
+      /* talón o punta: el pie conserva su orientación en el espacio (la de la pose) y
+         el tobillo va donde ese punto toca; así la rodilla no se dobla de a poco en
+         cada vuelta (al doblarla giraba el pie y el blanco se acercaba otra vez) */
+      const r = tipo === 'talon' ? RPIE : RPIE * 0.7, e2 = m.e[2];
+      const probar = aPie => {
+        const off = tipo === 'talon' ? pol({ x: 0, y: 0 }, aPie + 180, L.talon * e2) : pol({ x: 0, y: 0 }, aPie, L.pie * e2);
+        const okI = ubicarMiembro(E, clave, { x: x - off.x, y: PISO - r - off.y }, P, PISO);
+        const m2 = E.seg[clave];
+        E.seg[clave] = piernaFK(m2.raiz, [m2.a0, m2.aP - m2.a0, aPie - m2.aP + 90], m2.e);
+        const q = E.seg[clave];
+        return { okI, limpio: Math.max(q.talon.y + RPIE, q.punta.y + 1.8) <= PISO + 0.3 };
+      };
+      /* si el resto del pie quedaría bajo el piso, el pie gira lo mínimo sobre ese punto */
+      let res = probar(m.aPie);
+      for (let d = 2; d <= 40 && !res.limpio; d += 2) for (const sg of [1, -1]) { res = probar(m.aPie + sg * d); if (res.limpio) break; }
+      if (!res.limpio) res = probar(m.aPie);
+      ok = res.okI;
+      break;
     }
     void esPierna;
     return ok;
@@ -5073,7 +5103,7 @@ const FIGURA = (() => {
         const pts = contorno(r.E, ej.persp ? new Set(['pc', 'pl']) : new Set());
         const bajo = Math.max(...pts.map(p => p.y));
         if (bajo > PISO + 1.2) fallas.push(`${donde}: atraviesa el piso (${(bajo - PISO).toFixed(1)})`);
-        const piso = ej.persp ? PISO - 24 : PISO;
+        const piso = ej.persp ? PISO_P : PISO;
         if (ej.persp ? bajo > piso + 1.2 : false) fallas.push(`${donde}: atraviesa el piso`);
         if (bajo < piso - 1.2) fallas.push(`${donde}: flota (${(piso - bajo).toFixed(1)})`);
         const ap = clave ? (poses[i].apoyo || []) : Object.keys(r.contactos);
@@ -5176,15 +5206,15 @@ const FIGURA = (() => {
     return `<g class="${fantasma ? 'fig-fantasma' : 'fig-cuerpo'}">${seq.map(k => partes[k]).join('')}</g>`;
   }
   /* =====================================================================
-     FIGURA ANATÓMICA (v4, en prueba): misma cinemática, otro dibujo.
+     FIGURA ANATÓMICA (v4, la de la app): misma cinemática, otro dibujo.
      Siluetas con relieves musculares (deltoides, bíceps y tríceps,
      cuádriceps, isquiotibiales, gemelos), rótula y pliegues reales de
      rodilla y codo, manos con pulgar, pies con talón, arco y dedos,
      cara de perfil (frente, nariz, labios, mentón, ojo, ceja, oreja),
-     pelo con rodete y ropa de entrenamiento. Solo de perfil: de frente
-     y desde arriba se usa el dibujo clásico.
+     pelo con rodete y ropa de entrenamiento. De frente: dibujoFrente;
+     sentada vista desde arriba: dibujoArriba. 'clasico' queda para comparar.
      ===================================================================== */
-  let ESTILO = 'clasico';
+  let ESTILO = 'anatomico';
   /* Colores como variables CSS con valor por defecto: cada página puede
      ajustarlos por tema (en oscuro el contorno se aclara para separar la
      figura del fondo). La calza es ciruela: contrasta con fondos claros y
@@ -5469,7 +5499,11 @@ const FIGURA = (() => {
     if (ej.camara !== 'arriba' || (ej.estilo || ESTILO) !== 'anatomico') return '';
     const E = mover(cuadro(ej, 0, 0).E, enc.cx, enc.cy), largo = 166, ancho = 56;
     let x, y, w, h;
-    if (E.fr) {
+    if (E.fr && E.kt >= 0.5) {
+      /* acostada boca arriba vista desde arriba: el mat a lo largo del cuerpo, la cabeza cerca de un extremo */
+      const izq = E.C.x < E.H.x;
+      w = largo; h = ancho; x = izq ? E.C.x - 14 : E.C.x + 14 - w; y = E.H.y - h / 2;
+    } else if (E.fr) {
       /* sentado cerca de un extremo: el mat sigue a lo largo de las piernas */
       w = ancho; h = largo; x = E.H.x - w / 2; y = E.H.y - 24;
     } else {
@@ -5481,7 +5515,7 @@ const FIGURA = (() => {
       w = largo; h = ancho; x = izq ? borde : borde - w;
       y = atras > 0 ? E.S.y + 12 - h : E.S.y - 12;
     }
-    const lineas = E.fr ? [0.25, 0.5, 0.75].map(t => `<line x1="${f1(x + 4)}" y1="${f1(y + h * t)}" x2="${f1(x + w - 4)}" y2="${f1(y + h * t)}" class="fig-mat-raya"/>`).join('')
+    const lineas = E.fr && E.kt < 0.5 ? [0.25, 0.5, 0.75].map(t => `<line x1="${f1(x + 4)}" y1="${f1(y + h * t)}" x2="${f1(x + w - 4)}" y2="${f1(y + h * t)}" class="fig-mat-raya"/>`).join('')
       : [0.25, 0.5, 0.75].map(t => `<line x1="${f1(x + w * t)}" y1="${f1(y + 4)}" x2="${f1(x + w * t)}" y2="${f1(y + h - 4)}" class="fig-mat-raya"/>`).join('');
     return `<g class="fig-tapete"><rect x="${f1(x)}" y="${f1(y)}" width="${f1(w)}" height="${f1(h)}" rx="5" class="fig-mat-arriba"/>${lineas}</g>`;
   }
@@ -5553,12 +5587,176 @@ const FIGURA = (() => {
     return `<g class="${fantasma ? 'fig-fantasma' : 'fig-cuerpo'}">${svg}</g>`;
   }
 
+  /* ---------- vista de frente (estilo anatómico) ----------
+     Plano frontal: la misma silueta grácil vista de frente. Tronco con cadera,
+     cintura y caja torácica; top deportivo con breteles anchos y escote, calza
+     hasta el tobillo; brazos y piernas con la rodilla y el codo en arco; cara de
+     frente con el pelo tirado hacia atrás (el rodete asoma arriba). Sirve de pie,
+     sentada de frente, de costado vista de frente y acostada vista desde arriba. */
+  /* medio ancho del tronco según la altura (0 cadera … 0,86 axila) */
+  const TRF = [[-0.02, 14.2], [0.06, 14.4], [0.14, 13.6], [0.22, 12.0], [0.3, 10.7], [0.38, 10.1], [0.46, 10.2], [0.56, 10.9], [0.66, 11.6], [0.76, 12.0], [0.86, 12.4]];
+  /* miembros de frente: [t, lado de afuera, lado de adentro] */
+  const PERF_F = {
+    muslo:  [[0, 7.0, 5.6], [0.18, 6.6, 5.8], [0.45, 5.6, 5.2], [0.75, 4.8, 4.6], [1, 4.4, 4.0]],
+    pierna: [[0, 4.4, 4.0], [0.22, 4.4, 4.3], [0.48, 3.6, 3.7], [0.8, 2.8, 2.6], [1, 2.5, 2.3]],
+    brazo:  [[0, 4.6, 4.0], [0.2, 4.5, 3.9], [0.5, 3.8, 3.4], [0.85, 3.2, 3.0], [1, 3.0, 2.9]],
+    ante:   [[0, 3.0, 2.9], [0.25, 3.2, 3.0], [0.6, 2.6, 2.4], [1, 2.0, 1.9]]
+  };
+  /* mano vista de canto (del lado del pulgar) y pie de frente: x hacia la punta */
+  const MANO_F = [[0, -1.9], [2.5, -2.1], [5, -1.9], [7.5, -1.3], [9.2, -0.5], [9.6, 0.3], [8.6, 1.1], [6.4, 1.6], [5.6, 2.4], [3.8, 3.0], [1.6, 2.6], [0, 2.0]];
+  const PIE_F = [[-1.5, -2.5], [1, -2.7], [4, -2.6], [7.5, -2.5], [10.5, -2.4], [12.6, -1.9], [13.9, -0.8], [14.1, 0.4], [13.2, 1.7], [10.5, 2.4], [7, 2.4], [3.5, 2.4], [1, 2.6], [-1.5, 2.3], [-2.6, 0]];
+  /* contorno de un miembro de dos huesos visto de frente: el lado del pliegue con su
+     corte y el lado convexo con el arco de la rodilla o del codo */
+  function miembroFrente(raiz, medio, fin, pA, pB, afuera, rArco, wPliegue) {
+    const uA = unit(raiz, medio), uB = unit(medio, fin);
+    const n = { x: uA.y, y: -uA.x }, sg = (n.x * afuera.x + n.y * afuera.y) >= 0 ? 1 : -1;
+    const tab = T => T.map(([t, o, i]) => (sg > 0 ? [t, o, i] : [t, i, o]));
+    const prox = sg2 => ladoHueso(raiz, medio, tab(pA), sg2).map(p => ({ ...p, h: 0 }));
+    const A1 = prox(1), A2 = prox(-1);
+    const B1 = ladoHueso(medio, fin, tab(pB), 1), B2 = ladoHueso(medio, fin, tab(pB), -1);
+    const giro = uA.x * uB.y - uA.y * uB.x, ang = grad(Math.asin(Math.max(-1, Math.min(1, giro))));
+    const flex = Math.abs(ang) < 2 && uA.x * uB.x + uA.y * uB.y > 0 ? 0 : grad(Math.acos(Math.max(-1, Math.min(1, uA.x * uB.x + uA.y * uB.y))));
+    /* giro > 0: el hueso distal dobla hacia −n (ahí el pliegue) */
+    let L1, L2;
+    if (giro > 0) { L1 = [...A1, ...arco(medio, uA, uB, rArco, 1), ...B1.slice(1)]; L2 = articular(A2, B2, medio, uA, uB, flex, wPliegue, -1); }
+    else { L2 = [...A2, ...arco(medio, uA, uB, rArco, -1), ...B2.slice(1)]; L1 = articular(A1, B1, medio, uA, uB, flex, wPliegue, 1); }
+    return { L1, L2, uA, sg };
+  }
+  const PIERNA_CALZA = PERF_F.pierna.filter(([t]) => t <= 0.8).concat([[0.88, 2.65, 2.45]]);
+  /* sentada vista de frente (persp): la pierna viene hacia quien mira, así que se ve
+     más ancha cerca del pie (perspectiva) */
+  const acercar = (T, t0, t1, k) => T.map(([t, o, i]) => { const z = 1 + k * (t0 + (t1 - t0) * t); return [t, o * z, i * z]; });
+  function piernaFrente(m, col, H, persp = false) {
+    const afuera = { x: m.raiz.x - H.x, y: m.raiz.y - H.y }, z = persp ? 0.7 : 0;
+    const { L1, L2, uA } = miembroFrente(m.raiz, m.rod, m.tobillo, acercar(PERF_F.muslo, 0, 0.5, z), acercar(PIERNA_CALZA, 0.5, 1, z), afuera, 4.4 * (1 + z * 0.5), 4.2);
+    const tob = unit(m.rod, m.tobillo), nT = { x: tob.y, y: -tob.x };
+    const enT = (t, w) => ({ x: m.rod.x + (m.tobillo.x - m.rod.x) * t + nT.x * w, y: m.rod.y + (m.tobillo.y - m.rod.y) * t + nT.y * w });
+    const calza = [...tapa(m.raiz, uA, 5.8, 5.8), ...L1, ...[...L2].reverse()];
+    /* tobillo y pie descalzos (debajo de la calza) */
+    /* con perspectiva, el pie flexionado muestra la planta hacia quien mira (dedos arriba) */
+    const zp = 1 + z, pie = persp ? enMarco(m.tobillo, -90, 1, [[-1.2, -2.6], [3, -3.2], [7.5, -3.6], [10.6, -3.0], [12.2, -1.2], [12.4, 0.8], [11, 2.8], [7.5, 3.3], [3, 2.8], [-1.2, 2.4]].map(([x, y]) => [x * zp, y * zp]))
+      : enMarco(m.tobillo, m.aPie, m.e[2], PIE_F);
+    const tobillo = [enT(0.78, 2.8 * zp), enT(1, 2.4 * zp), ...pie, enT(1, -2.3 * zp), enT(0.78, -2.7 * zp)];
+    /* rótula: un arco apenas marcado si la rodilla está casi estirada */
+    const l = persp ? [-2.1, -0.7, 0.7, 2.1].map(d => linea(enMarco(m.tobillo, -90, 1, [[9.6 * zp, d * zp], [11.6 * zp, d * zp * 1.05]]), col, 0.3)) : [];
+    const fx = Math.abs(n180(grad(Math.atan2(tob.y, tob.x)) - grad(Math.atan2(uA.y, uA.x))));
+    if (fx < 25) { const r = enT(0.02, 0); l.push(`<ellipse cx="${f1(r.x)}" cy="${f1(r.y)}" rx="2.3" ry="2.7" transform="rotate(${f1(grad(Math.atan2(tob.y, tob.x)) - 90)} ${f1(r.x)} ${f1(r.y)})" fill="none" style="stroke:${col.fino}" stroke-width=".4"/>`); }
+    return { f: [forma(cerrar(tobillo), col.piel), forma(cerrar(calza), col.calza)], l };
+  }
+  function brazoFrente(m, col, S) {
+    const { L1, L2, uA, sg } = miembroFrente(m.raiz, m.codo, m.muneca, PERF_F.brazo, PERF_F.ante, { x: m.raiz.x - S.x, y: m.raiz.y - S.y }, 3.0, 2.8);
+    const raiz = tapa(m.raiz, uA, 3.7, 3.7);
+    const mano = enMarco(m.muneca, m.aM, m.e[2], MANO_F, sg);
+    const forma1 = forma(cerrar([...raiz, ...L1, ...[...L2].reverse()]), col.piel), forma2 = forma(cerrar(mano), col.piel);
+    /* el borde arranca debajo del hombro: así no aparece una línea sobre el deltoides */
+    const desde = L => L.filter(p => p.h !== 0 || p.t >= 0.22);
+    const lados = [desde(L1), desde(L2)];
+    const borde = lados.map(L => `<path d="M${suave(L)}" fill="none" style="stroke:${col.linea}" stroke-width="1.1" stroke-linecap="round"/>`).join('');
+    const bordeMano = `<path d="${forma2.d}" style="fill:${col.linea};stroke:${col.linea}" stroke-width="1.1" stroke-linejoin="round"/>`;
+    return { borde: borde + bordeMano, f: [forma1, forma2], l: [linea(enMarco(m.muneca, m.aM, m.e[2], [[5.8, 1.5], [3.6, 1.2]], sg), col, 0.25)] };
+  }
+  function troncoFrente(E, col, aire, piso) {
+    const P = E.col, ejes = [];
+    for (let i = 0; i < 4; i++) for (let k = 0; k < 6; k++) {
+      const t = k / 6, p0 = P[Math.max(0, i - 1)], p1 = P[i], p2 = P[i + 1], p3 = P[Math.min(4, i + 2)];
+      const t2 = t * t, t3 = t2 * t, cr = (a, b, c, d) => 0.5 * (2 * b + (-a + c) * t + (2 * a - 5 * b + 4 * c - d) * t2 + (-a + 3 * b - 3 * c + d) * t3);
+      ejes.push({ x: cr(p0.x, p1.x, p2.x, p3.x), y: cr(p0.y, p1.y, p2.y, p3.y) });
+    }
+    ejes.push(P[4]);
+    let largo = 0; const acum = [0];
+    for (let i = 1; i < ejes.length; i++) { largo += Math.hypot(ejes[i].x - ejes[i - 1].x, ejes[i].y - ejes[i - 1].y); acum.push(largo); }
+    const N = ejes.length, k = E.anch, a = aire - 0.5;
+    const nor = i => { const u = unit(ejes[Math.max(0, i - 1)], ejes[Math.min(N - 1, i + 1)]); return { x: u.y, y: -u.x, u }; };
+    /* lado + (hacia bc y pc) y lado − */
+    const lado = sg => ejes.map((p, i) => {
+      const s = acum[i] / largo, q = nor(i);
+      let w = enPerfil(TRF, s) * k;
+      if (s > 0.5 && s < 0.9) w *= 1 + 0.04 * a * Math.sin((s - 0.5) / 0.4 * Math.PI);
+      return { x: p.x + q.x * w * sg, y: p.y + q.y * w * sg, s };
+    }).filter(p => p.s <= 0.86);
+    const q0 = nor(0), H0 = ejes[0], u0 = q0.u, qN = nor(N - 1), uN = qN.u, S = ejes[N - 1];
+    const abajo = (aa, w) => ({ x: H0.x + u0.x * aa + q0.x * w * k, y: H0.y + u0.y * aa + q0.y * w * k });
+    const arriba = (aa, w) => ({ x: S.x + uN.x * aa + qN.x * w * k, y: S.y + uN.y * aa + qN.y * w * k });
+    const uC = unit(S, E.C), nC = { x: uC.y, y: -uC.x };
+    const cuello = (t, w) => ({ x: S.x + (E.C.x - S.x) * t + nC.x * w, y: S.y + (E.C.y - S.y) * t + nC.y * w });
+    const hombro = sg => [arriba(-1.6, 13.4 * sg), arriba(0.4, 12.2 * sg), arriba(1.8, 9.2 * sg), arriba(2.9, 6.4 * sg)];
+    const pelvis = sg => [abajo(-1, 14.2 * sg), abajo(-4.5, 12.6 * sg), abajo(-7, 8.5 * sg), abajo(-8.2, 2.5 * sg)];
+    const apl = p => (piso == null ? p : p.y > piso + 0.5 ? { ...p, y: piso + 0.5 } : p.y > piso - 1 ? { ...p, y: piso } : p);
+    const Lm = lado(1), Lp = lado(-1);
+    const contorno = [...[...pelvis(1)].reverse(), ...Lm, ...hombro(1), cuello(0.25, 3.7), cuello(0.6, 3.3), cuello(0.9, 3.2), cuello(0.9, -3.2), cuello(0.6, -3.3), cuello(0.25, -3.7), ...[...hombro(-1)].reverse(), ...[...Lp].reverse(), ...pelvis(-1), abajo(-8.4, 0)].map(apl);
+    /* top: breteles anchos, escote redondo; abajo llega a la cintura de la calza */
+    const top = sg => [arriba(-3.4, 11.4 * sg), arriba(-1.2, 10.2 * sg), arriba(1.4, 10.0 * sg), arriba(2.6, 7.2 * sg), arriba(0.4, 6.6 * sg), arriba(-2.6, 4.8 * sg), arriba(-4.6, 2.2 * sg)];
+    const desde = L => L.filter(p => p.s >= 0.27);
+    const topF = [...[...desde(Lm)], ...top(1), arriba(-5.0, 0), ...[...top(-1)].reverse(), ...[...desde(Lp)].reverse()].map(apl);
+    const corte = 0.3, hasta = L => L.filter(p => p.s <= corte);
+    const cm = hasta(Lm), cp = hasta(Lp);
+    const calza = [...[...pelvis(1)].reverse(), ...cm.slice(0, -1), { ...cm[cm.length - 1], esq: true }, { ...cp[cp.length - 1], esq: true }, ...[...cp.slice(0, -1)].reverse(), ...pelvis(-1), abajo(-8.4, 0)].map(apl);
+    const c0 = cm[cm.length - 1], c1 = cp[cp.length - 1];
+    const l = [`<path d="M${f1(c0.x)},${f1(c0.y)} L${f1(c1.x)},${f1(c1.y)}" style="stroke:${col.fino}" stroke-width=".4"/>`,
+      /* escote y sisas */
+      linea([arriba(2.6, 7.2), arriba(0.4, 6.6), arriba(-2.6, 4.8), arriba(-4.6, 2.2), arriba(-5.0, 0), arriba(-4.6, -2.2), arriba(-2.6, -4.8), arriba(0.4, -6.6), arriba(2.6, -7.2)], col, 0.4),
+      ...[1, -1].map(sg => linea([desde(sg > 0 ? Lm : Lp).slice(-1)[0], arriba(-3.4, 11.4 * sg), arriba(-1.2, 10.2 * sg), arriba(1.4, 10.0 * sg)], col, 0.35)),
+      /* busto sostenido (el pliegue de abajo) y clavículas */
+      ...[1, -1].map(sg => linea([arriba(-17.2, 1.4 * sg), arriba(-18.4, 4.6 * sg), arriba(-17.6, 8.0 * sg), arriba(-15.6, 10.0 * sg)], col, 0.4)),
+      ...[1, -1].map(sg => linea([arriba(-0.9, 1.9 * sg), arriba(-0.5, 3.8 * sg), arriba(-0.2, 5.6 * sg)], col, 0.35)),
+      /* cuello: los esternocleidomastoideos, apenas */
+      ...[1, -1].map(sg => linea([cuello(0.62, 2.5 * sg), cuello(0.3, 1.6 * sg), cuello(0.08, 0.9 * sg)], col, 0.3))];
+    return { f: [forma(cerrar(contorno), col.piel), forma(cerrar(topF), col.top), forma(cerrar(calza), col.calza)], l };
+  }
+  function cabezaFrente(E, col) {
+    const c = E.C, up = E.arriba, lado = { x: up.y, y: -up.x }, g = E.g || 0;
+    const P = ([x, y]) => ({ x: c.x + lado.x * x + up.x * y, y: c.y + lado.y * x + up.y * y });
+    const espejo = xs => [...xs, ...xs.slice(1, -1).reverse().map(([x, y]) => [-x, y])];
+    const cara = espejo([[0, -9.6], [3.4, -8.8], [5.8, -6.4], [6.9, -3], [7.2, 0.8], [6.9, 4.4], [5.6, 7.6], [3.2, 9.5], [0, 10.1]]).map(P);
+    const pelo = [[7.6, 0.6], [7.7, 4.4], [6.4, 8.0], [3.6, 10.3], [0, 10.9], [-3.6, 10.3], [-6.4, 8.0], [-7.7, 4.4], [-7.6, 0.6], [-6.6, 1.6], [-6.0, 4.4], [-4.2, 6.4], [-1.4, 6.9], [0.6, 6.4], [3.4, 6.6], [5.6, 5.2], [6.6, 2.6]].map(P);
+    const rodete = P([0, 8.6]);
+    const orejas = [-1, 1].map(sg => elipse(P([sg * 7.0, 0.2]), up, 2.4, 1.5, col.piel));
+    /* rasgos: se corren con el giro de la cabeza */
+    const R = ([x, y]) => P([x + g * 2.6, y]);
+    const ojo = sg => [[-1.25, 0], [0, 0.62], [1.25, 0.05], [0, -0.45]].map(([x, y]) => R([sg * 2.75 + x, 0.4 + y]));
+    const l = [];
+    for (const sg of [-1, 1]) {
+      const o = ojo(sg), ir = R([sg * 2.75, 0.45]);
+      l.push(`<path d="M${suave([...o, o[0]])}" fill="${col.blanco || '#fff'}" stroke="${col.tinta}" stroke-width=".3"/><circle cx="${f1(ir.x)}" cy="${f1(ir.y)}" r=".55" fill="${col.ojo || '#222'}"/>`);
+      l.push(`<path d="M${suave(o.slice(0, 3))}" fill="none" stroke="${col.ojo || '#222'}" stroke-width=".5" stroke-linecap="round"/>`);
+      l.push(`<path d="M${suave([[-1.4, 1.75], [0.1, 2.25], [1.5, 1.95]].map(([x, y]) => R([sg * 2.75 + x * sg, y])))}" fill="none" style="stroke:${col.pelo}" stroke-width=".75" stroke-linecap="round"/>`);
+    }
+    l.push(`<path d="M${suave([[0.35, -0.6], [0.75, -2.9], [0.1, -3.6], [-0.6, -3.35]].map(R))}" fill="none" stroke="${col.tinta}" stroke-width=".35" stroke-linecap="round"/>`);
+    l.push(`<path d="M${suave([[-2.0, -5.6], [-0.9, -5.15], [0, -5.35], [0.9, -5.15], [2.0, -5.6], [0, -5.9]].map(R))} Z" style="fill:${col.labio}" opacity=".8"/><path d="M${suave([[-1.9, -5.7], [0, -5.9], [1.9, -5.7], [0, -6.95]].map(R))} Z" style="fill:${col.labio}" opacity=".6"/>`);
+    l.push(...[[[-3.6, 9.4], [-5.2, 7.0], [-6.6, 3.6]], [[1.2, 10.4], [3.8, 8.6], [5.8, 5.0]], [[-1.0, 10.5], [-1.8, 8.8], [-3.0, 7.1]]].map(m => `<path d="M${suave(m.map(P))}" fill="none" stroke="rgba(255,255,255,.14)" stroke-width=".5"/>`));
+    return {
+      f: [{ d: `M${f1(rodete.x + 3.8)},${f1(rodete.y)} A3.8,3.8 0 1 0 ${f1(rodete.x - 3.8)},${f1(rodete.y)} A3.8,3.8 0 1 0 ${f1(rodete.x + 3.8)},${f1(rodete.y)} Z`, fill: col.pelo },
+        ...orejas,
+        forma(cerrar(cara), col.piel), forma(cerrar(pelo), col.pelo)], l };
+  }
+  /* capas: piernas, tronco y cuello forman una sola silueta (sin costuras); la cabeza
+     y cada brazo llevan su contorno. orden decide qué brazo queda detrás (por ejemplo,
+     la mano bajo la cabeza de costado o detrás de la nuca) */
+  function dibujoFrente(E, fantasma, orden, aire, piso = null, persp = false) {
+    const c1 = ANAT.cerca;
+    const P = { PC: piernaFrente(E.seg.pc, c1, E.H, persp), PL: piernaFrente(E.seg.pl, c1, E.H, persp), T: troncoFrente(E, c1, aire ?? 0.5, piso), C: cabezaFrente(E, c1), BC: brazoFrente(E.seg.bc, c1, E.S), BL: brazoFrente(E.seg.bl, c1, E.S) };
+    const seq = orden || ['PL', 'PC', 'T', 'C', 'BL', 'BC'];
+    const capas = [];
+    for (const k of seq) {
+      const grupo = k === 'PL' || k === 'PC' || k === 'T' ? 'cuerpo' : k;
+      const ult = capas[capas.length - 1];
+      if (ult && ult.g === grupo) ult.ks.push(k); else capas.push({ g: grupo, ks: [k] });
+    }
+    const svg = capas.map(({ ks }) => {
+      /* el tronco abajo y las piernas encima: los bordes que coinciden (pelvis) quedan tapados */
+      ks.sort((a, b) => (b === 'T') - (a === 'T'));
+      const fs = ks.flatMap(k => P[k].f), bordes = ks.map(k => P[k].borde || P[k].f.map(x => `<path d="${x.d}" style="fill:${c1.linea};stroke:${c1.linea}" stroke-width="1.1" stroke-linejoin="round"/>`).join('')).join('');
+      return `<g>${bordes}${fs.map(x => `<path d="${x.d}" style="fill:${x.fill}"/>`).join('')}${ks.flatMap(k => P[k].l).join('')}</g>`;
+    }).join('');
+    return `<g class="${fantasma ? 'fig-fantasma' : 'fig-cuerpo'}">${svg}</g>`;
+  }
+
   /* sombra en el mat bajo lo que está apoyado: ayuda a leer el contacto */
-  function sombra(E) {
-    const pts = contorno(E).filter(p => p.y > PISO - 5);
+  function sombra(E, piso = PISO) {
+    const pts = contorno(E).filter(p => p.y > piso - 5);
     if (!pts.length) return '';
     const x0 = Math.min(...pts.map(p => p.x)), x1 = Math.max(...pts.map(p => p.x));
-    return `<ellipse cx="${f1((x0 + x1) / 2)}" cy="${PISO + 1}" rx="${f1((x1 - x0) / 2 + 5)}" ry="2.6" class="fig-sombra"/>`;
+    return `<ellipse cx="${f1((x0 + x1) / 2)}" cy="${piso + 1}" rx="${f1((x1 - x0) / 2 + 5)}" ry="2.6" class="fig-sombra"/>`;
   }
 
   /* ---------- encuadre y salida ---------- */
@@ -5584,11 +5782,12 @@ const FIGURA = (() => {
       ? `<g class="fig-silla"><rect x="${f1(E.H.x - 16)}" y="${f1(E.H.y + 12)}" width="30" height="5" rx="2"/><rect x="${f1(E.H.x - 14)}" y="${f1(E.H.y + 16)}" width="4" height="${f1(PISO - E.H.y - 16)}"/><rect x="${f1(E.H.x + 8)}" y="${f1(E.H.y + 16)}" width="4" height="${f1(PISO - E.H.y - 16)}"/><rect x="${f1(E.H.x - 18)}" y="${f1(E.H.y - 30)}" width="4" height="46" rx="2"/></g>` : '';
     const est = (ej.estilo || ESTILO) === 'anatomico', arriba = ej.camara === 'arriba';
     /* de costado visto desde arriba se ve la silueta sagital: es el mismo dibujo que de perfil */
-    const anat = est && !E.fr;
-    const cuerpo = est && arriba && E.fr ? dibujoArriba(E, fantasma, aire) : anat ? dibujoAnat(E, fantasma, ej.orden, aire, !arriba && !ej.persp ? PISO : null) : dibujo(E, fantasma, ej.orden, aire);
+    const anat = est && !E.fr, desdeArriba = est && arriba && E.fr && E.kt < 0.5;
+    const piso = !arriba && !ej.persp ? PISO : null;
+    const cuerpo = desdeArriba ? dibujoArriba(E, fantasma, aire) : est && E.fr ? dibujoFrente(E, fantasma, ej.orden, aire, piso, !!ej.persp) : anat ? dibujoAnat(E, fantasma, ej.orden, aire, piso) : dibujo(E, fantasma, ej.orden, aire);
     /* desde arriba, la sombra del cuerpo en el mat ayuda a leer qué está apoyado y qué no */
     const sombraArr = est && arriba && !fantasma ? `<g class="fig-sombra-arriba" transform="translate(2.2 3)" fill="rgba(36,22,44,.15)" aria-hidden="true">${cuerpo.replace(/<(ellipse|circle)[^>]*\/>/g, '').replace(/<path d="([^"]*)"[^>]*\/>/g, (m, d) => (/fill="none"/.test(m) ? '' : `<path d="${d}"/>`))}</g>` : '';
-    return (fantasma || arriba ? '' : sombra(E)) + silla + sombraArr + cuerpo;
+    return (fantasma || arriba ? '' : sombra(E, ej.persp ? PISO_P : PISO)) + silla + sombraArr + cuerpo;
   }
   function fondo(ej) {
     if (ej.camara === 'arriba' && (ej.estilo || ESTILO) === 'anatomico') return '';
@@ -5639,7 +5838,7 @@ const FIGURA = (() => {
   function capaFisica(ej, r, enc) {
     if (ej.camara === 'arriba') return '';
     const E = mover(r.E, enc.cx, enc.cy), cm = centroMasa(E);
-    const piso = ej.persp ? PISO - 24 : PISO;
+    const piso = ej.persp ? PISO_P : PISO;
     const toca = contorno(E).filter(p => p.y >= piso - 1.5);
     let base = '', ok = true;
     if (toca.length) {
@@ -5837,7 +6036,8 @@ const POSES = (() => {
   const PRONO = { tr: 0, fl: 0, cab: 0, bc: [178, 0, 0], bl: [179, 0, 0], pc: [180, 0, 90], pl: [180, 0, 90], apoyo: ['pelvis', 'tronco', 'puntaC', 'puntaL'] };
   const SENTADO = { tr: -90, fl: 0, cab: 0, bc: [95, 10, 0], bl: [97, 10, 0], pc: [0, 0, -5], pl: [0, 0, -5], apoyo: ['pelvis', 'talonC', 'talonL', 'manoC', 'manoL'] };
   const CUADRUPEDIA = { tr: -15, fl: 0, cab: 0, bc: [90, 0, 0], bl: [91, 0, 0], pc: [90, 90, 90], pl: [91, 90, 90], apoyo: ['rodillaC', 'rodillaL', 'manoC', 'manoL'] };
-  const PLANCHA = { tr: -12, fl: 0, cab: 0, bc: [82, 0, 0], bl: [83, 0, 0], pc: [168, 0, 22], pl: [168, 0, 22], apoyo: ['manoC', 'manoL', 'puntaC', 'puntaL'] };
+  /* plancha: brazos estirados bajo los hombros y el cuerpo en una línea de la cabeza a los talones */
+  const PLANCHA = { tr: -19, fl: 0, cab: 0, bc: [81, 0, 0], bl: [82, 0, 0], pc: [160, 0, 40], pl: [160, 0, 40], apoyo: ['manoC', 'manoL', 'puntaC', 'puntaL'] };
   const PL_SUPINA = { tr: -165, fl: 0, cab: 6, bc: [95, 0, 0], bl: [96, 0, 0], pc: [14, 0, 70], pl: [15, 0, 70], apoyo: ['manoC', 'manoL', 'talonC', 'talonL'] };
   /* abdominal: cabeza y espalda alta despegadas hasta la punta de los omóplatos;
      la lumbar y la torácica baja siguen en el mat (la curva va arriba) */
@@ -5846,10 +6046,14 @@ const POSES = (() => {
   const V = { tr: -128, fl: 12, cab: 4, bc: [-50, 0, 0], bl: [-49, 0, 0], pc: [-55, 0, 85], pl: [-54, 0, 85], apoyo: ['pelvis'] };
   /* de costado, vista de frente: lado C = el de abajo */
   const COSTADO = { tr: -166, fl: 0, cab: 6, bc: [165, -100, 0], bl: [95, 0, 0], pc: [2, 0, 90], pl: [10, 0, 90], k: { pc: [1, 1, 0.5], pl: [1, 1, 0.5] }, ik: { bc: 'sien' }, apoyo: ['pelvis', 'tronco', 'manoL'] };
-  /* de costado, vista desde arriba (patadas adelante y atrás) */
-  const COSTADO_ARRIBA = { tr: 180, fl: 0, cab: 0, bc: [180, 100, 0], bl: [-95, 0, 0], pc: [-15, 0, 85], pl: [-12, 0, 85], k: { bc: [1, 0.4, 1], bl: [0.8, 0.8, 1] } };
-  /* sentado visto de frente: piernas hacia quien mira */
-  const SENTADO_FRENTE = { tr: -90, fl: 0, cab: 0, bc: [178, 0, 0], bl: [2, 0, 0], pc: [114, 0, -100], pl: [66, 0, -100], k: { pc: [0.55, 0.6, 1.1], pl: [0.55, 0.6, 1.1] }, apoyo: ['pelvis'] };
+  /* de costado, vista desde arriba: se ve la silueta sagital (el frente del cuerpo hacia
+     arriba de la imagen). Tronco en línea con el borde posterior del mat, caderas
+     flexionadas para que los pies lleguen al borde anterior. Brazo de abajo: el codo en
+     el mat más allá de la cabeza y la cabeza en la mano (el antebrazo en escorzo); brazo
+     de arriba: la mano apoyada en el mat delante del pecho. Patea la pierna de arriba (pc). */
+  const COSTADO_ARRIBA = { tr: 180, fl: 0, cab: 0, bc: [-74, 12, 6], bl: [180, 160, 0], pc: [-34, 0, 82], pl: [-37, 0, 84], k: { bc: [0.34, 0.6, 0.9], bl: [1.1, 0.28, 0.5] } };
+  /* sentado visto de frente: piernas hacia quien mira (muy en escorzo: se acercan) */
+  const SENTADO_FRENTE = { tr: -90, fl: 0, cab: 0, bc: [178, 0, 0], bl: [2, 0, 0], pc: [118, 0, -100], pl: [62, 0, -100], k: { pc: [0.36, 0.4, 1.1], pl: [0.36, 0.4, 1.1] }, apoyo: ['pelvis'] };
   /* Roll Over: apoyo en los omóplatos (nunca en el cuello), la pelvis apilada
      sobre los hombros y las piernas paralelas al piso por encima de la cabeza;
      la flexión se concentra en la torácica alta, que queda casi en el mat */
@@ -5859,6 +6063,9 @@ const POSES = (() => {
   const VERTICAL = { tr: 96, fl: 90, cur: TOP, cab: 18, bc: [0, 0, 0], bl: [1, 0, 0], pc: [-90, 0, 88], pl: [-89, 0, 88], apoyo: ['hombros', 'manoC', 'manoL'] };
   const VERTICAL_MANOS = X(VERTICAL, { ik: { bc: 'pelvis', bl: 'pelvis' }, apoyo: ['hombros'] });
   /* plancha lateral, vista de frente (lado C = brazo de apoyo, abajo) */
+  /* de frente, el brazo cercano (bc) va detrás de la cabeza: la mano bajo la sien
+     acostada de costado, o en la nuca */
+  const DEBAJO = ['BC', 'PL', 'PC', 'T', 'C', 'BL'];
   const PL_LATERAL = { tr: -160, fl: 0, cab: 0, bc: [90, 0, 0], bl: [-90, 0, 0], pc: [19, 0, 90], pl: [21, 0, 90], k: { pc: [1, 1, 0.5], pl: [1, 1, 0.5] }, apoyo: ['manoC', 'pieC', 'pieL'] };
 
   const P = {};
@@ -5876,7 +6083,7 @@ const POSES = (() => {
   ej('pos-4-puntos', '4 puntos (cuadrupedia)', {}, [CUADRUPEDIA]);
   ej('pos-plancha', 'Plancha prona', {}, [PLANCHA]);
   ej('pos-plancha-supina', 'Plancha supina', {}, [PL_SUPINA]);
-  ej('pos-lateral', 'Decúbito lateral', { vista: 'frente' }, [COSTADO]);
+  ej('pos-lateral', 'Decúbito lateral', { vista: 'frente', orden: DEBAJO }, [COSTADO]);
   ej('pos-rodillas', 'De rodillas', {}, [{ tr: -90, fl: 0, cab: 0, bc: [90, 5, 0], bl: [92, 5, 0], pc: [87, 101, 90], pl: [88, 101, 90], apoyo: ['rodillaC', 'rodillaL'] }]);
 
   /* ================= MAT 1 ================= */
@@ -5895,13 +6102,24 @@ const POSES = (() => {
     X(MESA, { ...CURL, bc: [4, 0, 0], bl: [3, 0, 0], pc: [-42, 0, 80], pl: [-41, 0, 80], apoyo: ['pelvis'], s: 4, dur: 500, pausa: 60 }),
     X(MESA, { ...CURL, bc: [16, 0, 0], bl: [15, 0, 0], pc: [-42, 0, 80], pl: [-41, 0, 80], apoyo: ['pelvis'], s: 4, dur: 500, pausa: 60 })
   ]);
-  const RU0 = X(SUPINO_FLEX, { bc: [-172, 0, 0], bl: [-171, 0, 0], apoyo: ['pelvis', 'tronco', 'talonC', 'talonL'] });
+  /* Roll Up — brazos por encima de la cabeza solo hasta donde las costillas bajas
+     siguen en el mat (no apoyados); piernas juntas, pies en punta suave */
+  const RU0 = { tr: 180, fl: 0, cab: 0, bc: [-158, 0, 0], bl: [-157, 0, 0], pc: [1, 0, 30], pl: [1, 0, 30], apoyo: ['pelvis', 'tronco', 'talonC', 'talonL'] };
+  const PIES_FLEX = { pc: [1, 0, -10], pl: [1, 0, -10] };
   ej('mat1-e03', 'The Roll Up', {}, [
     RU0,
-    X(RU0, { ...CURL, bc: [-80, 8, 0], bl: [-79, 8, 0], apoyo: ['pelvis', 'talonC', 'talonL'], s: 1 }),
-    X(RU0, { tr: -38, fl: 80, cab: 25, bc: [8, 0, 0], bl: [9, 0, 0], apoyo: ['pelvis', 'talonC', 'talonL'], s: 2, dur: 1900 }),
-    X(RU0, { tr: -112, fl: 85, cab: 25, bc: [0, 0, 0], bl: [1, 0, 0], apoyo: ['pelvis', 'talonC', 'talonL'], s: 3 }),
-    X(RU0, { s: 4, dur: 1700 })
+    /* 1 · inhala: brazos al techo, pies flexionados (el talón se desliza un poco), la cabeza asiente… */
+    X(RU0, { bc: [-90, 0, 0], bl: [-89, 0, 0], ...PIES_FLEX, cab: 10, libre: ['talonC', 'talonL'], s: 1, dur: 1300 }),
+    /* …y enrolla cabeza y espalda alta */
+    X(RU0, { ...CURL, bc: [-62, 0, 0], bl: [-61, 0, 0], ...PIES_FLEX, apoyo: ['pelvis', 'talonC', 'talonL'], s: 1, dur: 1200 }),
+    /* 2 · exhala: vértebra por vértebra hasta la C sobre las piernas, abrazando una pelota */
+    X(RU0, { tr: -46, fl: 96, cab: 18, bc: [2, 6, 0], bl: [3, 6, 0], ...PIES_FLEX, apoyo: ['pelvis', 'talonC', 'talonL'], s: 2, dur: 2100 }),
+    /* 3 · inhala: abdominales y glúteos redondean la pelvis (retroversión) manteniendo la C */
+    X(RU0, { tr: -104, fl: 92, cab: 22, bc: [-2, 8, 0], bl: [-1, 8, 0], ...PIES_FLEX, apoyo: ['pelvis', 'talonC', 'talonL'], s: 3, dur: 1500 }),
+    /* 4 · exhala: termina de bajar vértebra por vértebra… */
+    X(RU0, { bc: [-90, 0, 0], bl: [-89, 0, 0], ...PIES_FLEX, s: 4, dur: 2100 }),
+    /* …y los brazos vuelven por encima de la cabeza */
+    X(RU0, { libre: ['talonC', 'talonL'], s: 4, dur: 1200 })
   ]);
   const SLC = X(SUPINO, { pc: [-90, 0, 80], pl: [1, 0, 60], apoyo: ['pelvis', 'tronco', 'talonL', 'manoC', 'manoL'] });
   ej('mat1-e04', 'Single Leg Circles', {}, [
@@ -5980,10 +6198,16 @@ const POSES = (() => {
   ]);
   const CODOS_AFUERA = { bc: [0.6, 0.78, 1], bl: [0.6, 0.78, 1] };
   const SWAN0 = X(PRONO, { bc: [-150, 150, 0], bl: [-149, 150, 0], k: CODOS_AFUERA, pc: [180, 0, 85], pl: [180, 0, 85], apoyo: ['pelvis', 'tronco', 'puntaC', 'puntaL', 'manoC', 'manoL'] });
+  /* la extensión se concentra en la torácica; la lumbar acompaña poco */
+  const ARCO = [-0.1, 0.05, 0.35, 0.7];
   ej('mat1-e15', 'Swan', {}, [
     SWAN0,
-    X(SWAN0, { tr: -26, fl: -62, cab: 0, apoyo: ['pelvis', 'puntaC', 'puntaL', 'manoC', 'manoL'], s: 1, dur: 1700 }),
-    X(SWAN0, { s: 2, dur: 1700 })
+    /* 1 · inhala: omóplatos hacia abajo, se alarga la columna y empieza a despegar el esternón… */
+    X(SWAN0, { tr: -6, fl: -24, cur: ARCO, cab: 0, apoyo: ['pelvis', 'puntaC', 'puntaL', 'manoC', 'manoL'], s: 1, dur: 1100 }),
+    /* …empuja el mat y extiende la espalda alta, cabeza en línea, pubis en el mat */
+    X(SWAN0, { tr: -20, fl: -58, cur: ARCO, cab: -4, apoyo: ['pelvis', 'puntaC', 'puntaL', 'manoC', 'manoL'], s: 1, dur: 1500 }),
+    /* 2 · exhala: baja con control */
+    X(SWAN0, { s: 2, dur: 1800 })
   ]);
   const SLK = X(PRONO, { tr: -14, fl: -28, cab: 0, bc: [95, 95, 0], bl: [96, 95, 0], pc: [180, 0, 90], pl: [180, 0, 90], apoyo: ['pelvis', 'antebrazoC', 'antebrazoL', 'puntaC', 'puntaL'] });
   const kickC = f => X(SLK, { pc: [180, f, 90], apoyo: ['pelvis', 'antebrazoC', 'antebrazoL', 'rodillaC', 'puntaL'], s: 1, dur: 550, pausa: 80 });
@@ -6003,33 +6227,39 @@ const POSES = (() => {
     X(SWIM, { bc: [-14, 0, 0], pl: [-168, 0, 90], s: 1, dur: 500, pausa: 40 }),
     X(SWIM, { bl: [-12, 0, 0], pc: [-168, 0, 90], s: 1, dur: 500, pausa: 40 })
   ]);
-  ej('mat1-e19', 'Side Leg Lifts', { vista: 'frente' }, [
+  ej('mat1-e19', 'Side Leg Lifts', { vista: 'frente', orden: DEBAJO }, [
     COSTADO,
     X(COSTADO, { pl: [-16, 0, 90], s: 1 }),
     X(COSTADO, { s: 2 })
   ]);
+  /* la pierna de arriba levantada a la altura de la cadera dibuja un círculo: desde
+     arriba se ve ir adelante y atrás, y acortarse cuando sube (escorzo) */
+  const CIRC = (a, k) => X(COSTADO_ARRIBA, { pc: [a, 0, 84], k: { ...COSTADO_ARRIBA.k, pc: [k, k, 1] } });
   ej('mat1-e20', 'Side Leg Circles (Small & Big)', { camara: 'arriba' }, [
     COSTADO_ARRIBA,
-    X(COSTADO_ARRIBA, { pl: [-45, 0, 75], k: { ...COSTADO_ARRIBA.k, pl: [0.9, 0.9, 1] }, s: 1, dur: 900 }),
-    X(COSTADO_ARRIBA, { pl: [-20, 0, 85], k: { ...COSTADO_ARRIBA.k, pl: [0.82, 0.82, 1] }, s: 2, dur: 900 }),
-    X(COSTADO_ARRIBA, { pl: [8, 0, 90], k: { ...COSTADO_ARRIBA.k, pl: [0.92, 0.92, 1] }, s: 2, dur: 900 })
+    X(CIRC(-46, 0.9), { s: 1, dur: 900 }),
+    X(CIRC(-30, 0.8), { s: 2, dur: 900 }),
+    X(CIRC(-16, 0.92), { s: 2, dur: 900 })
   ]);
   ej('mat1-e21', 'Side Leg Kicks', { camara: 'arriba' }, [
     COSTADO_ARRIBA,
-    X(COSTADO_ARRIBA, { pl: [-50, 0, -10], s: 1, dur: 700 }),
-    X(COSTADO_ARRIBA, { pl: [-62, 0, -10], s: 1, dur: 400, pausa: 60 }),
-    X(COSTADO_ARRIBA, { pl: [28, 0, 90], s: 2, dur: 1100 })
+    /* 1 · inhala: patea al frente con el pie flexionado… */
+    X(COSTADO_ARRIBA, { pc: [-74, 0, -8], s: 1, dur: 800 }),
+    /* …y un segundo pulso, un poco más lejos */
+    X(COSTADO_ARRIBA, { pc: [-86, 0, -12], s: 1, dur: 380, pausa: 70 }),
+    /* 2 · exhala: patea atrás con el pie en punta, sin mover el tronco */
+    X(COSTADO_ARRIBA, { pc: [22, 0, 88], s: 2, dur: 1300 })
   ]);
   ej('mat1-e22', 'Side Leg Bicycle', { camara: 'arriba' }, [
     COSTADO_ARRIBA,
-    X(COSTADO_ARRIBA, { pl: [-55, 95, 80], s: 1 }),
-    X(COSTADO_ARRIBA, { pl: [-55, 0, 85], s: 1 }),
-    X(COSTADO_ARRIBA, { pl: [28, 0, 90], s: 2 }),
-    X(COSTADO_ARRIBA, { pl: [28, 130, 90], s: 2 }),
-    X(COSTADO_ARRIBA, { pl: [-50, 130, 90], s: 2 })
+    X(COSTADO_ARRIBA, { pc: [-70, 95, 80], s: 1 }),
+    X(COSTADO_ARRIBA, { pc: [-74, 0, 85], s: 1 }),
+    X(COSTADO_ARRIBA, { pc: [22, 0, 88], s: 2 }),
+    X(COSTADO_ARRIBA, { pc: [22, 130, 88], s: 2 }),
+    X(COSTADO_ARRIBA, { pc: [-50, 130, 88], s: 2 })
   ]);
   const BAN0 = X(COSTADO, { tr: -172, cab: 0, bc: [180, 0, 0], bl: [0, 0, 0], ik: {}, pc: [0, 0, 90], pl: [8, 0, 90], apoyo: ['pelvis', 'tronco'] });
-  ej('mat1-e23', 'Side Leg Bananas', { vista: 'frente' }, [
+  ej('mat1-e23', 'Side Leg Bananas', { vista: 'frente', orden: DEBAJO }, [
     BAN0,
     X(BAN0, { tr: -174, fl: 18, cab: 4, bc: [-168, 0, 0], bl: [-163, 0, 0], pc: [-16, 0, 90], pl: [-10, 0, 90], apoyo: ['pelvis'], s: 1, dur: 1500 }),
     X(BAN0, { s: 2, dur: 1500 })
@@ -6047,7 +6277,8 @@ const POSES = (() => {
     X(DE_PIE, { bc: [-90, 0, 0], bl: [-88, 0, 0] }),
     X(PU_ROLL, { s: 1, dur: 1800 }),
     X(PLANCHA, { libre: ['manoC', 'manoL'], s: 2, dur: 1800 }),
-    X(PLANCHA, { tr: -4, s: 3 }),
+    /* 3 · baja en bloque (codos flexionados): el cuerpo sigue recto de la cabeza a los talones */
+    X(PLANCHA, { tr: -8, pc: [172, 0, 40], pl: [172, 0, 40], s: 3 }),
     X(PLANCHA, { s: 4 }),
     X(PU_ROLL, { libre: ['manoC', 'manoL'], s: 4, dur: 1800 })
   ]);
@@ -6055,16 +6286,20 @@ const POSES = (() => {
   /* ================= MAT 2 ================= */
   /* sentado visto desde arriba: el tronco en escorzo, piernas hacia abajo de la imagen;
      la rotación se ve como la línea de los hombros y los brazos que gira */
-  const TW = { tr: -90, fl: 0, cab: 0, bc: [180, 0, 0], bl: [0, 0, 0], pc: [94, 0, 90], pl: [86, 0, 90], k: { tronco: 0.14, pc: [1, 1, 0.3], pl: [1, 1, 0.3] } };
-  const girar = g => X(TW, { tr: -90 + g, bc: [180 + g, 0, 0], bl: [g, 0, 0] });
+  /* piernas juntas y estiradas con los pies flexionados (dedos al techo), brazos abiertos a
+     la altura de los hombros. La columna rota sobre la pelvis quieta (rot): giran los
+     hombros, los brazos en línea y la cabeza; las caderas y los pies quedan parejos */
+  const TW = { tr: -90, fl: 0, cab: 0, rot: 0, bc: [180, 0, 0], bl: [0, 0, 0], pc: [86.4, 0, 90], pl: [93.6, 0, 90], k: { tronco: 0.04, pc: [1, 1, 0.32], pl: [1, 1, 0.32] } };
+  const girar = g => X(TW, { rot: g, bc: [180 + g, 0, 0], bl: [g, 0, 0] });
   ej('mat2-e01', 'Spine Twist', { vista: 'frente', camara: 'arriba', matV: true }, [
     TW,
-    X(girar(-38), { s: 1, dur: 900 }),
-    X(girar(-48), { s: 1, dur: 400, pausa: 60 }),
-    X(TW, { s: 2 }),
-    X(girar(38), { s: 1, dur: 900 }),
-    X(girar(48), { s: 1, dur: 400, pausa: 60 }),
-    X(TW, { s: 2 })
+    /* 1 · inhala: rota de un solo movimiento continuo hasta el final del giro */
+    X(girar(-48), { s: 1, dur: 1600 }),
+    /* 2 · exhala: vuelve al centro (ahí cambia la respiración: se detiene antes del otro lado) */
+    X(TW, { s: 2, dur: 1400, alto: true }),
+    /* al otro lado */
+    X(girar(48), { s: 1, dur: 1600 }),
+    X(TW, { s: 2, dur: 1400 })
   ]);
   const MESA_BRAZOS = X(MESA, { bc: [-168, 0, 0], bl: [-167, 0, 0], apoyo: ['pelvis', 'tronco'] });
   ej('mat2-e02', 'Teaser Preparation', {}, [
@@ -6138,12 +6373,12 @@ const POSES = (() => {
   ej('mat2-e13', 'Jackknife', { ancla: 'S' }, [
     X(RO0, { pc: [-90, 0, 88], pl: [-89, 0, 88], apoyo: ['pelvis', 'tronco', 'manoC', 'manoL'] }),
     X(ROLL_OVER, { s: 1, dur: 1800 }),
-    X(ROLL_OVER, { tr: 105, fl: 88, cab: 44, pc: [150, 0, 90], pl: [151, 0, 90], apoyo: ['hombros', 'manoC', 'manoL', 'puntaC', 'puntaL'], s: 2 }),
+    X(ROLL_OVER, { tr: 105, fl: 88, cab: 44, pc: [155, 0, 90], pl: [156, 0, 90], apoyo: ['hombros', 'manoC', 'manoL', 'puntaC', 'puntaL'], s: 2 }),
     X(VERTICAL, { s: 3, dur: 1600 }),
     X(RO0, { tr: 160, fl: 30, cab: 12, pc: [-98, 0, 88], pl: [-97, 0, 88], apoyo: ['manoC', 'manoL'], s: 4, dur: 1900 })
   ]);
   const KSK = { tr: -35, fl: 0, cab: 0, bl: [86, 0, 0], ik: { bc: 'nuca' }, pl: [92, 88, 90], pc: [180, 0, 90], k: { pl: [1, 0.3, 0.3] }, apoyo: ['manoL', 'rodillaL'] };
-  ej('mat2-e14', 'Kneeling Side Kicks', { vista: 'frente' }, [
+  ej('mat2-e14', 'Kneeling Side Kicks', { vista: 'frente', orden: DEBAJO }, [
     KSK,
     X(KSK, { pc: [182, 0, -5], k: { ...KSK.k, pc: [0.72, 0.72, 0.8] }, s: 1 }),
     X(KSK, { pc: [176, 0, 90], k: { ...KSK.k, pc: [0.84, 0.84, 1] }, s: 2 })
@@ -15315,7 +15550,7 @@ function conectarFilasPlan(p) {
       x[k] = k === 'reps' ? (Math.round(+el.value) > 0 ? Math.round(+el.value) : null) : el.value;
       tocar(p);
       if (k === 'reps') $('#plResumen').innerHTML = resumenPlanHTML(p);
-      if (k === 'prop') { const y = window.scrollY; vPlan(p.id); window.scrollTo(0, y); }
+      if (k === 'prop') rehacerPlan(p, `.pl-fila[data-i="${i}"]`);
     });
     const bf = $('.pl-foto', li);
     if (bf) bf.onclick = () => verFoto(fotosDe(x.id), +bf.dataset.foto);
@@ -15324,7 +15559,7 @@ function conectarFilasPlan(p) {
       if (a === 'quita') p.items.splice(i, 1);
       else { const j = a === 'sube' ? i - 1 : i + 1; [p.items[i], p.items[j]] = [p.items[j], p.items[i]]; }
       SND.toque(); tocar(p);
-      const y = window.scrollY; vPlan(p.id); window.scrollTo(0, y);
+      rehacerPlan(p, a === 'quita' ? '#plLista' : `.pl-fila[data-i="${a === 'quita' ? i : a === 'sube' ? i - 1 : i + 1}"]`);
     });
   });
 }
@@ -15340,48 +15575,117 @@ function pintarPoolPlan(p) {
   $$('#plPool .cl-ej').forEach(b => b.onclick = () => {
     p.items.push({ id: b.dataset.id, reps: null, prop: '', nota: '' });
     tocar(p); SND.soltar();
-    const y = window.scrollY; vPlan(p.id); window.scrollTo(0, y);
+    /* lo que se está mirando (el buscador) no se mueve aunque la lista de arriba crezca */
+    rehacerPlan(p, `#plPool [data-id="${b.dataset.id}"]`);
     toast(`Sumado: <b>${esc(ejPlan(b.dataset.id).n)}</b> (n.º ${p.items.length})`, 'toast-suave');
   });
 }
 
 /* ---------------- revisión (los criterios de "Armá tu clase", sin la cantidad del examen) ---------------- */
+/* por qué importa cada elemento del balance (elaboración propia, no texto del manual) */
+const POR_QUE_BALANCE = {
+  flexion: 'trabaja la estabilidad del centro con la columna en flexión',
+  movilidad: 'articula la columna vértebra por vértebra',
+  extension: 'compensa la flexión y fortalece los extensores de la espalda',
+  rotacion: 'suma oblicuos y mueve la columna en rotación o flexión lateral',
+  superior: 'trabaja la estabilidad escapular y la fuerza de brazos',
+  inferior: 'trabaja glúteos, isquiotibiales y aductores con la pelvis estable'
+};
+const nomPos = e => `${POS_CLASE[e.pos].ico} ${POS_CLASE[e.pos].nom}`;
+/* sugerencias del catálogo para un criterio: primero las de posiciones que la sesión ya
+   tiene (no suman transiciones), sin repetir y respetando el foco de osteoporosis */
+function sugerirPlan(p, filtro, n = 3) {
+  const usados = new Set(p.items.map(x => x.id)), posTiene = new Set(p.items.map(x => (ejPlan(x.id) || {}).pos));
+  const osteo = p.focos.some(f => /osteoporosis/i.test(f));
+  return catalogoPlan().filter(e => !usados.has(e.id) && filtro(e) && !(osteo && /evitar/i.test(e.osteo || '')))
+    .sort((a, b) => (posTiene.has(b.pos) - posTiene.has(a.pos)) || (POS_CLASE[a.pos].grupo - POS_CLASE[b.pos].grupo) || (a.f === 'pre') - (b.f === 'pre'))
+    .slice(0, n).map(e => e.id);
+}
+/* dónde entra un ejercicio nuevo: después del último de su grupo de posiciones (orden del manual) */
+function insertarOrdenado(p, id) {
+  const g = POS_CLASE[ejPlan(id).pos].grupo;
+  let k = p.items.length;
+  for (let i = p.items.length - 1; i >= 0; i--) { const e = ejPlan(p.items[i].id); if (e && POS_CLASE[e.pos].grupo <= g) { k = i + 1; break; } if (i === 0) k = 0; }
+  p.items.splice(k, 0, { id, reps: null, prop: '', nota: '' });
+  return k;
+}
 function analizarPlan(p) {
-  const es = p.items.map(x => ({ ...ejPlan(x.id), rep: x.reps })).filter(e => e.id);
-  const out = [], add = (estado, t, d) => out.push({ estado, t, d });
+  const es = p.items.map((x, i) => ({ ...ejPlan(x.id), rep: x.reps, i })).filter(e => e.id);
+  const out = [], add = (estado, t, d, extra = {}) => out.push({ estado, t, d, ...extra });
+  const n = e => `${e.i + 1}. ${e.n}`;
+  /* repeticiones */
   const sinReps = es.filter(e => !(e.rep > 0));
-  add(sinReps.length ? 'aviso' : 'ok', 'Repeticiones',
-    sinReps.length ? `Falta el número en: ${sinReps.map(e => e.n).join(', ')}.` : 'Cada ejercicio tiene su número.');
+  add(sinReps.length ? 'aviso' : 'ok', sinReps.length ? `Repeticiones: faltan en ${sinReps.length} de ${es.length}` : 'Repeticiones',
+    sinReps.length ? `Escribí el número en ${sinReps.map(n).join(', ')}. Un número exacto, no un rango: la casilla muestra lo que indica el material.` : 'Cada ejercicio tiene su número.');
   const fuera = es.filter(e => e.rep > 0 && rangoReps(e.reps) && (e.rep < rangoReps(e.reps)[0] || e.rep > rangoReps(e.reps)[1]));
-  if (fuera.length) add('aviso', 'Fuera de lo que indica el material', fuera.map(e => `${e.n}: ${e.rep} (${e.reps})`).join(' · '));
+  if (fuera.length) add('aviso', 'Repeticiones fuera de lo que indica el material',
+    fuera.map(e => `${n(e)}: pusiste ${e.rep}, el material indica ${e.reps}`).join(' · ') + '. Si es a propósito (una adaptación), anotalo en la nota del ejercicio.');
+  /* orden de posiciones */
   const regresos = []; let fueAtras = null;
-  es.forEach((e, i) => { if (POS_CLASE[e.pos].grupo >= 3 && !fueAtras) fueAtras = e; if (fueAtras && (e.pos === 'supino' || e.pos === 'inversion')) regresos.push(`${i + 1}. ${e.n}`); });
+  es.forEach(e => { if (POS_CLASE[e.pos].grupo >= 3 && !fueAtras) fueAtras = e; if (fueAtras && (e.pos === 'supino' || e.pos === 'inversion')) regresos.push(e); });
   add(regresos.length ? 'mal' : 'ok', 'Orden de posiciones',
-    regresos.length ? `Después de ${fueAtras.n} volvés a supino con: ${regresos.join(', ')}. El manual ordena de pie → cuatro apoyos → supino → sentado → prono → plancha → de costado.` : 'Sigue el orden del manual.');
-  const cambios = es.slice(1).filter((e, i) => e.pos !== es[i].pos).length;
-  add(cambios > Math.max(6, Math.round(es.length / 2.5)) ? 'aviso' : 'ok', `Transiciones: ${cambios} cambios de posición`,
-    cambios > Math.max(6, Math.round(es.length / 2.5)) ? 'Agrupá los ejercicios de la misma posición para que fluya.' : 'Mirá cada "↳" de la lista: así pasa el cuerpo de uno al otro.');
-  const primero = es[0];
-  add(primero && (primero.f === 'pre' || /hundred|breath/i.test(primero.n)) ? 'ok' : 'aviso', 'Calentamiento',
-    primero && (primero.f === 'pre' || /hundred|breath/i.test(primero.n)) ? `Arranca con ${primero.n}.` : 'Conviene arrancar con un Pre-Pilates de activación o respiración, o con el Hundred.');
+    regresos.length ? `${regresos.map(n).join(', ')} ${regresos.length > 1 ? 'vuelven' : 'vuelve'} a supino después de ${n(fueAtras)} (${POS_CLASE[fueAtras.pos].nom.toLowerCase()}). Subilo${regresos.length > 1 ? 's' : ''} con ↑ antes de ${fueAtras.n}: el manual ordena de pie → cuatro apoyos → supino → sentado → prono → plancha → de costado.` : 'Sigue el orden del manual.');
+  /* transiciones */
+  const cambios = es.slice(1).filter((e, i) => e.pos !== es[i].pos), tope = Math.max(6, Math.round(es.length / 2.5));
+  const vueltas = [...new Set(es.map(e => e.pos))].filter(pz => { let bloques = 0; es.forEach((e, i) => { if (e.pos === pz && (i === 0 || es[i - 1].pos !== pz)) bloques++; }); return bloques > 1; });
+  add(cambios.length > tope || vueltas.length ? 'aviso' : 'ok', `Transiciones: ${cambios.length} cambios de posición`,
+    vueltas.length ? `Volvés más de una vez a ${vueltas.map(pz => POS_CLASE[pz].nom.toLowerCase()).join(' y ')}: juntá esos ejercicios en un solo bloque para que la clase fluya.`
+      : cambios.length > tope ? 'Son muchos para la cantidad de ejercicios: agrupá los de la misma posición.' : 'Mirá cada "↳" de la lista: así pasa el cuerpo de uno al otro.');
+  /* calentamiento */
+  const primero = es[0], calienta = primero && (primero.f === 'pre' || /hundred|breath/i.test(primero.n));
+  add(calienta ? 'ok' : 'aviso', 'Calentamiento',
+    calienta ? `Arranca con ${primero.n}.` : `Arranca con ${primero ? primero.n : 'nada'}. Conviene empezar con respiración o activación de Pre-Pilates (o con el Hundred) para preparar el centro; tocá uno para ponerlo primero.`,
+    calienta ? {} : { sug: sugerirPlan(p, e => e.f === 'pre' && /breath|respir|pelvic|imprint|toe tap|clock/i.test(e.n), 3), donde: 'inicio' });
+  /* balance: cada elemento que falta con su porqué y ejercicios que lo cubren */
   const faltan = ELEMENTOS_CLASE.filter(el => !es.some(e => el.re.test(norm(e.n))));
-  add(faltan.length > 1 ? 'aviso' : 'ok', 'Balance', faltan.length ? `Falta: ${faltan.map(f => f.nom.toLowerCase()).join(', ')}.` : 'Tiene flexión, movilidad, extensión, rotación o lateral, tren superior y tren inferior.');
+  if (!faltan.length) add('ok', 'Balance', 'Tiene flexión, movilidad, extensión, rotación o lateral, tren superior y tren inferior.');
+  else faltan.forEach(el => add('aviso', `Balance: falta ${el.nom.toLowerCase()}`,
+    `Ningún ejercicio de la sesión ${POR_QUE_BALANCE[el.k]}.${el.k === 'extension' ? ' Sin extensión la clase queda toda en flexión.' : ''} Por ejemplo:`,
+    { sug: sugerirPlan(p, e => el.re.test(norm(e.n)), 3), donde: 'orden' }));
+  /* osteoporosis */
   if (p.focos.some(f => /osteoporosis/i.test(f))) {
     const ojo = es.filter(e => /evitar/i.test(e.osteo || ''));
-    add(ojo.length ? 'mal' : 'ok', 'Osteoporosis', ojo.length ? `El manual indica evitar: ${ojo.map(e => e.n).join(', ')} (flexión de columna con carga).` : 'Ningún ejercicio marcado para evitar en osteoporosis.');
+    add(ojo.length ? 'mal' : 'ok', 'Osteoporosis', ojo.length ? `El manual indica evitar ${ojo.map(n).join(', ')} (flexión de columna con carga). Quitalos con ✕; podés reemplazarlos por:` : 'Ningún ejercicio marcado para evitar en osteoporosis.',
+      ojo.length ? { sug: sugerirPlan(p, e => /apto/i.test(e.osteo || '') && ojo.some(o => o.pos === e.pos), 3), donde: 'orden' } : {});
   }
+  /* duración */
   const min = duracionPlan(p);
-  if (p.dur) add(min > p.dur + 8 ? 'aviso' : 'ok', `Duración: ≈ ${min} de ${p.dur} min`, min > p.dur + 8 ? 'Se pasa del tiempo buscado.' : min < p.dur - 12 ? 'Sobra tiempo: podés sumar ejercicios o repeticiones.' : 'Entra en el tiempo.');
+  if (p.dur) {
+    const sobra = p.dur - min;
+    add(min > p.dur + 8 ? 'aviso' : 'ok', `Duración: ≈ ${min} de ${p.dur} min`,
+      min > p.dur + 8 ? `Te pasás ≈ ${min - p.dur} min: sacá ${Math.max(1, Math.round((min - p.dur) / 2))} ejercicio${min - p.dur > 3 ? 's' : ''} o bajá repeticiones.`
+        : sobra > 12 ? `Sobran ≈ ${sobra} min: alcanza para ${Math.round(sobra / 2)} ejercicios más (≈ 2 min cada uno) o más repeticiones.` : 'Entra en el tiempo.');
+  }
   return out;
 }
-function revisarPlan(p) {
+function revisarPlan(p, silencio = false) {
   const out = analizarPlan(p), nMal = out.filter(x => x.estado === 'mal').length, nAv = out.filter(x => x.estado === 'aviso').length;
-  $('#plRes').innerHTML = `<div class="cl-res ${nMal ? '' : 'ok'}">
-    <h3>${nMal ? (nMal === 1 ? 'Hay un punto para corregir' : `Hay ${nMal} puntos para corregir`) : nAv ? 'Bien armada, con algunos detalles' : '¡Sesión bien armada!'}</h3>
-    <ul class="cl-check">${out.map(x => `<li class="${x.estado}"><span>${x.estado === 'ok' ? '✓' : x.estado === 'aviso' ? '!' : '✕'}</span><div><b>${esc(x.t)}</b><p>${esc(x.d)}</p></div></li>`).join('')}</ul>
+  $('#plRes').innerHTML = `<div class="cl-res ${nMal ? '' : nAv ? 'detalles' : 'ok'}">
+    <h3>${nMal ? (nMal === 1 ? 'Hay un punto para corregir' : `Hay ${nMal} puntos para corregir`) : nAv ? `Bien armada: ${nAv === 1 ? 'un detalle' : nAv + ' detalles'} para mejorar` : '¡Sesión bien armada!'}</h3>
+    <ul class="cl-check">${out.map(x => `<li class="${x.estado}"><span>${x.estado === 'ok' ? '✓' : x.estado === 'aviso' ? '!' : '✕'}</span><div><b>${esc(x.t)}</b><p>${esc(x.d)}</p>${x.sug && x.sug.length ? `<div class="pl-sug">${x.sug.map(id => { const e = ejPlan(id); return `<button type="button" data-sumar="${id}" data-donde="${x.donde}">＋ ${esc(e.n)} <small>${nomPos(e)} · ${fuenteNom(e.f)}</small></button>`; }).join('')}</div>` : ''}</div></li>`).join('')}</ul>
   </div>`;
+  $$('#plRes [data-sumar]').forEach(b => b.onclick = () => {
+    const id = b.dataset.sumar;
+    const k = b.dataset.donde === 'inicio' ? (p.items.unshift({ id, reps: null, prop: '', nota: '' }), 0) : insertarOrdenado(p, id);
+    tocar(p); SND.soltar();
+    /* la revisión queda donde estaba y se actualiza */
+    rehacerPlan(p, '#plRes', () => revisarPlan(p, true));
+    toast(`Sumado en el lugar ${k + 1}: <b>${esc(ejPlan(id).n)}</b>`, 'toast-suave');
+  });
+  if (silencio) return;
   nMal ? SND.mal() : SND.fin();
   $('#plRes').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+/* vuelve a dibujar el editor sin que se mueva lo que se está mirando: el elemento
+   ancla queda a la misma altura de la pantalla aunque la lista de arriba crezca */
+function rehacerPlan(p, ancla, despues = null) {
+  const el = typeof ancla === 'string' ? $(ancla) : ancla, antes = el ? el.getBoundingClientRect().top : null;
+  const sel = typeof ancla === 'string' ? ancla : null, y = window.scrollY;
+  vPlan(p.id);
+  if (despues) despues();
+  const nuevo = sel ? $(sel) : null;
+  if (antes != null && nuevo) window.scrollTo(0, y + nuevo.getBoundingClientRect().top - antes);
+  else window.scrollTo(0, y);
 }
 
 /* ---------------- copiar como texto (para mandar o imprimir) ---------------- */
@@ -16207,7 +16511,7 @@ function ejAnim(it) {
   const fig = document.createElement('div');
   fig.className = 'fig-ej';
   ej.el.prepend(fig);
-  FIGURA.reproductor(fig, { ...POSES[e.id], nom: '' }, { fantasma: false });
+  FIGURA.reproductor(fig, { ...POSES[e.id], nom: '' }, { fantasma: false, fluido: ritmoFluido() });
   /* después de responder se puede ver el ejercicio paso a paso, con sus fases */
   const comprobar = ej.comprobar;
   ej.comprobar = () => {
@@ -17151,7 +17455,7 @@ function conectarEjDelDia() {
   const c = $('#ejDia');
   if (!c) return;
   const e = ejDelDia();
-  FIGURA.reproductor($('.dia-fig', c), { ...POSES[e.id], nom: e.n }, { fantasma: false,
+  FIGURA.reproductor($('.dia-fig', c), { ...POSES[e.id], nom: e.n }, { fantasma: false, fluido: ritmoFluido(),
     resp: POSES[e.id].poses.map((_, k) => { const p = pasoDePose(POSES[e.id], (k + 1) % POSES[e.id].poses.length); return p > 0 && e.seq[p - 1] ? respDeFase(e.seq[p - 1].fase) : null; }) });
   $('#ejDiaVer').onclick = () => { SND.toque(); abrirVisorGrande(e); };
 }
@@ -17614,6 +17918,8 @@ function visorHTML(e, grande = false) {
       ${grande ? '' : '<button type="button" class="btn small ghost" data-acc="grande" aria-label="Ver en grande, paso a paso">⤢</button>'}
     </div>` : ''}
     <div class="visor-capas">
+      ${n > 1 ? `<span class="vel" role="group" aria-label="Ritmo">${[['fluido', 'Fluido'], ['pasos', 'Por pasos']].map(([r, t]) =>
+        `<button type="button" class="chip-vel${(r === 'fluido') === ritmoFluido() ? ' on' : ''}" data-ritmo="${r}" aria-pressed="${(r === 'fluido') === ritmoFluido()}">${t}</button>`).join('')}</span>` : ''}
       ${n > 1 ? '<button type="button" class="chip-capa" data-capa="tray" aria-pressed="false">〰️ Trayectoria</button>' : ''}
       <button type="button" class="chip-capa" data-capa="fisica" aria-pressed="false">⚖️ Centro de masa</button>
       ${n > 1 ? '<button type="button" class="chip-capa on" data-capa="fantasma" aria-pressed="true">👻 Hacia dónde va</button>' : ''}
@@ -17622,6 +17928,10 @@ function visorHTML(e, grande = false) {
     </div>
   </div>`;
 }
+/* ritmo de las animaciones: fluido (frena solo donde el movimiento empieza o
+   termina) o por pasos (frena en cada paso del manual); se recuerda en este navegador */
+function ritmoFluido() { try { return localStorage.getItem('anatoapp.ritmo') !== 'pasos'; } catch { return true; } }
+function guardarRitmo(fluido) { try { localStorage.setItem('anatoapp.ritmo', fluido ? 'fluido' : 'pasos'); } catch { /* sin almacenamiento */ } }
 /* conecta un visor; pasos = <li data-paso> de la lista de pasos (opcional) */
 function activarVisor(raiz, e, pasos = []) {
   const ej = POSES[e.id], n = ej.poses.length, fig = $('.rep-fig', raiz), fase = $('.rep-fase', raiz);
@@ -17637,7 +17947,7 @@ function activarVisor(raiz, e, pasos = []) {
   };
   const tiraOn = k => tiraEl && $$('.tira-p', tiraEl).forEach(b => { b.classList.toggle('on', +b.dataset.k === k); b.setAttribute('aria-current', +b.dataset.k === k ? 'step' : 'false'); });
   const rep = FIGURA.reproductor(fig, ej, {
-    resp, capas: { fantasma: n > 1 },
+    resp, capas: { fantasma: n > 1 }, fluido: ritmoFluido(),
     alCambiar: i => { marcar(pasoDePose(ej, i)); tiraOn(i); },
     alAvanzar: pos => {
       if (rango && !arrastrando) rango.value = pos;
@@ -17658,6 +17968,12 @@ function activarVisor(raiz, e, pasos = []) {
   $$('[data-vel]', raiz).forEach(b => b.onclick = () => {
     rep.velocidad = +b.dataset.vel;
     $$('[data-vel]', raiz).forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); });
+    SND.toque();
+  });
+  $$('[data-ritmo]', raiz).forEach(b => b.onclick = () => {
+    const fl = b.dataset.ritmo === 'fluido';
+    rep.fluido = fl; guardarRitmo(fl);
+    $$('[data-ritmo]', raiz).forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); });
     SND.toque();
   });
   $$('[data-capa]', raiz).forEach(b => b.onclick = () => {
