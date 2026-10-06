@@ -847,7 +847,9 @@ const FIGURA = (() => {
     ante:   [[0, 3.1, 3.2], [0.22, 3.5, 3.1], [0.5, 2.8, 2.6], [0.85, 2.1, 2.0], [1, 2.0, 1.9]]
   };
   /* tronco: distancia del eje al frente y a la espalda según la altura (0 cadera … 1 hombros) */
-  const TR_FRENTE = [[0, 6.2], [0.1, 6.9], [0.22, 6.9], [0.36, 6.6], [0.48, 7.2], [0.58, 8.3], [0.66, 10.2], [0.74, 11.5], [0.82, 11.0], [0.9, 9.3], [1, 8.0]];
+  /* frente: abdomen chato, costillas bajo el busto y el busto sostenido (top deportivo
+     debajo de la ropa): redondeado, con el pliegue submamario marcado en s ≈ 0,57 */
+  const TR_FRENTE = [[0, 6.2], [0.1, 6.9], [0.22, 6.9], [0.36, 6.6], [0.48, 7.1], [0.545, 7.5], [0.57, 7.9], [0.6, 9.9], [0.65, 11.1], [0.7, 11.5], [0.76, 11.2], [0.84, 10.2], [0.92, 9.0], [1, 8.0]];
   const TR_ESPALDA = [[0, 10.8], [0.08, 10.2], [0.2, 8.6], [0.32, 8.1], [0.48, 8.6], [0.7, 9.6], [0.88, 9.8], [1, 9.2]];
   const enPerfil = (tabla, s) => { for (let q = 1; q < tabla.length; q++) if (s <= tabla[q][0]) { const [a, va] = tabla[q - 1], [b, vb] = tabla[q]; return lerp(va, vb, (s - a) / (b - a || 1)); } return tabla[tabla.length - 1][1]; };
   const unit = (a, b) => { const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 0.001; return { x: dx / d, y: dy / d, d }; };
@@ -938,11 +940,11 @@ const FIGURA = (() => {
     return { f: [forma(cerrar([...raiz, ...ant, mano[mano.length - 1], ...mano.slice(0, -1).reverse(), ...[...post].reverse()]), col.piel)],
       l: [linea(deltoides, col, 0.4), linea(dedos, col, 0.3)] };
   }
-  function troncoAnat(E, col, aire, muslo) {
+  function troncoAnat(E, col, aire, muslo, piso = null) {
     /* eje del tronco suavizado (Catmull-Rom por las 5 vértebras de control) */
     const P = E.col, ejes = [];
-    for (let i = 0; i < 4; i++) for (let k = 0; k < 4; k++) {
-      const t = k / 4, p0 = P[Math.max(0, i - 1)], p1 = P[i], p2 = P[i + 1], p3 = P[Math.min(4, i + 2)];
+    for (let i = 0; i < 4; i++) for (let k = 0; k < 8; k++) {
+      const t = k / 8, p0 = P[Math.max(0, i - 1)], p1 = P[i], p2 = P[i + 1], p3 = P[Math.min(4, i + 2)];
       const t2 = t * t, t3 = t2 * t, cr = (a, b, c, d) => 0.5 * (2 * b + (-a + c) * t + (2 * a - 5 * b + 4 * c - d) * t2 + (-a + 3 * b - 3 * c + d) * t3);
       ejes.push({ x: cr(p0.x, p1.x, p2.x, p3.x), y: cr(p0.y, p1.y, p2.y, p3.y) });
     }
@@ -973,23 +975,30 @@ const FIGURA = (() => {
     /* en extensión el glúteo se recoge poco (se contrae, no gira hacia atrás) */
     const girarG = ([x, y], w) => { const a = rad(phi * w * (phi < 0 ? 0.4 : 1)), c = Math.cos(a), sn = Math.sin(a); return [x * c - y * sn, x * sn + y * c]; };
     /* sentado, la parte baja (a ≤ 10,6 de la cadera) queda a la altura del apoyo de la pelvis */
-    const gluteo = [[[-10.9, -2.0], 0.2], [[-10.5, -4.4], 0.35], [[-8.6, -6.2], 0.6], [[-7.6, -8.8], 0.8]].map(([p, w]) => enP(girarG(p, w)));
+    /* domo ancho: el punto más alto un poco por debajo de la cadera y una bajada larga
+       (≈ 10 cm) hasta el pliegue con el muslo; contra el piso se aplana (ver piso) */
+    const gluteo = [[[-10.95, -2.5], 0.2], [[-10.6, -5.0], 0.35], [[-9.6, -7.5], 0.55], [[-8.3, -10.0], 0.75]].map(([p, w]) => enP(girarG(p, w)));
     const perfM = t => { const T = PERF.muslo; for (let q = 1; q < T.length; q++) if (t <= T[q][0]) { const f = (t - T[q - 1][0]) / (T[q][0] - T[q - 1][0]); return [lerp(T[q - 1][1], T[q][1], f), lerp(T[q - 1][2], T[q][2], f)]; } return T[T.length - 1].slice(1); };
-    const atrasM = ladoHueso(muslo.raiz, muslo.rod, [[0.3, 0, perfM(0.3)[1]]], -1)[0];
+    const atrasM = ladoHueso(muslo.raiz, muslo.rod, [[0.34, 0, perfM(0.34)[1]]], -1)[0];
     /* la pelvis cubre toda la raíz del muslo (hasta un 30 % del largo) para que no se vea la pierna lejana por un hueco */
-    const frente30 = ladoHueso(muslo.raiz, muslo.rod, [[0.3, perfM(0.3)[0], 0]], 1)[0];
+    const frente30 = ladoHueso(muslo.raiz, muslo.rod, [[0.34, perfM(0.34)[0], 0]], 1)[0];
     const pubis = ladoHueso(muslo.raiz, muslo.rod, [[0.1, perfM(0.1)[0], 0]], 1)[0];
     const nalga = [...gluteo, { ...atrasM, esq: true }, { ...frente30, esq: true }];
     const qN = nor(N - 1), uN = qN.u, S = ejes[N - 1];
     const cuelloF = { x: S.x + uN.x * 3.6 + qN.x * 3.8, y: S.y + uN.y * 3.6 + qN.y * 3.8 }, cuelloE = { x: S.x + uN.x * 4.2 - qN.x * 4.2, y: S.y + uN.y * 4.2 - qN.y * 4.2 };
-    const contorno = [pubis, ...fr, cuelloF, cuelloE, ...[...es].reverse(), ...nalga];
+    /* lo blando que toca el piso (glúteo, busto, espalda) se aplana un poco contra él */
+    const apl = p => (piso != null && p.y > piso + 0.5 ? { ...p, y: piso + 0.5 } : p);
+    const contorno = [pubis, ...fr, cuelloF, cuelloE, ...[...es].reverse(), ...nalga].map(apl);
     /* calza: de la cadera hasta la cintura (s < 0.3) */
     const corte = 0.3, frC = fr.filter(p => p.s <= corte), esC = es.filter(p => p.s <= corte);
-    const calza = [pubis, ...frC.slice(0, -1), { ...frC[frC.length - 1], esq: true }, { ...esC[esC.length - 1], esq: true }, ...[...esC.slice(0, -1)].reverse(), ...nalga];
+    const calza = [pubis, ...frC.slice(0, -1), { ...frC[frC.length - 1], esq: true }, { ...esC[esC.length - 1], esq: true }, ...[...esC.slice(0, -1)].reverse(), ...nalga].map(apl);
+    /* pliegue bajo el busto: una curva corta desde el borde hacia adentro */
+    const enS = (sv, w) => { let i = 1; while (i < N - 1 && acum[i] / largo < sv) i++; const p = ejes[i], q = nor(i); return apl({ x: p.x + q.x * w, y: p.y + q.y * w }); };
+    const pliegue = [enS(0.575, enPerfil(TR_FRENTE, 0.575)), enS(0.6, enPerfil(TR_FRENTE, 0.6) - 1.8), enS(0.63, enPerfil(TR_FRENTE, 0.63) - 3.6)];
     /* borde de la calza (cintura) */
     const cint = [frC[frC.length - 1], esC[esC.length - 1]];
     return { f: [forma(cerrar(contorno), col.top), forma(cerrar(calza), col.calza)],
-      l: [`<path d="M${f1(cint[0].x)},${f1(cint[0].y)} L${f1(cint[1].x)},${f1(cint[1].y)}" style="stroke:${col.fino}" stroke-width=".4"/>`] };
+      l: [`<path d="M${f1(cint[0].x)},${f1(cint[0].y)} L${f1(cint[1].x)},${f1(cint[1].y)}" style="stroke:${col.fino}" stroke-width=".4"/>`, linea(pliegue, col, 0.45)] };
   }
   function cabezaAnat(E, col) {
     const c = E.C, f = E.antCab, u = E.arriba;
@@ -1054,9 +1063,9 @@ const FIGURA = (() => {
      En cada capa: primero todas las formas con un trazo grueso (el contorno) y
      encima los rellenos, así las uniones (cadera, cuello) no muestran costuras y
      la silueta queda bien definida. */
-  function dibujoAnat(E, fantasma, orden, aire) {
+  function dibujoAnat(E, fantasma, orden, aire, piso = null) {
     const c1 = ANAT.cerca, c2 = ANAT.lejos;
-    const P = { BC: brazoAnat(E.seg.bc, c1), BL: brazoAnat(E.seg.bl, c2), PC: piernaAnat(E.seg.pc, c1, true), PL: piernaAnat(E.seg.pl, c2), T: troncoAnat(E, c1, aire ?? 0.5, E.seg.pc) };
+    const P = { BC: brazoAnat(E.seg.bc, c1), BL: brazoAnat(E.seg.bl, c2), PC: piernaAnat(E.seg.pc, c1, true), PL: piernaAnat(E.seg.pl, c2), T: troncoAnat(E, c1, aire ?? 0.5, E.seg.pc, piso) };
     const cu = cuelloAnat(E, c1), ca = cabezaAnat(E, c1);
     P.C = { f: [...cu.f, ...ca.f], l: [...cu.l, ...ca.l] };
     const seq = orden || ['BL', 'PL', 'C', 'T', 'PC', 'BC'];
@@ -1200,7 +1209,7 @@ const FIGURA = (() => {
     const est = (ej.estilo || ESTILO) === 'anatomico', arriba = ej.camara === 'arriba';
     /* de costado visto desde arriba se ve la silueta sagital: es el mismo dibujo que de perfil */
     const anat = est && !E.fr;
-    const cuerpo = est && arriba && E.fr ? dibujoArriba(E, fantasma, aire) : anat ? dibujoAnat(E, fantasma, ej.orden, aire) : dibujo(E, fantasma, ej.orden, aire);
+    const cuerpo = est && arriba && E.fr ? dibujoArriba(E, fantasma, aire) : anat ? dibujoAnat(E, fantasma, ej.orden, aire, !arriba && !ej.persp ? PISO : null) : dibujo(E, fantasma, ej.orden, aire);
     /* desde arriba, la sombra del cuerpo en el mat ayuda a leer qué está apoyado y qué no */
     const sombraArr = est && arriba && !fantasma ? `<g class="fig-sombra-arriba" transform="translate(2.2 3)" fill="rgba(36,22,44,.15)" aria-hidden="true">${cuerpo.replace(/<(ellipse|circle)[^>]*\/>/g, '').replace(/<path d="([^"]*)"[^>]*\/>/g, (m, d) => (/fill="none"/.test(m) ? '' : `<path d="${d}"/>`))}</g>` : '';
     return (fantasma || arriba ? '' : sombra(E)) + silla + sombraArr + cuerpo;
