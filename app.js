@@ -2128,7 +2128,7 @@ function fichaRepHTML(e) {
   const ej = POSES[e.id];
   const ico = ej ? FIGURA.svgEstatico(ej, Math.floor(ej.poses.length / 2)) : '';
   const prec = Object.entries(e.prec || {});
-  return `<details class="ficha-rep" data-ej="${e.id}">
+  return `<details class="ficha-rep" data-ej="${e.id}" data-sujeto="e:bb=${e.id}">
     <summary><span class="rep-mini">${ico}</span>
       <span class="rep-t"><b>${esc(e.n)}</b><small>${esc(NOM_FUENTE[e.f])} · ${esc(BB.nomPos[e.pos] || '')} · ${esc(e.nivel)}</small></span>
       ${e.osteo ? `<span class="pill osteo-${e.osteo}" title="${esc(e.osteoTxt || '')}">${e.osteo === 'evitar' ? '🦴✕' : e.osteo === 'apto' ? '🦴✓' : '🦴~'}</span>` : ''}</summary>
@@ -2466,7 +2466,7 @@ function llenarMinis(raiz) {
 function abrirEjercicio(ref) {
   if (ref.bb && EJ_BB[ref.bb] && POSES[ref.bb]) return abrirVisorGrande(EJ_BB[ref.bb]);
   if (ref.pm && PM[ref.pm]) {
-    const m = abrirModal(`<div class="vm-cab"><h3>${esc(PM[ref.pm].n)}</h3><button type="button" class="btn small ghost" data-cerrar aria-label="Cerrar">✕</button></div>${fichaPremHTML(PM[ref.pm]).replace('<details class="ficha-pm">', '<details class="ficha-pm" open>')}`);
+    const m = abrirModal(`<div class="vm-cab"><h3>${esc(PM[ref.pm].n)}</h3><button type="button" class="btn small ghost" data-cerrar aria-label="Cerrar">✕</button></div>${fichaPremHTML(PM[ref.pm]).replace('<details class="ficha-pm"', '<details open class="ficha-pm"')}`);
     m.classList.add('modal-visor');
     $('[data-cerrar]', m).onclick = cerrarModal;
   }
@@ -2572,7 +2572,7 @@ function pintarMat1(filtro) {
 /* --- ejercicios Pre-Pilates (con foto) --- */
 function fichaPremHTML(e) {
   const fotos = [imagen(e.id), imagen(e.id + '_2')].filter(Boolean);
-  return `<details class="ficha-pm">
+  return `<details class="ficha-pm" data-sujeto="e:pm=${e.id}">
     <summary>${fotos[0] ? `<img class="mini" src="${fotos[0]}" alt="" loading="lazy">` : POS_PREMAT[e.pos] ? `<span class="mini mini-fig" title="Posición: ${esc(e.pos)}">${FIGURA.svgEstatico(POSES[POS_PREMAT[e.pos]], 0)}</span>` : '<span class="mini"></span>'}
       <span class="pm-t"><b>${esc(e.n)}</b><small>${esc(e.principio)} · ${esc(e.comp)}</small></span>
       ${e.revisar || e.fotoDudosa ? '<span class="pill aviso-p">revisar</span>' : ''}</summary>

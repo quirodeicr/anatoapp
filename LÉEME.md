@@ -99,6 +99,12 @@ repeticiones, calentamiento, balance, lo que el manual pide evitar con osteoporo
 tiempo. Se puede duplicar una sesión, copiarla como texto (para WhatsApp o notas) y, desde Armá tu clase,
 **Guardar como sesión**.
 
+**Músculos y ejercicios tocables** — en los apuntes, las fichas, la corrección de cada respuesta y tus
+sesiones, los nombres de músculos (verde) y de ejercicios (magenta) aparecen subrayados. Al tocarlos se
+abre una ventana: el músculo resaltado en el mapa corporal con su región, su acción, lo que dicen tus
+apuntes y los ejercicios que lo trabajan; o el ejercicio con su animación, sus pasos y sus propósitos.
+Dentro de una pregunta no se subraya nada hasta que respondés.
+
 **Tu personaje y tu estudio** (pestaña Estudio) — un personaje con nombre propio (el 🎲 propone juegos de
 palabras: *Core-azón*, *Pelvis Presley*, *Glúteo Máximo*, *Teaser Rex*…) que se viste a gusto: piel, pelo,
 ropa, medias antideslizantes y accesorios. Vive en un estudio que se va llenando con el progreso: la pelota
