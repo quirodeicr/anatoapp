@@ -793,6 +793,16 @@ function ejAnim(it) {
   fig.className = 'fig-ej';
   ej.el.prepend(fig);
   FIGURA.reproductor(fig, { ...POSES[e.id], nom: '' }, { fantasma: false });
+  /* después de responder se puede ver el ejercicio paso a paso, con sus fases */
+  const comprobar = ej.comprobar;
+  ej.comprobar = () => {
+    const r = comprobar();
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'btn small ghost ver-pasos'; b.textContent = '⤢ Verlo paso a paso';
+    b.onclick = () => abrirVisorGrande(e);
+    fig.after(b);
+    return r;
+  };
   return ej;
 }
 
@@ -2090,13 +2100,7 @@ function fichaRepHTML(e) {
       <span class="rep-t"><b>${esc(e.n)}</b><small>${esc(NOM_FUENTE[e.f])} · ${esc(BB.nomPos[e.pos] || '')} · ${esc(e.nivel)}</small></span>
       ${e.osteo ? `<span class="pill osteo-${e.osteo}" title="${esc(e.osteoTxt || '')}">${e.osteo === 'evitar' ? '🦴✕' : e.osteo === 'apto' ? '🦴✓' : '🦴~'}</span>` : ''}</summary>
     <div class="rep-cuerpo">
-      ${ej ? `<div class="rep-anim"><div class="rep-fig" aria-live="off"></div>
-        <div class="rep-ctrl">
-          <button type="button" class="btn small ghost" data-acc="ant" aria-label="Paso anterior">◀</button>
-          <button type="button" class="btn small" data-acc="play" aria-label="Pausar o reproducir">⏸</button>
-          <button type="button" class="btn small ghost" data-acc="sig" aria-label="Paso siguiente">▶</button>
-        </div>
-        <div class="rep-fase" aria-live="polite"></div></div>` : ''}
+      ${ej ? visorHTML(e) : ''}
       <ol class="rep-pasos">
         <li data-paso="0"><b>Posición inicial</b> ${esc(e.inicial)}</li>
         ${e.seq.map((s, i) => `<li data-paso="${i + 1}"><b>${esc(s.fase)}</b> ${esc(s.accion)}</li>`).join('')}
@@ -2117,27 +2121,114 @@ function fichaRepHTML(e) {
     </div>
   </details>`;
 }
-/* un reproductor por ficha abierta; se destruye al cerrarla */
-function activarFichaRep(d) {
-  const e = EJ_BB[d.dataset.ej], ej = POSES[e.id], fig = $('.rep-fig', d);
-  if (!ej || !fig) return;
-  const pasos = $$('.rep-pasos li', d), fase = $('.rep-fase', d), bPlay = $('[data-acc="play"]', d);
+/* --- visor de animación: reproducir, paso a paso, deslizador, cámara lenta y capas --- */
+const respDeFase = fase => /inhala.*exhala|continuo/i.test(fase || '') ? 'ambas' : /inhala/i.test(fase || '') ? 'inhala' : /exhala/i.test(fase || '') ? 'exhala' : null;
+function visorHTML(e, grande = false) {
+  const ej = POSES[e.id], n = ej.poses.length;
+  const marcas = ej.poses.map((_, k) => `<i style="left:${(k / n * 100).toFixed(2)}%"></i>`).join('');
+  return `<div class="visor${grande ? ' grande' : ''}">
+    <div class="rep-fig" aria-live="off"></div>
+    <div class="rep-fase" aria-live="polite"></div>
+    ${n > 1 ? `<label class="visor-tl"><span class="sr">Recorrer el movimiento</span><span class="tl-marcas" aria-hidden="true">${marcas}</span>
+      <input type="range" min="0" max="${n}" step="0.002" value="0"></label>
+    <div class="rep-ctrl">
+      <button type="button" class="btn small ghost" data-acc="ant" aria-label="Paso anterior">◀</button>
+      <button type="button" class="btn small" data-acc="play" aria-label="Pausar o reproducir">⏸</button>
+      <button type="button" class="btn small ghost" data-acc="sig" aria-label="Paso siguiente">▶</button>
+      <span class="vel" role="group" aria-label="Velocidad">${[[1, '1×'], [0.5, '½×'], [0.25, '¼×']].map(([v, t]) =>
+        `<button type="button" class="chip-vel${v === 1 ? ' on' : ''}" data-vel="${v}" aria-pressed="${v === 1}">${t}</button>`).join('')}</span>
+      ${grande ? '' : '<button type="button" class="btn small ghost" data-acc="grande" aria-label="Ver en grande, paso a paso">⤢</button>'}
+    </div>` : ''}
+    <div class="visor-capas">
+      ${n > 1 ? '<button type="button" class="chip-capa" data-capa="tray" aria-pressed="false">〰️ Trayectoria</button>' : ''}
+      <button type="button" class="chip-capa" data-capa="fisica" aria-pressed="false">⚖️ Centro de masa</button>
+      ${n > 1 ? '<button type="button" class="chip-capa on" data-capa="fantasma" aria-pressed="true">👻 Hacia dónde va</button>' : ''}
+    </div>
+    ${n > 1 ? '<div class="visor-tira" role="list"></div>' : ''}
+  </div>`;
+}
+/* conecta un visor; pasos = <li data-paso> de la lista de pasos (opcional) */
+function activarVisor(raiz, e, pasos = []) {
+  const ej = POSES[e.id], n = ej.poses.length, fig = $('.rep-fig', raiz), fase = $('.rep-fase', raiz);
+  const bPlay = $('[data-acc="play"]', raiz), rango = $('.visor-tl input', raiz), tiraEl = $('.visor-tira', raiz);
+  /* respiración de cada transición: la del paso al que se llega */
+  const resp = ej.poses.map((_, k) => { const p = pasoDePose(ej, (k + 1) % n); return p > 0 && e.seq[p - 1] ? respDeFase(e.seq[p - 1].fase) : null; });
+  let arrastrando = false, mostrado = -1;
+  const marcar = p => {
+    if (p === mostrado) return;
+    mostrado = p;
+    pasos.forEach(li => li.classList.toggle('on', +li.dataset.paso === p));
+    fase.innerHTML = faseHTML(e, p);
+  };
+  const tiraOn = k => tiraEl && $$('.tira-p', tiraEl).forEach(b => { b.classList.toggle('on', +b.dataset.k === k); b.setAttribute('aria-current', +b.dataset.k === k ? 'step' : 'false'); });
   const rep = FIGURA.reproductor(fig, ej, {
-    alCambiar: i => {
-      const p = pasoDePose(ej, i);
-      pasos.forEach(li => li.classList.toggle('on', +li.dataset.paso === p));
-      fase.innerHTML = faseHTML(e, p);
+    resp, capas: { fantasma: n > 1 },
+    alCambiar: i => { marcar(pasoDePose(ej, i)); tiraOn(i); },
+    alAvanzar: pos => {
+      if (rango && !arrastrando) rango.value = pos;
+      /* en movimiento se muestra el paso que se está haciendo (el de la pose a la que va) */
+      const i = Math.floor(pos), f = pos - i;
+      if (f > 0.02) marcar(pasoDePose(ej, (i + 1) % n));
     }
   });
-  d._rep = rep;
-  bPlay.onclick = () => { if (rep.reproduciendo) { rep.pausar(); bPlay.textContent = '▶︎'; } else { rep.reanudar(); bPlay.textContent = '⏸'; } SND.toque(); };
-  $('[data-acc="sig"]', d).onclick = () => { rep.pausar(); bPlay.textContent = '▶︎'; rep.siguiente(); SND.toque(); };
-  $('[data-acc="ant"]', d).onclick = () => { rep.pausar(); bPlay.textContent = '▶︎'; rep.anterior(); SND.toque(); };
-  /* tocar un paso lleva la figura a esa pose */
+  const icono = () => { if (bPlay) bPlay.textContent = rep.enBucle ? '⏸' : '▶︎'; };
+  if (bPlay) bPlay.onclick = () => { arrastrando = false; if (rep.enBucle) rep.pausar(); else rep.reanudar(); icono(); SND.toque(); };
+  const sig = $('[data-acc="sig"]', raiz), ant = $('[data-acc="ant"]', raiz);
+  if (sig) sig.onclick = () => { arrastrando = false; rep.siguiente(); icono(); SND.toque(); };
+  if (ant) ant.onclick = () => { arrastrando = false; rep.anterior(); icono(); SND.toque(); };
+  if (rango) {
+    rango.oninput = () => { arrastrando = true; rep.irA(+rango.value % n); icono(); };
+    ['change', 'pointerup', 'touchend', 'keyup', 'blur'].forEach(ev => rango.addEventListener(ev, () => { arrastrando = false; }));
+  }
+  $$('[data-vel]', raiz).forEach(b => b.onclick = () => {
+    rep.velocidad = +b.dataset.vel;
+    $$('[data-vel]', raiz).forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); });
+    SND.toque();
+  });
+  $$('[data-capa]', raiz).forEach(b => b.onclick = () => {
+    const on = !b.classList.contains('on');
+    b.classList.toggle('on', on); b.setAttribute('aria-pressed', on);
+    rep.capa(b.dataset.capa, on); SND.toque();
+  });
+  if (tiraEl) {
+    const mini = FIGURA.tira(ej);
+    tiraEl.innerHTML = mini.map((svg, k) => { const p = pasoDePose(ej, k);
+      const cl = p > 0 && e.seq[p - 1] ? respDeFase(e.seq[p - 1].fase) || '' : 'ini';
+      return `<button type="button" class="tira-p ${cl}" data-k="${k}" role="listitem" aria-label="${p ? 'Paso ' + p : 'Posición inicial'}">${svg}<b>${p ? p : '0'}</b></button>`; }).join('');
+    $$('.tira-p', tiraEl).forEach(b => b.onclick = () => { rep.ir(+b.dataset.k); icono(); SND.toque(); });
+    tiraOn(0);
+  }
+  /* tocar un paso de la lista lleva la figura a esa pose */
   pasos.forEach(li => li.onclick = () => {
     const k = ej.poses.findIndex((_, i) => pasoDePose(ej, i) === +li.dataset.paso);
-    if (k >= 0) { rep.pausar(); bPlay.textContent = '▶︎'; rep.ir(k); SND.toque(); }
+    if (k >= 0) { rep.ir(k); icono(); SND.toque(); }
   });
+  const gr = $('[data-acc="grande"]', raiz);
+  if (gr) gr.onclick = () => { rep.pausar(); icono(); abrirVisorGrande(e); };
+  return rep;
+}
+/* el visor en grande: la figura arriba y los pasos del manual debajo */
+function abrirVisorGrande(e) {
+  const m = abrirModal(`<div class="visor-modal">
+    <div class="vm-cab"><h3>${esc(e.n)}</h3><button type="button" class="btn small ghost" data-cerrar aria-label="Cerrar">✕</button></div>
+    ${visorHTML(e, true)}
+    <ol class="rep-pasos">
+      <li data-paso="0"><b>Posición inicial</b> ${esc(e.inicial)}</li>
+      ${e.seq.map((x, i) => `<li data-paso="${i + 1}"><b>${esc(x.fase)}</b> ${esc(x.accion)}</li>`).join('')}
+    </ol>
+    <p class="micro">◀ ▶ hacen un paso por vez. Arrastrá la barra para ver cualquier instante del movimiento; con ¼× va en cámara lenta. ⚖️ muestra el centro de masa: si cae sobre la base de apoyo (verde) la posición se sostiene.</p>
+  </div>`);
+  m.classList.add('modal-visor');
+  const rep = activarVisor(m, e, $$('.rep-pasos li', m));
+  const cerrar = () => { rep.destruir(); cerrarModal(); };
+  $('[data-cerrar]', m).onclick = cerrar;
+  m.addEventListener('click', ev => { if (ev.target === m) rep.destruir(); });
+}
+/* un reproductor por ficha abierta; se destruye al cerrarla */
+function activarFichaRep(d) {
+  const e = EJ_BB[d.dataset.ej];
+  if (!POSES[e.id] || !$('.visor', d)) return;
+  d._rep = activarVisor($('.visor', d), e, $$('.rep-pasos li', d));
 }
 function conectarFichasRep(cont) {
   $$('.ficha-rep', cont).forEach(d => d.addEventListener('toggle', () => {
@@ -2157,7 +2248,7 @@ function pintarRepertorio(filtro) {
     ${['', ...NIVELES_EJ].map(n => `<button type="button" class="chip-reg ${filtroRep.nivel === n ? 'on' : ''}" data-nivel="${n}">${n || 'Todos los niveles'}</button>`).join('')}
     <button type="button" class="chip-reg ${filtroRep.osteo ? 'on' : ''}" data-osteo="1">🦴 Apto o modificado con osteoporosis</button>
   </div>
-  <p class="micro">Tocá un ejercicio para ver la animación: cada fase muestra si se inhala o se exhala. Con ◀ ▶ vas paso a paso, o tocá un paso de la lista. El orden es el del manual.</p>`;
+  <p class="micro">Tocá un ejercicio para ver la animación: cada fase muestra si se inhala o se exhala (el tórax se expande al inhalar). Con ◀ ▶ vas paso a paso, la barra recorre el movimiento, ¼× es cámara lenta y ⤢ lo abre en grande. El orden es el del manual.</p>`;
   cont.innerHTML = chips + (hits.length ? ['mat1', 'mat2'].map(fu => {
     const xs = hits.filter(e => e.f === fu);
     return xs.length ? `<h3 class="grupo-t">${NOM_FUENTE[fu]} <i>${xs.length}</i></h3>${xs.map(fichaRepHTML).join('')}` : '';

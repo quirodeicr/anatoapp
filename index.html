@@ -708,6 +708,42 @@ html[data-fx="suaves"] .fin-trofeo .ico,html[data-fx="suaves"] .sube-badge,html[
 .fase-chip.exhala{background:#ffedd5;color:#c2410c}
 .fase-chip.ambas{background:#ede9fe;color:#6d28d9}
 .fase-chip.ini{background:var(--sup3);color:var(--tx)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* visor de animación: paso a paso, deslizador, velocidad y capas */
+.visor{background:var(--sup2);border-radius:14px;padding:6px 6px 8px;margin-bottom:10px}
+.visor .rep-fig{max-width:560px;margin:0 auto}
+.visor-tl{display:block;position:relative;margin:4px 10px 2px;height:26px}
+.visor-tl input{position:absolute;inset:0;width:100%;margin:0;accent-color:var(--mag);background:transparent;cursor:pointer}
+.tl-marcas{position:absolute;left:8px;right:8px;top:50%;height:0;pointer-events:none}
+.tl-marcas i{position:absolute;top:-7px;width:2px;height:14px;margin-left:-1px;border-radius:1px;background:var(--linea2)}
+.visor .rep-ctrl{flex-wrap:wrap;align-items:center}
+.vel{display:inline-flex;gap:2px;background:var(--sup3);border-radius:99px;padding:2px;margin-left:4px}
+.chip-vel{border:0;background:transparent;color:var(--tx2);font:inherit;font-size:12.5px;font-weight:800;min-width:38px;min-height:32px;border-radius:99px;cursor:pointer}
+.chip-vel.on{background:var(--sup);color:var(--tx);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.visor-capas{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:4px 0 6px}
+.chip-capa{border:1.5px solid var(--linea2);background:var(--sup);color:var(--tx2);font:inherit;font-size:12.5px;font-weight:700;padding:6px 10px;min-height:34px;border-radius:99px;cursor:pointer}
+.chip-capa.on{border-color:var(--mag);color:var(--tx);background:var(--mag-cl)}
+.visor-tira{display:flex;gap:6px;overflow-x:auto;padding:4px 2px 2px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.tira-p{flex:0 0 92px;scroll-snap-align:start;position:relative;border:2px solid transparent;background:var(--sup);border-radius:10px;padding:0;cursor:pointer;overflow:hidden}
+.tira-p .fig-svg{display:block}
+.tira-p b{position:absolute;left:4px;top:3px;font-size:11px;min-width:18px;height:18px;border-radius:9px;display:grid;place-items:center;background:var(--sup3);color:var(--tx)}
+.tira-p.inhala b{background:#dbeafe;color:#1d4ed8}.tira-p.exhala b{background:#ffedd5;color:#c2410c}.tira-p.ambas b{background:#ede9fe;color:#6d28d9}
+.tira-p.on{border-color:var(--mag)}
+.tray{fill:none;stroke-width:1.6;stroke-dasharray:3 2.4;stroke-linecap:round;opacity:.9}
+.tray-flecha{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tray-mano{stroke:#e11d48}.tray-pie{stroke:#2563eb}.tray-cab{stroke:#c026d3}.tray-pel{stroke:#f59e0b}
+.fis-plomada{stroke-width:1;stroke-dasharray:2 2}
+.fis-cm{stroke-width:1.2}
+.fis-cruz{stroke-width:1}
+.fis-ok .fis-plomada,.fis-ok .fis-cm,.fis-ok .fis-cruz{stroke:#15803d}.fis-ok .fis-cm{fill:#dcfce7}.fis-ok .fis-base{fill:#22c55e}
+.fis-fuera .fis-plomada,.fis-fuera .fis-cm,.fis-fuera .fis-cruz{stroke:#c2410c}.fis-fuera .fis-cm{fill:#ffedd5}.fis-fuera .fis-base{fill:#f97316}
+.fis-base{opacity:.75}
+.modal-visor .modal-in{max-width:760px;max-height:92vh;max-height:92dvh;overflow:auto}
+.ver-pasos{display:block;margin:6px auto 8px}
+.vm-cab{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.vm-cab h3{margin:0;font-size:18px}
+.visor.grande .rep-fig{max-width:720px}
+.visor.grande .rep-fase{font-size:15.5px;min-height:52px}
 .rep-pasos{margin:0 0 10px 0;padding:0;list-style:none;counter-reset:p}
 .rep-pasos li{font-size:14px;line-height:1.45;padding:7px 10px 7px 34px;border-radius:10px;position:relative;cursor:pointer}
 .rep-pasos li::before{counter-increment:p;content:counter(p);position:absolute;left:8px;top:7px;width:20px;height:20px;border-radius:50%;background:var(--sup3);font-size:11px;font-weight:800;display:grid;place-items:center}
