@@ -853,16 +853,16 @@ const FIGURA = (() => {
   };
   /* perfiles de ancho [t, anterior, posterior] a lo largo de cada hueso */
   const PERF = {
-    muslo:  [[0, 5.6, 8.0], [0.15, 5.9, 7.6], [0.42, 6.3, 6.7], [0.7, 5.7, 5.5], [0.9, 5.2, 4.8], [1, 5.1, 4.6]],
-    pierna: [[0, 4.8, 4.6], [0.12, 4.1, 5.3], [0.3, 3.7, 5.6], [0.5, 3.2, 4.4], [0.75, 2.6, 3.0], [1, 2.4, 2.5]],
-    brazo:  [[0, 4.9, 4.7], [0.16, 5.2, 4.7], [0.38, 4.2, 4.4], [0.62, 3.9, 4.1], [0.88, 3.1, 3.4], [1, 3.0, 3.2]],
-    ante:   [[0, 3.1, 3.2], [0.22, 3.5, 3.1], [0.5, 2.8, 2.6], [0.85, 2.1, 2.0], [1, 2.0, 1.9]]
+    muslo:  [[0, 5.3, 7.5], [0.15, 5.55, 7.15], [0.42, 5.9, 6.3], [0.7, 5.35, 5.15], [0.9, 4.9, 4.5], [1, 4.8, 4.3]],
+    pierna: [[0, 4.5, 4.3], [0.12, 3.85, 5.0], [0.3, 3.5, 5.25], [0.5, 3.0, 4.1], [0.75, 2.45, 2.8], [1, 2.25, 2.35]],
+    brazo:  [[0, 4.55, 4.35], [0.16, 4.8, 4.35], [0.38, 3.9, 4.1], [0.62, 3.6, 3.8], [0.88, 2.9, 3.15], [1, 2.8, 3.0]],
+    ante:   [[0, 2.9, 3.0], [0.22, 3.25, 2.9], [0.5, 2.6, 2.4], [0.85, 1.95, 1.85], [1, 1.85, 1.75]]
   };
   /* tronco: distancia del eje al frente y a la espalda según la altura (0 cadera … 1 hombros) */
   /* frente: abdomen chato, costillas bajo el busto y el busto sostenido (top deportivo
      debajo de la ropa): redondeado, con el pliegue submamario marcado en s ≈ 0,57 */
-  const TR_FRENTE = [[0, 6.2], [0.1, 6.9], [0.22, 6.9], [0.36, 6.6], [0.48, 7.1], [0.545, 7.5], [0.57, 7.9], [0.6, 9.9], [0.65, 11.1], [0.7, 11.5], [0.76, 11.2], [0.84, 10.2], [0.92, 8.8], [1, 7.4]];
-  const TR_ESPALDA = [[0, 10.8], [0.08, 10.2], [0.2, 8.6], [0.32, 8.1], [0.48, 8.6], [0.7, 9.6], [0.86, 9.8], [0.94, 9.3], [1, 8.4]];
+  const TR_FRENTE = [[0, 6.0], [0.1, 6.6], [0.22, 6.5], [0.36, 6.2], [0.48, 6.8], [0.545, 7.2], [0.57, 7.6], [0.6, 9.6], [0.65, 10.8], [0.7, 11.2], [0.76, 10.9], [0.84, 9.9], [0.92, 8.6], [1, 7.2]];
+  const TR_ESPALDA = [[0, 10.8], [0.08, 10.2], [0.2, 8.4], [0.32, 7.8], [0.48, 8.3], [0.7, 9.3], [0.86, 9.5], [0.94, 9.0], [1, 8.2]];
   const enPerfil = (tabla, s) => { for (let q = 1; q < tabla.length; q++) if (s <= tabla[q][0]) { const [a, va] = tabla[q - 1], [b, vb] = tabla[q]; return lerp(va, vb, (s - a) / (b - a || 1)); } return tabla[tabla.length - 1][1]; };
   const unit = (a, b) => { const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 0.001; return { x: dx / d, y: dy / d, d }; };
   /* lado anterior (+1) o posterior (−1) de un hueso; normal anterior = ángulo − 90° */
@@ -882,11 +882,15 @@ const FIGURA = (() => {
     const B = dist.filter(p => p.dist > sAst * 0.9 || p === dist[dist.length - 1]);
     return Math.abs(flex) > 25 ? [...A, pliegue, ...B] : [...prox, ...dist];
   }
-  function convexo(centro, uA, uB, r, lado) {
+  /* relieve redondeado del lado convexo de una articulación (rótula, olécranon): un arco
+     entre las normales de los dos huesos; con la articulación recta, un solo punto */
+  function arco(centro, uA, uB, r, lado) {
     const nA = lado > 0 ? { x: uA.y, y: -uA.x } : { x: -uA.y, y: uA.x }, nB = lado > 0 ? { x: uB.y, y: -uB.x } : { x: -uB.y, y: uB.x };
-    let bx = nA.x + nB.x, by = nA.y + nB.y; const bl = Math.hypot(bx, by) || 1;
-    return { x: centro.x + bx / bl * r, y: centro.y + by / bl * r };
+    const a0 = Math.atan2(nA.y, nA.x), d = Math.atan2(Math.sin(Math.atan2(nB.y, nB.x) - a0), Math.cos(Math.atan2(nB.y, nB.x) - a0));
+    const ts = Math.abs(d) < rad(14) ? [0.5] : [0.15, 0.5, 0.85];
+    return ts.map(t => ({ x: centro.x + Math.cos(a0 + d * t) * r, y: centro.y + Math.sin(a0 + d * t) * r }));
   }
+  const perfEn = (T, t) => { for (let q = 1; q < T.length; q++) if (t <= T[q][0]) { const f = (t - T[q - 1][0]) / (T[q][0] - T[q - 1][0]); return [lerp(T[q - 1][1], T[q][1], f), lerp(T[q - 1][2], T[q][2], f)]; } return T[T.length - 1].slice(1); };
   /* puntos en el marco de un hueso: x a lo largo, y hacia la normal elegida */
   const enMarco = (o, ang, k, pts, signoY = 1) => {
     const u = { x: Math.cos(rad(ang)), y: Math.sin(rad(ang)) }, n = { x: -u.y * signoY, y: u.x * signoY };
@@ -919,38 +923,38 @@ const FIGURA = (() => {
     const uA = unit(m.raiz, m.rod), uB = unit(m.rod, m.tobillo), flex = n180(m.aP - m.a0);
     const mA = ladoHueso(m.raiz, m.rod, envuelta ? recortar(PERF.muslo, 0.07) : PERF.muslo, 1), mP = ladoHueso(m.raiz, m.rod, envuelta ? recortar(PERF.muslo, 0.24) : PERF.muslo, -1);
     const pA = ladoHueso(m.rod, m.tobillo, PERF.pierna, 1), pP = ladoHueso(m.rod, m.tobillo, PERF.pierna, -1);
-    const rotula = convexo(m.rod, uA, uB, 5.4, 1);
-    const ant = [...mA, rotula, ...pA.slice(1)];
-    const post = articular(mP, pP, m.rod, uA, uB, flex, 4.9, -1);
-    /* pie en su marco: x hacia los dedos, y hacia la planta */
-    const pie = enMarco(m.tobillo, m.aPie, m.e[2], [[0.8, -2.4], [5, -1.9], [9.5, -1.2], [12.8, -0.5], [14.3, 0.7], [13.1, 2.1], [10, 2.5], [6.5, 1.8], [2.5, 2.3], [-1.6, 2.9], [-3.9, 1.5], [-3.5, -0.7], [-2.2, -2.6]]);
+    /* rodilla: un arco suave sobre la rótula, sin punta */
+    const rodilla = arco(m.rod, uA, uB, 4.75, 1);
+    const ant = [...mA, ...rodilla, ...pA.slice(1)];
+    const post = articular(mP, pP, m.rod, uA, uB, flex, 4.5, -1);
+    /* pie en su marco (x hacia los dedos, y hacia la planta): fino, con el empeine largo,
+       el arco de la planta marcado y el talón chico */
+    const pie = enMarco(m.tobillo, m.aPie, m.e[2], [[0.8, -2.1], [4, -1.7], [8, -1.05], [11.4, -0.45], [13.5, 0.05], [14.4, 0.75], [13.6, 1.5], [10.6, 1.85], [8, 1.35], [5.5, 1.15], [2.6, 1.75], [0.4, 2.3], [-2.4, 1.75], [-3.2, 0.3], [-2.4, -1.6], [-1.0, -2.3]]);
     /* la calza llega al tobillo; el pie va descalzo */
     const raiz = envuelta ? [] : tapa(m.raiz, uA, 4.2, 7.6);
     /* la calza llega hasta el 88 % de la pierna (el tobillo y el pie quedan descubiertos) */
-    const corta = PERF.pierna.filter(([t]) => t <= 0.75).concat([[0.88, lerp(2.8, 2.5, 0.52), lerp(3.2, 2.6, 0.52)]]);
+    const corta = PERF.pierna.filter(([t]) => t <= 0.75).concat([[0.88, ...perfEn(PERF.pierna, 0.88)]]);
     const pAc = ladoHueso(m.rod, m.tobillo, corta, 1), pPc = ladoHueso(m.rod, m.tobillo, corta, -1);
-    const calza = [...raiz, ...mA, rotula, ...pAc.slice(1), ...[...articular(mP, pPc, m.rod, uA, uB, flex, 4.9, -1)].reverse()];
+    const calza = [...raiz, ...mA, ...rodilla, ...pAc.slice(1), ...[...articular(mP, pPc, m.rod, uA, uB, flex, 4.5, -1)].reverse()];
     /* piel solo donde se ve (tobillo y pie): así no asoma un borde claro bajo la calza */
     const pielPie = [...pA.filter(p => p.t >= 0.7), ...pie, ...[...pP.filter(p => p.t >= 0.7)].reverse()];
     return { f: [forma(cerrar(pielPie), col.piel), forma(cerrar(calza), col.calza)],
-      l: [linea([rotula, { x: rotula.x - uB.x * 2.4 + uA.x * 0.6, y: rotula.y - uB.y * 2.4 + uA.y * 0.6 }], col),
-          linea(ladoHueso(m.rod, m.tobillo, [[0.1, 0, 3.9], [0.3, 0, 4.6], [0.52, 0, 3.4]], -1), col),
-          linea(enMarco(m.tobillo, m.aPie, m.e[2], [[11.6, -0.9], [12.2, 0.9]]), col, 0.3)] };
+      l: [linea(ladoHueso(m.rod, m.tobillo, [[0.12, 0, 3.6], [0.3, 0, 4.2], [0.5, 0, 3.1]], -1), col, 0.3)] };
   }
   function brazoAnat(m, col) {
     const uA = unit(m.raiz, m.codo), uB = unit(m.codo, m.muneca), flex = n180(m.a0 - m.aA);
     const bA = ladoHueso(m.raiz, m.codo, PERF.brazo, 1), bP = ladoHueso(m.raiz, m.codo, PERF.brazo, -1);
     const aA = ladoHueso(m.codo, m.muneca, PERF.ante, 1), aP = ladoHueso(m.codo, m.muneca, PERF.ante, -1);
-    const olecranon = convexo(m.codo, uA, uB, 3.7, -1);
-    const ant = articular(bA, aA, m.codo, uA, uB, flex, 3.4, 1);
-    const post = [...bP, olecranon, ...aP.slice(1)];
-    /* mano en su marco: x hacia los dedos, y hacia adelante (pulgar) */
-    const mano = enMarco(m.muneca, m.aM, m.e[2], [[0, -2.0], [2.2, -2.7], [5.4, -3.5], [6.2, -2.8], [5.6, -2.1], [8.6, -1.6], [10.2, -0.4], [9.7, 1.0], [6, 2.2], [2, 2.2], [0, 2.0]], -1);
-    const deltoides = ladoHueso(m.raiz, m.codo, [[0.04, 4.6, 0], [0.22, 3.4, 0], [0.36, 1.0, 0], [0.24, -2.6, 0], [0.06, -4.2, 0]], 1);
-    const raiz = tapa(m.raiz, uA, 5.2, 5.0);
-    const dedos = enMarco(m.muneca, m.aM, m.e[2], [[6.4, 0.9], [8.9, 0.4]], -1);
+    const codo = arco(m.codo, uA, uB, 3.2, -1);
+    const ant = articular(bA, aA, m.codo, uA, uB, flex, 3.1, 1);
+    const post = [...bP, ...codo, ...aP.slice(1)];
+    /* mano en su marco (x hacia los dedos, y hacia el pulgar): fina, con los dedos juntos
+       que se afinan hacia la punta y el pulgar recogido junto al índice */
+    const mano = enMarco(m.muneca, m.aM, m.e[2], [[0, -1.75], [2.4, -2.05], [4.4, -2.35], [5.6, -2.15], [6.3, -1.45], [8.4, -0.95], [9.9, -0.2], [9.8, 0.55], [8.4, 0.95], [6, 1.55], [3, 1.75], [0, 1.75]], -1);
+    const raiz = tapa(m.raiz, uA, 4.8, 4.6);
+    const dedos = enMarco(m.muneca, m.aM, m.e[2], [[6.6, 0.45], [9.0, 0.1]], -1);
     return { f: [forma(cerrar([...raiz, ...ant, mano[mano.length - 1], ...mano.slice(0, -1).reverse(), ...[...post].reverse()]), col.piel)],
-      l: [linea(deltoides, col, 0.4), linea(dedos, col, 0.3)] };
+      l: [linea(dedos, col, 0.22)] };
   }
   function troncoAnat(E, col, aire, muslo, piso = null) {
     /* eje del tronco suavizado (Catmull-Rom por las 5 vértebras de control) */
@@ -1008,20 +1012,24 @@ const FIGURA = (() => {
     /* arriba del hombro: por delante la zona de la clavícula sube hacia el cuello y por
        detrás el trapecio baja del cuello al hombro (sin escalón) */
     const sobre = (a, w) => ({ x: S.x + uN.x * a + qN.x * w, y: S.y + uN.y * a + qN.y * w });
-    const hombroF = [sobre(1.2, 5.9), sobre(2.6, 4.5), sobre(3.6, 3.9)], hombroE = [sobre(4.4, -4.3), sobre(3.0, -5.8), sobre(1.5, -7.2)];
+    /* en el marco del cuello (hacia la cabeza) y justo sobre su borde: el pecho sube y
+       se funde con el cuello sin piquito, aunque la cabeza esté flexionada */
+    const uC = unit(S, E.C); let nC = { x: uC.y, y: -uC.x };
+    if (nC.x * E.antCab.x + nC.y * E.antCab.y < 0) nC = { x: -nC.x, y: -nC.y };
+    const enCuello = (t, w) => ({ x: S.x + (E.C.x - S.x) * t + nC.x * w, y: S.y + (E.C.y - S.y) * t + nC.y * w });
+    const bordeF = t => lerp(4.2, 3.5, (t + 0.15) / 0.65), bordeE = t => -lerp(5.0, 3.9, (t + 0.2) / 0.6);
+    const hombroF = [sobre(0.9, 6.0), enCuello(0.08, bordeF(0.08)), enCuello(0.2, bordeF(0.2))];
+    const hombroE = [enCuello(0.22, bordeE(0.22)), enCuello(0.08, bordeE(0.08)), sobre(1.5, -6.8)];
     /* lo blando que toca el piso (glúteo, busto, espalda) se aplana un poco contra él */
-    const apl = p => (piso != null && p.y > piso + 0.5 ? { ...p, y: piso + 0.5 } : p);
+    const apl = p => (piso == null ? p : p.y > piso + 0.5 ? { ...p, y: piso + 0.5 } : p.y > piso - 1 ? { ...p, y: piso } : p);
     const contorno = [pubis, ...fr, ...hombroF, ...hombroE, ...[...es].reverse(), ...nalga].map(apl);
     /* calza: de la cadera hasta la cintura (s < 0.3) */
     const corte = 0.3, frC = fr.filter(p => p.s <= corte), esC = es.filter(p => p.s <= corte);
     const calza = [pubis, ...frC.slice(0, -1), { ...frC[frC.length - 1], esq: true }, { ...esC[esC.length - 1], esq: true }, ...[...esC.slice(0, -1)].reverse(), ...nalga].map(apl);
-    /* pliegue bajo el busto: una curva corta desde el borde hacia adentro */
-    const enS = (sv, w) => { let i = 1; while (i < N - 1 && acum[i] / largo < sv) i++; const p = ejes[i], q = nor(i); return apl({ x: p.x + q.x * w, y: p.y + q.y * w }); };
-    const pliegue = [enS(0.575, enPerfil(TR_FRENTE, 0.575)), enS(0.6, enPerfil(TR_FRENTE, 0.6) - 1.8), enS(0.63, enPerfil(TR_FRENTE, 0.63) - 3.6)];
     /* borde de la calza (cintura) */
     const cint = [frC[frC.length - 1], esC[esC.length - 1]];
     return { f: [forma(cerrar(contorno), col.top), forma(cerrar(calza), col.calza)],
-      l: [`<path d="M${f1(cint[0].x)},${f1(cint[0].y)} L${f1(cint[1].x)},${f1(cint[1].y)}" style="stroke:${col.fino}" stroke-width=".4"/>`, linea(pliegue, col, 0.45)] };
+      l: [`<path d="M${f1(cint[0].x)},${f1(cint[0].y)} L${f1(cint[1].x)},${f1(cint[1].y)}" style="stroke:${col.fino}" stroke-width=".4"/>`] };
   }
   function cabezaAnat(E, col) {
     const c = E.C, f = E.antCab, u = E.arriba;
@@ -1054,7 +1062,7 @@ const FIGURA = (() => {
     const p = (t, w) => ({ x: E.S.x + (E.C.x - E.S.x) * t + n.x * w, y: E.S.y + (E.C.y - E.S.y) * t + n.y * w });
     /* el frente del cuello es la normal anterior del tronco */
     const fr = E.antCab, sig = (n.x * fr.x + n.y * fr.y) > 0 ? 1 : -1;
-    const pts = [p(-0.15, 4.6 * sig), p(0.5, 3.9 * sig), p(0.95, 3.6 * sig), p(0.95, -4.4 * sig), p(0.4, -4.3 * sig), p(-0.2, -5.4 * sig)];
+    const pts = [p(-0.15, 4.2 * sig), p(0.5, 3.5 * sig), p(0.95, 3.3 * sig), p(0.95, -4.0 * sig), p(0.4, -3.9 * sig), p(-0.2, -5.0 * sig)];
     return { f: [forma(cerrar(pts), col.piel)], l: [linea([p(0.1, -2.6 * sig), p(0.55, 1.6 * sig), p(0.85, 2.8 * sig)], col, 0.35)] };
   }
   /* columna vertebral (capa didáctica): sacro, 5 lumbares, 12 dorsales y 7 cervicales */
@@ -1164,7 +1172,7 @@ const FIGURA = (() => {
       const m = E.seg[k], uPie = unit(m.tobillo, m.punta), lp = Math.hypot(m.punta.x - m.tobillo.x, m.punta.y - m.tobillo.y);
       pies.push(elipse({ x: m.tobillo.x + uPie.x * (lp * 0.45 + 1.2), y: m.tobillo.y + uPie.y * (lp * 0.45 + 1.2) }, uPie, lp * 0.45 + 2.6, 4.1, col.piel));
       const pts = [...tramo(m.raiz, m.rod, [0, 0.3, 0.65, 1]), ...tramo(m.rod, m.tobillo, [0.22, 0.5, 0.78, 1])];
-      piernas.push(forma(tubo(pts, [7.0, 6.5, 5.6, 4.6, 4.6, 4.1, 3.3, 2.6]), col.calza));
+      piernas.push(forma(tubo(pts, [6.6, 6.1, 5.3, 4.35, 4.35, 3.85, 3.1, 2.45]), col.calza));
       const ur = unit(m.raiz, m.tobillo);
       rodillas.push(`<ellipse cx="${f1(m.rod.x)}" cy="${f1(m.rod.y)}" rx="2.6" ry="2.2" transform="rotate(${f1(Math.atan2(ur.y, ur.x) * 180 / Math.PI)} ${f1(m.rod.x)} ${f1(m.rod.y)})" fill="none" style="stroke:${col.fino}" stroke-width=".5"/>`);
     }
@@ -1185,7 +1193,7 @@ const FIGURA = (() => {
       const m = E.seg[k], uM = unit(m.muneca, m.mano), lm = Math.hypot(m.mano.x - m.muneca.x, m.mano.y - m.muneca.y);
       manos.push(elipse({ x: m.muneca.x + uM.x * (lm * 0.55), y: m.muneca.y + uM.y * (lm * 0.55) }, uM, lm * 0.55 + 1.6, 3.5, col.piel));
       const pts = [...tramo(m.raiz, m.codo, [0, 0.25, 0.6, 1]), ...tramo(m.codo, m.muneca, [0.25, 0.6, 1])];
-      brazos.push(forma(tubo(pts, [4.7, 4.3, 3.7, 3.2, 3.2, 2.8, 2.2]), col.piel));
+      brazos.push(forma(tubo(pts, [4.4, 4.0, 3.45, 3.0, 3.0, 2.6, 2.05]), col.piel));
     }
     /* cabeza: coronilla (pelo tirado hacia atrás y rodete), orejas y la punta de la nariz */
     const CB = L2({ x: S0.x + fH.x * 1.6, y: S0.y + fH.y * 1.6 }, uH, fH);

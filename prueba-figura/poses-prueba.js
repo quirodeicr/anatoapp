@@ -9,7 +9,8 @@ const POSES_PRUEBA = (() => {
   const rollUp = { nom: 'The Roll Up', vista: 'perfil', poses: [
     RU0,
     /* 1 · inhala: brazos al techo, pies flexionados, la cabeza asiente */
-    X(RU0, { bc: [-90, 0, 0], bl: [-89, 0, 0], pc: [1, 0, -10], pl: [1, 0, -10], cab: 10, s: 1, dur: 1300 }),
+    /* (al flexionar los pies el talón se desliza un poco: las piernas siguen estiradas) */
+    X(RU0, { bc: [-90, 0, 0], bl: [-89, 0, 0], pc: [1, 0, -10], pl: [1, 0, -10], cab: 10, libre: ['talonC', 'talonL'], s: 1, dur: 1300 }),
     /* …y enrolla cabeza y espalda alta */
     X(RU0, { ...CURL, bc: [-62, 0, 0], bl: [-61, 0, 0], pc: [1, 0, -10], pl: [1, 0, -10], apoyo: ['pelvis', 'talonC', 'talonL'], s: 1, dur: 1200 }),
     /* 2 · exhala: vértebra por vértebra hasta la C sobre las piernas, abrazando una pelota */
@@ -19,7 +20,7 @@ const POSES_PRUEBA = (() => {
     /* 4 · exhala: termina de bajar vértebra por vértebra… */
     X(RU0, { bc: [-90, 0, 0], bl: [-89, 0, 0], pc: [1, 0, -10], pl: [1, 0, -10], s: 4, dur: 2100 }),
     /* …y los brazos vuelven por encima de la cabeza */
-    X(RU0, { s: 4, dur: 1200 })
+    X(RU0, { libre: ['talonC', 'talonL'], s: 4, dur: 1200 })
   ] };
   /* Swan — prono, manos bajo los hombros, codos flexionados, piernas juntas */
   const CODOS = { bc: [0.6, 0.78, 1], bl: [0.6, 0.78, 1] };

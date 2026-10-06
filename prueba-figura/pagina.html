@@ -96,13 +96,14 @@ dialog.ver button { position: absolute; top: 8px; right: 8px; min-width: 40px; m
 <div class="pag">
   <header>
     <h1>Laboratorio de figura</h1>
-    <p>Cuatro ejercicios para ajustar la modelo nueva antes de pasarla a los 48: más anatómica, con los pasos del manual más precisos, movimiento fluido de verdad y dos vistas desde arriba. Compará con la anterior, mirala en secuencia, prendé la columna vertebral o mirá las fotos con props.</p>
+    <p>Cuatro ejercicios para ajustar la modelo nueva antes de pasarla a los 48: más anatómica, con los pasos del manual más precisos, movimiento fluido de verdad y dos vistas desde arriba. Compará con la anterior, mirala en secuencia o mirá las fotos con props.</p>
   </header>
   <div id="ejercicios"></div>
   <section class="mirar">
     <h2>Qué mirar para ajustar</h2>
     <ul>
-      <li><b>Lo último:</b> el Spine Twist rota de un solo movimiento continuo; los brazos tienen inercia (arrancan un poco después que el tronco, lo pasan apenas al frenar y se acomodan en línea); los hombros bajan en pendiente hacia el cuello (trapecio y clavícula), sin escalón; la respiración abre las costillas a los costados y el pecho apenas sube; y <b>Hacia dónde va</b> aparece y se va con un fundido (en modo fluido muestra dónde termina el movimiento).</li>
+      <li><b>Esta vuelta:</b> silueta más fina y grácil, rodillas y codos redondeados (y las piernas del Roll Up ya no se doblan al flexionar los pies), sin la línea del hombro, manos y pies finos, el pecho que se funde con el cuello sin piquito y sin la capa de columna.</li>
+      <li><b>Antes:</b> el Spine Twist rota de un solo movimiento continuo; los brazos tienen inercia (arrancan un poco después que el tronco, lo pasan apenas al frenar y se acomodan en línea); los hombros bajan en pendiente hacia el cuello (trapecio y clavícula), sin escalón; la respiración abre las costillas a los costados y el pecho apenas sube; y <b>Hacia dónde va</b> aparece y se va con un fundido (en modo fluido muestra dónde termina el movimiento).</li>
       <li><b>Antes:</b> el glúteo es un domo ancho que baja de a poco al muslo (sin punta, también boca abajo) y se aplana contra el mat al apoyarse; el busto está sostenido como con un top deportivo debajo, con el pliegue bajo el busto marcado; cintura más fina, brazos y piernas más finos, el elástico de la calza apenas marcado y el Spine Twist con dos pulsos iguales.</li>
       <li><b>Cuerpo y cara:</b> proporciones, curvas (glúteos, pantorrillas, hombros), rasgos, pelo, ropa y colores.</li>
       <li><b>Cada paso:</b> si la posición coincide con el manual (dónde van los brazos, cuánto sube la espalda, la cabeza).</li>
@@ -185,7 +186,6 @@ dialog.ver button { position: absolute; top: 8px; right: 8px; min-width: 40px; m
               <div class="seg" role="group" aria-label="Velocidad">${[[1, '1×'], [0.5, '½×'], [0.25, '¼×']].map(([v, t]) => `<button type="button" data-vel="${v}" aria-pressed="${v === 1}">${t}</button>`).join('')}</div>
             </div>
             <div class="capas">
-              <button type="button" class="capa" data-capa="columna" aria-pressed="false">Columna vertebral</button>
               <button type="button" class="capa" data-capa="fisica" aria-pressed="false">Centro de masa</button>
               <button type="button" class="capa" data-capa="tray" aria-pressed="false">Trayectoria</button>
               <button type="button" class="capa" data-capa="fantasma" aria-pressed="true">Hacia dónde va</button>
@@ -202,7 +202,7 @@ dialog.ver button { position: absolute; top: 8px; right: 8px; min-width: 40px; m
     cont.appendChild(sec);
 
     const $ = s => sec.querySelector(s), $$ = s => [...sec.querySelectorAll(s)];
-    const capas = { columna: false, fisica: false, tray: false, fantasma: true };
+    const capas = { fisica: false, tray: false, fantasma: true };
     let modelo = 'nueva', rep = null, arrastrando = false, vel = 1, fluido = true;
     const ejDe = () => modelo === 'nueva' ? { ...POSES_PRUEBA[id], estilo: 'anatomico', _prep: null, _enc: null } : { ...POSES[id], estilo: 'clasico', _prep: null, _enc: null };
     let ej = ejDe();
