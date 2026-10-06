@@ -378,6 +378,8 @@ const FIGURA = (() => {
   /* ---------- tiempo y articulación ---------- */
   /* perfil de velocidad de mínimo jerk: arranca y frena con aceleración nula */
   const mj = t => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * t * (10 + t * (6 * t - 15)));
+  /* modo fluido: no frena del todo en cada pose (pasa a un 65 % de la velocidad media) */
+  const flu = t => (t <= 0 ? 0 : t >= 1 ? 1 : 0.65 * t + 0.35 * mj(t));
   const CUR0 = [-0.375, -0.125, 0.125, 0.375];
   const segAngs = P => (P.cur || CUR0).map(c => P.tr + P.fl * c);
   /* rangos de la articulación (respecto del segmento al que se une; − = flexión):
@@ -456,19 +458,24 @@ const FIGURA = (() => {
     }
     K[n - 1].resto = K[0].xoff - K[n - 1].xoff - K[n - 1].rueda[M];
   }
-  function xRueda(K, i, f) {
-    const t = K[i].rueda, M = t.length - 1, q = Math.min(M - 1, Math.floor(f * M)), u = f * M - q;
-    return K[i].xoff + lerp(t[q], t[q + 1], u) + (K[i].resto || 0) * mj(f);
+  /* la tabla se muestreó en tiempo con mínimo jerk: se busca por avance (e = mj(f)),
+     así sirve igual para el modo fluido (e = f) */
+  function xRueda(K, i, e) {
+    const t = K[i].rueda, M = t.length - 1;
+    let q = 0;
+    while (q < M - 1 && mj((q + 1) / M) < e) q++;
+    const e0 = mj(q / M), e1 = mj((q + 1) / M), u = e1 > e0 ? Math.max(0, Math.min(1, (e - e0) / (e1 - e0))) : 0;
+    return K[i].xoff + lerp(t[q], t[q + 1], u) + (K[i].resto || 0) * e;
   }
 
   /* Mezcla de dos poses en la fracción de tiempo f (0…1, sin suavizar). */
-  function mezclar(A, B, f, ej, art = 0) {
-    const r = { ...B }, e = mj(f);
+  function mezclar(A, B, f, ej, art = 0, fluido = false) {
+    const r = { ...B }, e = fluido ? flu(f) : mj(f);
     const dTr = n180(B.tr - A.tr), ca = A.cur || CUR0, cb = B.cur || CUR0;
     /* cada segmento (lumbar baja… torácica alta, cuello) arranca con un
        pequeño retraso respecto del anterior y dura el 60 % del tiempo */
     const D = 0.4, ret = art > 0 ? [4, 3, 2, 1, 0] : art < 0 ? [0, 1, 2, 3, 4] : null;
-    const fr = q => (ret ? mj((f - ret[q] * D / 4) / (1 - D)) : e);
+    const fr = q => (ret ? (fluido ? flu : mj)((f - ret[q] * D / 4) / (1 - D)) : e);
     r.segs = [0, 1, 2, 3].map(q => { const t = fr(q); return A.tr + dTr * t + lerp(A.fl * ca[q], B.fl * cb[q], t); });
     r.tr = A.tr + dTr * e;
     r.fl = lerp(A.fl, B.fl, e);
@@ -511,15 +518,16 @@ const FIGURA = (() => {
     return r;
   }
   /* cuadro de la transición i → i+1 en la fracción de tiempo f */
-  function cuadro(ej, i, f) {
+  /* fluido: sin frenar en cada pose clave (velocidad continua entre pasos) */
+  function cuadro(ej, i, f, fluido = false) {
     const { poses, K } = preparar(ej), n = poses.length;
     const j = (i + 1) % n, A = poses[i], B = poses[j];
     if (f <= 0 || n === 1) return resolver(A, ej, { xoff: K[i].xoff, pins: K[i].pins });
     if (f >= 1) return resolver(B, ej, { xoff: K[j].xoff, pins: K[j].pins });
-    const P = mezclar(A, B, f, ej, K[i].art), comp = compartidos(ej, A, B), pins = {}, e = mj(f);
+    const P = mezclar(A, B, f, ej, K[i].art, fluido), comp = compartidos(ej, A, B), pins = {}, e = fluido ? flu(f) : mj(f);
     for (const a of comp) if (K[i].cont[a] && K[j].cont[a]) pins[a] = lerp(K[i].cont[a].x, K[j].cont[a].x, e);
     /* sin apoyo rígido clavado, el punto de anclaje avanza (rodando, si rueda) */
-    const ancla = { x: K[i].rueda ? xRueda(K, i, f) : lerp(anclaX(K[i].E, ej.ancla), anclaX(K[j].E, ej.ancla), e) };
+    const ancla = { x: K[i].rueda ? xRueda(K, i, e) : lerp(anclaX(K[i].E, ej.ancla), anclaX(K[j].E, ej.ancla), e) };
     return resolver(P, ej, { pins, forzados: comp, ancla });
   }
 
@@ -667,20 +675,27 @@ const FIGURA = (() => {
      y desde arriba se usa el dibujo clásico.
      ===================================================================== */
   let ESTILO = 'clasico';
+  /* Colores como variables CSS con valor por defecto: cada página puede
+     ajustarlos por tema (en oscuro el contorno se aclara para separar la
+     figura del fondo). La calza es ciruela: contrasta con fondos claros y
+     oscuros y no se confunde con el mat. */
+  const v = (n, d) => `var(--ap-${n},${d})`;
   const ANAT = {
-    cerca: { piel: '#eec19c', pielS: '#d8a27c', top: '#2f8f8a', calza: '#2d3042', calzaS: '#3b3f55', pelo: '#3a2618', linea: 'rgba(60,34,20,.55)', fino: 'rgba(60,34,20,.28)', ojo: '#2b1d14', labio: '#c4766c', blanco: '#fbf4ec' },
-    lejos: { piel: '#d3a07a', pielS: '#bd8762', top: '#226b67', calza: '#1f2231', calzaS: '#2b2e40', pelo: '#2a1b10', linea: 'rgba(40,22,12,.5)', fino: 'rgba(40,22,12,.22)' }
+    cerca: { piel: v('piel', '#eec19c'), pielS: v('piel-s', '#d8a27c'), top: v('top', '#2f8f8a'), calza: v('calza', '#6d3d68'), pelo: v('pelo', '#3a2618'),
+      linea: v('borde', 'rgba(60,34,20,.6)'), fino: v('fino', 'rgba(60,34,20,.28)'), ojo: '#2b1d14', labio: '#c4766c', blanco: '#fbf4ec', tinta: 'rgba(60,34,20,.55)' },
+    lejos: { piel: v('piel-l', '#d3a07a'), pielS: v('piel-s', '#bd8762'), top: v('top-l', '#226b67'), calza: v('calza-l', '#4f2b4c'), pelo: v('pelo', '#2a1b10'),
+      linea: v('borde', 'rgba(60,34,20,.6)'), fino: v('fino', 'rgba(40,22,12,.22)'), tinta: 'rgba(40,22,12,.5)' }
   };
   /* perfiles de ancho [t, anterior, posterior] a lo largo de cada hueso */
   const PERF = {
-    muslo:  [[0, 7.6, 8.6], [0.15, 7.6, 8.3], [0.4, 7.1, 7.1], [0.7, 6.1, 5.9], [0.9, 5.5, 5.0], [1, 5.3, 4.8]],
+    muslo:  [[0, 5.8, 8.4], [0.15, 6.2, 8.0], [0.42, 6.8, 7.1], [0.7, 6.1, 5.9], [0.9, 5.5, 5.0], [1, 5.3, 4.8]],
     pierna: [[0, 5.0, 4.8], [0.12, 4.3, 5.6], [0.3, 3.9, 6.0], [0.5, 3.4, 4.8], [0.75, 2.8, 3.2], [1, 2.5, 2.6]],
     brazo:  [[0, 5.2, 5.0], [0.16, 5.6, 5.0], [0.38, 4.6, 4.7], [0.62, 4.2, 4.4], [0.88, 3.3, 3.6], [1, 3.1, 3.3]],
     ante:   [[0, 3.2, 3.3], [0.22, 3.7, 3.3], [0.5, 3.0, 2.8], [0.85, 2.2, 2.1], [1, 2.1, 2.0]]
   };
   /* tronco: distancia del eje al frente y a la espalda según la altura (0 cadera … 1 hombros) */
-  const TR_FRENTE = [[0, 7.0], [0.1, 8.6], [0.22, 8.5], [0.36, 7.8], [0.5, 8.3], [0.62, 9.4], [0.74, 10.9], [0.84, 10.5], [0.93, 9.0], [1, 8.0]];
-  const TR_ESPALDA = [[0, 11.6], [0.08, 11.1], [0.2, 9.1], [0.32, 8.8], [0.5, 9.3], [0.7, 10.0], [0.88, 10.1], [1, 9.4]];
+  const TR_FRENTE = [[0, 6.4], [0.1, 7.3], [0.22, 7.6], [0.36, 7.5], [0.5, 8.3], [0.62, 9.4], [0.74, 10.9], [0.84, 10.5], [0.93, 9.0], [1, 8.0]];
+  const TR_ESPALDA = [[0, 10.8], [0.08, 10.4], [0.2, 9.1], [0.32, 8.8], [0.5, 9.3], [0.7, 10.0], [0.88, 10.1], [1, 9.4]];
   const enPerfil = (tabla, s) => { for (let q = 1; q < tabla.length; q++) if (s <= tabla[q][0]) { const [a, va] = tabla[q - 1], [b, vb] = tabla[q]; return lerp(va, vb, (s - a) / (b - a || 1)); } return tabla[tabla.length - 1][1]; };
   const unit = (a, b) => { const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 0.001; return { x: dx / d, y: dy / d, d }; };
   /* lado anterior (+1) o posterior (−1) de un hueso; normal anterior = ángulo − 90° */
@@ -723,19 +738,27 @@ const FIGURA = (() => {
   }
   /* cada parte devuelve formas (relleno) y detalles (líneas finas); el contorno lo pone dibujoAnat */
   const forma = (d, fill) => ({ d, fill });
-  const linea = (pts, col, ancho = 0.45) => `<path d="M${suave(pts)}" fill="none" stroke="${col.fino}" stroke-width="${ancho}" stroke-linecap="round"/>`;
+  const linea = (pts, col, ancho = 0.45) => `<path d="M${suave(pts)}" fill="none" style="stroke:${col.fino}" stroke-width="${ancho}" stroke-linecap="round"/>`;
 
-  function piernaAnat(m, col) {
+  /* desde dónde se dibuja el muslo: la pierna cercana arranca dentro de la pelvis
+     (que la envuelve); la lejana, desde la cadera con una tapa redondeada */
+  const recortar = (perfil, t0) => {
+    const i = perfil.findIndex(r => r[0] >= t0), a = perfil[i - 1], b = perfil[i];
+    if (!a || b[0] === t0) return perfil.slice(Math.max(0, i));
+    const u = (t0 - a[0]) / (b[0] - a[0]);
+    return [[t0, lerp(a[1], b[1], u), lerp(a[2], b[2], u)], ...perfil.slice(i)];
+  };
+  function piernaAnat(m, col, envuelta = false) {
     const uA = unit(m.raiz, m.rod), uB = unit(m.rod, m.tobillo), flex = n180(m.aP - m.a0);
-    const mA = ladoHueso(m.raiz, m.rod, PERF.muslo, 1), mP = ladoHueso(m.raiz, m.rod, PERF.muslo, -1);
+    const mA = ladoHueso(m.raiz, m.rod, envuelta ? recortar(PERF.muslo, 0.07) : PERF.muslo, 1), mP = ladoHueso(m.raiz, m.rod, envuelta ? recortar(PERF.muslo, 0.24) : PERF.muslo, -1);
     const pA = ladoHueso(m.rod, m.tobillo, PERF.pierna, 1), pP = ladoHueso(m.rod, m.tobillo, PERF.pierna, -1);
-    const rotula = convexo(m.rod, uA, uB, 5.6, 1);
+    const rotula = convexo(m.rod, uA, uB, 5.4, 1);
     const ant = [...mA, rotula, ...pA.slice(1)];
     const post = articular(mP, pP, m.rod, uA, uB, flex, 4.9, -1);
     /* pie en su marco: x hacia los dedos, y hacia la planta */
     const pie = enMarco(m.tobillo, m.aPie, m.e[2], [[0.8, -2.4], [5, -1.9], [9.5, -1.2], [12.8, -0.5], [14.3, 0.7], [13.1, 2.1], [10, 2.5], [6.5, 1.8], [2.5, 2.3], [-1.6, 2.9], [-3.9, 1.5], [-3.5, -0.7], [-2.2, -2.6]]);
     /* la calza llega al tobillo; el pie va descalzo */
-    const raiz = tapa(m.raiz, uA, 7.6, 8.6);
+    const raiz = envuelta ? [] : tapa(m.raiz, uA, 4.2, 7.6);
     /* la calza llega hasta el 88 % de la pierna (el tobillo y el pie quedan descubiertos) */
     const corta = PERF.pierna.filter(([t]) => t <= 0.75).concat([[0.88, lerp(2.8, 2.5, 0.52), lerp(3.2, 2.6, 0.52)]]);
     const pAc = ladoHueso(m.rod, m.tobillo, corta, 1), pPc = ladoHueso(m.rod, m.tobillo, corta, -1);
@@ -762,7 +785,7 @@ const FIGURA = (() => {
     return { f: [forma(cerrar([...raiz, ...ant, mano[mano.length - 1], ...mano.slice(0, -1).reverse(), ...[...post].reverse()]), col.piel)],
       l: [linea(deltoides, col, 0.4), linea(dedos, col, 0.3)] };
   }
-  function troncoAnat(E, col, aire) {
+  function troncoAnat(E, col, aire, muslo) {
     /* eje del tronco suavizado (Catmull-Rom por las 5 vértebras de control) */
     const P = E.col, ejes = [];
     for (let i = 0; i < 4; i++) for (let k = 0; k < 4; k++) {
@@ -774,7 +797,8 @@ const FIGURA = (() => {
     let largo = 0; const acum = [0];
     for (let i = 1; i < ejes.length; i++) { largo += Math.hypot(ejes[i].x - ejes[i - 1].x, ejes[i].y - ejes[i - 1].y); acum.push(largo); }
     const a = aire - 0.5, N = ejes.length;
-    const nor = i => { const u = unit(ejes[Math.max(0, i - 1)], ejes[Math.min(N - 1, i + 1)]); return { x: u.y, y: -u.x, u }; };
+    /* normal hacia el frente del cuerpo (a la izquierda del sentido cadera → hombros) */
+    const nor = i => { const u = unit(ejes[Math.max(0, i - 1)], ejes[Math.min(N - 1, i + 1)]); return { x: -u.y, y: u.x, u }; };
     const fr = [], es = [];
     ejes.forEach((p, i) => {
       const s = acum[i] / largo, q = nor(i);
@@ -785,13 +809,23 @@ const FIGURA = (() => {
       fr.push({ x: p.x + q.x * wf, y: p.y + q.y * wf, s }); es.push({ x: p.x - q.x * we, y: p.y - q.y * we, s });
     });
     const q0 = nor(0), u0 = q0.u, H0 = ejes[0];
-    /* glúteo: arco por detrás y por debajo de la cadera hasta el muslo; pubis adelante */
-    const gl = (g, r) => ({ x: H0.x + (-q0.x * Math.cos(rad(g)) - u0.x * Math.sin(rad(g))) * r, y: H0.y + (-q0.y * Math.cos(rad(g)) - u0.y * Math.sin(rad(g))) * r });
-    const nalga = [gl(28, 11.2), gl(55, 9.6), gl(82, 7.2)];
-    const pubis = { x: H0.x + q0.x * 4.6 - u0.x * 5.2, y: H0.y + q0.y * 4.6 - u0.y * 5.2 };
+    /* La pelvis termina sobre el muslo cercano: por detrás el glúteo baja
+       redondeado hasta el borde posterior del muslo; por delante el abdomen
+       llega al pliegue de la ingle sobre el borde anterior. Así cadera y
+       muslo forman una sola silueta, sin bultos. */
+    const atrasM = ladoHueso(muslo.raiz, muslo.rod, [[0.3, 0, 7.2]], -1)[0];
+    const frenteM = ladoHueso(muslo.raiz, muslo.rod, [[0.1, 5.9, 0]], 1)[0];
+    const esp0 = es[0];
+    const medio = { x: (esp0.x + atrasM.x) / 2, y: (esp0.y + atrasM.y) / 2 };
+    let gx = medio.x - H0.x, gy = medio.y - H0.y; const gl = Math.hypot(gx, gy) || 1;
+    /* la pelvis cubre toda la raíz del muslo (hasta un 30 % del largo) para que no se vea la pierna lejana por un hueco */
+    const frente30 = ladoHueso(muslo.raiz, muslo.rod, [[0.3, 6.4, 0]], 1)[0];
+    const nalga = [{ x: medio.x + gx / gl * 2.6, y: medio.y + gy / gl * 2.6 }, atrasM, frente30];
+    const pubis = frenteM;
     const qN = nor(N - 1), uN = qN.u, S = ejes[N - 1];
     const cuelloF = { x: S.x + uN.x * 3.6 + qN.x * 3.8, y: S.y + uN.y * 3.6 + qN.y * 3.8 }, cuelloE = { x: S.x + uN.x * 4.2 - qN.x * 4.2, y: S.y + uN.y * 4.2 - qN.y * 4.2 };
     const contorno = [pubis, ...fr, cuelloF, cuelloE, ...[...es].reverse(), ...nalga];
+    void q0; void u0;
     /* calza: de la cadera hasta la cintura (s < 0.3) */
     const corte = 0.3, frC = fr.filter(p => p.s <= corte), esC = es.filter(p => p.s <= corte);
     const calza = [pubis, ...frC, ...[...esC].reverse(), ...nalga];
@@ -817,13 +851,13 @@ const FIGURA = (() => {
     const oreja = P([-0.6, -0.8]), angOreja = Math.atan2(u.y, u.x) * 180 / Math.PI;
     const mechones = [pts([[4.0, 8.4], [0.4, 8.6], [-4.6, 7.0]]), pts([[2.6, 5.2], [-1.6, 6.6], [-6.8, 3.8]]), pts([[-1.0, 2.4], [-5.2, 3.0], [-8.0, -0.6]])];
     return { f: [forma(cerrar(piel), col.piel), { d: `M${f1(rodete.x + 4.1)},${f1(rodete.y)} A4.1,4.1 0 1 0 ${f1(rodete.x - 4.1)},${f1(rodete.y)} A4.1,4.1 0 1 0 ${f1(rodete.x + 4.1)},${f1(rodete.y)} Z`, fill: col.pelo }, forma(cerrar(pelo), col.pelo)],
-      l: [`<path d="M${suave(labioS)} Z" fill="${col.labio || col.piel}" opacity=".8"/><path d="M${suave(labioI)} Z" fill="${col.labio || col.piel}" opacity=".65"/>`,
-        `<ellipse cx="${f1(oreja.x)}" cy="${f1(oreja.y)}" rx="2.3" ry="1.45" transform="rotate(${f1(angOreja)} ${f1(oreja.x)} ${f1(oreja.y)})" fill="${col.pielS}" opacity=".55"/><path d="M${suave(pts([[0.3, 0.9], [-1.4, 0.4], [-1.5, -1.6], [-0.4, -2.6]]))}" fill="none" stroke="${col.linea}" stroke-width=".35"/>`,
-        `<path d="M${suave([...ojo, ojo[0]])}" fill="${col.blanco || '#fff'}" stroke="${col.linea}" stroke-width=".3"/><circle cx="${f1(iris.x)}" cy="${f1(iris.y)}" r=".62" fill="${col.ojo || '#222'}"/>`,
+      l: [`<path d="M${suave(labioS)} Z" style="fill:${col.labio}" opacity=".8"/><path d="M${suave(labioI)} Z" style="fill:${col.labio}" opacity=".65"/>`,
+        `<ellipse cx="${f1(oreja.x)}" cy="${f1(oreja.y)}" rx="2.3" ry="1.45" transform="rotate(${f1(angOreja)} ${f1(oreja.x)} ${f1(oreja.y)})" style="fill:${col.pielS}" opacity=".55"/><path d="M${suave(pts([[0.3, 0.9], [-1.4, 0.4], [-1.5, -1.6], [-0.4, -2.6]]))}" fill="none" stroke="${col.tinta}" stroke-width=".35"/>`,
+        `<path d="M${suave([...ojo, ojo[0]])}" fill="${col.blanco || '#fff'}" stroke="${col.tinta}" stroke-width=".3"/><circle cx="${f1(iris.x)}" cy="${f1(iris.y)}" r=".62" fill="${col.ojo || '#222'}"/>`,
         `<path d="M${suave(ojo.slice(0, 3))}" fill="none" stroke="${col.ojo || '#222'}" stroke-width=".55" stroke-linecap="round"/>`,
-        `<path d="M${suave(ceja)}" fill="none" stroke="${col.pelo}" stroke-width=".8" stroke-linecap="round"/>`,
-        `<path d="M${suave(boca)}" fill="none" stroke="${col.linea}" stroke-width=".4" stroke-linecap="round"/>`,
-        `<path d="M${suave(fosa)}" fill="none" stroke="${col.linea}" stroke-width=".35"/>`,
+        `<path d="M${suave(ceja)}" fill="none" style="stroke:${col.pelo}" stroke-width=".8" stroke-linecap="round"/>`,
+        `<path d="M${suave(boca)}" fill="none" stroke="${col.tinta}" stroke-width=".4" stroke-linecap="round"/>`,
+        `<path d="M${suave(fosa)}" fill="none" stroke="${col.tinta}" stroke-width=".35"/>`,
         ...mechones.map(m => `<path d="M${suave(m)}" fill="none" stroke="rgba(255,255,255,.14)" stroke-width=".5"/>`)] };
   }
   function cuelloAnat(E, col) {
@@ -846,11 +880,11 @@ const FIGURA = (() => {
     let out = '';
     for (let k = 0; k < 17; k++) {
       const s = 0.1 + (k + 0.5) / 17 * 0.9, q = en(s), atras = enPerfil(TR_ESPALDA, s) - 3.8;
-      const pt = { x: q.x - q.u.y * atras, y: q.y + q.u.x * atras, u: q.u };
+      const pt = { x: q.x + q.u.y * atras, y: q.y - q.u.x * atras, u: q.u };
       out += vert(pt, k < 5 ? 3.4 : 2.9, largo * 0.9 / 17 * 0.74, k < 5 ? ' lumbar' : ' dorsal');
     }
     const q0 = en(0.04), at0 = enPerfil(TR_ESPALDA, 0.04) - 3.6;
-    out += vert({ x: q0.x - q0.u.y * at0, y: q0.y + q0.u.x * at0, u: q0.u }, 4.2, largo * 0.09, ' sacro');
+    out += vert({ x: q0.x + q0.u.y * at0, y: q0.y - q0.u.x * at0, u: q0.u }, 4.2, largo * 0.09, ' sacro');
     const uc = unit(E.S, E.C);
     for (let k = 0; k < 7; k++) {
       const t = (k + 0.5) / 7 * 0.9, q = { x: lerp(E.S.x, E.C.x, t) - uc.y * 1.8 * 0, y: lerp(E.S.y, E.C.y, t), u: uc };
@@ -865,7 +899,7 @@ const FIGURA = (() => {
      la silueta queda bien definida. */
   function dibujoAnat(E, fantasma, orden, aire) {
     const c1 = ANAT.cerca, c2 = ANAT.lejos;
-    const P = { BC: brazoAnat(E.seg.bc, c1), BL: brazoAnat(E.seg.bl, c2), PC: piernaAnat(E.seg.pc, c1), PL: piernaAnat(E.seg.pl, c2), T: troncoAnat(E, c1, aire ?? 0.5) };
+    const P = { BC: brazoAnat(E.seg.bc, c1), BL: brazoAnat(E.seg.bl, c2), PC: piernaAnat(E.seg.pc, c1, true), PL: piernaAnat(E.seg.pl, c2), T: troncoAnat(E, c1, aire ?? 0.5, E.seg.pc) };
     const cu = cuelloAnat(E, c1), ca = cabezaAnat(E, c1);
     P.C = { f: [...cu.f, ...ca.f], l: [...cu.l, ...ca.l] };
     const seq = orden || ['BL', 'PL', 'C', 'T', 'PC', 'BC'];
@@ -877,7 +911,7 @@ const FIGURA = (() => {
     }
     const svg = capas.map(({ g, ks }) => {
       const col = g === 'lejos' ? c2 : c1, fs = ks.flatMap(k => P[k].f);
-      return `<g>${fs.map(x => `<path d="${x.d}" fill="${col.linea}" stroke="${col.linea}" stroke-width="1.1" stroke-linejoin="round"/>`).join('')}${fs.map(x => `<path d="${x.d}" fill="${x.fill}"/>`).join('')}${ks.flatMap(k => P[k].l).join('')}</g>`;
+      return `<g>${fs.map(x => `<path d="${x.d}" style="fill:${col.linea};stroke:${col.linea}" stroke-width="1.1" stroke-linejoin="round"/>`).join('')}${fs.map(x => `<path d="${x.d}" style="fill:${x.fill}"/>`).join('')}${ks.flatMap(k => P[k].l).join('')}</g>`;
     }).join('');
     return `<g class="${fantasma ? 'fig-fantasma' : 'fig-cuerpo'}">${svg}</g>`;
   }
@@ -979,11 +1013,13 @@ const FIGURA = (() => {
        · cámara lenta (velocidad 0,25 a 1),
        · capas: fantasma de la pose a la que va, trayectorias, centro de masa,
        · respiración: el tórax se expande al inhalar (resp por transición). */
-  function reproductor(cont, ej, { alCambiar = () => {}, alAvanzar = null, auto = true, fantasma = true, resp = null, capas = {} } = {}) {
+  function reproductor(cont, ej, { alCambiar = () => {}, alAvanzar = null, auto = true, fantasma = true, resp = null, capas = {}, fluido = false } = {}) {
     const enc = encuadre(ej), { poses } = preparar(ej), n = poses.length;
     cont.innerHTML = `<svg viewBox="0 0 ${W} ${H}" class="fig-svg" role="img" aria-label="Animación: ${ej.nom || 'ejercicio'}">${fondo(ej)}${etiquetaCam(ej)}<g ${zoom(enc)}><g class="fg"></g><g class="ft"></g><g class="fc"></g><g class="ff"></g></g></svg>`;
     const gF = cont.querySelector('.fg'), gT = cont.querySelector('.ft'), gC = cont.querySelector('.fc'), gFis = cont.querySelector('.ff');
     const pausaBase = ej.pausa || 650;
+    let fluir = fluido;
+    const pausaDe = k => fluir ? 0 : (poses[k].pausa ?? pausaBase) / Math.max(vel, 0.5);
     const capa = { fantasma, tray: false, fisica: false, ...capas };
     /* aire al llegar a cada pose (0 exhalado … 1 inhalado) */
     const aireEn = [0.5];
@@ -996,7 +1032,7 @@ const FIGURA = (() => {
     const dur = k => (poses[(k + 1) % n].dur || ej.dur || 1500) / vel;
     const quieto = () => matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.fx === 'suaves';
     const pintar = () => {
-      const r = cuadro(ej, i, f);
+      const r = cuadro(ej, i, f, fluir);
       gC.innerHTML = figuraSVG(ej, r, enc, false, aire(i, f));
       gF.innerHTML = capa.fantasma && n > 1 ? figuraSVG(ej, cuadro(ej, f > 0 && f < 1 ? (i + 1) % n : (i + 1) % n, 0), enc, true) : '';
       if (capa.tray && n > 1) { if (trayDe !== i) { gT.innerHTML = trayectorias(ej, i, enc); trayDe = i; } } else { gT.innerHTML = ''; trayDe = -1; }
@@ -1007,7 +1043,7 @@ const FIGURA = (() => {
     function paso(t) {
       if (!vivo || !cont.isConnected) { vivo = false; return; }
       if (modo === 'bucle') {
-        const el = t - t0, pausa = (poses[i].pausa ?? pausaBase) / Math.max(vel, 0.5);
+        const el = t - t0, pausa = pausaDe(i);
         if (quieto()) { if (el > dur(i) + pausa) { llegar(i + 1); t0 = t; pintar(); } }
         else if (el < pausa) { if (f !== 0) { f = 0; pintar(); } }
         else if (el < pausa + dur(i)) { f = (el - pausa) / dur(i); pintar(); }
@@ -1035,11 +1071,14 @@ const FIGURA = (() => {
         i = (i - 1 + n) % n; f = 1; modo = 'uno'; dir = -1; f0 = 1; t0 = performance.now();
       },
       pausar() { modo = 'quieto'; pintar(); },
-      reanudar() { if (n > 1) { if (f > 0) { t0 = performance.now() - (poses[i].pausa ?? pausaBase) / Math.max(vel, 0.5) - f * dur(i); } else t0 = performance.now(); modo = 'bucle'; } },
+      reanudar() { if (n > 1) { if (f > 0) { t0 = performance.now() - pausaDe(i) - f * dur(i); } else t0 = performance.now(); modo = 'bucle'; } },
+      /* fluido: reproduce todo seguido, sin detenerse en cada paso */
+      set fluido(b) { const pos = f; fluir = !!b; if (modo === 'bucle') t0 = performance.now() - pausaDe(i) - pos * dur(i); pintar(); },
+      get fluido() { return fluir; },
       /* posición continua: 2,5 = a mitad de camino entre la pose 2 y la 3 */
       irA(pos) { modo = 'quieto'; const k = Math.floor(pos); const fr = pos - k; i = ((k % n) + n) % n; f = Math.max(0, Math.min(0.999, fr)); pintar(); },
       capa(nombre, on) { capa[nombre] = on; trayDe = -1; pintar(); },
-      set velocidad(v) { const pausa = (poses[i].pausa ?? pausaBase) / Math.max(vel, 0.5); const el = performance.now() - t0; const prog = el < pausa ? null : (el - pausa) / dur(i); vel = v; if (modo === 'bucle' && prog != null) t0 = performance.now() - (poses[i].pausa ?? pausaBase) / Math.max(vel, 0.5) - prog * dur(i); else if (modo === 'uno') { f0 = f; t0 = performance.now(); } },
+      set velocidad(v) { const pausa = pausaDe(i); const el = performance.now() - t0; const prog = el < pausa ? null : (el - pausa) / dur(i); vel = v; if (modo === 'bucle' && prog != null) t0 = performance.now() - pausaDe(i) - prog * dur(i); else if (modo === 'uno') { f0 = f; t0 = performance.now(); } },
       get velocidad() { return vel; },
       get reproduciendo() { return modo !== 'quieto'; },
       get enBucle() { return modo === 'bucle'; },
