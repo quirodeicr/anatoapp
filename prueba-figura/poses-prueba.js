@@ -1,4 +1,4 @@
-/* Poses afinadas con el manual para la prueba (Roll Up y Swan). */
+/* Poses afinadas con el manual para la prueba (Roll Up, Swan y dos vistas desde arriba). */
 const POSES_PRUEBA = (() => {
   const X = (b, c = {}) => ({ ...b, ...c });
   /* Roll Up — supino; brazos por encima de la cabeza solo hasta donde las costillas
@@ -35,5 +35,39 @@ const POSES_PRUEBA = (() => {
     /* 2 · exhala: baja con control */
     X(SW0, { s: 2, dur: 1800 })
   ] };
-  return { 'mat1-e03': rollUp, 'mat1-e15': swan };
+  /* Side Leg Kicks — de costado, visto desde arriba: se ve la silueta sagital (el frente
+     del cuerpo hacia arriba de la imagen). Tronco en línea con el borde posterior del mat,
+     caderas flexionadas para que los pies lleguen al borde anterior. Brazo de abajo: el codo
+     en el mat más allá de la cabeza y la cabeza en la mano (el antebrazo en escorzo); brazo
+     de arriba: la mano apoyada en el mat delante del pecho. La pierna de arriba patea. */
+  /* el brazo de arriba baja del hombro al mat: desde arriba se ve corto (escorzo); el de
+     abajo va por el mat más allá de la cabeza (el hombro de abajo sube hacia la oreja) */
+  const SLK = { tr: 180, fl: 0, cab: 0, bc: [-74, 12, 6], bl: [180, 160, 0], pc: [-34, 0, 82], pl: [-37, 0, 84], k: { bc: [0.34, 0.6, 0.9], bl: [1.1, 0.28, 0.5] } };
+  const sideKicks = { nom: 'Side Leg Kicks', camara: 'arriba', poses: [
+    SLK,
+    /* 1 · inhala: patea al frente con el pie flexionado… */
+    X(SLK, { pc: [-74, 0, -8], s: 1, dur: 800 }),
+    /* …y un segundo pulso, un poco más lejos */
+    X(SLK, { pc: [-86, 0, -12], s: 1, dur: 380, pausa: 70 }),
+    /* 2 · exhala: patea atrás con el pie en punta, sin mover el tronco */
+    X(SLK, { pc: [22, 0, 88], s: 2, dur: 1300 })
+  ] };
+  /* Spine Twist — sentado visto desde arriba: piernas juntas y estiradas con los pies
+     flexionados (dedos al techo), brazos abiertos a la altura de los hombros. La columna
+     rota sobre la pelvis quieta (rot): giran los hombros, los brazos en línea y la cabeza;
+     las caderas y los pies quedan parejos */
+  const TWS = { tr: -90, fl: 0, cab: 0, rot: 0, bc: [180, 0, 0], bl: [0, 0, 0], pc: [86.4, 0, 90], pl: [93.6, 0, 90], k: { tronco: 0.04, pc: [1, 1, 0.32], pl: [1, 1, 0.32] } };
+  const girar = g => X(TWS, { rot: g, bc: [180 + g, 0, 0], bl: [g, 0, 0] });
+  const spineTwist = { nom: 'Spine Twist', vista: 'frente', camara: 'arriba', matV: true, poses: [
+    TWS,
+    /* 1 · inhala: rota hacia un lado con dos pulsos (respiración percusiva) */
+    X(girar(-38), { s: 1, dur: 900, alto: true, pausa: 60 }),
+    X(girar(-50), { s: 1, dur: 420, pausa: 90 }),
+    /* 2 · exhala: vuelve al centro */
+    X(TWS, { s: 2, dur: 1200 }),
+    X(girar(38), { s: 1, dur: 900, alto: true, pausa: 60 }),
+    X(girar(50), { s: 1, dur: 420, pausa: 90 }),
+    X(TWS, { s: 2, dur: 1200 })
+  ] };
+  return { 'mat1-e03': rollUp, 'mat1-e15': swan, 'mat1-e21': sideKicks, 'mat2-e01': spineTwist };
 })();

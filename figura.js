@@ -88,14 +88,18 @@ const FIGURA = (() => {
     const C = pol(S, aCue, L.cuello * kt);
     const lat = { x: Math.cos(rad(P.tr - 90)), y: Math.sin(rad(P.tr - 90)) };
     const off = (p, d) => ({ x: p.x + lat.x * d, y: p.y + lat.y * d });
+    /* rot: rotación axial del tórax sobre la pelvis quieta (sentado visto desde
+       arriba, Spine Twist, Saw): gira la línea de los hombros, no la de las caderas */
+    const latH = P.rot ? { x: Math.cos(rad(P.tr - 90 + P.rot)), y: Math.sin(rad(P.tr - 90 + P.rot)) } : lat;
+    const offH = (p, d) => ({ x: p.x + latH.x * d, y: p.y + latH.y * d });
     const hombro = pol(S, aTop + 180, 3.5);
     const E = {
-      vista, fr, anch, g: P.g || 0, col, angs, S, C, H: Hc, aTop, aCue,
+      vista, fr, anch, g: P.g || 0, rot: P.rot || 0, latH, col, angs, S, C, H: Hc, aTop, aCue,
       ant: { x: Math.cos(rad(aTop + 90)), y: Math.sin(rad(aTop + 90)) },
       antCab: { x: Math.cos(rad(aCue + 90)), y: Math.sin(rad(aCue + 90)) },
       arriba: { x: Math.cos(rad(aCue)), y: Math.sin(rad(aCue)) },
       lat, esc,
-      hom: { bc: fr ? off(hombro, 14 * anch) : hombro, bl: fr ? off(hombro, -14 * anch) : hombro },
+      hom: { bc: fr ? offH(hombro, 14 * anch) : hombro, bl: fr ? offH(hombro, -14 * anch) : hombro },
       cad: { pc: fr ? off(Hc, 8 * anch) : Hc, pl: fr ? off(Hc, -8 * anch) : Hc },
       seg: {}
     };
@@ -219,7 +223,7 @@ const FIGURA = (() => {
 
   /* ---------- resolver una pose en el mundo ----------
      pins: { apoyo: x } posiciones fijas; xoff: corrimiento si no hay pin rígido */
-  function resolver(P, ej, { pins = {}, xoff = 0, forzados = null, ancla = null } = {}) {
+  function resolver(P, ej, { pins = {}, xoff = 0, forzados = null, ancla = null, cambian = [] } = {}) {
     const avisos = [];
     let E = esqueleto(P, ej.vista);
     const agarres = Object.entries(P.ik || {});
@@ -257,7 +261,10 @@ const FIGURA = (() => {
       /* apoyado en pies o manos: la altura la dan los pies (las manos se
          acomodan doblando los codos), sin que el tronco atraviese el piso */
       const pies = ext.filter(n => /^(pie|talon|punta)/.test(n)), base = pies.length ? pies : ext;
-      dy = Math.min(PISO - Math.max(...base.map(n => contactoDe(E, n).y)), dyCuerpo);
+      /* en una transición, un brazo que llega al piso antes de tiempo se apoya
+         (paso 6) en vez de levantar todo el cuerpo */
+      const dyT = forzados && !ej.persp ? piso - Math.max(...contorno(E, new Set(['bc', 'bl', 'pc', 'pl'])).map(p => p.y)) : dyCuerpo;
+      dy = Math.min(PISO - Math.max(...base.map(n => contactoDe(E, n).y)), dyT);
     } else dy = dyCuerpo;
     /* 2. corrimiento horizontal: un apoyo rígido clavado manda */
     let dx = ancla ? ancla.x - anclaX(E, ej.ancla) : xoff;
@@ -284,7 +291,14 @@ const FIGURA = (() => {
     /* 6. los miembros libres no atraviesan el piso: se apoyan en él */
     if (ej.camara !== 'arriba' && !ej.persp) {
       const usados = new Set([...excl, ...rig.filter(n => UNIHUESO.test(n)).map(miembroDe)]);
-      for (const k of ['bc', 'bl', 'pc', 'pl']) if (!usados.has(k)) chocar(E, k, P, piso);
+      for (const k of ['bc', 'bl', 'pc', 'pl']) {
+        if (usados.has(k)) continue;
+        /* la mano o el pie que se apoya (o despega) en esta transición: al llegar
+           al piso se queda ahí y dobla el codo o la rodilla, como en un apoyo real */
+        const n = cambian.find(a => miembroDe(a) === k);
+        if (n && bajoMiembro(E, k) > piso + 0.3) apoyarExtremo(E, n, k, contactoDe(E, n).x, P, piso);
+        chocar(E, k, P, piso);
+      }
     }
     const contactos = {};
     for (const n of ap) contactos[n] = contactoDe(E, n);
@@ -378,8 +392,11 @@ const FIGURA = (() => {
   /* ---------- tiempo y articulación ---------- */
   /* perfil de velocidad de mínimo jerk: arranca y frena con aceleración nula */
   const mj = t => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * t * (10 + t * (6 * t - 15)));
-  /* modo fluido: no frena del todo en cada pose (pasa a un 65 % de la velocidad media) */
-  const flu = t => (t <= 0 ? 0 : t >= 1 ? 1 : 0.65 * t + 0.35 * mj(t));
+  /* modo fluido: cada canal (segmento de columna, cabeza, cada miembro) sigue una
+     curva de Hermite cúbica; [α, β] = velocidad al salir y al llegar, relativa a la
+     velocidad media del tramo (1 = constante, 0 = frena en esa pose) */
+  const UNO = [1, 1];
+  const herm = (x, [a, b]) => { x = x <= 0 ? 0 : x >= 1 ? 1 : x; const x2 = x * x, x3 = x2 * x; return 3 * x2 - 2 * x3 + a * (x3 - 2 * x2 + x) + b * (x3 - x2); };
   const CUR0 = [-0.375, -0.125, 0.125, 0.375];
   const segAngs = P => (P.cur || CUR0).map(c => P.tr + P.fl * c);
   /* rangos de la articulación (respecto del segmento al que se une; − = flexión):
@@ -468,33 +485,49 @@ const FIGURA = (() => {
     return K[i].xoff + lerp(t[q], t[q + 1], u) + (K[i].resto || 0) * e;
   }
 
-  /* Mezcla de dos poses en la fracción de tiempo f (0…1, sin suavizar). */
-  function mezclar(A, B, f, ej, art = 0, fluido = false) {
-    const r = { ...B }, e = fluido ? flu(f) : mj(f);
+  /* Mezcla de dos poses en la fracción de tiempo f (0…1, sin suavizar).
+     Por pasos, todo arranca y frena en cada pose (mínimo jerk). En modo fluido
+     f avanza parejo por el camino y cada canal usa sus tangentes (tg, de fluidez):
+     lo que sigue moviéndose en el tramo siguiente pasa por la pose sin frenar y lo
+     que termina ahí desacelera solo. tg.reg, si está, anota cuánto cambia cada canal. */
+  function mezclar(A, B, f, ej, art = 0, fluido = false, tg = null) {
+    const r = { ...B }, e = fluido ? f : mj(f);
+    const ch = (c, d) => { if (tg && tg.reg) tg.reg[c] = d; return (tg && tg[c]) || UNO; };
+    const pe = (c, d) => (fluido ? herm(f, ch(c, d)) : e);
     const dTr = n180(B.tr - A.tr), ca = A.cur || CUR0, cb = B.cur || CUR0;
     /* cada segmento (lumbar baja… torácica alta, cuello) arranca con un
-       pequeño retraso respecto del anterior y dura el 60 % del tiempo */
+       pequeño retraso respecto del anterior y dura el 60 % del tiempo.
+       En modo fluido la onda va adelantando o atrasando cada segmento a mitad
+       del tramo, sin cambiar la velocidad con la que entra y sale de las poses */
     const D = 0.4, ret = art > 0 ? [4, 3, 2, 1, 0] : art < 0 ? [0, 1, 2, 3, 4] : null;
-    const fr = q => (ret ? (fluido ? flu : mj)((f - ret[q] * D / 4) / (1 - D)) : e);
-    r.segs = [0, 1, 2, 3].map(q => { const t = fr(q); return A.tr + dTr * t + lerp(A.fl * ca[q], B.fl * cb[q], t); });
-    r.tr = A.tr + dTr * e;
-    r.fl = lerp(A.fl, B.fl, e);
-    r.cur = ca.map((v, q) => lerp(v, cb[q], e));
-    r.cab = lerp(A.cab, B.cab, fr(4));
+    const fr = (q, c, d) => fluido ? herm(ret ? f + 0.1 * (2 - ret[q]) * Math.sin(Math.PI * f) ** 2 : f, ch(c, d))
+      : ret ? mj((f - ret[q] * D / 4) / (1 - D)) : e;
+    r.segs = [0, 1, 2, 3].map(q => { const a = A.tr + A.fl * ca[q], d = dTr + B.fl * cb[q] - A.fl * ca[q]; return a + d * fr(q, 's' + q, d); });
+    r.tr = A.tr + dTr * pe('tr', dTr);
+    const efl = pe('fl', B.fl - A.fl);
+    r.fl = lerp(A.fl, B.fl, efl);
+    r.cur = ca.map((v, q) => lerp(v, cb[q], efl));
+    r.cab = lerp(A.cab, B.cab, fr(4, 'cab', B.cab - A.cab));
     const perfil = ej.vista !== 'frente' && ej.camara !== 'arriba';
     const sA = segAngs(A), sB = segAngs(B);
     const libre = (P, k) => !(P.apoyo || []).some(a => (k[0] === 'p' ? /^(pie|talon|punta|rodilla)/ : /^(mano|antebrazo)/).test(a) && a.slice(-1) === (k[1] === 'c' ? 'C' : 'L'));
     for (const k of ['bc', 'bl', 'pc', 'pl']) {
       const brazo = k[0] === 'b', q = brazo ? 3 : 0;
-      const resto = [lerp(A[k][1], B[k][1], e), lerp(A[k][2] || 0, B[k][2] || 0, e)];
-      if (!perfil) { r[k] = [lerpAng(A[k][0], B[k][0], e), ...resto]; continue; }
+      /* un miembro apoyado en las dos poses se mueve en bloque (pie plano, mano en el mat):
+         ángulo, flexión y tobillo o muñeca con el mismo avance */
+      const bloque = fluido && !libre(A, k) && !libre(B, k);
       /* ángulo del hombro (o la cadera) respecto de su segmento, dentro del rango
          anatómico: decide por qué lado gira el miembro */
       const v = VENT[k[0]], ra = enVentana(A[k][0] - sA[q] - 180, v), rb = enVentana(B[k][0] - sB[q] - 180, v);
+      const d1 = B[k][1] - A[k][1], d2 = (B[k][2] || 0) - (A[k][2] || 0);
+      const dBloque = (perfil ? rb - ra + n180(sB[q] - sA[q]) : n180(B[k][0] - A[k][0])) || d1 || d2;
+      const pk = (c, d) => (bloque ? pe(k + 'b', dBloque) : pe(c, d));
+      const resto = [lerp(A[k][1], B[k][1], pk(k + '1', d1)), lerp(A[k][2] || 0, B[k][2] || 0, pk(k + '2', d2))];
+      if (!perfil) { const d = n180(B[k][0] - A[k][0]); r[k] = [A[k][0] + d * pk(k, d), ...resto]; continue; }
       if (!brazo && art && libre(A, k) && libre(B, k)) {
         /* piernas en el aire mientras la columna articula: viajan con la pelvis
            (Roll Over, Teaser, Jackknife) */
-        r[k] = [r.segs[q] + 180 + lerp(ra, rb, e), ...resto];
+        r[k] = [r.segs[q] + 180 + lerp(ra, rb, pe(k + 'r', rb - ra)), ...resto];
       } else {
         /* el resto se orienta en el espacio (brazos que alcanzan, piernas apoyadas),
            girando por el lado que permite la articulación */
@@ -503,32 +536,135 @@ const FIGURA = (() => {
            cabeza hasta atrás: de perfil, la circunducción se ve como un giro largo) */
         const g = (B.giro || {})[k];
         if (g && Math.sign(d) !== g) d += g * 360;
-        r[k] = [A[k][0] + d * e, ...resto];
+        r[k] = [A[k][0] + d * pk(k, d), ...resto];
       }
     }
     const ka = A.k || {}, kb = B.k || {};
     r.k = {};
-    for (const k of ['bc', 'bl', 'pc', 'pl']) if (ka[k] || kb[k]) r.k[k] = [0, 1, 2].map(q => lerp((ka[k] || [])[q] ?? 1, (kb[k] || [])[q] ?? 1, e));
-    if (ka.ancho != null || kb.ancho != null) r.k.ancho = lerp(ka.ancho ?? 1, kb.ancho ?? 1, e);
-    if (ka.tronco != null || kb.tronco != null) r.k.tronco = lerp(ka.tronco ?? 1, kb.tronco ?? 1, e);
-    r.g = lerp(A.g || 0, B.g || 0, e);
+    for (const k of ['bc', 'bl', 'pc', 'pl']) if (ka[k] || kb[k]) r.k[k] = [0, 1, 2].map(q => { const a = (ka[k] || [])[q] ?? 1, b = (kb[k] || [])[q] ?? 1; return lerp(a, b, fluido && !libre(A, k) && !libre(B, k) ? herm(f, (tg && tg[k + 'b']) || UNO) : pe('k' + k + q, b - a)); });
+    if (ka.ancho != null || kb.ancho != null) r.k.ancho = lerp(ka.ancho ?? 1, kb.ancho ?? 1, pe('kancho', (kb.ancho ?? 1) - (ka.ancho ?? 1)));
+    if (ka.tronco != null || kb.tronco != null) r.k.tronco = lerp(ka.tronco ?? 1, kb.tronco ?? 1, pe('ktronco', (kb.tronco ?? 1) - (ka.tronco ?? 1)));
+    r.g = lerp(A.g || 0, B.g || 0, pe('g', (B.g || 0) - (A.g || 0)));
+    if (A.rot || B.rot) r.rot = lerp(A.rot || 0, B.rot || 0, pe('rot', (B.rot || 0) - (A.rot || 0)));
     /* los agarres se mantienen solo si están en las dos poses */
     r.ik = {};
     for (const [b, d] of Object.entries(B.ik || {})) if ((A.ik || {})[b] === d) r.ik[b] = d;
     return r;
   }
-  /* cuadro de la transición i → i+1 en la fracción de tiempo f */
-  /* fluido: sin frenar en cada pose clave (velocidad continua entre pasos) */
+  /* cuadro de la transición i → i+1 en la fracción de tiempo f.
+     fluido: f es el avance por el camino (ver fluidez y frases) */
   function cuadro(ej, i, f, fluido = false) {
     const { poses, K } = preparar(ej), n = poses.length;
     const j = (i + 1) % n, A = poses[i], B = poses[j];
     if (f <= 0 || n === 1) return resolver(A, ej, { xoff: K[i].xoff, pins: K[i].pins });
     if (f >= 1) return resolver(B, ej, { xoff: K[j].xoff, pins: K[j].pins });
-    const P = mezclar(A, B, f, ej, K[i].art, fluido), comp = compartidos(ej, A, B), pins = {}, e = fluido ? flu(f) : mj(f);
-    for (const a of comp) if (K[i].cont[a] && K[j].cont[a]) pins[a] = lerp(K[i].cont[a].x, K[j].cont[a].x, e);
+    const tg = fluido ? fluidez(ej).tg[i] : null;
+    const P = mezclar(A, B, f, ej, K[i].art, fluido, tg), comp = compartidos(ej, A, B), pins = {};
+    const e = fluido ? herm(f, tg.ancla || UNO) : mj(f), etr = fluido ? herm(f, tg.tr || UNO) : e;
+    for (const a of comp) pins[a] = lerp(contactoDe(K[i].E, a).x, contactoDe(K[j].E, a).x, e);
+    const cambian = ej.rueda ? [] : [...(A.apoyo || []), ...(B.apoyo || [])].filter(a => EXTREMO.test(a) && !comp.includes(a) && !comp.some(c => miembroDe(c) === miembroDe(a)));
     /* sin apoyo rígido clavado, el punto de anclaje avanza (rodando, si rueda) */
-    const ancla = { x: K[i].rueda ? xRueda(K, i, e) : lerp(anclaX(K[i].E, ej.ancla), anclaX(K[j].E, ej.ancla), e) };
-    return resolver(P, ej, { pins, forzados: comp, ancla });
+    const ancla = { x: K[i].rueda ? xRueda(K, i, etr) : lerp(anclaX(K[i].E, ej.ancla), anclaX(K[j].E, ej.ancla), e) };
+    return resolver(P, ej, { pins, forzados: comp, ancla, cambian });
+  }
+
+  /* ---------- modo fluido ----------
+     Un movimiento real no frena en cada paso del manual: frena donde termina,
+     donde cambia de sentido o donde se sostiene. Esas poses son las paradas y
+     dividen el ciclo en frases. Cada frase arranca con aceleración suave, va a
+     velocidad pareja y frena al final (rampa); por dentro, cada canal pasa por
+     las poses intermedias con la velocidad que trae (tangentes de Hermite
+     monótonas, PCHIP: no se pasa de largo ni vuelve atrás).
+     En la pose, alto: true la vuelve parada y alto: false la deja pasar;
+     ej.continuo: la pose inicial no es parada (círculos, bombeos). */
+  const MARCAS_MOV = E => [E.H, E.S, E.C, E.seg.bc.codo, E.seg.bc.mano, E.seg.bl.mano, E.seg.pc.rod, E.seg.pc.punta, E.seg.pl.rod, E.seg.pl.punta, ...E.col];
+  function paradas(ej) {
+    const { poses, K } = preparar(ej), n = poses.length, M = K.map(k => MARCAS_MOV(k.E));
+    const dif = (a, b) => M[a].flatMap((p, q) => [M[b][q].x - p.x, M[b][q].y - p.y]);
+    return poses.map((P, k) => {
+      if (P.alto != null) return !!P.alto;
+      if (k === 0 && !ej.continuo) return true;
+      const di = dif((k - 1 + n) % n, k), dd = dif(k, (k + 1) % n), ni = Math.hypot(...di), nd = Math.hypot(...dd);
+      /* se sostiene, o el movimiento se da vuelta (más de ~100°) */
+      if (ni < 4 || nd < 4) return true;
+      return di.reduce((s, v, q) => s + v * dd[q], 0) / (ni * nd) < -0.2;
+    });
+  }
+  /* velocidad en una pose intermedia (Fritsch–Butland): 0 si el canal cambia de
+     sentido o se queda quieto de un lado; si no, media armónica ponderada */
+  const pchip = (s1, s2, h1, h2) => (s1 * s2 <= 0 ? 0 : (3 * h1 + 3 * h2) / ((2 * h2 + h1) / s1 + (h2 + 2 * h1) / s2));
+  function fluidez(ej) {
+    const prep = preparar(ej);
+    if (prep.flu) return prep.flu;
+    const { poses, K } = prep, n = poses.length;
+    const durs = poses.map((_, k) => poses[(k + 1) % n].dur || ej.dur || 1500);
+    const del = poses.map((A, k) => {
+      const t = { reg: {} };
+      mezclar(A, poses[(k + 1) % n], 0.5, ej, K[k].art, true, t);
+      if (!K[k].rueda) t.reg.ancla = anclaX(K[(k + 1) % n].E, ej.ancla) - anclaX(K[k].E, ej.ancla);
+      return t.reg;
+    });
+    const alto = n > 1 ? paradas(ej) : [true];
+    const tg = del.map((d, k) => {
+      const kp = (k - 1 + n) % n, kn = (k + 1) % n, t = {};
+      for (const [c, v] of Object.entries(d)) {
+        if (Math.abs(v) < 1e-6) continue;
+        const S = v / durs[k];
+        /* en una parada la velocidad la pone la rampa (1 = sin frenar dos veces); si el
+           canal no sigue del otro lado (una mano o un pie que se apoya o despega, una
+           pierna que pasa a moverse con la pelvis) llega o sale con velocidad 0 */
+        const a = alto[k] ? 1 : c in del[kp] ? pchip(del[kp][c] / durs[kp], S, durs[kp], durs[k]) / S : 0;
+        const b = alto[kn] ? 1 : c in del[kn] ? pchip(S, del[kn][c] / durs[kn], durs[k], durs[kn]) / S : 0;
+        t[c] = [a, b];
+      }
+      return t;
+    });
+    /* tramos sin movimiento (la vuelta a la pose inicial): un respiro corto */
+    const M = K.map(q => MARCAS_MOV(q.E));
+    const quieto = M.map((m, k) => Math.max(...m.map((p, q) => Math.hypot(M[(k + 1) % n][q].x - p.x, M[(k + 1) % n][q].y - p.y))) < 2);
+    const frases = [], cortes = alto.map((a, k) => (a ? k : -1)).filter(k => k >= 0);
+    const inicios = cortes.length ? cortes : [0];
+    inicios.forEach((ini, q) => {
+      const fin = cortes.length ? inicios[(q + 1) % inicios.length] : 0;
+      const segs = [];
+      let k = ini;
+      do { segs.push(k); k = (k + 1) % n; } while (k !== fin);
+      const ds = segs.map(k => (quieto[k] ? Math.min(durs[k], 450) : durs[k])), T = ds.reduce((a, b) => a + b, 0);
+      const c = [0];
+      ds.forEach(d => c.push(c[c.length - 1] + d / T));
+      /* rampa: fracción de la frase que dura la aceleración (y la frenada) */
+      const m = segs.length, a = !cortes.length ? 0 : m === 1 ? 0.5 : Math.max(0.2, 0.5 / m);
+      frases.push({ ini, segs, T, c, a, alto: !!cortes.length });
+    });
+    const fraseDe = [];
+    frases.forEach((F, q) => F.segs.forEach(k => { fraseDe[k] = q; }));
+    prep.flu = { tg, alto, frases, fraseDe };
+    return prep.flu;
+  }
+  /* avance por el camino en función del tiempo de la frase: acelera, crucero y
+     frena; velocidad y aceleración continuas (las rampas son smoothstep) */
+  function rampa(t, a) {
+    if (a <= 0) return t;
+    if (t > 1 - a) return 1 - rampa(1 - t, a);
+    const c = 1 / (1 - a);
+    if (t < a) { const x = t / a; return c * a * (x * x * x - x * x * x * x / 2); }
+    return c * (a / 2 + t - a);
+  }
+  function rampaInv(u, a) {
+    let lo = 0, hi = 1;
+    for (let q = 0; q < 30; q++) { const m = (lo + hi) / 2; if (rampa(m, a) < u) lo = m; else hi = m; }
+    return (lo + hi) / 2;
+  }
+  /* de la fracción de tiempo de una frase a (tramo, avance) y de vuelta */
+  function enFrase(F, t) {
+    const u = rampa(Math.max(0, Math.min(1, t)), F.a);
+    let s = 0;
+    while (s < F.segs.length - 1 && u >= F.c[s + 1]) s++;
+    return { i: F.segs[s], f: Math.max(0, Math.min(1, (u - F.c[s]) / (F.c[s + 1] - F.c[s]))) };
+  }
+  function deFrase(F, i, f) {
+    const s = Math.max(0, F.segs.indexOf(i));
+    return rampaInv(F.c[s] + f * (F.c[s + 1] - F.c[s]), F.a);
   }
 
   /* ---------- centro de masa (Winter 2009: fracción de la masa y posición
@@ -573,27 +709,41 @@ const FIGURA = (() => {
       for (const k of ['bc', 'bl']) { const m = E.seg[k], fx = ((m.a0 - m.aA + 540) % 360) - 180; if (!E.fr && (fx < -8 || fx > 160)) fallas.push(`${donde}: codo ${k} fuera de rango (${fx.toFixed(0)}°)`); }
     };
     let previo = null;
+    /* r: cuadro; clave: es una pose clave; ms: tiempo desde el cuadro anterior */
+    const revisar = (r, donde, i, clave, ms) => {
+      r.avisos.forEach(a => fallas.push(`${donde}: ${a}`));
+      if (ej.camara !== 'arriba') {
+        const pts = contorno(r.E, ej.persp ? new Set(['pc', 'pl']) : new Set());
+        const bajo = Math.max(...pts.map(p => p.y));
+        if (bajo > PISO + 1.2) fallas.push(`${donde}: atraviesa el piso (${(bajo - PISO).toFixed(1)})`);
+        const piso = ej.persp ? PISO - 24 : PISO;
+        if (ej.persp ? bajo > piso + 1.2 : false) fallas.push(`${donde}: atraviesa el piso`);
+        if (bajo < piso - 1.2) fallas.push(`${donde}: flota (${(piso - bajo).toFixed(1)})`);
+        const ap = clave ? (poses[i].apoyo || []) : Object.keys(r.contactos);
+        for (const a of ap) { const c = contactoDe(r.E, a); if (Math.abs(c.y - piso) > 1.2) fallas.push(`${donde}: ${a} no toca el piso (${(PISO - c.y).toFixed(1)})`); }
+      }
+      limite(r.E, donde);
+      if (clave) { const q = equilibrio(ej, i); if (q && q.fuera > 0) fallas.push(`${donde}: fuera de equilibrio (centro de masa ${q.fuera.toFixed(1)} fuera de la base)`); }
+      const marcas = [r.E.H, r.E.S, r.E.C, r.E.seg.pc.tobillo, r.E.seg.bc.muneca];
+      /* velocidad de las marcas en unidades cada 100 ms: más de 30 (~3,5 m/s) es un salto */
+      if (previo && ms) { const salto = Math.max(...marcas.map((p, q) => Math.hypot(p.x - previo[q].x, p.y - previo[q].y))) * 100 / ms; if (salto > 30) fallas.push(`${donde}: salto brusco (${salto.toFixed(0)} cada 100 ms)`); }
+      previo = marcas;
+    };
     for (let i = 0; i < (n > 1 ? n : 1); i++) {
       for (let s = 0; s < (n > 1 ? pasos : 1); s++) {
-        const f = s / pasos, r = cuadro(ej, i, f), donde = `pose ${i}${f ? ` → ${(i + 1) % n} (${Math.round(f * 100)}%)` : ''}`;
-        r.avisos.forEach(a => fallas.push(`${donde}: ${a}`));
-        if (ej.camara !== 'arriba') {
-          const pts = contorno(r.E, ej.persp ? new Set(['pc', 'pl']) : new Set());
-          const bajo = Math.max(...pts.map(p => p.y));
-          if (bajo > PISO + 1.2) fallas.push(`${donde}: atraviesa el piso (${(bajo - PISO).toFixed(1)})`);
-          const piso = ej.persp ? PISO - 24 : PISO;
-          if (ej.persp ? bajo > piso + 1.2 : false) fallas.push(`${donde}: atraviesa el piso`);
-          if (bajo < piso - 1.2) fallas.push(`${donde}: flota (${(piso - bajo).toFixed(1)})`);
-          const ap = f ? Object.keys(r.contactos) : (poses[i].apoyo || []);
-          for (const a of ap) { const c = contactoDe(r.E, a); if (Math.abs(c.y - piso) > 1.2) fallas.push(`${donde}: ${a} no toca el piso (${(PISO - c.y).toFixed(1)})`); }
+        const f = s / pasos;
+        revisar(cuadro(ej, i, f), `pose ${i}${f ? ` → ${(i + 1) % n} (${Math.round(f * 100)}%)` : ''}`, i, !f, (poses[(i + 1) % n].dur || ej.dur || 1500) / pasos);
+      }
+    }
+    /* modo fluido: se recorre cada frase en tiempo real */
+    if (n > 1) {
+      previo = null;
+      for (const F of fluidez(ej).frases) {
+        const N = Math.max(2, Math.ceil(F.T / 40));
+        for (let s = 0; s <= N; s++) {
+          const { i, f } = enFrase(F, s / N);
+          revisar(cuadro(ej, i, f, true), `fluido, pose ${i} → ${(i + 1) % n} (${Math.round(f * 100)}%)`, i, false, s ? F.T / N : 0);
         }
-        limite(r.E, donde);
-        if (!f) { const q = equilibrio(ej, i); if (q && q.fuera > 0) fallas.push(`${donde}: fuera de equilibrio (centro de masa ${q.fuera.toFixed(1)} fuera de la base)`); }
-        const clave = [r.E.H, r.E.S, r.E.C, r.E.seg.pc.tobillo, r.E.seg.bc.muneca];
-        /* velocidad de las marcas en unidades cada 100 ms: más de 30 (~3,5 m/s) es un salto */
-        const ms = (poses[(i + 1) % n].dur || ej.dur || 1500) / pasos;
-        if (previo) { const salto = Math.max(...clave.map((p, q) => Math.hypot(p.x - previo[q].x, p.y - previo[q].y))) * 100 / ms; if (salto > 30) fallas.push(`${donde}: salto brusco (${salto.toFixed(0)} cada 100 ms)`); }
-        previo = clave;
       }
     }
     return [...new Set(fallas)];
@@ -916,6 +1066,101 @@ const FIGURA = (() => {
     return `<g class="${fantasma ? 'fig-fantasma' : 'fig-cuerpo'}">${svg}</g>`;
   }
 
+  /* ---------- vista desde arriba (estilo anatómico) ----------
+     De costado, desde arriba se ve la silueta sagital: se usa el dibujo de perfil.
+     Sentado, desde arriba (E.fr) se ve otra cosa: la coronilla con el rodete, la
+     cintura escapular y los brazos, la pelvis que asoma atrás y a los costados y
+     las piernas enteras con los pies hacia el techo. rot gira el tórax, los brazos
+     y la cabeza sobre la pelvis quieta. */
+  /* mat de 180 × 60 cm a la escala de la figura (≈ 1,08 cm por unidad) */
+  function tapete(ej, enc) {
+    if (ej.camara !== 'arriba' || (ej.estilo || ESTILO) !== 'anatomico') return '';
+    const E = mover(cuadro(ej, 0, 0).E, enc.cx, enc.cy), largo = 166, ancho = 56;
+    let x, y, w, h;
+    if (E.fr) {
+      /* sentado cerca de un extremo: el mat sigue a lo largo de las piernas */
+      w = ancho; h = largo; x = E.H.x - w / 2; y = E.H.y - 24;
+    } else {
+      /* de costado: el tronco en línea con el borde posterior del mat (abajo en la
+         imagen, la espalda) y los pies llegando al borde anterior */
+      const atras = E.ant.y < 0 ? 1 : -1, izq = E.C.x < E.H.x;
+      /* la cabeza (y el codo de abajo, que va más allá) cerca de un extremo */
+      const borde = izq ? Math.min(E.C.x - 14, E.seg.bl.codo.x - 7, E.seg.bc.codo.x - 7) : Math.max(E.C.x + 14, E.seg.bl.codo.x + 7, E.seg.bc.codo.x + 7);
+      w = largo; h = ancho; x = izq ? borde : borde - w;
+      y = atras > 0 ? E.S.y + 12 - h : E.S.y - 12;
+    }
+    const lineas = E.fr ? [0.25, 0.5, 0.75].map(t => `<line x1="${f1(x + 4)}" y1="${f1(y + h * t)}" x2="${f1(x + w - 4)}" y2="${f1(y + h * t)}" class="fig-mat-raya"/>`).join('')
+      : [0.25, 0.5, 0.75].map(t => `<line x1="${f1(x + w * t)}" y1="${f1(y + 4)}" x2="${f1(x + w * t)}" y2="${f1(y + h - 4)}" class="fig-mat-raya"/>`).join('');
+    return `<g class="fig-tapete"><rect x="${f1(x)}" y="${f1(y)}" width="${f1(w)}" height="${f1(h)}" rx="5" class="fig-mat-arriba"/>${lineas}</g>`;
+  }
+  /* contorno de un miembro visto de frente: radios simétricos a lo largo de un camino */
+  function tubo(pts, rs) {
+    const n = pts.length, I = [], D = [];
+    const dir = i => unit(pts[Math.max(0, i - 1)], pts[Math.min(n - 1, i + 1)]);
+    for (let i = 0; i < n; i++) { const u = dir(i), no = { x: -u.y, y: u.x }; I.push({ x: pts[i].x + no.x * rs[i], y: pts[i].y + no.y * rs[i] }); D.push({ x: pts[i].x - no.x * rs[i], y: pts[i].y - no.y * rs[i] }); }
+    const tapaEn = (c, u, r, sg) => [0.3, 0.5, 0.7].map(t => { const g = Math.PI * t, no = { x: -u.y, y: u.x }; return { x: c.x + sg * (u.x * r * Math.sin(g) + no.x * r * Math.cos(g)), y: c.y + sg * (u.y * r * Math.sin(g) + no.y * r * Math.cos(g)) }; });
+    return cerrar([...I, ...tapaEn(pts[n - 1], dir(n - 1), rs[n - 1], 1), ...D.reverse(), ...tapaEn(pts[0], dir(0), rs[0], -1)]);
+  }
+  const tramo = (a, b, ts) => ts.map(t => ({ x: lerp(a.x, b.x, t), y: lerp(a.y, b.y, t) }));
+  const elipse = (c, u, rLargo, rAncho, fill) => {
+    const no = { x: -u.y, y: u.x }, pts = [];
+    for (let k = 0; k < 12; k++) { const g = k / 12 * Math.PI * 2; pts.push({ x: c.x + u.x * rLargo * Math.cos(g) + no.x * rAncho * Math.sin(g), y: c.y + u.y * rLargo * Math.cos(g) + no.y * rAncho * Math.sin(g) }); }
+    return forma(cerrar(pts), fill);
+  };
+  function dibujoArriba(E, fantasma, aire = 0.5) {
+    const col = ANAT.cerca;
+    const capa = (fs, ls = []) => `<g>${fs.map(x => `<path d="${x.d}" style="fill:${col.linea};stroke:${col.linea}" stroke-width="1.1" stroke-linejoin="round"/>`).join('')}${fs.map(x => `<path d="${x.d}" style="fill:${x.fill}"/>`).join('')}${ls.join('')}</g>`;
+    /* ejes: u = de la cadera L a la C (pelvis, no gira), f = hacia adelante (las piernas) */
+    const uP = unit(E.cad.pl, E.cad.pc), mid = p => ({ x: (E.seg.pc[p].x + E.seg.pl[p].x) / 2, y: (E.seg.pc[p].y + E.seg.pl[p].y) / 2 });
+    const rodM = mid('rod');
+    let fP = { x: -uP.y, y: uP.x };
+    if ((rodM.x - E.H.x) * fP.x + (rodM.y - E.H.y) * fP.y < 0) fP = { x: -fP.x, y: -fP.y };
+    const uH = unit(E.hom.bl, E.hom.bc);
+    let fH = { x: -uH.y, y: uH.x };
+    if (fH.x * fP.x + fH.y * fP.y < 0) fH = { x: -fH.x, y: -fH.y };
+    const L2 = (c, u, f) => ([x, y]) => ({ x: c.x + u.x * x + f.x * y, y: c.y + u.y * x + f.y * y });
+    /* piernas: muslo, rodilla y pierna vistos por delante; el pie con los dedos hacia el techo */
+    const piernas = [], pies = [], rodillas = [];
+    for (const k of ['pc', 'pl']) {
+      const m = E.seg[k], uPie = unit(m.tobillo, m.punta), lp = Math.hypot(m.punta.x - m.tobillo.x, m.punta.y - m.tobillo.y);
+      pies.push(elipse({ x: m.tobillo.x + uPie.x * (lp * 0.45 + 1.2), y: m.tobillo.y + uPie.y * (lp * 0.45 + 1.2) }, uPie, lp * 0.45 + 2.6, 4.1, col.piel));
+      const pts = [...tramo(m.raiz, m.rod, [0, 0.3, 0.65, 1]), ...tramo(m.rod, m.tobillo, [0.22, 0.5, 0.78, 1])];
+      piernas.push(forma(tubo(pts, [7.4, 6.9, 6.0, 4.9, 4.9, 4.4, 3.5, 2.8]), col.calza));
+      const ur = unit(m.raiz, m.tobillo);
+      rodillas.push(`<ellipse cx="${f1(m.rod.x)}" cy="${f1(m.rod.y)}" rx="2.6" ry="2.2" transform="rotate(${f1(Math.atan2(ur.y, ur.x) * 180 / Math.PI)} ${f1(m.rod.x)} ${f1(m.rod.y)})" fill="none" style="stroke:${col.fino}" stroke-width=".5"/>`);
+    }
+    const dedos = ['pc', 'pl'].map(k => { const m = E.seg[k], u = unit(m.tobillo, m.punta), no = { x: -u.y, y: u.x }, lp = Math.hypot(m.punta.x - m.tobillo.x, m.punta.y - m.tobillo.y), c = { x: m.tobillo.x + u.x * (lp * 0.9 + 3), y: m.tobillo.y + u.y * (lp * 0.9 + 3) };
+      return [-2.4, -0.8, 0.8, 2.4].map(d => `<path d="M${f1(c.x + no.x * d - u.x * 1.2)},${f1(c.y + no.y * d - u.y * 1.2)} L${f1(c.x + no.x * d + u.x * 0.2)},${f1(c.y + no.y * d + u.y * 0.2)}" style="stroke:${col.fino}" stroke-width=".4" stroke-linecap="round"/>`).join(''); });
+    /* pelvis: no gira; asoma detrás del tronco (glúteos) y a los costados (caderas) */
+    const PL = L2(E.H, uP, fP);
+    const pelvis = forma(cerrar([[-15.6, -1], [-14.8, -7.5], [-9, -12.6], [0, -13.6], [9, -12.6], [14.8, -7.5], [15.6, -1], [13.5, 5], [6, 7.5], [0, 7], [-6, 7.5], [-13.5, 5]].map(PL)), col.calza);
+    /* tórax y cintura escapular (gira con rot); la respiración ensancha las costillas */
+    const S0 = { x: (E.hom.bc.x + E.hom.bl.x) / 2, y: (E.hom.bc.y + E.hom.bl.y) / 2 }, ea = 1 + 0.05 * (aire - 0.5), fa = 1 + 0.06 * (aire - 0.5);
+    const TH = ([x, y]) => L2(S0, uH, fH)([x * ea, y * fa]);
+    const torax = forma(cerrar([[0, -7.4], [7, -7.8], [13, -7.0], [17.4, -4.4], [18.8, -0.2], [17.6, 3.8], [13.6, 5.8], [8.6, 8.8], [3.8, 9.4], [0, 8.4], [-3.8, 9.4], [-8.6, 8.8], [-13.6, 5.8], [-17.6, 3.8], [-18.8, -0.2], [-17.4, -4.4], [-13, -7.0], [-7, -7.8]].map(TH)), col.top);
+    const escote = forma(cerrar([[-6.4, 1.6], [-3.6, 5.6], [0, 6.6], [3.6, 5.6], [6.4, 1.6], [0, 0.6]].map(TH)), col.piel);
+    const omoplatos = [-1, 1].map(sg => linea([[sg * 4.2, -5.6], [sg * 8.6, -6.4], [sg * 12.4, -4.6]].map(TH), col, 0.45));
+    /* brazos: del hombro a la mano, vistos desde arriba con la palma hacia el piso */
+    const brazos = [], manos = [];
+    for (const k of ['bc', 'bl']) {
+      const m = E.seg[k], uM = unit(m.muneca, m.mano), lm = Math.hypot(m.mano.x - m.muneca.x, m.mano.y - m.muneca.y);
+      manos.push(elipse({ x: m.muneca.x + uM.x * (lm * 0.55), y: m.muneca.y + uM.y * (lm * 0.55) }, uM, lm * 0.55 + 1.6, 3.5, col.piel));
+      const pts = [...tramo(m.raiz, m.codo, [0, 0.25, 0.6, 1]), ...tramo(m.codo, m.muneca, [0.25, 0.6, 1])];
+      brazos.push(forma(tubo(pts, [5.0, 4.6, 4.0, 3.4, 3.4, 3.0, 2.4]), col.piel));
+    }
+    /* cabeza: coronilla (pelo tirado hacia atrás y rodete), orejas y la punta de la nariz */
+    const CB = L2({ x: S0.x + fH.x * 1.6, y: S0.y + fH.y * 1.6 }, uH, fH);
+    const cara = forma(cerrar([[0, 9.6], [3.6, 8.6], [6.4, 5.4], [7.2, 0.6], [6.4, -4.6], [3.8, -8], [0, -8.8], [-3.8, -8], [-6.4, -4.6], [-7.2, 0.6], [-6.4, 5.4], [-3.6, 8.6]].map(CB)), col.piel);
+    const nariz = forma(cerrar([[-1.3, 8.8], [-0.9, 10.9], [0, 11.5], [0.9, 10.9], [1.3, 8.8]].map(CB)), col.piel);
+    const orejas = [-1, 1].map(sg => elipse(CB([sg * 7.3, 0.4]), fH, 2.1, 1.1, col.piel));
+    const pelo = forma(cerrar([[0, 7.6], [3.6, 6.9], [6.2, 4.2], [6.9, 0], [6.1, -4.6], [3.6, -7.9], [0, -8.7], [-3.6, -7.9], [-6.1, -4.6], [-6.9, 0], [-6.2, 4.2], [-3.6, 6.9]].map(CB)), col.pelo);
+    const rodete = elipse(CB([0, -5.4]), fH, 3.6, 3.6, col.pelo);
+    const mechones = [-4.6, -2.2, 0, 2.2, 4.6].map(x => `<path d="M${suave([[x * 1.05, 6.6], [x * 0.8, 1.6], [x * 0.45, -2.6]].map(CB))}" fill="none" stroke="rgba(255,255,255,.16)" stroke-width=".5"/>`);
+    const vuelta = `<path d="M${suave([[-3, -5.4], [0, -2.2], [3, -5.4]].map(CB))}" fill="none" stroke="rgba(255,255,255,.18)" stroke-width=".5"/>`;
+    const svg = capa(pies, dedos) + capa(piernas, rodillas) + capa([pelvis]) + capa([torax, escote], omoplatos) + capa(manos) + capa(brazos) + capa([...orejas, cara, nariz]) + capa([pelo, rodete], [...mechones, vuelta]);
+    return `<g class="${fantasma ? 'fig-fantasma' : 'fig-cuerpo'}">${svg}</g>`;
+  }
+
   /* sombra en el mat bajo lo que está apoyado: ayuda a leer el contacto */
   function sombra(E) {
     const pts = contorno(E).filter(p => p.y > PISO - 5);
@@ -945,10 +1190,16 @@ const FIGURA = (() => {
     const E = mover(r.E, enc.cx, enc.cy);
     const silla = ej.silla && !fantasma
       ? `<g class="fig-silla"><rect x="${f1(E.H.x - 16)}" y="${f1(E.H.y + 12)}" width="30" height="5" rx="2"/><rect x="${f1(E.H.x - 14)}" y="${f1(E.H.y + 16)}" width="4" height="${f1(PISO - E.H.y - 16)}"/><rect x="${f1(E.H.x + 8)}" y="${f1(E.H.y + 16)}" width="4" height="${f1(PISO - E.H.y - 16)}"/><rect x="${f1(E.H.x - 18)}" y="${f1(E.H.y - 30)}" width="4" height="46" rx="2"/></g>` : '';
-    const anat = (ej.estilo || ESTILO) === 'anatomico' && !E.fr && ej.camara !== 'arriba';
-    return (fantasma || ej.camara === 'arriba' ? '' : sombra(E)) + silla + (anat ? dibujoAnat(E, fantasma, ej.orden, aire) : dibujo(E, fantasma, ej.orden, aire));
+    const est = (ej.estilo || ESTILO) === 'anatomico', arriba = ej.camara === 'arriba';
+    /* de costado visto desde arriba se ve la silueta sagital: es el mismo dibujo que de perfil */
+    const anat = est && !E.fr;
+    const cuerpo = est && arriba && E.fr ? dibujoArriba(E, fantasma, aire) : anat ? dibujoAnat(E, fantasma, ej.orden, aire) : dibujo(E, fantasma, ej.orden, aire);
+    /* desde arriba, la sombra del cuerpo en el mat ayuda a leer qué está apoyado y qué no */
+    const sombraArr = est && arriba && !fantasma ? `<g class="fig-sombra-arriba" transform="translate(2.2 3)" fill="rgba(36,22,44,.15)" aria-hidden="true">${cuerpo.replace(/<(ellipse|circle)[^>]*\/>/g, '').replace(/<path d="([^"]*)"[^>]*\/>/g, (m, d) => (/fill="none"/.test(m) ? '' : `<path d="${d}"/>`))}</g>` : '';
+    return (fantasma || arriba ? '' : sombra(E)) + silla + sombraArr + cuerpo;
   }
   function fondo(ej) {
+    if (ej.camara === 'arriba' && (ej.estilo || ESTILO) === 'anatomico') return '';
     if (ej.camara === 'arriba') return ej.matV ? `<rect x="${W / 2 - 48}" y="6" width="96" height="${H - 12}" rx="10" class="fig-mat-arriba"/>`
       : `<rect x="18" y="${H / 2 - 42}" width="${W - 36}" height="84" rx="10" class="fig-mat-arriba"/>`;
     if (ej.persp) return `<path d="M70,${PISO - 24} L250,${PISO - 24} L304,${H - 2} L16,${H - 2} Z" class="fig-mat-persp"/>`;
@@ -959,7 +1210,7 @@ const FIGURA = (() => {
   function svgEstatico(ej, i = 0, f = 0) {
     const enc = encuadre(ej);
     if (ej.silla) enc.esc = Math.min(enc.esc, 1.3);
-    return `<svg viewBox="0 0 ${W} ${H}" class="fig-svg" role="img" aria-label="${ej.nom || 'figura'}">${fondo(ej)}${etiquetaCam(ej)}<g ${zoom(enc)}>${figuraSVG(ej, cuadro(ej, i, f), enc)}</g></svg>`;
+    return `<svg viewBox="0 0 ${W} ${H}" class="fig-svg" role="img" aria-label="${ej.nom || 'figura'}">${fondo(ej)}${etiquetaCam(ej)}<g ${zoom(enc)}>${tapete(ej, enc)}${figuraSVG(ej, cuadro(ej, i, f), enc)}</g></svg>`;
   }
 
   /* ---------- capas didácticas (en coordenadas del dibujo) ---------- */
@@ -970,9 +1221,13 @@ const FIGURA = (() => {
     ['pie', E => E.seg.pc.punta, 'tray-pie'], ['pie', E => E.seg.pl.punta, 'tray-pie'],
     ['cabeza', E => E.C, 'tray-cab'], ['pelvis', E => E.H, 'tray-pel']
   ];
-  function trayectorias(ej, i, enc, N = 18) {
+  function trayectorias(ej, i, enc, N = 18, fluido = false) {
     const cuadros = [];
-    for (let k = 0; k <= N; k++) cuadros.push(mover(cuadro(ej, i, k / N).E, enc.cx, enc.cy));
+    if (fluido) {
+      /* en modo fluido, el camino de toda la frase */
+      const F = fluidez(ej), fr = F.frases[F.fraseDe[i]], M = N * Math.min(4, fr.segs.length);
+      for (let k = 0; k <= M; k++) { const p = enFrase(fr, k / M); cuadros.push(mover(cuadro(ej, p.i, p.f, true).E, enc.cx, enc.cy)); }
+    } else for (let k = 0; k <= N; k++) cuadros.push(mover(cuadro(ej, i, k / N).E, enc.cx, enc.cy));
     const res = MARCAS.map(([nom, f, cl]) => {
       const pts = cuadros.map(f);
       let largo = 0;
@@ -1015,11 +1270,20 @@ const FIGURA = (() => {
        · respiración: el tórax se expande al inhalar (resp por transición). */
   function reproductor(cont, ej, { alCambiar = () => {}, alAvanzar = null, auto = true, fantasma = true, resp = null, capas = {}, fluido = false } = {}) {
     const enc = encuadre(ej), { poses } = preparar(ej), n = poses.length;
-    cont.innerHTML = `<svg viewBox="0 0 ${W} ${H}" class="fig-svg" role="img" aria-label="Animación: ${ej.nom || 'ejercicio'}">${fondo(ej)}${etiquetaCam(ej)}<g ${zoom(enc)}><g class="fg"></g><g class="ft"></g><g class="fc"></g><g class="ff"></g></g></svg>`;
+    cont.innerHTML = `<svg viewBox="0 0 ${W} ${H}" class="fig-svg" role="img" aria-label="Animación: ${ej.nom || 'ejercicio'}">${fondo(ej)}${etiquetaCam(ej)}<g ${zoom(enc)}>${tapete(ej, enc)}<g class="fg"></g><g class="ft"></g><g class="fc"></g><g class="ff"></g></g></svg>`;
     const gF = cont.querySelector('.fg'), gT = cont.querySelector('.ft'), gC = cont.querySelector('.fc'), gFis = cont.querySelector('.ff');
     const pausaBase = ej.pausa || 650;
     let fluir = fluido;
-    const pausaDe = k => fluir ? 0 : (poses[k].pausa ?? pausaBase) / Math.max(vel, 0.5);
+    const pausaDe = k => (poses[k].pausa ?? pausaBase) / Math.max(vel, 0.5);
+    /* modo fluido: se reproduce por frases (ver fluidez), con un respiro corto
+       solo en las paradas naturales (inicio, final, cambio de sentido) */
+    const FL = n > 1 ? fluidez(ej) : null;
+    let ph = 0;
+    const respiro = F => (F.alto ? Math.min(280, poses[F.ini].pausa ?? 280) : 0) / Math.max(vel, 0.5);
+    const largo = F => F.T / vel;
+    const ponerEn = (k, ff) => { if (k !== i) { i = k; alCambiar(i); } f = ff; };
+    /* t0 para retomar la frase en la posición actual */
+    const t0Fluido = () => { ph = FL.fraseDe[i]; const F = FL.frases[ph]; return performance.now() - (i === F.ini && f === 0 ? 0 : respiro(F) + deFrase(F, i, f) * largo(F)); };
     const capa = { fantasma, tray: false, fisica: false, ...capas };
     /* aire al llegar a cada pose (0 exhalado … 1 inhalado) */
     const aireEn = [0.5];
@@ -1035,21 +1299,32 @@ const FIGURA = (() => {
       const r = cuadro(ej, i, f, fluir);
       gC.innerHTML = figuraSVG(ej, r, enc, false, aire(i, f));
       gF.innerHTML = capa.fantasma && n > 1 ? figuraSVG(ej, cuadro(ej, f > 0 && f < 1 ? (i + 1) % n : (i + 1) % n, 0), enc, true) : '';
-      if (capa.tray && n > 1) { if (trayDe !== i) { gT.innerHTML = trayectorias(ej, i, enc); trayDe = i; } } else { gT.innerHTML = ''; trayDe = -1; }
+      if (capa.tray && n > 1) {
+        const clave = fluir ? 'f' + FL.fraseDe[i] : i;
+        if (trayDe !== clave) { gT.innerHTML = trayectorias(ej, i, enc, 18, fluir); trayDe = clave; }
+      } else { gT.innerHTML = ''; trayDe = -1; }
       gFis.innerHTML = (capa.columna && ej.camara !== 'arriba' && !r.E.fr ? columnaSVG(mover(r.E, enc.cx, enc.cy)) : '') + (capa.fisica ? capaFisica(ej, r, enc) : '');
       if (alAvanzar) alAvanzar(i + f);
     };
     const llegar = k => { i = ((k % n) + n) % n; f = 0; alCambiar(i); };
     function paso(t) {
       if (!vivo || !cont.isConnected) { vivo = false; return; }
-      if (modo === 'bucle') {
+      if (modo === 'bucle' && fluir) {
+        const F = FL.frases[ph], el = t - t0, r0 = respiro(F);
+        if (quieto()) { if (el > r0 + largo(F)) { ph = (ph + 1) % FL.frases.length; t0 = t; ponerEn(FL.frases[ph].ini, 0); pintar(); } }
+        else if (el < r0) { if (i !== F.ini || f !== 0) { ponerEn(F.ini, 0); pintar(); } }
+        else if (el < r0 + largo(F)) { const p = enFrase(F, (el - r0) / largo(F)); ponerEn(p.i, p.f); pintar(); }
+        else { ph = (ph + 1) % FL.frases.length; t0 = t; ponerEn(FL.frases[ph].ini, 0); pintar(); }
+      } else if (modo === 'bucle') {
         const el = t - t0, pausa = pausaDe(i);
         if (quieto()) { if (el > dur(i) + pausa) { llegar(i + 1); t0 = t; pintar(); } }
         else if (el < pausa) { if (f !== 0) { f = 0; pintar(); } }
         else if (el < pausa + dur(i)) { f = (el - pausa) / dur(i); pintar(); }
         else { llegar(i + 1); t0 = t; pintar(); }
       } else if (modo === 'uno') {
-        const u = Math.min(1, (t - t0) / dur(i));
+        /* por pasos el cuadro ya suaviza cada transición; en modo fluido el paso
+           suelto arranca y frena acá */
+        const u0 = Math.min(1, (t - t0) / dur(i)), u = fluir ? mj(u0) : u0;
         f = dir > 0 ? f0 + (1 - f0) * u : f0 * (1 - u);
         if (quieto()) f = dir > 0 ? 1 : 0;
         if (dir > 0 && f >= 1) { modo = 'quieto'; llegar(i + 1); }
@@ -1071,14 +1346,20 @@ const FIGURA = (() => {
         i = (i - 1 + n) % n; f = 1; modo = 'uno'; dir = -1; f0 = 1; t0 = performance.now();
       },
       pausar() { modo = 'quieto'; pintar(); },
-      reanudar() { if (n > 1) { if (f > 0) { t0 = performance.now() - pausaDe(i) - f * dur(i); } else t0 = performance.now(); modo = 'bucle'; } },
-      /* fluido: reproduce todo seguido, sin detenerse en cada paso */
-      set fluido(b) { const pos = f; fluir = !!b; if (modo === 'bucle') t0 = performance.now() - pausaDe(i) - pos * dur(i); pintar(); },
+      reanudar() { if (n > 1) { if (fluir) t0 = t0Fluido(); else if (f > 0) { t0 = performance.now() - pausaDe(i) - f * dur(i); } else t0 = performance.now(); modo = 'bucle'; } },
+      /* fluido: reproduce de corrido; frena solo donde el movimiento empieza,
+         termina o cambia de sentido */
+      set fluido(b) { fluir = !!b && n > 1; trayDe = -1; if (modo === 'bucle') t0 = fluir ? t0Fluido() : performance.now() - pausaDe(i) - f * dur(i); pintar(); },
       get fluido() { return fluir; },
       /* posición continua: 2,5 = a mitad de camino entre la pose 2 y la 3 */
       irA(pos) { modo = 'quieto'; const k = Math.floor(pos); const fr = pos - k; i = ((k % n) + n) % n; f = Math.max(0, Math.min(0.999, fr)); pintar(); },
       capa(nombre, on) { capa[nombre] = on; trayDe = -1; pintar(); },
-      set velocidad(v) { const pausa = pausaDe(i); const el = performance.now() - t0; const prog = el < pausa ? null : (el - pausa) / dur(i); vel = v; if (modo === 'bucle' && prog != null) t0 = performance.now() - pausaDe(i) - prog * dur(i); else if (modo === 'uno') { f0 = f; t0 = performance.now(); } },
+      set velocidad(v) {
+        if (modo === 'bucle' && fluir) {
+          const F = FL.frases[ph], el = performance.now() - t0, r0 = respiro(F), tau = el < r0 ? null : (el - r0) / largo(F);
+          vel = v; t0 = performance.now() - (tau == null ? 0 : respiro(F) + tau * largo(F)); return;
+        }
+        const pausa = pausaDe(i); const el = performance.now() - t0; const prog = el < pausa ? null : (el - pausa) / dur(i); vel = v; if (modo === 'bucle' && prog != null) t0 = performance.now() - pausaDe(i) - prog * dur(i); else if (modo === 'uno') { f0 = f; t0 = performance.now(); } },
       get velocidad() { return vel; },
       get reproduciendo() { return modo !== 'quieto'; },
       get enBucle() { return modo === 'bucle'; },
@@ -1110,5 +1391,5 @@ const FIGURA = (() => {
     return { masBajo: bajo.p + ' ' + (bajo.y - PISO).toFixed(1), apoyos: cont.join(' '), agarres: ags, avisos: r.avisos };
   }
 
-  return { estilo(v) { if (v) ESTILO = v; return ESTILO; }, svgEstatico, reproductor, tira, esqueletoEn, validar, cuadro, preparar, diag, centroMasa, equilibrio, W, H, PISO };
+  return { estilo(v) { if (v) ESTILO = v; return ESTILO; }, svgEstatico, reproductor, tira, esqueletoEn, validar, cuadro, preparar, fluidez, enFrase, diag, centroMasa, equilibrio, W, H, PISO };
 })();

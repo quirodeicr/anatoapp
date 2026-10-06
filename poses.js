@@ -403,7 +403,7 @@ const POSES = (() => {
     SWAN0,
     X(SD_ARCO, { s: 1, dur: 1600 }),
     X(SD_ARCO, { tr: 10, bc: [-4, 0, 0], bl: [-2, 0, 0], pc: [-158, 0, 88], pl: [-157, 0, 88], apoyo: ['tronco'], libre: ['manoC', 'manoL'], dx: 8, s: 2, dur: 1100 }),
-    X(SD_ARCO, { tr: -42, pc: [178, 0, 88], pl: [178, 0, 88], bc: [50, 60, 0], bl: [52, 60, 0], apoyo: ['pelvis', 'puntaC', 'puntaL'], dx: -6, s: 3, dur: 1100 })
+    X(SD_ARCO, { tr: -42, pc: [178, 0, 88], pl: [178, 0, 88], bc: [140, 110, 0], bl: [142, 110, 0], apoyo: ['pelvis', 'puntaC', 'puntaL'], dx: -6, s: 3, dur: 1100 })
   ]);
   const BOW = { tr: -18, fl: -45, cab: 0, pc: [-165, 150, 80], pl: [-163, 150, 80], ik: { bc: 'tobilloC', bl: 'tobilloL' }, apoyo: ['pelvis'] };
   ej('mat2-e23', 'Rocking', { rueda: true }, [
