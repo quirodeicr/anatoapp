@@ -77,6 +77,9 @@ como un único archivo HTML. Textos en **voseo rioplatense y sin género** ("Tod
 ## Pendiente conocido
 
 - "Mat 3 Props.xlsx" (Drive, 68 MB; se baja con `drive.usercontent.google.com/download?id=…&export=download&confirm=t`, la red del entorno ya lo permite): 19 hojas, 116 fotos. Solo Roll Up y Swan están revisadas foto por foto (caras) y en el laboratorio. Falta revisar las otras 17 y llevarlas a la app (preguntar antes por las fotos: el link es público).
-- Modelo anatómica: está en el laboratorio; generalizarla a las 48 animaciones y a la app recién cuando la usuaria la apruebe.
+- Modelo anatómica: está en el laboratorio; generalizarla a las 48 animaciones y a la app recién cuando la usuaria la apruebe. Pendientes que pidió (para la próxima vuelta, todavía no):
+  - **Sacar la capa "Columna vertebral"** del laboratorio (se ve rara y no está en todos los ejercicios).
+  - **Piquito en el frente del tronco antes del busto** (unión cuello/clavícula con el pecho, se nota boca arriba y de perfil): suavizarlo.
+  - **Cuerpo muy slim y grácil**: priorizar una silueta fina y elegante aunque difiera levemente de un cuerpo real.
 
 - Material BB: faltan los módulos 2 a 5 de Principios del Movimiento (el material de origen los marca como pendientes). Cuando lleguen: copiarlos a `fuentes/`, sumarlos a FUENTES en `importar_bb.py` y correrlo.
