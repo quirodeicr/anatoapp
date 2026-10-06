@@ -754,12 +754,15 @@ const FIGURA = (() => {
     const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 0.001, nx = -dy / d, ny = dx / d;
     return `M${f1(a.x + nx * r0)},${f1(a.y + ny * r0)} L${f1(b.x + nx * r1)},${f1(b.y + ny * r1)} A${f1(r1)},${f1(r1)} 0 0 0 ${f1(b.x - nx * r1)},${f1(b.y - ny * r1)} L${f1(a.x - nx * r0)},${f1(a.y - ny * r0)} A${f1(r0)},${f1(r0)} 0 0 0 ${f1(a.x + nx * r0)},${f1(a.y + ny * r0)} Z`;
   }
-  /* curva suave por una lista de puntos (Catmull-Rom → Bézier) */
+  /* curva suave por una lista de puntos (Catmull-Rom → Bézier). Un punto con
+     esq: true es una esquina: la curva llega y sale sin tangente, así un corte
+     (la cintura de la calza, la raíz del muslo) no se pasa de largo y no hace bulto */
   function suave(pts) {
     let d = `${f1(pts[0].x)},${f1(pts[0].y)}`;
     for (let i = 0; i < pts.length - 1; i++) {
       const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
-      d += ` C${f1(p1.x + (p2.x - p0.x) / 6)},${f1(p1.y + (p2.y - p0.y) / 6)} ${f1(p2.x - (p3.x - p1.x) / 6)},${f1(p2.y - (p3.y - p1.y) / 6)} ${f1(p2.x)},${f1(p2.y)}`;
+      const c1 = p1.esq ? p1 : { x: p1.x + (p2.x - p0.x) / 6, y: p1.y + (p2.y - p0.y) / 6 }, c2 = p2.esq ? p2 : { x: p2.x - (p3.x - p1.x) / 6, y: p2.y - (p3.y - p1.y) / 6 };
+      d += ` C${f1(c1.x)},${f1(c1.y)} ${f1(c2.x)},${f1(c2.y)} ${f1(p2.x)},${f1(p2.y)}`;
     }
     return d;
   }
@@ -838,14 +841,14 @@ const FIGURA = (() => {
   };
   /* perfiles de ancho [t, anterior, posterior] a lo largo de cada hueso */
   const PERF = {
-    muslo:  [[0, 5.8, 8.4], [0.15, 6.2, 8.0], [0.42, 6.8, 7.1], [0.7, 6.1, 5.9], [0.9, 5.5, 5.0], [1, 5.3, 4.8]],
-    pierna: [[0, 5.0, 4.8], [0.12, 4.3, 5.6], [0.3, 3.9, 6.0], [0.5, 3.4, 4.8], [0.75, 2.8, 3.2], [1, 2.5, 2.6]],
-    brazo:  [[0, 5.2, 5.0], [0.16, 5.6, 5.0], [0.38, 4.6, 4.7], [0.62, 4.2, 4.4], [0.88, 3.3, 3.6], [1, 3.1, 3.3]],
-    ante:   [[0, 3.2, 3.3], [0.22, 3.7, 3.3], [0.5, 3.0, 2.8], [0.85, 2.2, 2.1], [1, 2.1, 2.0]]
+    muslo:  [[0, 5.6, 8.0], [0.15, 5.9, 7.6], [0.42, 6.3, 6.7], [0.7, 5.7, 5.5], [0.9, 5.2, 4.8], [1, 5.1, 4.6]],
+    pierna: [[0, 4.8, 4.6], [0.12, 4.1, 5.3], [0.3, 3.7, 5.6], [0.5, 3.2, 4.4], [0.75, 2.6, 3.0], [1, 2.4, 2.5]],
+    brazo:  [[0, 4.9, 4.7], [0.16, 5.2, 4.7], [0.38, 4.2, 4.4], [0.62, 3.9, 4.1], [0.88, 3.1, 3.4], [1, 3.0, 3.2]],
+    ante:   [[0, 3.1, 3.2], [0.22, 3.5, 3.1], [0.5, 2.8, 2.6], [0.85, 2.1, 2.0], [1, 2.0, 1.9]]
   };
   /* tronco: distancia del eje al frente y a la espalda según la altura (0 cadera … 1 hombros) */
-  const TR_FRENTE = [[0, 6.4], [0.1, 7.3], [0.22, 7.6], [0.36, 7.5], [0.5, 8.3], [0.62, 9.4], [0.74, 10.9], [0.84, 10.5], [0.93, 9.0], [1, 8.0]];
-  const TR_ESPALDA = [[0, 10.8], [0.08, 10.4], [0.2, 9.1], [0.32, 8.8], [0.5, 9.3], [0.7, 10.0], [0.88, 10.1], [1, 9.4]];
+  const TR_FRENTE = [[0, 6.2], [0.1, 6.9], [0.22, 6.9], [0.36, 6.6], [0.48, 7.2], [0.58, 8.3], [0.66, 10.2], [0.74, 11.5], [0.82, 11.0], [0.9, 9.3], [1, 8.0]];
+  const TR_ESPALDA = [[0, 10.8], [0.08, 10.2], [0.2, 8.6], [0.32, 8.1], [0.48, 8.6], [0.7, 9.6], [0.88, 9.8], [1, 9.2]];
   const enPerfil = (tabla, s) => { for (let q = 1; q < tabla.length; q++) if (s <= tabla[q][0]) { const [a, va] = tabla[q - 1], [b, vb] = tabla[q]; return lerp(va, vb, (s - a) / (b - a || 1)); } return tabla[tabla.length - 1][1]; };
   const unit = (a, b) => { const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 0.001; return { x: dx / d, y: dy / d, d }; };
   /* lado anterior (+1) o posterior (−1) de un hueso; normal anterior = ángulo − 90° */
@@ -959,30 +962,34 @@ const FIGURA = (() => {
       fr.push({ x: p.x + q.x * wf, y: p.y + q.y * wf, s }); es.push({ x: p.x - q.x * we, y: p.y - q.y * we, s });
     });
     const q0 = nor(0), u0 = q0.u, H0 = ejes[0];
-    /* La pelvis termina sobre el muslo cercano: por detrás el glúteo baja
-       redondeado hasta el borde posterior del muslo; por delante el abdomen
-       llega al pliegue de la ingle sobre el borde anterior. Así cadera y
-       muslo forman una sola silueta, sin bultos. */
-    const atrasM = ladoHueso(muslo.raiz, muslo.rod, [[0.3, 0, 7.2]], -1)[0];
-    const frenteM = ladoHueso(muslo.raiz, muslo.rod, [[0.1, 5.9, 0]], 1)[0];
-    const esp0 = es[0];
-    const medio = { x: (esp0.x + atrasM.x) / 2, y: (esp0.y + atrasM.y) / 2 };
-    let gx = medio.x - H0.x, gy = medio.y - H0.y; const gl = Math.hypot(gx, gy) || 1;
+    /* Glúteo: es de la pelvis, no del muslo. En el marco de la pelvis (x adelante,
+       y hacia la cabeza, origen en la cadera) es una curva redondeada detrás y debajo
+       de la articulación; al flexionar la cadera la parte baja acompaña al muslo
+       (el glúteo se estira y la tuberosidad isquiática queda abajo al sentarse) y al
+       extenderla se recoge. Después se une al borde posterior del muslo (pliegue). */
+    const enP = ([x, y]) => ({ x: H0.x + q0.x * x + u0.x * y, y: H0.y + q0.y * x + u0.y * y });
+    const dM = unit(muslo.raiz, muslo.rod);
+    const phi = Math.max(-40, Math.min(115, grad(Math.atan2(dM.x * q0.x + dM.y * q0.y, -(dM.x * u0.x + dM.y * u0.y)))));
+    /* en extensión el glúteo se recoge poco (se contrae, no gira hacia atrás) */
+    const girarG = ([x, y], w) => { const a = rad(phi * w * (phi < 0 ? 0.4 : 1)), c = Math.cos(a), sn = Math.sin(a); return [x * c - y * sn, x * sn + y * c]; };
+    /* sentado, la parte baja (a ≤ 10,6 de la cadera) queda a la altura del apoyo de la pelvis */
+    const gluteo = [[[-10.9, -2.0], 0.2], [[-10.5, -4.4], 0.35], [[-8.6, -6.2], 0.6], [[-7.6, -8.8], 0.8]].map(([p, w]) => enP(girarG(p, w)));
+    const perfM = t => { const T = PERF.muslo; for (let q = 1; q < T.length; q++) if (t <= T[q][0]) { const f = (t - T[q - 1][0]) / (T[q][0] - T[q - 1][0]); return [lerp(T[q - 1][1], T[q][1], f), lerp(T[q - 1][2], T[q][2], f)]; } return T[T.length - 1].slice(1); };
+    const atrasM = ladoHueso(muslo.raiz, muslo.rod, [[0.3, 0, perfM(0.3)[1]]], -1)[0];
     /* la pelvis cubre toda la raíz del muslo (hasta un 30 % del largo) para que no se vea la pierna lejana por un hueco */
-    const frente30 = ladoHueso(muslo.raiz, muslo.rod, [[0.3, 6.4, 0]], 1)[0];
-    const nalga = [{ x: medio.x + gx / gl * 2.6, y: medio.y + gy / gl * 2.6 }, atrasM, frente30];
-    const pubis = frenteM;
+    const frente30 = ladoHueso(muslo.raiz, muslo.rod, [[0.3, perfM(0.3)[0], 0]], 1)[0];
+    const pubis = ladoHueso(muslo.raiz, muslo.rod, [[0.1, perfM(0.1)[0], 0]], 1)[0];
+    const nalga = [...gluteo, { ...atrasM, esq: true }, { ...frente30, esq: true }];
     const qN = nor(N - 1), uN = qN.u, S = ejes[N - 1];
     const cuelloF = { x: S.x + uN.x * 3.6 + qN.x * 3.8, y: S.y + uN.y * 3.6 + qN.y * 3.8 }, cuelloE = { x: S.x + uN.x * 4.2 - qN.x * 4.2, y: S.y + uN.y * 4.2 - qN.y * 4.2 };
     const contorno = [pubis, ...fr, cuelloF, cuelloE, ...[...es].reverse(), ...nalga];
-    void q0; void u0;
     /* calza: de la cadera hasta la cintura (s < 0.3) */
     const corte = 0.3, frC = fr.filter(p => p.s <= corte), esC = es.filter(p => p.s <= corte);
-    const calza = [pubis, ...frC, ...[...esC].reverse(), ...nalga];
+    const calza = [pubis, ...frC.slice(0, -1), { ...frC[frC.length - 1], esq: true }, { ...esC[esC.length - 1], esq: true }, ...[...esC.slice(0, -1)].reverse(), ...nalga];
     /* borde de la calza (cintura) */
     const cint = [frC[frC.length - 1], esC[esC.length - 1]];
     return { f: [forma(cerrar(contorno), col.top), forma(cerrar(calza), col.calza)],
-      l: [`<path d="M${f1(cint[0].x)},${f1(cint[0].y)} L${f1(cint[1].x)},${f1(cint[1].y)}" stroke="rgba(255,255,255,.18)" stroke-width=".8"/>`] };
+      l: [`<path d="M${f1(cint[0].x)},${f1(cint[0].y)} L${f1(cint[1].x)},${f1(cint[1].y)}" style="stroke:${col.fino}" stroke-width=".4"/>`] };
   }
   function cabezaAnat(E, col) {
     const c = E.C, f = E.antCab, u = E.arriba;
@@ -1125,7 +1132,7 @@ const FIGURA = (() => {
       const m = E.seg[k], uPie = unit(m.tobillo, m.punta), lp = Math.hypot(m.punta.x - m.tobillo.x, m.punta.y - m.tobillo.y);
       pies.push(elipse({ x: m.tobillo.x + uPie.x * (lp * 0.45 + 1.2), y: m.tobillo.y + uPie.y * (lp * 0.45 + 1.2) }, uPie, lp * 0.45 + 2.6, 4.1, col.piel));
       const pts = [...tramo(m.raiz, m.rod, [0, 0.3, 0.65, 1]), ...tramo(m.rod, m.tobillo, [0.22, 0.5, 0.78, 1])];
-      piernas.push(forma(tubo(pts, [7.4, 6.9, 6.0, 4.9, 4.9, 4.4, 3.5, 2.8]), col.calza));
+      piernas.push(forma(tubo(pts, [7.0, 6.5, 5.6, 4.6, 4.6, 4.1, 3.3, 2.6]), col.calza));
       const ur = unit(m.raiz, m.tobillo);
       rodillas.push(`<ellipse cx="${f1(m.rod.x)}" cy="${f1(m.rod.y)}" rx="2.6" ry="2.2" transform="rotate(${f1(Math.atan2(ur.y, ur.x) * 180 / Math.PI)} ${f1(m.rod.x)} ${f1(m.rod.y)})" fill="none" style="stroke:${col.fino}" stroke-width=".5"/>`);
     }
@@ -1137,7 +1144,7 @@ const FIGURA = (() => {
     /* tórax y cintura escapular (gira con rot); la respiración ensancha las costillas */
     const S0 = { x: (E.hom.bc.x + E.hom.bl.x) / 2, y: (E.hom.bc.y + E.hom.bl.y) / 2 }, ea = 1 + 0.05 * (aire - 0.5), fa = 1 + 0.06 * (aire - 0.5);
     const TH = ([x, y]) => L2(S0, uH, fH)([x * ea, y * fa]);
-    const torax = forma(cerrar([[0, -7.4], [7, -7.8], [13, -7.0], [17.4, -4.4], [18.8, -0.2], [17.6, 3.8], [13.6, 5.8], [8.6, 8.8], [3.8, 9.4], [0, 8.4], [-3.8, 9.4], [-8.6, 8.8], [-13.6, 5.8], [-17.6, 3.8], [-18.8, -0.2], [-17.4, -4.4], [-13, -7.0], [-7, -7.8]].map(TH)), col.top);
+    const torax = forma(cerrar([[0, -7.4], [7, -7.8], [13, -7.0], [17.4, -4.4], [18.8, -0.2], [17.6, 3.8], [13.6, 5.8], [8.6, 9.2], [3.8, 9.9], [0, 8.6], [-3.8, 9.9], [-8.6, 9.2], [-13.6, 5.8], [-17.6, 3.8], [-18.8, -0.2], [-17.4, -4.4], [-13, -7.0], [-7, -7.8]].map(TH)), col.top);
     const escote = forma(cerrar([[-6.4, 1.6], [-3.6, 5.6], [0, 6.6], [3.6, 5.6], [6.4, 1.6], [0, 0.6]].map(TH)), col.piel);
     const omoplatos = [-1, 1].map(sg => linea([[sg * 4.2, -5.6], [sg * 8.6, -6.4], [sg * 12.4, -4.6]].map(TH), col, 0.45));
     /* brazos: del hombro a la mano, vistos desde arriba con la palma hacia el piso */
@@ -1146,7 +1153,7 @@ const FIGURA = (() => {
       const m = E.seg[k], uM = unit(m.muneca, m.mano), lm = Math.hypot(m.mano.x - m.muneca.x, m.mano.y - m.muneca.y);
       manos.push(elipse({ x: m.muneca.x + uM.x * (lm * 0.55), y: m.muneca.y + uM.y * (lm * 0.55) }, uM, lm * 0.55 + 1.6, 3.5, col.piel));
       const pts = [...tramo(m.raiz, m.codo, [0, 0.25, 0.6, 1]), ...tramo(m.codo, m.muneca, [0.25, 0.6, 1])];
-      brazos.push(forma(tubo(pts, [5.0, 4.6, 4.0, 3.4, 3.4, 3.0, 2.4]), col.piel));
+      brazos.push(forma(tubo(pts, [4.7, 4.3, 3.7, 3.2, 3.2, 2.8, 2.2]), col.piel));
     }
     /* cabeza: coronilla (pelo tirado hacia atrás y rodete), orejas y la punta de la nariz */
     const CB = L2({ x: S0.x + fH.x * 1.6, y: S0.y + fH.y * 1.6 }, uH, fH);

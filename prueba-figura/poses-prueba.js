@@ -60,14 +60,15 @@ const POSES_PRUEBA = (() => {
   const girar = g => X(TWS, { rot: g, bc: [180 + g, 0, 0], bl: [g, 0, 0] });
   const spineTwist = { nom: 'Spine Twist', vista: 'frente', camara: 'arriba', matV: true, poses: [
     TWS,
-    /* 1 · inhala: rota hacia un lado con dos pulsos (respiración percusiva) */
-    X(girar(-38), { s: 1, dur: 900, alto: true, pausa: 60 }),
-    X(girar(-50), { s: 1, dur: 420, pausa: 90 }),
-    /* 2 · exhala: vuelve al centro */
-    X(TWS, { s: 2, dur: 1200 }),
-    X(girar(38), { s: 1, dur: 900, alto: true, pausa: 60 }),
-    X(girar(50), { s: 1, dur: 420, pausa: 90 }),
-    X(TWS, { s: 2, dur: 1200 })
+    /* 1 · inhala: rota hacia un lado en dos pulsos iguales, uno por cada inhalación
+       corta de la respiración percusiva (ta-ta): la mitad del giro y la otra mitad */
+    X(girar(-25), { s: 1, dur: 620, alto: true, pausa: 110 }),
+    X(girar(-50), { s: 1, dur: 620, pausa: 160 }),
+    /* 2 · exhala: vuelve al centro en un solo movimiento (ahí cambia la respiración: se detiene) */
+    X(TWS, { s: 2, dur: 1300, alto: true }),
+    X(girar(25), { s: 1, dur: 620, alto: true, pausa: 110 }),
+    X(girar(50), { s: 1, dur: 620, pausa: 160 }),
+    X(TWS, { s: 2, dur: 1300 })
   ] };
   return { 'mat1-e03': rollUp, 'mat1-e15': swan, 'mat1-e21': sideKicks, 'mat2-e01': spineTwist };
 })();
