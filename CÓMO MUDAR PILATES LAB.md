@@ -1,4 +1,4 @@
-# Cómo mudar AnatoApp a otra cuenta de Claude Code
+# Cómo mudar Pilates Lab (antes AnatoApp) a otra cuenta de Claude Code
 
 En esta carpeta hay dos paquetes:
 
@@ -30,7 +30,7 @@ pip install openpyxl pillow
 
 | Para | Comando |
 |---|---|
-| Regenerar el archivo único para compartir (`AnatoApp.html`) | `python empaquetar.py` |
+| Regenerar el archivo único para compartir (`PilatesLab.html`) | `python empaquetar.py` |
 | Generar la versión web para publicar | `python web_artefacto.py` |
 | Reimportar el material de Balanced Body (`fuentes/*.json`) | `python importar_bb.py` |
 | Reimportar la planilla de Pre-Pilates (con fotos) | `python importar_premat.py` |

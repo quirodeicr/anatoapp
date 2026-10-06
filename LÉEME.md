@@ -1,4 +1,4 @@
-# AnatoApp 2
+# Pilates Lab (antes AnatoApp)
 
 App de estudio construida a partir de tu material de **Anatomía aplicada al método Pilates**:
 484 ejercicios en 20 unidades.
@@ -52,8 +52,8 @@ misma pregunta, y las que no parecen corresponder a su ejercicio no se usan. Tod
 
 ## Cómo abrirla
 
-**Opción recomendada:** doble clic en **`Abrir AnatoApp.bat`** (se abre una ventana negra: dejala abierta).
-**Opción rápida:** doble clic en **`AnatoApp.html`**.
+**Opción recomendada:** doble clic en **`Abrir Pilates Lab.bat`** (se abre una ventana negra: dejala abierta).
+**Opción rápida:** doble clic en **`PilatesLab.html`**.
 
 > Elegí **una sola** forma y usá siempre esa: el progreso se guarda por dirección, y abrirla de las
 > dos maneras crearía dos historiales separados.
@@ -216,7 +216,7 @@ entender, no texto literal de tus apuntes: contrastalos con tu manual antes de d
 
 ## Cómo compartirla
 
-**`AnatoApp.html`** es la app entera en un solo archivo (~1,6 MB, con las fotos). Mandalo por WhatsApp o correo:
+**`PilatesLab.html`** es la app entera en un solo archivo (~1,6 MB, con las fotos). Mandalo por WhatsApp o correo:
 la otra persona le hace doble clic y funciona sin internet, con **su propio** progreso.
 
 Desde **Perfil → Guardar y compartir** la app genera copias de sí misma:
@@ -251,7 +251,7 @@ El material de Balanced Body se actualiza reemplazando los JSON de `fuentes/` y 
 python empaquetar.py
 ```
 
-y se regenera `AnatoApp.html` con tus cambios. Tu progreso no se pierde.
+y se regenera `PilatesLab.html` con tus cambios. Tu progreso no se pierde.
 
 ---
 

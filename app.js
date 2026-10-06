@@ -1,5 +1,5 @@
 /* ============================================================
-   AnatoApp 2 — motor de estudio
+   Pilates Lab — motor de estudio
 
    Principios que implementa (ver "Cómo aprende tu cerebro acá"
    en Perfil y el LÉEME para las referencias):
@@ -2154,10 +2154,36 @@ function fichaRepHTML(e) {
 }
 /* --- visor de animación: reproducir, paso a paso, deslizador, cámara lenta y capas --- */
 const respDeFase = fase => /inhala.*exhala|continuo/i.test(fase || '') ? 'ambas' : /inhala/i.test(fase || '') ? 'inhala' : /exhala/i.test(fase || '') ? 'exhala' : null;
+/* fotos de "Mat 3 Props" (privado/fotos-mat3.js, fuera del repo): agrupadas por prop */
+const fotosDe = id => (typeof FOTOS_MAT3 !== 'undefined' && FOTOS_MAT3[id]) || null;
+function fotosHTML(F) {
+  const grupos = [];
+  F.fotos.forEach((f, k) => { let g = grupos.find(x => x.prop === f.prop); if (!g) grupos.push(g = { prop: f.prop, fotos: [] }); g.fotos.push({ ...f, k }); });
+  return grupos.map(g => `<div class="vf-prop"><h5>${esc(g.prop || 'Sin prop')}</h5>${F.props[g.prop] ? `<p>${esc(F.props[g.prop])}</p>` : ''}
+    <div class="vf-grid">${g.fotos.map(f => `<button type="button" class="vf-foto" data-foto="${f.k}" aria-label="Ampliar: ${esc(F.nombre)} con ${esc(g.prop)}"><img src="${f.src}" alt="${esc(F.nombre)} con ${esc(g.prop)}" loading="lazy" width="${f.w}" height="${f.h}"></button>`).join('')}</div></div>`).join('')
+    + (F.observaciones ? `<p class="vf-obs"><b>Observaciones de tu planilla:</b> ${esc(F.observaciones)}</p>` : '')
+    + '<p class="micro">Fotos de tu planilla Mat 3 Props: el mismo ejercicio con cada prop. Las caras de quienes miran la clase están pixeladas.</p>';
+}
+function verFoto(F, k) {
+  let d = $('#foto-grande');
+  if (!d) {
+    d = document.createElement('dialog'); d.id = 'foto-grande'; d.className = 'foto-grande';
+    d.innerHTML = '<button type="button" class="fg-cerrar" aria-label="Cerrar">✕</button><img alt=""><p></p>';
+    document.body.appendChild(d);
+    $('.fg-cerrar', d).onclick = () => d.close();
+    d.addEventListener('click', ev => { if (ev.target === d) d.close(); });
+  }
+  const f = F.fotos[k];
+  $('img', d).src = f.src; $('img', d).alt = `${F.nombre} con ${f.prop}`; $('p', d).textContent = `${F.nombre} · ${f.prop}`;
+  d.showModal();
+}
 function visorHTML(e, grande = false) {
-  const ej = POSES[e.id], n = ej.poses.length;
+  const ej = POSES[e.id], n = ej.poses.length, F = fotosDe(e.id);
   const marcas = ej.poses.map((_, k) => `<i style="left:${(k / n * 100).toFixed(2)}%"></i>`).join('');
   return `<div class="visor${grande ? ' grande' : ''}">
+    ${F ? `<div class="visor-modo" role="group" aria-label="Ver"><button type="button" data-modo="anim" aria-pressed="true">Animación</button><button type="button" data-modo="fotos" aria-pressed="false">📷 Fotos con props <small>${F.fotos.length}</small></button></div>
+    <div class="visor-fotos" hidden></div>` : ''}
+    <div class="visor-anim">
     <div class="rep-fig" aria-live="off"></div>
     <div class="rep-fase" aria-live="polite"></div>
     ${n > 1 ? `<label class="visor-tl"><span class="sr">Recorrer el movimiento</span><span class="tl-marcas" aria-hidden="true">${marcas}</span>
@@ -2176,6 +2202,7 @@ function visorHTML(e, grande = false) {
       ${n > 1 ? '<button type="button" class="chip-capa on" data-capa="fantasma" aria-pressed="true">👻 Hacia dónde va</button>' : ''}
     </div>
     ${n > 1 ? '<div class="visor-tira" role="list"></div>' : ''}
+    </div>
   </div>`;
 }
 /* conecta un visor; pasos = <li data-paso> de la lista de pasos (opcional) */
@@ -2236,6 +2263,16 @@ function activarVisor(raiz, e, pasos = []) {
   });
   const gr = $('[data-acc="grande"]', raiz);
   if (gr) gr.onclick = () => { rep.pausar(); icono(); abrirVisorGrande(e); };
+  /* Animación ↔ Fotos con props (las fotos se arman recién al abrirlas) */
+  const F = fotosDe(e.id), vf = $('.visor-fotos', raiz), va = $('.visor-anim', raiz);
+  if (F && vf) $$('[data-modo]', raiz).forEach(b => b.onclick = () => {
+    const fotos = b.dataset.modo === 'fotos';
+    $$('[data-modo]', raiz).forEach(x => x.setAttribute('aria-pressed', x === b));
+    if (fotos && !vf.childElementCount) { vf.innerHTML = fotosHTML(F); $$('.vf-foto', vf).forEach(x => x.onclick = () => verFoto(F, +x.dataset.foto)); }
+    vf.hidden = !fotos; va.hidden = fotos;
+    if (fotos) rep.pausar(); else rep.reanudar();
+    icono(); SND.toque();
+  });
   return rep;
 }
 /* el visor en grande: la figura arriba y los pasos del manual debajo */
@@ -2749,7 +2786,7 @@ function vPerfil() {
     r.oninput = () => { S.cfg[r.dataset.vol] = +r.value; AUD.iniciar(); AUD.volumenes(); };
     r.onchange = () => { guardar(); if (r.dataset.vol === 'volSonido') SND.par(); };
   });
-  $('#exp').onclick = () => descargar(`anatoapp-${HOY()}.json`, JSON.stringify(S, null, 2), 'application/json',
+  $('#exp').onclick = () => descargar(`pilateslab-${HOY()}.json`, JSON.stringify(S, null, 2), 'application/json',
     'Respaldo guardado. No hace falta abrirlo: para recuperar tu avance usá <b>Importar</b> y elegí este archivo.');
   $('#imp').onchange = e => {
     const file = e.target.files[0];
@@ -2758,7 +2795,7 @@ function vPerfil() {
     fr.onload = () => {
       try {
         const d = migrar(JSON.parse(fr.result));
-        if (!d) { avisoAlmacen('Ese archivo no parece un respaldo de AnatoApp.'); return; }
+        if (!d) { avisoAlmacen('Ese archivo no parece un respaldo de Pilates Lab (ni de AnatoApp).'); return; }
         S = d; guardar(); ir('perfil');
         avisoOk(`Progreso restaurado: <b>${Object.keys(d.items).length}</b> ejercicios con sus fechas de repaso.`);
       } catch (x) { avisoAlmacen('No se pudo leer el archivo: puede estar dañado o editado a mano.'); }
@@ -2849,10 +2886,10 @@ async function generarCopia(conProgreso) {
   let html;
   try { html = await construirCopia(conProgreso); }
   catch (e) {
-    avisoAlmacen('No se pudo armar la copia desde acá. Abrí la app con <b>Abrir AnatoApp.bat</b> o desde <b>AnatoApp.html</b> y probá de nuevo.');
+    avisoAlmacen('No se pudo armar la copia desde acá. Abrí la app con <b>Abrir Pilates Lab.bat</b> o desde <b>PilatesLab.html</b> y probá de nuevo.');
     return;
   }
-  descargar(conProgreso ? `AnatoApp-con-progreso-${HOY()}.html` : 'AnatoApp.html', html, 'text/html',
+  descargar(conProgreso ? `PilatesLab-con-progreso-${HOY()}.html` : 'PilatesLab.html', html, 'text/html',
     conProgreso ? 'Copia guardada con tu progreso adentro: es la app entera en un archivo.'
                 : 'Copia limpia guardada, sin progreso. Es la que conviene compartir.');
 }

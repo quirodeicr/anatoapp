@@ -1,5 +1,5 @@
 /* ============================================================
-   AnatoApp — figura articulada (v3)
+   Pilates Lab — figura articulada (v3)
 
    Maniquí 2D con cinemática directa + inversa y apoyos en el piso.
 

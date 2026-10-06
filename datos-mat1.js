@@ -1,5 +1,5 @@
 /* ============================================================
-   AnatoApp — Análisis MAT 1 y repertorio Pre-Pilates
+   Pilates Lab — Análisis MAT 1 y repertorio Pre-Pilates
    Fuentes:
      · "Analisis MAT 1.pdf" / "Mat 1.xlsx": 25 fichas de análisis
        de ejercicios (una por hoja)

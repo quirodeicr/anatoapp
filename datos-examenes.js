@@ -1,5 +1,5 @@
 /* ============================================================
-   AnatoApp — tus exámenes previos de Balanced Body
+   Pilates Lab — tus exámenes previos de Balanced Body
 
    Fuente: las revisiones de los exámenes que se rindieron en la
    formación (transcripción completa en fuentes/examenes-previos.md):

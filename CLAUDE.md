@@ -1,6 +1,6 @@
-# AnatoApp — contexto del proyecto para Claude Code
+# Pilates Lab (antes AnatoApp) — contexto del proyecto para Claude Code
 
-App de estudio de **anatomía aplicada al método Pilates**, hecha a partir del material de la usuaria:
+App de estudio de **anatomía aplicada al método Pilates** (se llamaba AnatoApp; la usuaria la renombró **Pilates Lab**), hecha a partir del material de la usuaria:
 apuntes manuscritos, Análisis MAT 1, planilla de Principios del Movimiento (Pre-Pilates) y los manuales
 de Balanced Body (Principios del Movimiento módulo 1, Mat 1, Mat 2). La usa para estudiar y la comparte
 como un único archivo HTML. Textos en **voseo rioplatense y sin género** ("Todavía no", "otra persona").
@@ -14,10 +14,10 @@ como un único archivo HTML. Textos en **voseo rioplatense y sin género** ("Tod
   ```
   python empaquetar.py
   ```
-  que genera `AnatoApp.html` (archivo único para compartir; incrusta cada `<script src>`). El empaquetador neutraliza `</script` dentro del JS: nunca escribir esa secuencia en comentarios.
-- Versión web (Artifact de claude.ai): `python web_artefacto.py` genera `publicar/anatoapp-web.html` (sin `<html>/<head>/<body>`) para publicar con la herramienta Artifact. El link anterior (`claude.ai/artifact/L8qvjqdFibzG6ySjWwFx9k`) pertenece a la cuenta vieja: en una cuenta nueva hay que publicar un artifact nuevo.
+  que genera `PilatesLab.html` (archivo único para compartir; incrusta cada `<script src>`; **sin** las fotos de `privado/`, porque se versiona y el repo es público). `python empaquetar.py --con-fotos` genera `publicar/PilatesLab-con-fotos.html` (no se versiona) con las fotos de Mat 3 Props. El empaquetador neutraliza `</script` dentro del JS: nunca escribir esa secuencia en comentarios.
+- Versión web (Artifact de claude.ai): `python web_artefacto.py` genera `publicar/pilateslab-web.html` (sin `<html>/<head>/<body>`) desde la versión con fotos si existe (la usuaria aprobó las fotos en la web, con las caras de terceros pixeladas). Artifact de la app: `claude.ai/artifact/ShiXvKGB2tZCJSLnNYx4tZ` (compartido por link); laboratorio: `claude.ai/artifact/4g9xHumekKC7w9e8j4Kr42`.
 - Probar con el servidor local: configuración `anatoapp` de `.claude/launch.json` (puerto 8777). Tras editar, forzar recarga (`fetch(url,{cache:'reload'})` y `location.reload()`), el navegador cachea los `.js`.
-- El progreso de estudio vive en `localStorage` del navegador (llave `'anatoapp.v1'`, adentro estado v2; migra solo desde v1). No está en los archivos: se exporta desde la app (Perfil → Exportar progreso o "Copia con mi progreso").
+- El progreso de estudio vive en `localStorage` del navegador (llave `'anatoapp.v1'` — no cambiarla al renombrar, ni `'anatoapp.tema'`; adentro estado v2; migra solo desde v1). No está en los archivos: se exporta desde la app (Perfil → Exportar progreso o "Copia con mi progreso").
 
 ## Archivos
 
@@ -40,8 +40,8 @@ como un único archivo HTML. Textos en **voseo rioplatense y sin género** ("Tod
 | `mapa.js` | Lámina anatómica del mapa corporal (LAMINA): frente/espalda, mitad superficial y mitad profunda. |
 | `efectos.js` | Música generativa, sonidos (Web Audio, sin archivos) y efectos visuales. |
 | `_galeria.html` | Herramienta de control de poses (no se empaqueta): `_galeria.html#mat1-e0` muestra cada transición y las fallas del validador. |
-| `importar_mat3.py` | Extrae fotos y textos de "Mat 3 Props.xlsx" (ejercicios con bola, ligas, pesa, círculo, roller) a `privado/mat3/`: pixela las caras de quienes miran la clase (CARAS), achica a JPEG. `EJERCICIO` mapea hoja → ejercicio (solo las revisadas). |
-| `privado/` | **No se versiona** (el repo es público): fotos de personas y notas personales. El laboratorio incrusta las fotos si existen; en la app, preguntar antes (su link es público). |
+| `importar_mat3.py` | Extrae fotos y textos de "Mat 3 Props.xlsx" (19 hojas, 116 fotos: el ejercicio con bola, ligas, pesa, círculo, roller) a `privado/`: pixela las caras de quienes miran la clase (CARAS, revisadas foto por foto), recorta los textos de capturas de chat (CORTE), achica a JPEG, saca lo personal de las observaciones. `EJERCICIO` mapea hoja → ejercicios (Hundred → e01 y e02; "Roll up" es Rolling like a ball). |
+| `privado/` | **No se versiona** (el repo es público): `mat3/` (fotos procesadas y `mat3.json`) y `fotos-mat3.js` (`FOTOS_MAT3[id]`, base64), que index.html carga y la vista "Fotos con props" del visor muestra si existe. Se regenera con `importar_mat3.py "Mat 3 Props.xlsx"`. |
 | `prueba-figura/` | Laboratorio de la modelo anatómica (no se empaqueta): `pagina.html`, `poses-prueba.js` (Roll Up, Swan, Side Leg Kicks y Spine Twist desde arriba), `armar.py` → `publicar/prueba-figura.html`. |
 | `fuentes/` | JSON del material Balanced Body, `quiz_revisado.json` (preguntas rebalanceadas) y `examenes-previos.md` (transcripción de los exámenes; los PDF no se versionan porque tienen datos personales). |
 | `LÉEME.md` | Documentación para la usuaria (fuentes, formatos, principios con referencias). |
@@ -76,7 +76,7 @@ como un único archivo HTML. Textos en **voseo rioplatense y sin género** ("Tod
 
 ## Pendiente conocido
 
-- "Mat 3 Props.xlsx" (Drive, 68 MB; se baja con `drive.usercontent.google.com/download?id=…&export=download&confirm=t`, la red del entorno ya lo permite): 19 hojas, 116 fotos. Solo Roll Up y Swan están revisadas foto por foto (caras) y en el laboratorio. Falta revisar las otras 17 y llevarlas a la app (preguntar antes por las fotos: el link es público).
+- "Mat 3 Props.xlsx" (Drive, 68 MB; se baja con `drive.usercontent.google.com/download?id=1qx1I1jHBVGPNZetbjWyqhWbmQUc9wb8x&export=download&confirm=t`): ya está en la app (vista "Fotos con props" en 20 ejercicios). Las hojas sin fotos (Teaser, Hip Circles, Corkscrew, Spine Twist, Side Series) tienen solo texto: falta sumar sus textos de props.
 - Modelo anatómica: está en el laboratorio; generalizarla a las 48 animaciones y a la app recién cuando la usuaria la apruebe. Ya se hizo lo que pidió (sin capa de columna, sin piquito entre cuello y pecho, silueta slim y grácil, rodilla y codo en arco, sin línea del deltoides, manos y pies finos). Al generalizar, revisar las rodillas que la cinemática inversa dobla sin que la pose lo pida (`rodillas.js` en el scratchpad lo detectaba): Plancha prona, Push Ups, Leg Pull Down y Jackknife; en el Roll Up se arregló dejando deslizar los talones (`libre`) al flexionar o estirar los pies.
 
 - Material BB: faltan los módulos 2 a 5 de Principios del Movimiento (el material de origen los marca como pendientes). Cuando lleguen: copiarlos a `fuentes/`, sumarlos a FUENTES en `importar_bb.py` y correrlo.

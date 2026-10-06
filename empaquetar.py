@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 """
-Regenera AnatoApp.html: la app entera en un solo archivo, lista para compartir.
+Regenera PilatesLab.html: la app entera en un solo archivo, lista para compartir.
 
-Uso:  python empaquetar.py
+Uso:  python empaquetar.py              -> PilatesLab.html (se versiona; sin fotos privadas)
+      python empaquetar.py --con-fotos  -> publicar/PilatesLab-con-fotos.html (no se versiona)
 
-Toma index.html y todos los scripts que carga (datos.js, datos-premat.js,
-imagenes.js, datos-mat1.js, app.js) y escribe AnatoApp.html con todo
-incrustado adentro. Ejecutalo cada vez que edites el contenido y quieras
-compartir la version actualizada.
+Toma index.html y todos los scripts que carga y escribe el archivo con todo
+incrustado adentro. Los scripts de privado/ (fotos de Mat 3 Props, con
+personas) solo entran con --con-fotos: el repositorio es público.
 """
 import io, os, re, sys
 
 BASE = os.path.dirname(os.path.abspath(__file__))
-SALIDA = os.path.join(BASE, "AnatoApp.html")
+CON_FOTOS = "--con-fotos" in sys.argv
+SALIDA = os.path.join(BASE, "publicar", "PilatesLab-con-fotos.html") if CON_FOTOS else os.path.join(BASE, "PilatesLab.html")
 
 
 def leer(nombre):
@@ -50,6 +51,10 @@ def inyectar(marca, codigo, texto):
 def main():
     html = leer("index.html")
     for nombre in re.findall(r'<script src="([^"]+)"></script>', html):
+        if nombre.startswith("privado/") and not (CON_FOTOS and os.path.exists(os.path.join(BASE, nombre))):
+            # sin fotos privadas: se saca la etiqueta (la app funciona igual, sin la vista Fotos)
+            html = html.replace('<script src="%s"></script>\n' % nombre, "").replace('<script src="%s"></script>' % nombre, "")
+            continue
         html = inyectar(nombre, leer(nombre), html)
 
     if "<script src=" in html:
@@ -61,11 +66,12 @@ def main():
     if abre != cierra:
         sys.exit("Bloques de script descompensados: %d aperturas y %d cierres." % (abre, cierra))
 
+    os.makedirs(os.path.dirname(SALIDA), exist_ok=True)
     with io.open(SALIDA, "w", encoding="utf-8") as f:
         f.write(html)
 
     print("Listo: %s  (%.1f KB)" % (SALIDA, os.path.getsize(SALIDA) / 1024.0))
-    print("Ese es el archivo que podes compartir.")
+    print("Ese es el archivo que podes compartir." + (" Tiene las fotos de Mat 3 (personas): no lo subas al repo." if CON_FOTOS else ""))
 
 
 if __name__ == "__main__":

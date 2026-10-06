@@ -1,5 +1,5 @@
 /* ============================================================
-   AnatoApp — Análisis MAT 2 y familias por posición
+   Pilates Lab — Análisis MAT 2 y familias por posición
    Fuentes:
      · "Mat 2 ordenado.xlsx" (hoja Mat 2): 23 fichas de análisis, con
        series, posición, principio, objetivos, regresiones (Pre-Pilates,

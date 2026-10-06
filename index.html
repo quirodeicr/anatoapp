@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>AnatoApp — Anatomía aplicada al Pilates</title>
+<title>Pilates Lab — Anatomía aplicada al Pilates</title>
 <meta name="theme-color" content="#0d9488">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='52' font-size='52'>🦴</text></svg>">
 <style>
@@ -723,6 +723,22 @@ html[data-fx="suaves"] .fin-trofeo .ico,html[data-fx="suaves"] .sube-badge,html[
 .visor-capas{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:4px 0 6px}
 .chip-capa{border:1.5px solid var(--linea2);background:var(--sup);color:var(--tx2);font:inherit;font-size:12.5px;font-weight:700;padding:6px 10px;min-height:34px;border-radius:99px;cursor:pointer}
 .chip-capa.on{border-color:var(--mag);color:var(--tx);background:var(--mag-cl)}
+.visor-modo{display:flex;gap:3px;background:var(--sup3);border-radius:99px;padding:3px;margin:2px auto 8px;width:max-content;max-width:100%}
+.visor-modo button{border:0;background:transparent;color:var(--tx2);font:inherit;font-size:13px;font-weight:800;padding:7px 12px;min-height:36px;border-radius:99px;cursor:pointer}
+.visor-modo button[aria-pressed="true"]{background:var(--sup);color:var(--tx);box-shadow:0 1px 2px rgba(0,0,0,.14)}
+.visor-modo small{font-weight:700;color:var(--tx2);margin-left:2px}
+.visor-fotos{display:grid;gap:10px;padding:2px 4px}
+.vf-prop h5{margin:0 0 3px;font-size:14px}.vf-prop p{margin:0 0 6px;font-size:13px;color:var(--tx2);line-height:1.45}
+.vf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
+.vf-foto{border:0;padding:0;background:var(--sup3);border-radius:10px;overflow:hidden;cursor:zoom-in;aspect-ratio:4/3}
+.vf-foto img{width:100%;height:100%;object-fit:cover;display:block}
+.vf-foto:focus-visible,.visor-modo button:focus-visible{outline:3px solid var(--mag);outline-offset:2px}
+.vf-obs{font-size:13px;color:var(--tx2);margin:0;line-height:1.45}
+dialog.foto-grande{border:0;padding:0;background:transparent;max-width:min(96vw,1000px)}
+dialog.foto-grande::backdrop{background:rgba(0,0,0,.8)}
+dialog.foto-grande img{max-width:100%;max-height:82vh;display:block;border-radius:10px}
+dialog.foto-grande p{color:#fff;margin:8px 2px 0;font-size:14px}
+.fg-cerrar{position:absolute;top:8px;right:8px;min-width:40px;min-height:40px;border-radius:99px;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:18px;cursor:pointer}
 .visor-tira{display:flex;gap:6px;overflow-x:auto;padding:4px 2px 2px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
 .tira-p{flex:0 0 92px;scroll-snap-align:start;position:relative;border:2px solid transparent;background:var(--sup);border-radius:10px;padding:0;cursor:pointer;overflow:hidden}
 .tira-p .fig-svg{display:block}
@@ -1062,7 +1078,7 @@ article.ex-rev{margin-bottom:10px}
 
 <header>
   <span class="logo">🦴</span>
-  <h2>AnatoApp</h2>
+  <h2>Pilates Lab</h2>
   <span class="sp"></span>
   <div id="hud"></div>
   <span id="musica-slot"></span>
@@ -1100,6 +1116,7 @@ article.ex-rev{margin-bottom:10px}
 <script src="efectos.js"></script>
 <script src="estudio.js"></script>
 <script src="clase.js"></script>
+<script src="privado/fotos-mat3.js"></script>
 <script src="app.js"></script>
 <script>
 (function(){

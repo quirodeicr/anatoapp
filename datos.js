@@ -1,5 +1,5 @@
 /* ============================================================
-   AnatoApp — Base de conocimiento (v2)
+   Pilates Lab — Base de conocimiento (v2)
    Digitalizada de los apuntes manuscritos de Anatomía aplicada
    al método Pilates (43 fotos, 12 pliegos únicos).
 

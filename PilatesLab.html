@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>AnatoApp — Anatomía aplicada al Pilates</title>
+<title>Pilates Lab — Anatomía aplicada al Pilates</title>
 <meta name="theme-color" content="#0d9488">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='52' font-size='52'>🦴</text></svg>">
 <style>
@@ -723,6 +723,22 @@ html[data-fx="suaves"] .fin-trofeo .ico,html[data-fx="suaves"] .sube-badge,html[
 .visor-capas{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:4px 0 6px}
 .chip-capa{border:1.5px solid var(--linea2);background:var(--sup);color:var(--tx2);font:inherit;font-size:12.5px;font-weight:700;padding:6px 10px;min-height:34px;border-radius:99px;cursor:pointer}
 .chip-capa.on{border-color:var(--mag);color:var(--tx);background:var(--mag-cl)}
+.visor-modo{display:flex;gap:3px;background:var(--sup3);border-radius:99px;padding:3px;margin:2px auto 8px;width:max-content;max-width:100%}
+.visor-modo button{border:0;background:transparent;color:var(--tx2);font:inherit;font-size:13px;font-weight:800;padding:7px 12px;min-height:36px;border-radius:99px;cursor:pointer}
+.visor-modo button[aria-pressed="true"]{background:var(--sup);color:var(--tx);box-shadow:0 1px 2px rgba(0,0,0,.14)}
+.visor-modo small{font-weight:700;color:var(--tx2);margin-left:2px}
+.visor-fotos{display:grid;gap:10px;padding:2px 4px}
+.vf-prop h5{margin:0 0 3px;font-size:14px}.vf-prop p{margin:0 0 6px;font-size:13px;color:var(--tx2);line-height:1.45}
+.vf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
+.vf-foto{border:0;padding:0;background:var(--sup3);border-radius:10px;overflow:hidden;cursor:zoom-in;aspect-ratio:4/3}
+.vf-foto img{width:100%;height:100%;object-fit:cover;display:block}
+.vf-foto:focus-visible,.visor-modo button:focus-visible{outline:3px solid var(--mag);outline-offset:2px}
+.vf-obs{font-size:13px;color:var(--tx2);margin:0;line-height:1.45}
+dialog.foto-grande{border:0;padding:0;background:transparent;max-width:min(96vw,1000px)}
+dialog.foto-grande::backdrop{background:rgba(0,0,0,.8)}
+dialog.foto-grande img{max-width:100%;max-height:82vh;display:block;border-radius:10px}
+dialog.foto-grande p{color:#fff;margin:8px 2px 0;font-size:14px}
+.fg-cerrar{position:absolute;top:8px;right:8px;min-width:40px;min-height:40px;border-radius:99px;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:18px;cursor:pointer}
 .visor-tira{display:flex;gap:6px;overflow-x:auto;padding:4px 2px 2px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
 .tira-p{flex:0 0 92px;scroll-snap-align:start;position:relative;border:2px solid transparent;background:var(--sup);border-radius:10px;padding:0;cursor:pointer;overflow:hidden}
 .tira-p .fig-svg{display:block}
@@ -1062,7 +1078,7 @@ article.ex-rev{margin-bottom:10px}
 
 <header>
   <span class="logo">🦴</span>
-  <h2>AnatoApp</h2>
+  <h2>Pilates Lab</h2>
   <span class="sp"></span>
   <div id="hud"></div>
   <span id="musica-slot"></span>
@@ -1086,7 +1102,7 @@ article.ex-rev{margin-bottom:10px}
 
 <script>
 /* ============================================================
-   AnatoApp — Base de conocimiento (v2)
+   Pilates Lab — Base de conocimiento (v2)
    Digitalizada de los apuntes manuscritos de Anatomía aplicada
    al método Pilates (43 fotos, 12 pliegos únicos).
 
@@ -3832,7 +3848,7 @@ const IMGS = {"pm001": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDA
 </script>
 <script>
 /* ============================================================
-   AnatoApp — Análisis MAT 1 y repertorio Pre-Pilates
+   Pilates Lab — Análisis MAT 1 y repertorio Pre-Pilates
    Fuentes:
      · "Analisis MAT 1.pdf" / "Mat 1.xlsx": 25 fichas de análisis
        de ejercicios (una por hoja)
@@ -4300,7 +4316,7 @@ const FOTOS = [];   // ¿Qué ejercicio es? (se llena abajo)
 </script>
 <script>
 /* ============================================================
-   AnatoApp — figura articulada (v3)
+   Pilates Lab — figura articulada (v3)
 
    Maniquí 2D con cinemática directa + inversa y apoyos en el piso.
 
@@ -5761,7 +5777,7 @@ const FIGURA = (() => {
 </script>
 <script>
 /* ============================================================
-   AnatoApp — poses de ejercicios y posiciones (motor: figura.js v2)
+   Pilates Lab — poses de ejercicios y posiciones (motor: figura.js v2)
 
    tr dirección del tronco · fl flexión de columna (+ enrolla, − extiende)
    cab flexión de cuello · bc/bl brazos [ángulo, codo, muñeca]
@@ -10542,7 +10558,7 @@ const BB = {
 </script>
 <script>
 /* ============================================================
-   AnatoApp — material de Balanced Body convertido en práctica
+   Pilates Lab — material de Balanced Body convertido en práctica
 
    Toma BB (datos-bb.js, generado desde los JSON del manual) y POSES
    (poses.js) y agrega:
@@ -10611,7 +10627,7 @@ const ANIMS = [];
 </script>
 <script>
 /* ============================================================
-   AnatoApp — tus exámenes previos de Balanced Body
+   Pilates Lab — tus exámenes previos de Balanced Body
 
    Fuente: las revisiones de los exámenes que se rindieron en la
    formación (transcripción completa en fuentes/examenes-previos.md):
@@ -12532,7 +12548,7 @@ const FAMILIAS = [
 </script>
 <script>
 /* ============================================================
-   AnatoApp — Análisis MAT 2 y familias por posición
+   Pilates Lab — Análisis MAT 2 y familias por posición
    Fuentes:
      · "Mat 2 ordenado.xlsx" (hoja Mat 2): 23 fichas de análisis, con
        series, posición, principio, objetivos, regresiones (Pre-Pilates,
@@ -12915,7 +12931,7 @@ FAMILIAS.forEach(f => { f.ref = EJ_REF(f.n, f.libro); });
 </script>
 <script>
 /* ============================================================
-   AnatoApp — figuras del manual dibujadas en código (SVG)
+   Pilates Lab — figuras del manual dibujadas en código (SVG)
 
    Son las figuras que el material marca como "svg_codigo": dependen de
    ángulos o referencias anatómicas precisas, y un dibujo generado por IA
@@ -13270,7 +13286,7 @@ const DIAGRAMAS = (() => {
 </script>
 <script>
 /* ============================================================
-   AnatoApp — lámina anatómica del mapa corporal
+   Pilates Lab — lámina anatómica del mapa corporal
 
    Figura dibujada a mano en vectores, al estilo de un atlas: en cada
    vista la mitad izquierda muestra la capa SUPERFICIAL y la derecha la
@@ -13581,7 +13597,7 @@ const LAMINA = (() => {
 </script>
 <script>
 /* ============================================================
-   AnatoApp — música, sonidos y efectos visuales
+   Pilates Lab — música, sonidos y efectos visuales
 
    Todo el audio se sintetiza en el navegador (Web Audio API): no
    hay archivos de música, funciona sin internet, no agranda la app
@@ -14089,7 +14105,7 @@ function confeti(n = 110) {
 </script>
 <script>
 /* ============================================================
-   AnatoApp — tu personaje y tu estudio de Pilates
+   Pilates Lab — tu personaje y tu estudio de Pilates
 
    Un personaje propio (nombre, piel, pelo, ropa, accesorios) que vive
    en un estudio. Con el progreso se desbloquean prendas, accesorios y
@@ -14737,7 +14753,7 @@ function conectarPanel() {
 </script>
 <script>
 /* ============================================================
-   AnatoApp — Armá tu clase
+   Pilates Lab — Armá tu clase
 
    En los exámenes, diseñar la clase fue lo que más puntos costó:
    Mat 1, 17 de 30 y Mat 2, 0 de 50. Acá se arma una clase con los
@@ -15049,7 +15065,7 @@ function revisarClase() {
 </script>
 <script>
 /* ============================================================
-   AnatoApp 2 — motor de estudio
+   Pilates Lab — motor de estudio
 
    Principios que implementa (ver "Cómo aprende tu cerebro acá"
    en Perfil y el LÉEME para las referencias):
@@ -17204,10 +17220,36 @@ function fichaRepHTML(e) {
 }
 /* --- visor de animación: reproducir, paso a paso, deslizador, cámara lenta y capas --- */
 const respDeFase = fase => /inhala.*exhala|continuo/i.test(fase || '') ? 'ambas' : /inhala/i.test(fase || '') ? 'inhala' : /exhala/i.test(fase || '') ? 'exhala' : null;
+/* fotos de "Mat 3 Props" (privado/fotos-mat3.js, fuera del repo): agrupadas por prop */
+const fotosDe = id => (typeof FOTOS_MAT3 !== 'undefined' && FOTOS_MAT3[id]) || null;
+function fotosHTML(F) {
+  const grupos = [];
+  F.fotos.forEach((f, k) => { let g = grupos.find(x => x.prop === f.prop); if (!g) grupos.push(g = { prop: f.prop, fotos: [] }); g.fotos.push({ ...f, k }); });
+  return grupos.map(g => `<div class="vf-prop"><h5>${esc(g.prop || 'Sin prop')}</h5>${F.props[g.prop] ? `<p>${esc(F.props[g.prop])}</p>` : ''}
+    <div class="vf-grid">${g.fotos.map(f => `<button type="button" class="vf-foto" data-foto="${f.k}" aria-label="Ampliar: ${esc(F.nombre)} con ${esc(g.prop)}"><img src="${f.src}" alt="${esc(F.nombre)} con ${esc(g.prop)}" loading="lazy" width="${f.w}" height="${f.h}"></button>`).join('')}</div></div>`).join('')
+    + (F.observaciones ? `<p class="vf-obs"><b>Observaciones de tu planilla:</b> ${esc(F.observaciones)}</p>` : '')
+    + '<p class="micro">Fotos de tu planilla Mat 3 Props: el mismo ejercicio con cada prop. Las caras de quienes miran la clase están pixeladas.</p>';
+}
+function verFoto(F, k) {
+  let d = $('#foto-grande');
+  if (!d) {
+    d = document.createElement('dialog'); d.id = 'foto-grande'; d.className = 'foto-grande';
+    d.innerHTML = '<button type="button" class="fg-cerrar" aria-label="Cerrar">✕</button><img alt=""><p></p>';
+    document.body.appendChild(d);
+    $('.fg-cerrar', d).onclick = () => d.close();
+    d.addEventListener('click', ev => { if (ev.target === d) d.close(); });
+  }
+  const f = F.fotos[k];
+  $('img', d).src = f.src; $('img', d).alt = `${F.nombre} con ${f.prop}`; $('p', d).textContent = `${F.nombre} · ${f.prop}`;
+  d.showModal();
+}
 function visorHTML(e, grande = false) {
-  const ej = POSES[e.id], n = ej.poses.length;
+  const ej = POSES[e.id], n = ej.poses.length, F = fotosDe(e.id);
   const marcas = ej.poses.map((_, k) => `<i style="left:${(k / n * 100).toFixed(2)}%"></i>`).join('');
   return `<div class="visor${grande ? ' grande' : ''}">
+    ${F ? `<div class="visor-modo" role="group" aria-label="Ver"><button type="button" data-modo="anim" aria-pressed="true">Animación</button><button type="button" data-modo="fotos" aria-pressed="false">📷 Fotos con props <small>${F.fotos.length}</small></button></div>
+    <div class="visor-fotos" hidden></div>` : ''}
+    <div class="visor-anim">
     <div class="rep-fig" aria-live="off"></div>
     <div class="rep-fase" aria-live="polite"></div>
     ${n > 1 ? `<label class="visor-tl"><span class="sr">Recorrer el movimiento</span><span class="tl-marcas" aria-hidden="true">${marcas}</span>
@@ -17226,6 +17268,7 @@ function visorHTML(e, grande = false) {
       ${n > 1 ? '<button type="button" class="chip-capa on" data-capa="fantasma" aria-pressed="true">👻 Hacia dónde va</button>' : ''}
     </div>
     ${n > 1 ? '<div class="visor-tira" role="list"></div>' : ''}
+    </div>
   </div>`;
 }
 /* conecta un visor; pasos = <li data-paso> de la lista de pasos (opcional) */
@@ -17286,6 +17329,16 @@ function activarVisor(raiz, e, pasos = []) {
   });
   const gr = $('[data-acc="grande"]', raiz);
   if (gr) gr.onclick = () => { rep.pausar(); icono(); abrirVisorGrande(e); };
+  /* Animación ↔ Fotos con props (las fotos se arman recién al abrirlas) */
+  const F = fotosDe(e.id), vf = $('.visor-fotos', raiz), va = $('.visor-anim', raiz);
+  if (F && vf) $$('[data-modo]', raiz).forEach(b => b.onclick = () => {
+    const fotos = b.dataset.modo === 'fotos';
+    $$('[data-modo]', raiz).forEach(x => x.setAttribute('aria-pressed', x === b));
+    if (fotos && !vf.childElementCount) { vf.innerHTML = fotosHTML(F); $$('.vf-foto', vf).forEach(x => x.onclick = () => verFoto(F, +x.dataset.foto)); }
+    vf.hidden = !fotos; va.hidden = fotos;
+    if (fotos) rep.pausar(); else rep.reanudar();
+    icono(); SND.toque();
+  });
   return rep;
 }
 /* el visor en grande: la figura arriba y los pasos del manual debajo */
@@ -17799,7 +17852,7 @@ function vPerfil() {
     r.oninput = () => { S.cfg[r.dataset.vol] = +r.value; AUD.iniciar(); AUD.volumenes(); };
     r.onchange = () => { guardar(); if (r.dataset.vol === 'volSonido') SND.par(); };
   });
-  $('#exp').onclick = () => descargar(`anatoapp-${HOY()}.json`, JSON.stringify(S, null, 2), 'application/json',
+  $('#exp').onclick = () => descargar(`pilateslab-${HOY()}.json`, JSON.stringify(S, null, 2), 'application/json',
     'Respaldo guardado. No hace falta abrirlo: para recuperar tu avance usá <b>Importar</b> y elegí este archivo.');
   $('#imp').onchange = e => {
     const file = e.target.files[0];
@@ -17808,7 +17861,7 @@ function vPerfil() {
     fr.onload = () => {
       try {
         const d = migrar(JSON.parse(fr.result));
-        if (!d) { avisoAlmacen('Ese archivo no parece un respaldo de AnatoApp.'); return; }
+        if (!d) { avisoAlmacen('Ese archivo no parece un respaldo de Pilates Lab (ni de AnatoApp).'); return; }
         S = d; guardar(); ir('perfil');
         avisoOk(`Progreso restaurado: <b>${Object.keys(d.items).length}</b> ejercicios con sus fechas de repaso.`);
       } catch (x) { avisoAlmacen('No se pudo leer el archivo: puede estar dañado o editado a mano.'); }
@@ -17899,10 +17952,10 @@ async function generarCopia(conProgreso) {
   let html;
   try { html = await construirCopia(conProgreso); }
   catch (e) {
-    avisoAlmacen('No se pudo armar la copia desde acá. Abrí la app con <b>Abrir AnatoApp.bat</b> o desde <b>AnatoApp.html</b> y probá de nuevo.');
+    avisoAlmacen('No se pudo armar la copia desde acá. Abrí la app con <b>Abrir Pilates Lab.bat</b> o desde <b>PilatesLab.html</b> y probá de nuevo.');
     return;
   }
-  descargar(conProgreso ? `AnatoApp-con-progreso-${HOY()}.html` : 'AnatoApp.html', html, 'text/html',
+  descargar(conProgreso ? `PilatesLab-con-progreso-${HOY()}.html` : 'PilatesLab.html', html, 'text/html',
     conProgreso ? 'Copia guardada con tu progreso adentro: es la app entera en un archivo.'
                 : 'Copia limpia guardada, sin progreso. Es la que conviene compartir.');
 }

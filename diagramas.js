@@ -1,5 +1,5 @@
 /* ============================================================
-   AnatoApp — figuras del manual dibujadas en código (SVG)
+   Pilates Lab — figuras del manual dibujadas en código (SVG)
 
    Son las figuras que el material marca como "svg_codigo": dependen de
    ángulos o referencias anatómicas precisas, y un dibujo generado por IA

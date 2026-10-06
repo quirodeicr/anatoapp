@@ -1,5 +1,5 @@
 /* ============================================================
-   AnatoApp — lámina anatómica del mapa corporal
+   Pilates Lab — lámina anatómica del mapa corporal
 
    Figura dibujada a mano en vectores, al estilo de un atlas: en cada
    vista la mitad izquierda muestra la capa SUPERFICIAL y la derecha la

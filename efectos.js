@@ -1,5 +1,5 @@
 /* ============================================================
-   AnatoApp — música, sonidos y efectos visuales
+   Pilates Lab — música, sonidos y efectos visuales
 
    Todo el audio se sintetiza en el navegador (Web Audio API): no
    hay archivos de música, funciona sin internet, no agranda la app

@@ -1,5 +1,5 @@
 /* ============================================================
-   AnatoApp — Armá tu clase
+   Pilates Lab — Armá tu clase
 
    En los exámenes, diseñar la clase fue lo que más puntos costó:
    Mat 1, 17 de 30 y Mat 2, 0 de 50. Acá se arma una clase con los

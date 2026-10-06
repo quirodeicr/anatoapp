@@ -1,5 +1,5 @@
 /* ============================================================
-   AnatoApp — poses de ejercicios y posiciones (motor: figura.js v2)
+   Pilates Lab — poses de ejercicios y posiciones (motor: figura.js v2)
 
    tr dirección del tronco · fl flexión de columna (+ enrolla, − extiende)
    cab flexión de cuello · bc/bl brazos [ángulo, codo, muñeca]

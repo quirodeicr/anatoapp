@@ -1,10 +1,10 @@
 @echo off
 rem ============================================================
-rem  AnatoApp - lanzador
+rem  Pilates Lab - lanzador
 rem  Levanta un servidor local y abre la app en el navegador.
 rem  Dejá esta ventana negra abierta mientras estudiás.
 rem ============================================================
-title AnatoApp
+title Pilates Lab
 cd /d "%~dp0"
 
 where python >nul 2>&1
@@ -15,7 +15,7 @@ if errorlevel 1 (
 )
 
 echo.
-echo   AnatoApp esta corriendo en  http://localhost:8777
+echo   Pilates Lab esta corriendo en  http://localhost:8777
 echo   Dejá esta ventana abierta mientras estudias.
 echo   Para cerrar la app: cerra esta ventana.
 echo.

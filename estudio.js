@@ -1,5 +1,5 @@
 /* ============================================================
-   AnatoApp — tu personaje y tu estudio de Pilates
+   Pilates Lab — tu personaje y tu estudio de Pilates
 
    Un personaje propio (nombre, piel, pelo, ropa, accesorios) que vive
    en un estudio. Con el progreso se desbloquean prendas, accesorios y

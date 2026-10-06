@@ -1,5 +1,5 @@
 /* ============================================================
-   AnatoApp — material de Balanced Body convertido en práctica
+   Pilates Lab — material de Balanced Body convertido en práctica
 
    Toma BB (datos-bb.js, generado desde los JSON del manual) y POSES
    (poses.js) y agrega:
