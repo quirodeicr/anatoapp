@@ -93,6 +93,12 @@ function ejerciciosClase() {
   });
   return [...pre, ...bb];
 }
+/* foto (Pre-Pilates) o figura del manual de cada ejercicio */
+function miniClase(e) {
+  if (e.f !== 'pre') return miniEj({ bb: e.id });
+  const p = PREMAT.find(x => norm(x.n) === norm(e.n));
+  return p ? miniEj({ pm: p.id }) : '';
+}
 let CATALOGO_CLASE = null;
 const ejClase = id => (CATALOGO_CLASE || (CATALOGO_CLASE = ejerciciosClase())).find(e => e.id === id);
 
@@ -154,6 +160,7 @@ function filasClase(c) {
     const trans = prev && prev.pos !== e.pos ? transicionHTML(prev, e) : '';
     return `${trans}<li class="cl-fila" data-i="${i}">
       <span class="cl-n">${i + 1}</span>
+      <span class="cl-mini">${miniClase(e)}</span>
       <div class="cl-info"><b>${esc(e.n)}</b>
         <small><span class="cl-pos p-${e.pos}">${p.ico} ${p.nom}</span> ${e.f === 'pre' ? 'Pre-Pilates' : e.f === 'mat1' ? 'Mat 1' : 'Mat 2'}${e.reps ? ` · manual: ${esc(e.reps)}` : ''}</small></div>
       <label class="cl-reps"><input type="number" inputmode="numeric" min="1" max="100" step="1" value="${x.reps || ''}" placeholder="${r ? r[0] + (r[1] > r[0] ? '–' + r[1] : '') : '#'}" aria-label="Repeticiones de ${esc(e.n)}"><small>${unidadReps(e.reps)}</small></label>
@@ -201,7 +208,7 @@ function pintarPoolClase() {
   const lista = ejerciciosClase().filter(e => (e.f === 'pre' || m.fuentes.includes(e.f)) &&
     (!filtroClase.pos || e.pos === filtroClase.pos) && (!filtroClase.f || e.f === filtroClase.f));
   $('#clPool').innerHTML = lista.length ? lista.map(e => `<button type="button" class="cl-ej ${usados.has(e.id) ? 'usado' : ''}" data-id="${e.id}">
-      <span class="cl-pos p-${e.pos}">${POS_CLASE[e.pos].ico}</span><b>${esc(e.n)}</b><small>${e.f === 'pre' ? 'Pre-Pilates' : e.f === 'mat1' ? 'Mat 1' : 'Mat 2'}${usados.has(e.id) ? ' · ya está' : ''}</small></button>`).join('')
+      <span class="cl-mini">${miniClase(e)}</span><span class="cl-pos p-${e.pos}">${POS_CLASE[e.pos].ico}</span><b>${esc(e.n)}</b><small>${e.f === 'pre' ? 'Pre-Pilates' : e.f === 'mat1' ? 'Mat 1' : 'Mat 2'}${usados.has(e.id) ? ' · ya está' : ''}</small></button>`).join('')
     : '<p class="vacio">No hay ejercicios con ese filtro.</p>';
   $$('.cl-ej').forEach(b => b.onclick = () => {
     c.items.push({ id: b.dataset.id, reps: null });

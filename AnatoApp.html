@@ -708,6 +708,87 @@ html[data-fx="suaves"] .fin-trofeo .ico,html[data-fx="suaves"] .sube-badge,html[
 .fase-chip.exhala{background:#ffedd5;color:#c2410c}
 .fase-chip.ambas{background:#ede9fe;color:#6d28d9}
 .fase-chip.ini{background:var(--sup3);color:var(--tx)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* visor de animación: paso a paso, deslizador, velocidad y capas */
+.visor{background:var(--sup2);border-radius:14px;padding:6px 6px 8px;margin-bottom:10px}
+.visor .rep-fig{max-width:560px;margin:0 auto}
+.visor-tl{display:block;position:relative;margin:4px 10px 2px;height:26px}
+.visor-tl input{position:absolute;inset:0;width:100%;margin:0;accent-color:var(--mag);background:transparent;cursor:pointer}
+.tl-marcas{position:absolute;left:8px;right:8px;top:50%;height:0;pointer-events:none}
+.tl-marcas i{position:absolute;top:-7px;width:2px;height:14px;margin-left:-1px;border-radius:1px;background:var(--linea2)}
+.visor .rep-ctrl{flex-wrap:wrap;align-items:center}
+.vel{display:inline-flex;gap:2px;background:var(--sup3);border-radius:99px;padding:2px;margin-left:4px}
+.chip-vel{border:0;background:transparent;color:var(--tx2);font:inherit;font-size:12.5px;font-weight:800;min-width:38px;min-height:32px;border-radius:99px;cursor:pointer}
+.chip-vel.on{background:var(--sup);color:var(--tx);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.visor-capas{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:4px 0 6px}
+.chip-capa{border:1.5px solid var(--linea2);background:var(--sup);color:var(--tx2);font:inherit;font-size:12.5px;font-weight:700;padding:6px 10px;min-height:34px;border-radius:99px;cursor:pointer}
+.chip-capa.on{border-color:var(--mag);color:var(--tx);background:var(--mag-cl)}
+.visor-tira{display:flex;gap:6px;overflow-x:auto;padding:4px 2px 2px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.tira-p{flex:0 0 92px;scroll-snap-align:start;position:relative;border:2px solid transparent;background:var(--sup);border-radius:10px;padding:0;cursor:pointer;overflow:hidden}
+.tira-p .fig-svg{display:block}
+.tira-p b{position:absolute;left:4px;top:3px;font-size:11px;min-width:18px;height:18px;border-radius:9px;display:grid;place-items:center;background:var(--sup3);color:var(--tx)}
+.tira-p.inhala b{background:#dbeafe;color:#1d4ed8}.tira-p.exhala b{background:#ffedd5;color:#c2410c}.tira-p.ambas b{background:#ede9fe;color:#6d28d9}
+.tira-p.on{border-color:var(--mag)}
+.tray{fill:none;stroke-width:1.6;stroke-dasharray:3 2.4;stroke-linecap:round;opacity:.9}
+.tray-flecha{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tray-mano{stroke:#e11d48}.tray-pie{stroke:#2563eb}.tray-cab{stroke:#c026d3}.tray-pel{stroke:#f59e0b}
+.fis-plomada{stroke-width:1;stroke-dasharray:2 2}
+.fis-cm{stroke-width:1.2}
+.fis-cruz{stroke-width:1}
+.fis-ok .fis-plomada,.fis-ok .fis-cm,.fis-ok .fis-cruz{stroke:#15803d}.fis-ok .fis-cm{fill:#dcfce7}.fis-ok .fis-base{fill:#22c55e}
+.fis-fuera .fis-plomada,.fis-fuera .fis-cm,.fis-fuera .fis-cruz{stroke:#c2410c}.fis-fuera .fis-cm{fill:#ffedd5}.fis-fuera .fis-base{fill:#f97316}
+.fis-base{opacity:.75}
+.modal-visor .modal-in{max-width:760px;max-height:92vh;max-height:92dvh;overflow:auto}
+.ver-pasos{display:block;margin:6px auto 8px}
+.ses-ilus{float:right;width:118px;margin:0 0 6px 10px;border-radius:10px;overflow:hidden;background:var(--sup2);aspect-ratio:16/10}
+.ses-ilus img{width:100%;height:100%;object-fit:contain;background:#fff}.ses-ilus .fig-svg{width:100%;height:100%}
+.ses-ej{clear:both}
+.dia-card{display:flex;gap:12px;align-items:center;background:var(--sup);border:2px solid var(--linea);border-radius:var(--r);padding:10px 12px;margin:0 0 16px;box-shadow:var(--sombra)}
+.dia-fig{width:46%;max-width:240px;flex-shrink:0;background:var(--sup2);border-radius:12px;overflow:hidden}
+.dia-txt{min-width:0}
+.dia-txt small{display:block;font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--mag)}
+.dia-txt b{display:block;font-size:17px;line-height:1.2;margin:2px 0 4px}
+.dia-txt p{font-size:13px;color:var(--tx2);line-height:1.35;margin-bottom:8px}
+/* chips de ejercicios con miniatura (regresiones, progresiones) */
+.chips-ej{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px}
+.chip-ej{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--linea);background:var(--sup);color:var(--tx);font:inherit;font-size:13px;font-weight:600;line-height:1.2;padding:3px 9px 3px 3px;border-radius:10px;cursor:pointer;text-align:left}
+.chip-ej.sin{padding-left:9px;cursor:default;opacity:.85;border-style:dashed}
+.chip-ej:not(.sin):hover{border-color:var(--mag)}
+.ce-img{width:44px;height:30px;border-radius:7px;overflow:hidden;background:var(--sup2);flex-shrink:0;display:grid;place-items:center}
+.ce-img img{width:100%;height:100%;object-fit:contain;background:#fff}
+.ce-img .fig-svg{width:100%;height:100%}
+.grupo-chips{margin-bottom:6px}
+.grupo-chips>small{display:block;color:var(--tx2);font-weight:700;font-size:12px;margin-bottom:2px}
+/* familias por posición */
+.familia{background:var(--sup);border:1px solid var(--linea);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+.familia>summary{display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;list-style:none}
+.familia>summary::-webkit-details-marker{display:none}
+.familia>summary .gp-fig{width:74px;flex-shrink:0;background:var(--sup2);border-radius:8px;overflow:hidden}
+.familia>summary b{font-size:16px}
+.fam-cuenta{margin-left:auto;display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end}
+.fam-cuenta i{font-style:normal;font-size:11.5px;font-weight:800;padding:2px 7px;border-radius:99px}
+.lb-pre{--lb:#0d9488}.lb-mat1{--lb:#2563eb}.lb-mat2{--lb:#c026d3}
+.fam-cuenta i{background:color-mix(in srgb,var(--lb) 15%,transparent);color:var(--lb)}
+.fam-libro{margin:10px 12px 6px;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--lb);border-bottom:2px solid color-mix(in srgb,var(--lb) 35%,transparent);padding-bottom:3px}
+.fam-sub{margin:6px 12px 4px;font-size:12.5px;color:var(--tx2)}
+.fam-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;padding:0 12px 10px}
+.fam-ej{display:flex;flex-direction:column;gap:3px;text-align:left;border:1.5px solid var(--linea);background:var(--bg);color:var(--tx);font:inherit;border-radius:12px;padding:5px;cursor:pointer;min-width:0}
+.fam-ej:not(.sin):hover{border-color:var(--mag)}
+.fam-ej.sin{cursor:default}
+.fe-img{aspect-ratio:16/10;border-radius:8px;overflow:hidden;background:var(--sup2);display:grid;place-items:center}
+.fe-img img{width:100%;height:100%;object-fit:cover}
+.fe-img .fig-svg{width:100%;height:100%}
+.fe-nada{font-size:11px;color:var(--tx3)}
+.fam-ej b{font-size:13px;line-height:1.25}
+.fam-ej small{font-size:11.5px;color:var(--tx2);line-height:1.3}
+/* armá tu clase: miniaturas */
+.cl-mini{width:46px;height:32px;border-radius:7px;overflow:hidden;background:var(--sup2);flex-shrink:0;display:grid;place-items:center}
+.cl-mini img{width:100%;height:100%;object-fit:cover}
+.cl-mini .fig-svg{width:100%;height:100%}
+.vm-cab{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.vm-cab h3{margin:0;font-size:18px}
+.visor.grande .rep-fig{max-width:720px}
+.visor.grande .rep-fase{font-size:15.5px;min-height:52px}
 .rep-pasos{margin:0 0 10px 0;padding:0;list-style:none;counter-reset:p}
 .rep-pasos li{font-size:14px;line-height:1.45;padding:7px 10px 7px 34px;border-radius:10px;position:relative;cursor:pointer}
 .rep-pasos li::before{counter-increment:p;content:counter(p);position:absolute;left:8px;top:7px;width:20px;height:20px;border-radius:50%;background:var(--sup3);font-size:11px;font-weight:800;display:grid;place-items:center}
@@ -880,6 +961,7 @@ article.ex-rev{margin-bottom:10px}
 .cl-ej b{font-size:13.5px;font-weight:800;line-height:1.25}
 .cl-ej small{font-size:11.5px;color:var(--tx2)}
 .cl-ej.usado{opacity:.55}
+.cl-ej .cl-mini{grid-column:1/-1;width:100%;height:auto;aspect-ratio:16/9;margin-bottom:6px}
 .cl-res{margin-top:16px;background:var(--sup);border:2px solid var(--linea);border-radius:var(--r);padding:14px 16px}
 .cl-res.ok{border-color:var(--ok);background:var(--ok-cl)}
 .cl-res h3{font-size:17px;font-weight:800;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -4218,9 +4300,27 @@ const FOTOS = [];   // ¿Qué ejercicio es? (se llena abajo)
 </script>
 <script>
 /* ============================================================
-   AnatoApp — figura articulada (v2)
+   AnatoApp — figura articulada (v3)
 
    Maniquí 2D con cinemática directa + inversa y apoyos en el piso.
+
+   Movimiento (v3):
+     · Velocidad de "mínimo jerk" (Flash y Hogan, 1985): así acelera y
+       frena un movimiento humano voluntario, sin arranques bruscos.
+     · Articulación segmentaria: al despegar la columna del piso (Roll Up,
+       Teaser, Roll Over, puentes) o al flexionarla sentado/de pie, los
+       4 segmentos y el cuello se mueven de a uno, "vértebra por vértebra",
+       en el orden que corresponde (ver articulacion()).
+     · Brazos y piernas se interpolan en el espacio de la articulación
+       (ángulo del hombro respecto del tórax, de la cadera respecto de la
+       pelvis), dentro del rango anatómico: acompañan al tronco y nunca
+       giran "por el lado imposible".
+     · Rodar (rueda): sin deslizar. La cadera avanza h·Δθ, con h su altura
+       sobre el punto de contacto (el piso es el centro instantáneo de
+       rotación).
+     · Centro de masa con las fracciones de Winter (2009) por segmento:
+       validar() controla que en las poses de equilibrio caiga sobre la
+       base de apoyo, y el reproductor puede mostrarlo con su plomada.
 
    POSE (ángulos en grados; 0 = derecha, 90 = abajo, -90 = arriba):
      tr   dirección del tronco (de la cadera a los hombros)
@@ -4281,7 +4381,8 @@ const FIGURA = (() => {
     const kt = k.tronco != null ? k.tronco : 1;
     const Hc = { x: 0, y: 0 }, col = [Hc], angs = [];
     for (let i = 0; i < 4; i++) {
-      const a = P.tr + P.fl * (P.cur ? P.cur[i] : (i + 0.5) / 4 - 0.5);
+      /* segs: ángulo de cada segmento ya resuelto (transiciones articuladas) */
+      const a = P.segs ? P.segs[i] : P.tr + P.fl * (P.cur ? P.cur[i] : (i + 0.5) / 4 - 0.5);
       angs.push(a); col.push(pol(col[i], a, LC[i] * kt));
     }
     const S = col[4], aTop = angs[3], aCue = aTop + P.cab;
@@ -4440,7 +4541,13 @@ const FIGURA = (() => {
     const dyCuerpo = piso - Math.max(...contorno(E, excl).map(p => p.y));
     let dy;
     const tronco = rig.filter(n => RIGIDOS.includes(n)), uni = rig.filter(n => UNIHUESO.test(n));
-    if (!tronco.length && uni.length) {
+    if (forzados && tronco.length && !ej.persp) {
+      /* en una transición, lo que sigue apoyado (pelvis, espalda, hombros) queda
+         en el piso; un brazo o una pierna que bajara de más choca con el piso
+         (se corrige abajo) en vez de levantar todo el cuerpo */
+      const sinMiembros = contorno(E, new Set(['bc', 'bl', 'pc', 'pl']));
+      dy = Math.min(piso - Math.max(...tronco.map(n => contactoDe(E, n).y)), piso - Math.max(...sinMiembros.map(p => p.y)));
+    } else if (!tronco.length && uni.length) {
       /* en rodillas o sobre los antebrazos: el muslo (o el brazo) llega vertical al piso */
       dy = Math.min(dyCuerpo, ...uni.map(n => {
         const m = E.seg[miembroDe(n)], pierna = n.startsWith('rodilla');
@@ -4475,9 +4582,34 @@ const FIGURA = (() => {
       ubicarMiembro(E, b, T, P, piso);
       if (falta > 2.5) avisos.push(`${b} no llega a ${destino} (faltan ${falta.toFixed(1)})`);
     }
+    /* 6. los miembros libres no atraviesan el piso: se apoyan en él */
+    if (ej.camara !== 'arriba' && !ej.persp) {
+      const usados = new Set([...excl, ...rig.filter(n => UNIHUESO.test(n)).map(miembroDe)]);
+      for (const k of ['bc', 'bl', 'pc', 'pl']) if (!usados.has(k)) chocar(E, k, P, piso);
+    }
     const contactos = {};
     for (const n of ap) contactos[n] = contactoDe(E, n);
     return { E, avisos, contactos, dx, dy };
+  }
+  /* parte más baja de un miembro */
+  function bajoMiembro(E, k) {
+    const m = E.seg[k], pts = [];
+    const lin = (a, b, r0, r1) => { for (let q = 0; q <= 4; q++) { const t = q / 4; pts.push(lerp(a.y, b.y, t) + lerp(r0, r1, t)); } };
+    if (k[0] === 'b') { lin(m.raiz, m.codo, 4.2, 3.4); lin(m.codo, m.muneca, 3.3, 2.5); lin(m.muneca, m.mano, RMANO, 2); }
+    else { lin(m.raiz, m.rod, 7, RROD); lin(m.rod, m.tobillo, RROD, 3.4); lin(m.talon, m.punta, RPIE, 1.8); }
+    return Math.max(...pts);
+  }
+  /* si un miembro libre atraviesa el piso, gira desde la raíz lo mínimo para apoyarse */
+  function chocar(E, k, P, piso) {
+    if (bajoMiembro(E, k) <= piso + 0.3) return;
+    const m = E.seg[k], esPierna = k[0] === 'p';
+    const fk = a0 => esPierna ? piernaFK(m.raiz, [a0, m.aP - m.a0, m.aPie - m.aP + 90], m.e) : brazoFK(m.raiz, [a0, m.a0 - m.aA, m.aM - m.aA], m.e);
+    for (let d = 1; d <= 120; d += 1) for (const sg of [1, -1]) {
+      const prueba = fk(m.a0 + sg * d), antes = E.seg[k];
+      E.seg[k] = prueba;
+      if (bajoMiembro(E, k) <= piso + 0.3) return;
+      E.seg[k] = antes;
+    }
   }
   function unHueso(E, n, P) {
     const clave = miembroDe(n), m = E.seg[clave], esPierna = clave[0] === 'p';
@@ -4543,6 +4675,38 @@ const FIGURA = (() => {
   }
   const anclaX = (E, nombre) => (nombre === 'pie' ? E.seg.pc.tobillo.x : nombre === 'mano' ? E.seg.bc.muneca.x : nombre === 'S' ? E.S.x : E.H.x);
   const compartidos = (ej, A, B) => ej.rueda ? [] : (A.apoyo || []).filter(a => (B.apoyo || []).includes(a) && !(B.libre || []).includes(a));
+
+  /* ---------- tiempo y articulación ---------- */
+  /* perfil de velocidad de mínimo jerk: arranca y frena con aceleración nula */
+  const mj = t => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * t * (10 + t * (6 * t - 15)));
+  const CUR0 = [-0.375, -0.125, 0.125, 0.375];
+  const segAngs = P => (P.cur || CUR0).map(c => P.tr + P.fl * c);
+  /* rangos de la articulación (respecto del segmento al que se une; − = flexión):
+     el hombro va de ~60° de extensión a ~250° de flexión; la cadera, de ~140 a 220 */
+  const VENT = { b: [-250, 110], p: [-220, 140] };
+  const enVentana = (a, [lo, hi]) => { while (a < lo) a += 360; while (a >= hi) a -= 360; return a; };
+  const tieneTronco = P => (P.apoyo || []).some(a => a === 'tronco' || a === 'espalda');
+  const sobreHombros = P => (P.apoyo || []).includes('hombros') && !(P.apoyo || []).includes('pelvis');
+  /* Orden en que se mueve la columna entre dos poses:
+       +1 desde la cabeza (cuello, torácica alta… lumbar baja)
+       −1 desde la pelvis (lumbar baja… cuello)
+        0 todo junto
+     Con la pelvis como ancla (Roll Up, Teaser, Swan, sentado, de pie):
+     al despegar o flexionar va primero la cabeza; al apoyar o enderezar,
+     primero la pelvis (se "apila" desde abajo). Con los hombros como ancla
+     (Roll Over, puentes, invertidas) es al revés: al subir despega primero
+     la pelvis y al bajar se apoya primero la columna alta. */
+  function articulacion(ej, A, B) {
+    if (B.art != null) return B.art;
+    if (ej.rueda || ej.vista === 'frente' || ej.camara === 'arriba') return 0;
+    const hombros = sobreHombros(A) || sobreHombros(B);
+    const tA = tieneTronco(A), tB = tieneTronco(B);
+    if (tA !== tB) { const despega = tA; return hombros ? (despega ? -1 : 1) : (despega ? 1 : -1); }
+    const dfl = Math.abs(B.fl) - Math.abs(A.fl);
+    if (Math.abs(dfl) < 15) return 0;
+    return hombros ? (dfl > 0 ? -1 : 1) : (dfl > 0 ? 1 : -1);
+  }
+
   function preparar(ej) {
     if (ej._prep) return ej._prep;
     const crudas = ej.poses.map(completa), n = crudas.length, poses = [], K = [];
@@ -4564,37 +4728,134 @@ const FIGURA = (() => {
       poses.push(hornear(P, r.E));
       K.push({ xoff: r.dx, cont: r.contactos, E: r.E, pins });
     }
+    for (let i = 0; i < n; i++) K[i].art = n > 1 ? articulacion(ej, poses[i], poses[(i + 1) % n]) : 0;
     ej._prep = { poses, K };
+    if (ej.rueda && n > 1) rodar(ej);
     return ej._prep;
   }
-  function mezclar(A, B, f) {
-    const r = { ...B };
-    for (const k of ['tr', 'fl', 'cab']) r[k] = k === 'tr' ? lerpAng(A[k], B[k], f) : lerp(A[k], B[k], f);
-    const ca = A.cur || [-0.375, -0.125, 0.125, 0.375], cb = B.cur || [-0.375, -0.125, 0.125, 0.375];
-    r.cur = ca.map((v, q) => lerp(v, cb[q], f));
-    for (const k of ['bc', 'bl', 'pc', 'pl']) r[k] = [lerpAng(A[k][0], B[k][0], f), lerp(A[k][1], B[k][1], f), lerp(A[k][2] || 0, B[k][2] || 0, f)];
+  /* Rodar sin deslizar: en cada instante el cuerpo gira alrededor del punto
+     que toca el piso, así que la cadera avanza h·Δθ (h = su altura sobre el
+     piso). Se integra cada transición y se recolocan las poses clave; lo que
+     no cierra en la vuelta al inicio se reparte en la última transición. */
+  function rodar(ej) {
+    const { poses, K } = ej._prep, n = poses.length, M = 24;
+    for (let i = 0; i < n; i++) {
+      const A = poses[i], B = poses[(i + 1) % n], tabla = [0];
+      let x = 0, prev = null;
+      for (let k = 0; k <= M; k++) {
+        const P = mezclar(A, B, k / M, ej, 0), r = resolver(P, ej, { xoff: 0 });
+        const h = PISO - r.E.H.y;
+        if (prev) { x += (h + prev.h) / 2 * rad(n180(P.tr - prev.tr)); tabla.push(x); }
+        prev = { h, tr: P.tr };
+      }
+      K[i].rueda = tabla;
+    }
+    for (let i = 1; i < n; i++) {
+      K[i].xoff = K[i - 1].xoff + K[i - 1].rueda[M];
+      const r = resolver(poses[i], ej, { xoff: K[i].xoff });
+      K[i].E = r.E; K[i].cont = r.contactos;
+    }
+    K[n - 1].resto = K[0].xoff - K[n - 1].xoff - K[n - 1].rueda[M];
+  }
+  function xRueda(K, i, f) {
+    const t = K[i].rueda, M = t.length - 1, q = Math.min(M - 1, Math.floor(f * M)), u = f * M - q;
+    return K[i].xoff + lerp(t[q], t[q + 1], u) + (K[i].resto || 0) * mj(f);
+  }
+
+  /* Mezcla de dos poses en la fracción de tiempo f (0…1, sin suavizar). */
+  function mezclar(A, B, f, ej, art = 0) {
+    const r = { ...B }, e = mj(f);
+    const dTr = n180(B.tr - A.tr), ca = A.cur || CUR0, cb = B.cur || CUR0;
+    /* cada segmento (lumbar baja… torácica alta, cuello) arranca con un
+       pequeño retraso respecto del anterior y dura el 60 % del tiempo */
+    const D = 0.4, ret = art > 0 ? [4, 3, 2, 1, 0] : art < 0 ? [0, 1, 2, 3, 4] : null;
+    const fr = q => (ret ? mj((f - ret[q] * D / 4) / (1 - D)) : e);
+    r.segs = [0, 1, 2, 3].map(q => { const t = fr(q); return A.tr + dTr * t + lerp(A.fl * ca[q], B.fl * cb[q], t); });
+    r.tr = A.tr + dTr * e;
+    r.fl = lerp(A.fl, B.fl, e);
+    r.cur = ca.map((v, q) => lerp(v, cb[q], e));
+    r.cab = lerp(A.cab, B.cab, fr(4));
+    const perfil = ej.vista !== 'frente' && ej.camara !== 'arriba';
+    const sA = segAngs(A), sB = segAngs(B);
+    const libre = (P, k) => !(P.apoyo || []).some(a => (k[0] === 'p' ? /^(pie|talon|punta|rodilla)/ : /^(mano|antebrazo)/).test(a) && a.slice(-1) === (k[1] === 'c' ? 'C' : 'L'));
+    for (const k of ['bc', 'bl', 'pc', 'pl']) {
+      const brazo = k[0] === 'b', q = brazo ? 3 : 0;
+      const resto = [lerp(A[k][1], B[k][1], e), lerp(A[k][2] || 0, B[k][2] || 0, e)];
+      if (!perfil) { r[k] = [lerpAng(A[k][0], B[k][0], e), ...resto]; continue; }
+      /* ángulo del hombro (o la cadera) respecto de su segmento, dentro del rango
+         anatómico: decide por qué lado gira el miembro */
+      const v = VENT[k[0]], ra = enVentana(A[k][0] - sA[q] - 180, v), rb = enVentana(B[k][0] - sB[q] - 180, v);
+      if (!brazo && art && libre(A, k) && libre(B, k)) {
+        /* piernas en el aire mientras la columna articula: viajan con la pelvis
+           (Roll Over, Teaser, Jackknife) */
+        r[k] = [r.segs[q] + 180 + lerp(ra, rb, e), ...resto];
+      } else {
+        /* el resto se orienta en el espacio (brazos que alcanzan, piernas apoyadas),
+           girando por el lado que permite la articulación */
+        let d = rb - ra + n180(sB[q] - sA[q]);
+        /* giro: −1 / +1 obliga el sentido (los brazos que circulan por arriba de la
+           cabeza hasta atrás: de perfil, la circunducción se ve como un giro largo) */
+        const g = (B.giro || {})[k];
+        if (g && Math.sign(d) !== g) d += g * 360;
+        r[k] = [A[k][0] + d * e, ...resto];
+      }
+    }
     const ka = A.k || {}, kb = B.k || {};
     r.k = {};
-    for (const k of ['bc', 'bl', 'pc', 'pl']) if (ka[k] || kb[k]) r.k[k] = [0, 1, 2].map(i => lerp((ka[k] || [])[i] ?? 1, (kb[k] || [])[i] ?? 1, f));
-    if (ka.ancho != null || kb.ancho != null) r.k.ancho = lerp(ka.ancho ?? 1, kb.ancho ?? 1, f);
-    if (ka.tronco != null || kb.tronco != null) r.k.tronco = lerp(ka.tronco ?? 1, kb.tronco ?? 1, f);
-    r.g = lerp(A.g || 0, B.g || 0, f);
+    for (const k of ['bc', 'bl', 'pc', 'pl']) if (ka[k] || kb[k]) r.k[k] = [0, 1, 2].map(q => lerp((ka[k] || [])[q] ?? 1, (kb[k] || [])[q] ?? 1, e));
+    if (ka.ancho != null || kb.ancho != null) r.k.ancho = lerp(ka.ancho ?? 1, kb.ancho ?? 1, e);
+    if (ka.tronco != null || kb.tronco != null) r.k.tronco = lerp(ka.tronco ?? 1, kb.tronco ?? 1, e);
+    r.g = lerp(A.g || 0, B.g || 0, e);
     /* los agarres se mantienen solo si están en las dos poses */
     r.ik = {};
     for (const [b, d] of Object.entries(B.ik || {})) if ((A.ik || {})[b] === d) r.ik[b] = d;
     return r;
   }
-  /* cuadro de la transición i → i+1 en la fracción f */
+  /* cuadro de la transición i → i+1 en la fracción de tiempo f */
   function cuadro(ej, i, f) {
     const { poses, K } = preparar(ej), n = poses.length;
     const j = (i + 1) % n, A = poses[i], B = poses[j];
     if (f <= 0 || n === 1) return resolver(A, ej, { xoff: K[i].xoff, pins: K[i].pins });
     if (f >= 1) return resolver(B, ej, { xoff: K[j].xoff, pins: K[j].pins });
-    const P = mezclar(A, B, f), comp = compartidos(ej, A, B), pins = {};
-    for (const a of comp) if (K[i].cont[a] && K[j].cont[a]) pins[a] = lerp(K[i].cont[a].x, K[j].cont[a].x, f);
-    /* sin apoyo rígido clavado, el punto de anclaje avanza en línea recta */
-    const ancla = { x: lerp(anclaX(K[i].E, ej.ancla), anclaX(K[j].E, ej.ancla), f) };
+    const P = mezclar(A, B, f, ej, K[i].art), comp = compartidos(ej, A, B), pins = {}, e = mj(f);
+    for (const a of comp) if (K[i].cont[a] && K[j].cont[a]) pins[a] = lerp(K[i].cont[a].x, K[j].cont[a].x, e);
+    /* sin apoyo rígido clavado, el punto de anclaje avanza (rodando, si rueda) */
+    const ancla = { x: K[i].rueda ? xRueda(K, i, f) : lerp(anclaX(K[i].E, ej.ancla), anclaX(K[j].E, ej.ancla), e) };
     return resolver(P, ej, { pins, forzados: comp, ancla });
+  }
+
+  /* ---------- centro de masa (Winter 2009: fracción de la masa y posición
+     del centro de cada segmento, desde su extremo proximal) ---------- */
+  const MASA = { cabeza: 0.081, tronco: 0.497, brazo: [0.028, 0.436], ante: [0.016, 0.43], mano: [0.006, 0.506], muslo: [0.1, 0.433], pierna: [0.0465, 0.433], pie: [0.0145, 0.5] };
+  function centroMasa(E) {
+    let mx = 0, my = 0, m = 0;
+    const add = (p, w) => { mx += p.x * w; my += p.y * w; m += w; };
+    const en = (a, b, [w, t]) => add({ x: lerp(a.x, b.x, t), y: lerp(a.y, b.y, t) }, w);
+    const largo = LC.reduce((a, b) => a + b, 0);
+    for (let q = 0; q < 4; q++) en(E.col[q], E.col[q + 1], [MASA.tronco * LC[q] / largo, 0.5]);
+    add(E.C, MASA.cabeza);
+    for (const k of ['bc', 'bl']) { const s = E.seg[k]; en(s.raiz, s.codo, MASA.brazo); en(s.codo, s.muneca, MASA.ante); en(s.muneca, s.mano, MASA.mano); }
+    for (const k of ['pc', 'pl']) { const s = E.seg[k]; en(s.raiz, s.rod, MASA.muslo); en(s.rod, s.tobillo, MASA.pierna); en(s.talon, s.punta, MASA.pie); }
+    return { x: mx / m, y: my / m };
+  }
+  /* base de apoyo: de qué x a qué x toca de verdad el piso */
+  function baseApoyo(E) {
+    const xs = contorno(E).filter(p => p.y >= PISO - 1.5).map(p => p.x);
+    if (!xs.length) return null;
+    return { x0: Math.min(...xs), x1: Math.max(...xs) };
+  }
+  /* ¿la pose clave está en equilibrio estático? (solo si el apoyo es chico:
+     sentado en los isquiones, de pie, en planchas; acostado siempre lo está) */
+  const SIN_CONTROL = /^(tronco|espalda|hombros|cabeza)$/;
+  function equilibrio(ej, i) {
+    const P = preparar(ej).poses[i];
+    const ap = P.apoyo || [];
+    if (!ap.length || ej.silla || ej.camara === 'arriba' || ej.persp || ap.some(a => SIN_CONTROL.test(a))) return null;
+    const r = cuadro(ej, i, 0), cm = centroMasa(r.E), b = baseApoyo(r.E);
+    /* sentado sobre la pelvis, los isquiones y el cóccix ocupan unos 6 más de cada lado */
+    const tol = ap.length === 1 && ap[0] === 'pelvis' ? 6 : 2;
+    const fuera = cm.x < b.x0 - tol ? b.x0 - tol - cm.x : cm.x > b.x1 + tol ? cm.x - b.x1 - tol : 0;
+    return { cm, base: b, tol, fuera };
   }
 
   /* ---------- control automático de calidad ---------- */
@@ -4620,8 +4881,11 @@ const FIGURA = (() => {
           for (const a of ap) { const c = contactoDe(r.E, a); if (Math.abs(c.y - piso) > 1.2) fallas.push(`${donde}: ${a} no toca el piso (${(PISO - c.y).toFixed(1)})`); }
         }
         limite(r.E, donde);
+        if (!f) { const q = equilibrio(ej, i); if (q && q.fuera > 0) fallas.push(`${donde}: fuera de equilibrio (centro de masa ${q.fuera.toFixed(1)} fuera de la base)`); }
         const clave = [r.E.H, r.E.S, r.E.C, r.E.seg.pc.tobillo, r.E.seg.bc.muneca];
-        if (previo) { const salto = Math.max(...clave.map((p, q) => Math.hypot(p.x - previo[q].x, p.y - previo[q].y))); if (salto > 26) fallas.push(`${donde}: salto brusco (${salto.toFixed(0)})`); }
+        /* velocidad de las marcas en unidades cada 100 ms: más de 30 (~3,5 m/s) es un salto */
+        const ms = (poses[(i + 1) % n].dur || ej.dur || 1500) / pasos;
+        if (previo) { const salto = Math.max(...clave.map((p, q) => Math.hypot(p.x - previo[q].x, p.y - previo[q].y))) * 100 / ms; if (salto > 30) fallas.push(`${donde}: salto brusco (${salto.toFixed(0)} cada 100 ms)`); }
         previo = clave;
       }
     }
@@ -4642,10 +4906,16 @@ const FIGURA = (() => {
     }
     return d;
   }
-  function tronco(E) {
+  function tronco(E, aire = 0.5) {
     const P = E.col, n = P.length;
-    /* radios adelante / atrás (glúteos, abdomen, pecho) */
-    const ra = E.fr ? radios(E) : [9.5, 8.8, 9.2, 11.2, 10], rp = E.fr ? radios(E) : [11, 9, 8.8, 9.8, 10.2];
+    /* radios adelante / atrás (glúteos, abdomen, pecho). La respiración (aire
+       0 = exhalado, 1 = inhalado) expande las costillas hacia adelante, los
+       costados y atrás (respiración lateral del método), y al exhalar el
+       abdomen se hunde un poco hacia la columna. */
+    const ra = (E.fr ? radios(E) : [9.5, 8.8, 9.2, 11.2, 10]).slice(), rp = (E.fr ? radios(E) : [11, 9, 8.8, 9.8, 10.2]).slice();
+    const a = aire - 0.5;
+    if (E.fr) { ra[2] *= 1 + 0.07 * a; ra[3] *= 1 + 0.09 * a; rp[2] = ra[2]; rp[3] = ra[3]; }
+    else { ra[1] *= 1 + 0.08 * a; ra[2] *= 1 + 0.07 * a; ra[3] *= 1 + 0.08 * a; rp[2] *= 1 + 0.04 * a; rp[3] *= 1 + 0.04 * a; }
     const nor = i => { const a = P[Math.max(0, i - 1)], b = P[Math.min(n - 1, i + 1)], dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 1; return { x: -dy / d, y: dx / d }; };
     /* nor apunta a la izquierda del sentido del tronco; en perfil eso es el frente */
     const A = [], B = [];
@@ -4681,10 +4951,10 @@ const FIGURA = (() => {
   };
   const pierna = (m, col) => `<path d="${huso(m.raiz, m.rod, 7, RROD)}" fill="${col.ropa}"/><path d="${huso(m.rod, m.tobillo, RROD, 3.4)}" fill="${col.ropa}"/><path d="${huso(m.talon, m.punta, RPIE, 1.7)}" fill="${col.piel}"/>`;
   const brazo = (m, col) => `<path d="${huso(m.raiz, m.codo, 4.3, 3.4)}" fill="${col.ropa2}"/><path d="${huso(m.codo, m.muneca, 3.3, 2.5)}" fill="${col.piel}"/><path d="${huso(m.muneca, m.mano, RMANO, 2)}" fill="${col.piel}"/>`;
-  function dibujo(E, fantasma, orden) {
+  function dibujo(E, fantasma, orden, aire) {
     const c1 = COL.cerca, c2 = E.fr ? COL.cerca : COL.lejos;
     const cuello = `<path d="${huso(E.S, E.C, 4.4, 4.2)}" fill="${c1.piel}"/>`;
-    const partes = { BC: brazo(E.seg.bc, c1), BL: brazo(E.seg.bl, c2), PC: pierna(E.seg.pc, c1), PL: pierna(E.seg.pl, c2), T: `<path d="${tronco(E)}" fill="${c1.ropa}"/>`, C: cuello + cabeza(E, c1) };
+    const partes = { BC: brazo(E.seg.bc, c1), BL: brazo(E.seg.bl, c2), PC: pierna(E.seg.pc, c1), PL: pierna(E.seg.pl, c2), T: `<path d="${tronco(E, aire)}" fill="${c1.ropa}"/>`, C: cuello + cabeza(E, c1) };
     const seq = orden || (E.fr ? ['PL', 'PC', 'T', 'C', 'BL', 'BC'] : ['BL', 'PL', 'C', 'T', 'PC', 'BC']);
     return `<g class="${fantasma ? 'fig-fantasma' : 'fig-cuerpo'}">${seq.map(k => partes[k]).join('')}</g>`;
   }
@@ -4713,11 +4983,11 @@ const FIGURA = (() => {
     return ej._enc;
   }
   const zoom = enc => `transform="translate(${W / 2} ${enc.oy}) scale(${enc.esc.toFixed(3)}) translate(${-W / 2} ${-enc.oy})"`;
-  function figuraSVG(ej, r, enc, fantasma) {
+  function figuraSVG(ej, r, enc, fantasma, aire) {
     const E = mover(r.E, enc.cx, enc.cy);
     const silla = ej.silla && !fantasma
       ? `<g class="fig-silla"><rect x="${f1(E.H.x - 16)}" y="${f1(E.H.y + 12)}" width="30" height="5" rx="2"/><rect x="${f1(E.H.x - 14)}" y="${f1(E.H.y + 16)}" width="4" height="${f1(PISO - E.H.y - 16)}"/><rect x="${f1(E.H.x + 8)}" y="${f1(E.H.y + 16)}" width="4" height="${f1(PISO - E.H.y - 16)}"/><rect x="${f1(E.H.x - 18)}" y="${f1(E.H.y - 30)}" width="4" height="46" rx="2"/></g>` : '';
-    return (fantasma || ej.camara === 'arriba' ? '' : sombra(E)) + silla + dibujo(E, fantasma, ej.orden);
+    return (fantasma || ej.camara === 'arriba' ? '' : sombra(E)) + silla + dibujo(E, fantasma, ej.orden, aire);
   }
   function fondo(ej) {
     if (ej.camara === 'arriba') return ej.matV ? `<rect x="${W / 2 - 48}" y="6" width="96" height="${H - 12}" rx="10" class="fig-mat-arriba"/>`
@@ -4733,42 +5003,129 @@ const FIGURA = (() => {
     return `<svg viewBox="0 0 ${W} ${H}" class="fig-svg" role="img" aria-label="${ej.nom || 'figura'}">${fondo(ej)}${etiquetaCam(ej)}<g ${zoom(enc)}>${figuraSVG(ej, cuadro(ej, i, f), enc)}</g></svg>`;
   }
 
-  /* reproductor: anima de pose en pose y avisa en qué pose está */
-  function reproductor(cont, ej, { alCambiar = () => {}, auto = true, fantasma = true } = {}) {
+  /* ---------- capas didácticas (en coordenadas del dibujo) ---------- */
+  /* trayectoria de manos, pies y cabeza durante una transición: se muestran
+     las que más se mueven, con una flecha al final */
+  const MARCAS = [
+    ['mano', E => E.seg.bc.mano, 'tray-mano'], ['mano', E => E.seg.bl.mano, 'tray-mano'],
+    ['pie', E => E.seg.pc.punta, 'tray-pie'], ['pie', E => E.seg.pl.punta, 'tray-pie'],
+    ['cabeza', E => E.C, 'tray-cab'], ['pelvis', E => E.H, 'tray-pel']
+  ];
+  function trayectorias(ej, i, enc, N = 18) {
+    const cuadros = [];
+    for (let k = 0; k <= N; k++) cuadros.push(mover(cuadro(ej, i, k / N).E, enc.cx, enc.cy));
+    const res = MARCAS.map(([nom, f, cl]) => {
+      const pts = cuadros.map(f);
+      let largo = 0;
+      for (let k = 1; k < pts.length; k++) largo += Math.hypot(pts[k].x - pts[k - 1].x, pts[k].y - pts[k - 1].y);
+      return { nom, cl, pts, largo };
+    }).filter(t => t.largo > 14).sort((a, b) => b.largo - a.largo);
+    /* una por tipo (manos juntas, pies juntos), máximo tres */
+    const vistos = new Set(), out = [];
+    for (const t of res) if (!vistos.has(t.nom) && out.length < 3) { vistos.add(t.nom); out.push(t); }
+    return out.map(t => {
+      const a = t.pts[t.pts.length - 2], b = t.pts[t.pts.length - 1], ang = Math.atan2(b.y - a.y, b.x - a.x);
+      const fl = [ang + 2.6, ang - 2.6].map(g => `${f1(b.x + Math.cos(g) * 4.5)},${f1(b.y + Math.sin(g) * 4.5)}`);
+      return `<path d="M${suave(t.pts)}" class="tray ${t.cl}"/><path d="M${fl[0]} L${f1(b.x)},${f1(b.y)} L${fl[1]}" class="tray-flecha ${t.cl}"/>`;
+    }).join('');
+  }
+  /* centro de masa, su plomada y la base de apoyo */
+  function capaFisica(ej, r, enc) {
+    if (ej.camara === 'arriba') return '';
+    const E = mover(r.E, enc.cx, enc.cy), cm = centroMasa(E);
+    const piso = ej.persp ? PISO - 24 : PISO;
+    const toca = contorno(E).filter(p => p.y >= piso - 1.5);
+    let base = '', ok = true;
+    if (toca.length) {
+      const x0 = Math.min(...toca.map(p => p.x)), x1 = Math.max(...toca.map(p => p.x));
+      const soloPelvis = r.contactos && Object.keys(r.contactos).length === 1 && r.contactos.pelvis;
+      const tol = soloPelvis ? 6 : 2;
+      ok = cm.x >= x0 - tol && cm.x <= x1 + tol;
+      base = `<rect x="${f1(x0 - 1)}" y="${piso - 1.6}" width="${f1(x1 - x0 + 2)}" height="3.2" rx="1.6" class="fis-base"/>`;
+    }
+    return `<g class="fis ${ok ? 'fis-ok' : 'fis-fuera'}">${base}<line x1="${f1(cm.x)}" y1="${f1(cm.y)}" x2="${f1(cm.x)}" y2="${piso}" class="fis-plomada"/>
+      <circle cx="${f1(cm.x)}" cy="${f1(cm.y)}" r="3.6" class="fis-cm"/><path d="M${f1(cm.x - 3.6)},${f1(cm.y)} H${f1(cm.x + 3.6)} M${f1(cm.x)},${f1(cm.y - 3.6)} V${f1(cm.y + 3.6)}" class="fis-cruz"/></g>`;
+  }
+
+  /* ---------- reproductor ----------
+     Anima de pose en pose. Además de reproducir en bucle permite:
+       · ir paso a paso (siguiente/anterior animan solo esa transición),
+       · recorrer el movimiento con un deslizador (irA, posición continua),
+       · cámara lenta (velocidad 0,25 a 1),
+       · capas: fantasma de la pose a la que va, trayectorias, centro de masa,
+       · respiración: el tórax se expande al inhalar (resp por transición). */
+  function reproductor(cont, ej, { alCambiar = () => {}, alAvanzar = null, auto = true, fantasma = true, resp = null, capas = {} } = {}) {
     const enc = encuadre(ej), { poses } = preparar(ej), n = poses.length;
-    cont.innerHTML = `<svg viewBox="0 0 ${W} ${H}" class="fig-svg" role="img" aria-label="Animación: ${ej.nom || 'ejercicio'}">${fondo(ej)}${etiquetaCam(ej)}<g ${zoom(enc)}><g class="fg"></g><g class="fc"></g></g></svg>`;
-    const gF = cont.querySelector('.fg'), gC = cont.querySelector('.fc');
+    cont.innerHTML = `<svg viewBox="0 0 ${W} ${H}" class="fig-svg" role="img" aria-label="Animación: ${ej.nom || 'ejercicio'}">${fondo(ej)}${etiquetaCam(ej)}<g ${zoom(enc)}><g class="fg"></g><g class="ft"></g><g class="fc"></g><g class="ff"></g></g></svg>`;
+    const gF = cont.querySelector('.fg'), gT = cont.querySelector('.ft'), gC = cont.querySelector('.fc'), gFis = cont.querySelector('.ff');
     const pausaBase = ej.pausa || 650;
-    let i = 0, t0 = performance.now(), play = auto && n > 1, raf = null, vivo = true;
-    const dur = k => poses[(k + 1) % n].dur || ej.dur || 1500;
+    const capa = { fantasma, tray: false, fisica: false, ...capas };
+    /* aire al llegar a cada pose (0 exhalado … 1 inhalado) */
+    const aireEn = [0.5];
+    for (let k = 0; k < n; k++) aireEn.push(!resp ? 0.5 : resp[k] === 'inhala' ? 1 : resp[k] === 'exhala' ? 0 : aireEn[k]);
+    if (resp) aireEn[0] = aireEn[n];
+    const aire = (k, f) => lerp(aireEn[k], k + 1 < n ? aireEn[k + 1] : aireEn[0], resp && resp[k] === 'ambas' ? Math.sin(f * Math.PI * 4) * 0.25 + f : mj(f));
+    let i = 0, f = 0, t0 = performance.now(), raf = null, vivo = true, vel = 1;
+    /* modo: 'bucle' (reproduce todo), 'uno' (anima una transición y se detiene), 'quieto' */
+    let modo = auto && n > 1 ? 'bucle' : 'quieto', dir = 1, f0 = 0, trayDe = -1;
+    const dur = k => (poses[(k + 1) % n].dur || ej.dur || 1500) / vel;
     const quieto = () => matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.fx === 'suaves';
-    const suav = f => (f < 0.5 ? 2 * f * f : 1 - Math.pow(-2 * f + 2, 2) / 2);
-    const pintar = (idx, f) => { gC.innerHTML = figuraSVG(ej, cuadro(ej, idx, suav(f)), enc); };
-    gF.innerHTML = fantasma && n > 1 ? figuraSVG(ej, cuadro(ej, 0, 0), enc, true) : '';
+    const pintar = () => {
+      const r = cuadro(ej, i, f);
+      gC.innerHTML = figuraSVG(ej, r, enc, false, aire(i, f));
+      gF.innerHTML = capa.fantasma && n > 1 ? figuraSVG(ej, cuadro(ej, f > 0 && f < 1 ? (i + 1) % n : (i + 1) % n, 0), enc, true) : '';
+      if (capa.tray && n > 1) { if (trayDe !== i) { gT.innerHTML = trayectorias(ej, i, enc); trayDe = i; } } else { gT.innerHTML = ''; trayDe = -1; }
+      gFis.innerHTML = capa.fisica ? capaFisica(ej, r, enc) : '';
+      if (alAvanzar) alAvanzar(i + f);
+    };
+    const llegar = k => { i = ((k % n) + n) % n; f = 0; alCambiar(i); };
     function paso(t) {
       if (!vivo || !cont.isConnected) { vivo = false; return; }
-      if (play) {
-        const el = t - t0, pausa = poses[i].pausa ?? pausaBase;
-        if (quieto()) { if (el > dur(i) + pausa) { i = (i + 1) % n; t0 = t; pintar(i, 0); alCambiar(i); } }
-        else if (el < pausa) { /* quieto en la pose */ }
-        else if (el < pausa + dur(i)) pintar(i, (el - pausa) / dur(i));
-        else { i = (i + 1) % n; t0 = t; pintar(i, 0); alCambiar(i); }
+      if (modo === 'bucle') {
+        const el = t - t0, pausa = (poses[i].pausa ?? pausaBase) / Math.max(vel, 0.5);
+        if (quieto()) { if (el > dur(i) + pausa) { llegar(i + 1); t0 = t; pintar(); } }
+        else if (el < pausa) { if (f !== 0) { f = 0; pintar(); } }
+        else if (el < pausa + dur(i)) { f = (el - pausa) / dur(i); pintar(); }
+        else { llegar(i + 1); t0 = t; pintar(); }
+      } else if (modo === 'uno') {
+        const u = Math.min(1, (t - t0) / dur(i));
+        f = dir > 0 ? f0 + (1 - f0) * u : f0 * (1 - u);
+        if (quieto()) f = dir > 0 ? 1 : 0;
+        if (dir > 0 && f >= 1) { modo = 'quieto'; llegar(i + 1); }
+        else if (dir < 0 && f <= 0) { modo = 'quieto'; f = 0; alCambiar(i); }
+        pintar();
       }
       raf = requestAnimationFrame(paso);
     }
-    pintar(0, 0); alCambiar(0);
+    pintar(); alCambiar(0);
     raf = requestAnimationFrame(paso);
     return {
-      ir(k) { i = ((k % n) + n) % n; t0 = performance.now(); pintar(i, 0); alCambiar(i); },
-      siguiente() { this.ir(i + 1); },
-      anterior() { this.ir(i - 1); },
-      pausar() { play = false; pintar(i, 0); },
-      reanudar() { if (n > 1) { play = true; t0 = performance.now(); } },
-      get reproduciendo() { return play; },
+      /* salta a una pose clave */
+      ir(k) { modo = 'quieto'; llegar(k); pintar(); },
+      /* anima solo la transición a la pose siguiente (o vuelve a la anterior) */
+      siguiente() { if (n < 2) return; if (modo === 'uno' && dir > 0) { llegar(i + 1); pintar(); } modo = 'uno'; dir = 1; f0 = f; t0 = performance.now(); },
+      anterior() {
+        if (n < 2) return;
+        if (f > 0.02) { modo = 'uno'; dir = -1; f0 = f; t0 = performance.now(); return; }
+        i = (i - 1 + n) % n; f = 1; modo = 'uno'; dir = -1; f0 = 1; t0 = performance.now();
+      },
+      pausar() { modo = 'quieto'; pintar(); },
+      reanudar() { if (n > 1) { if (f > 0) { t0 = performance.now() - (poses[i].pausa ?? pausaBase) / Math.max(vel, 0.5) - f * dur(i); } else t0 = performance.now(); modo = 'bucle'; } },
+      /* posición continua: 2,5 = a mitad de camino entre la pose 2 y la 3 */
+      irA(pos) { modo = 'quieto'; const k = Math.floor(pos); const fr = pos - k; i = ((k % n) + n) % n; f = Math.max(0, Math.min(0.999, fr)); pintar(); },
+      capa(nombre, on) { capa[nombre] = on; trayDe = -1; pintar(); },
+      set velocidad(v) { const pausa = (poses[i].pausa ?? pausaBase) / Math.max(vel, 0.5); const el = performance.now() - t0; const prog = el < pausa ? null : (el - pausa) / dur(i); vel = v; if (modo === 'bucle' && prog != null) t0 = performance.now() - (poses[i].pausa ?? pausaBase) / Math.max(vel, 0.5) - prog * dur(i); else if (modo === 'uno') { f0 = f; t0 = performance.now(); } },
+      get velocidad() { return vel; },
+      get reproduciendo() { return modo !== 'quieto'; },
+      get enBucle() { return modo === 'bucle'; },
       get indice() { return i; },
+      get posicion() { return i + f; },
+      get n() { return n; },
       destruir() { vivo = false; cancelAnimationFrame(raf); }
     };
   }
+  /* tira de poses clave (miniaturas) */
+  function tira(ej) { return preparar(ej).poses.map((_, k) => svgEstatico(ej, k, 0)); }
 
   /* articulaciones de una pose, en coordenadas del cuadro (para dibujar encima) */
   function esqueletoEn(ej, i = 0) {
@@ -4789,7 +5146,7 @@ const FIGURA = (() => {
     return { masBajo: bajo.p + ' ' + (bajo.y - PISO).toFixed(1), apoyos: cont.join(' '), agarres: ags, avisos: r.avisos };
   }
 
-  return { svgEstatico, reproductor, esqueletoEn, validar, cuadro, preparar, diag, W, H, PISO };
+  return { svgEstatico, reproductor, tira, esqueletoEn, validar, cuadro, preparar, diag, centroMasa, equilibrio, W, H, PISO };
 })();
 
 </script>
@@ -4829,8 +5186,9 @@ const POSES = (() => {
   const CUADRUPEDIA = { tr: -15, fl: 0, cab: 0, bc: [90, 0, 0], bl: [91, 0, 0], pc: [90, 90, 90], pl: [91, 90, 90], apoyo: ['rodillaC', 'rodillaL', 'manoC', 'manoL'] };
   const PLANCHA = { tr: -12, fl: 0, cab: 0, bc: [82, 0, 0], bl: [83, 0, 0], pc: [168, 0, 22], pl: [168, 0, 22], apoyo: ['manoC', 'manoL', 'puntaC', 'puntaL'] };
   const PL_SUPINA = { tr: -165, fl: 0, cab: 6, bc: [95, 0, 0], bl: [96, 0, 0], pc: [14, 0, 70], pl: [15, 0, 70], apoyo: ['manoC', 'manoL', 'talonC', 'talonL'] };
-  /* abdominal: cabeza y espalda alta despegadas hasta la punta de los omóplatos */
-  const CURL = { tr: -160, fl: 55, cab: 20 };
+  /* abdominal: cabeza y espalda alta despegadas hasta la punta de los omóplatos;
+     la lumbar y la torácica baja siguen en el mat (la curva va arriba) */
+  const CURL = { tr: -159, fl: 42, cur: [-0.5, -0.5, -0.143, 0.5], cab: 22 };
   /* sentado en V (Teaser) */
   const V = { tr: -128, fl: 12, cab: 4, bc: [-50, 0, 0], bl: [-49, 0, 0], pc: [-55, 0, 85], pl: [-54, 0, 85], apoyo: ['pelvis'] };
   /* de costado, vista de frente: lado C = el de abajo */
@@ -4839,8 +5197,10 @@ const POSES = (() => {
   const COSTADO_ARRIBA = { tr: 180, fl: 0, cab: 0, bc: [180, 100, 0], bl: [-95, 0, 0], pc: [-15, 0, 85], pl: [-12, 0, 85], k: { bc: [1, 0.4, 1], bl: [0.8, 0.8, 1] } };
   /* sentado visto de frente: piernas hacia quien mira */
   const SENTADO_FRENTE = { tr: -90, fl: 0, cab: 0, bc: [178, 0, 0], bl: [2, 0, 0], pc: [114, 0, -100], pl: [66, 0, -100], k: { pc: [0.55, 0.6, 1.1], pl: [0.55, 0.6, 1.1] }, apoyo: ['pelvis'] };
-  /* hombros en el piso, pelvis arriba (Roll Over) */
-  const ROLL_OVER = { tr: 135, fl: 93, cab: 10, bc: [0, 0, 0], bl: [1, 0, 0], pc: [180, 0, 90], pl: [181, 0, 90], apoyo: ['hombros', 'manoC', 'manoL'] };
+  /* Roll Over: apoyo en los omóplatos (nunca en el cuello), la pelvis apilada
+     sobre los hombros y las piernas paralelas al piso por encima de la cabeza;
+     la flexión se concentra en la torácica alta, que queda casi en el mat */
+  const ROLL_OVER = { tr: 106, fl: 80, cur: [-0.2, -0.1, 0.05, 0.8], cab: 15, bc: [0, 0, 0], bl: [1, 0, 0], pc: [180, 0, 90], pl: [181, 0, 90], apoyo: ['hombros', 'manoC', 'manoL'] };
   /* vertical sobre los hombros: la curva se concentra arriba */
   const TOP = [-0.1, -0.1, 0, 0.7];
   const VERTICAL = { tr: 96, fl: 90, cur: TOP, cab: 18, bc: [0, 0, 0], bl: [1, 0, 0], pc: [-90, 0, 88], pl: [-89, 0, 88], apoyo: ['hombros', 'manoC', 'manoL'] };
@@ -4864,7 +5224,7 @@ const POSES = (() => {
   ej('pos-plancha', 'Plancha prona', {}, [PLANCHA]);
   ej('pos-plancha-supina', 'Plancha supina', {}, [PL_SUPINA]);
   ej('pos-lateral', 'Decúbito lateral', { vista: 'frente' }, [COSTADO]);
-  ej('pos-rodillas', 'De rodillas', {}, [{ tr: -90, fl: 0, cab: 0, bc: [90, 5, 0], bl: [92, 5, 0], pc: [90, 90, 90], pl: [91, 90, 90], apoyo: ['rodillaC', 'rodillaL'] }]);
+  ej('pos-rodillas', 'De rodillas', {}, [{ tr: -90, fl: 0, cab: 0, bc: [90, 5, 0], bl: [92, 5, 0], pc: [87, 101, 90], pl: [88, 101, 90], apoyo: ['rodillaC', 'rodillaL'] }]);
 
   /* ================= MAT 1 ================= */
   ej('mat1-e01', 'The Hundred Preparation', {}, [
@@ -4932,9 +5292,9 @@ const POSES = (() => {
   const CC = X(SUPINO, { ...CURL, pc: [-140, 150, 70], pl: [-28, 0, 85], ik: { bc: 'nuca', bl: 'nuca' }, k: CODOS_NUCA, apoyo: ['pelvis'] });
   ej('mat1-e10', 'Criss Cross / Bicycle', {}, [
     CC,
-    X(CC, { fl: 62, ik: { bc: 'nuca' }, bl: [-38, 150, 0], s: 1 }),
+    X(CC, { tr: -155, fl: 50, ik: { bc: 'nuca' }, bl: [-38, 150, 0], s: 1 }),
     X(CC, { pc: [-28, 0, 85], pl: [-140, 150, 70], s: 2 }),
-    X(CC, { fl: 62, pc: [-28, 0, 85], pl: [-140, 150, 70], ik: { bl: 'nuca' }, bc: [-38, 150, 0], s: 1 })
+    X(CC, { tr: -155, fl: 50, pc: [-28, 0, 85], pl: [-140, 150, 70], ik: { bl: 'nuca' }, bc: [-38, 150, 0], s: 1 })
   ]);
   const SSF = X(SENTADO, { bc: [0, 0, 0], bl: [1, 0, 0], pc: [0, 0, -10], pl: [0, 0, -10], apoyo: ['pelvis', 'talonC', 'talonL'] });
   ej('mat1-e11', 'Spine Stretch Forward', {}, [
@@ -4956,7 +5316,7 @@ const POSES = (() => {
     X(SAW, { k: {}, tr: -42, fl: 115, cab: 20, bc: [22, 0, 0], bl: [-145, 0, 0], s: 2, dur: 1800 }),
     X(SAW, { k: {}, s: 3, dur: 1800 })
   ]);
-  const OLR = { tr: -85, fl: 30, cab: 10, pc: [-70, 110, 60], pl: [-69, 110, 60], ik: { bc: 'tobilloC', bl: 'tobilloL' }, apoyo: ['pelvis'] };
+  const OLR = { tr: -88, fl: 30, cab: 10, pc: [-78, 125, 60], pl: [-77, 125, 60], ik: { bc: 'tobilloC', bl: 'tobilloL' }, apoyo: ['pelvis'] };
   const OLR_V = X(OLR, { tr: -97, fl: 16, cab: 6, pc: [-66, 0, 85], pl: [-65, 0, 85] });
   ej('mat1-e14', 'Open Leg Rocker', { rueda: true }, [
     OLR,
@@ -5018,7 +5378,7 @@ const POSES = (() => {
   const BAN0 = X(COSTADO, { tr: -172, cab: 0, bc: [180, 0, 0], bl: [0, 0, 0], ik: {}, pc: [0, 0, 90], pl: [8, 0, 90], apoyo: ['pelvis', 'tronco'] });
   ej('mat1-e23', 'Side Leg Bananas', { vista: 'frente' }, [
     BAN0,
-    X(BAN0, { tr: -172, fl: 22, cab: 4, bc: [-168, 0, 0], bl: [-163, 0, 0], pc: [-10, 0, 90], pl: [-4, 0, 90], apoyo: ['pelvis'], s: 1, dur: 1500 }),
+    X(BAN0, { tr: -174, fl: 18, cab: 4, bc: [-168, 0, 0], bl: [-163, 0, 0], pc: [-16, 0, 90], pl: [-10, 0, 90], apoyo: ['pelvis'], s: 1, dur: 1500 }),
     X(BAN0, { s: 2, dur: 1500 })
   ]);
   const SEAL = { tr: -115, fl: 88, cab: 34, pc: [-84, 150, 60], pl: [-83, 150, 60], k: { pc: [0.72, 0.8, 0.8], pl: [0.72, 0.8, 0.8] }, ik: { bc: 'tobilloC', bl: 'tobilloL' }, apoyo: ['pelvis'] };
@@ -5100,9 +5460,9 @@ const POSES = (() => {
   ej('mat2-e09', 'Corkscrew', { ancla: 'S' }, [
     X(RO0, { pc: [-90, 0, 88], pl: [-89, 0, 88], apoyo: ['pelvis', 'tronco', 'manoC', 'manoL'] }),
     X(ROLL_OVER, { s: 1, dur: 1800 }),
-    X(ROLL_OVER, { tr: 150, fl: 70, pc: [-150, 0, 88], pl: [-148, 0, 88], k: { pc: [0.85, 0.85, 1], pl: [0.85, 0.85, 1] }, s: 2, dur: 1600 }),
+    X(ROLL_OVER, { tr: 150, fl: 70, cur: [-0.375, -0.125, 0.125, 0.375], pc: [-150, 0, 88], pl: [-148, 0, 88], k: { pc: [0.85, 0.85, 1], pl: [0.85, 0.85, 1] }, s: 2, dur: 1600 }),
     X(RO0, { pc: [-62, 0, 88], pl: [-60, 0, 88], k: { pc: [0.85, 0.85, 1], pl: [0.85, 0.85, 1] }, apoyo: ['pelvis', 'tronco', 'manoC', 'manoL'], s: 3, dur: 1600 }),
-    X(ROLL_OVER, { tr: 150, fl: 70, pc: [-150, 0, 88], pl: [-148, 0, 88], k: { pc: [0.8, 0.8, 1], pl: [0.8, 0.8, 1] }, s: 4, dur: 1600 })
+    X(ROLL_OVER, { tr: 150, fl: 70, cur: [-0.375, -0.125, 0.125, 0.375], pc: [-150, 0, 88], pl: [-148, 0, 88], k: { pc: [0.8, 0.8, 1], pl: [0.8, 0.8, 1] }, s: 4, dur: 1600 })
   ]);
   const NP0 = X(SUPINO_FLEX, { ik: { bc: 'nuca', bl: 'nuca' }, k: CODOS_NUCA, apoyo: ['pelvis', 'tronco', 'talonC', 'talonL'] });
   ej('mat2-e10', 'Neck Pull', {}, [
@@ -5185,8 +5545,10 @@ const POSES = (() => {
     X(SUPINO_PUNTA, { pc: [-80, 0, 88], pl: [-79, 0, 88], apoyo: ['tronco', 'manoC', 'manoL'], libre: ['manoC', 'manoL'], s: 1, dur: 1400 }),
     X(ROLL_OVER, { s: 1, dur: 1400 }),
     X(V, { s: 2, dur: 2000 }),
-    X(V, { bc: [150, 0, 0], bl: [152, 0, 0], s: 3 }),
-    X(V, { tr: -100, pc: [-30, 0, 85], pl: [-29, 0, 85], bc: [-95, 0, 0], bl: [-93, 0, 0], s: 4, dur: 1100 }),
+    /* los brazos circulan por arriba de la cabeza hasta entrelazar las manos atrás,
+       y al soltar siguen el círculo hacia arriba (giro: sentido obligado) */
+    X(V, { tr: -116, bc: [150, 0, 0], bl: [152, 0, 0], giro: { bc: -1, bl: -1 }, s: 3, dur: 1700 }),
+    X(V, { tr: -100, pc: [-30, 0, 85], pl: [-29, 0, 85], bc: [-95, 0, 0], bl: [-93, 0, 0], giro: { bc: 1, bl: 1 }, s: 4, dur: 1300 }),
     X(SENTADO, { tr: -40, fl: 125, cab: 20, bc: [16, 0, 0], bl: [17, 0, 0], pc: [0, 0, 85], pl: [1, 0, 85], apoyo: ['pelvis', 'talonC', 'talonL'], s: 4, dur: 1800 })
   ]);
   const SD_ARCO = X(SWAN0, { tr: -28, fl: -66, cab: 0, apoyo: ['pelvis', 'puntaC', 'puntaL', 'manoC', 'manoL'] });
@@ -10095,6 +10457,1854 @@ const REVISION_EXAMEN = [
 
 </script>
 <script>
+/* Generado por importar_familias.py desde fuentes/familias.json
+   (hojas de familias de "Resumen Todos los ejercicios.xlsx").
+   No editar a mano: corregí la planilla, volvé a extraerla y corré el script. */
+const FAMILIAS = [
+ {
+  "pos": "Supino",
+  "n": "Diaphragmatic Breathing",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Breathing Exercises"
+  ]
+ },
+ {
+  "pos": "Supino",
+  "n": "Supported Neutral Spine",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Neutral Pelvis"
+  ]
+ },
+ {
+  "pos": "Supino",
+  "n": "Pelvic Clock",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Unidad Interna"
+  ]
+ },
+ {
+  "pos": "Supino",
+  "n": "Fingertip Abdominals",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Unidad Interna"
+  ]
+ },
+ {
+  "pos": "Supino",
+  "n": "Pelvic Floor Activation",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Unidad Interna"
+  ]
+ },
+ {
+  "pos": "Supino",
+  "n": "Low Back Bridge",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Unidad Interna"
+  ]
+ },
+ {
+  "pos": "Supino",
+  "n": "Toe Taps",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Unidad Externa"
+  ]
+ },
+ {
+  "pos": "Supino",
+  "n": "Diagonal Press",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Unidad Externa SOA-SOP"
+  ],
+  "orig": "Deagonal Press"
+ },
+ {
+  "pos": "Supino",
+  "n": "Marching",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Estabilidad lumbopélvica"
+  ]
+ },
+ {
+  "pos": "Supino",
+  "n": "Dead Bug",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Estabilidad lumbopélvica"
+  ]
+ },
+ {
+  "pos": "Supino",
+  "n": "Bridge with Marching",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Estabilidad lumbopélvica"
+  ]
+ },
+ {
+  "pos": "Supino",
+  "n": "Abdominal Curl",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Movilidad de la Columna"
+  ]
+ },
+ {
+  "pos": "Supino",
+  "n": "Oblique Abdominals",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Movilidad de la Columna"
+  ],
+  "orig": "Oblicue abdominals"
+ },
+ {
+  "pos": "Supino",
+  "n": "Hundred prep",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Unidad Interna Fortalecer tronco"
+  ],
+  "orig": "Hundread Prep"
+ },
+ {
+  "pos": "Supino",
+  "n": "Hundred",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Unidad Interna Fortalecer tronco"
+  ],
+  "orig": "Hundread"
+ },
+ {
+  "pos": "Supino",
+  "n": "Single leg circles",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Estabilidad lumbopélvica"
+  ],
+  "orig": "Single Leg Circule"
+ },
+ {
+  "pos": "Supino",
+  "n": "Single Leg Stretch",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Fortalecer Estabilidad lumbopélvica",
+   "Fortalecer Abdominales",
+   "Movilidad Columna"
+  ]
+ },
+ {
+  "pos": "Supino",
+  "n": "Double Leg Stretch",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Fortalecer Estabilidad lumbopélvica",
+   "Fortalecer Abdominales",
+   "Movilidad Columna"
+  ]
+ },
+ {
+  "pos": "Supino",
+  "n": "Single straight leg stretch",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Fortalecer Estabilidad lumbopélvica",
+   "Fortalecer Abdominales",
+   "Movilidad Columna"
+  ],
+  "orig": "Single straith Leg Stretch"
+ },
+ {
+  "pos": "Supino",
+  "n": "Double straight leg stretch",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Fortalecer Estabilidad lumbopélvica",
+   "Fortalecer Abdominales",
+   "Movilidad Columna"
+  ],
+  "orig": "Double straight Leg Stretch"
+ },
+ {
+  "pos": "Supino",
+  "n": "Criss cross",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Fortalecer Estabilidad lumbopélvica",
+   "Fortalecer Abdominales",
+   "Movilidad Columna"
+  ],
+  "orig": "Criss Cross Bicycle"
+ },
+ {
+  "pos": "Supino",
+  "n": "Roll Up",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Fortalecimiento del tronco",
+   "Movilidad de la columna"
+  ]
+ },
+ {
+  "pos": "Supino",
+  "n": "Rolling like a ball",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Estabilidad lumbopélvica",
+   "Fortalecimiento Tronco"
+  ],
+  "orig": "Rolling like a Ball"
+ },
+ {
+  "pos": "Supino",
+  "n": "Open leg rocker",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Estabilidad lumbopélvica",
+   "Fortalecimiento del tronco",
+   "Coordinación y balance",
+   "Estabilidad Escapular"
+  ],
+  "orig": "Open leg Rocker"
+ },
+ {
+  "pos": "Supino",
+  "n": "Teaser preparation (bent knee, single leg)",
+  "libro": "mat2",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Fortalecer abdominales",
+   "Estabilidad lumbopélvica",
+   "Flexión de cadera"
+  ],
+  "orig": "Teaser Preparation 1: Bend Knee 2-Single leg"
+ },
+ {
+  "pos": "Supino",
+  "n": "Teaser 1 (roll down)",
+  "libro": "mat2",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Fortalecer abdominales",
+   "Estabilidad lumbopélvica",
+   "Flexión de cadera"
+  ],
+  "orig": "Teaser Roll Down"
+ },
+ {
+  "pos": "Supino",
+  "n": "Teaser 2 (leg lowers)",
+  "libro": "mat2",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Fortalecer abdominales",
+   "Estabilidad lumbopélvica",
+   "Flexión de cadera"
+  ],
+  "orig": "Teaser Leg Lovers"
+ },
+ {
+  "pos": "Supino",
+  "n": "Teaser 3 (arms and legs together)",
+  "libro": "mat2",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Fortalecer abdominales",
+   "Estabilidad lumbopélvica",
+   "Flexión de cadera"
+  ],
+  "orig": "Teaser Arm and leg toguether"
+ },
+ {
+  "pos": "Supino",
+  "n": "Hip circles",
+  "libro": "mat2",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Fortalecer abdominales",
+   "Flexión de cadera",
+   "Estabilidad lumbopélvica"
+  ],
+  "orig": "Hip Circules"
+ },
+ {
+  "pos": "Supino",
+  "n": "Roll Over",
+  "libro": "mat2",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Fortalecimiento de abdomen",
+   "Movilidad de la columna inversión y reversa de columna Flexión de Columna"
+  ]
+ },
+ {
+  "pos": "Supino",
+  "n": "Modified Corkscrew",
+  "libro": "mat2",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Control abdominal",
+   "Estabilidad lumbopélvica",
+   "Movilidad Columna"
+  ]
+ },
+ {
+  "pos": "Supino",
+  "n": "Neck Pull",
+  "libro": "mat2",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Fortalecer los abdominales",
+   "Movilidad de columna flexión y extensión"
+  ]
+ },
+ {
+  "pos": "Supino",
+  "n": "Jackknife",
+  "libro": "mat2",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Fortalecer abdominales",
+   "Estabilizar escapular",
+   "Flexión dinámica columna inversión"
+  ]
+ },
+ {
+  "pos": "Supino",
+  "n": "Corkscrew",
+  "libro": "mat2",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Movilidad de la columna rotación",
+   "Control Abdominal",
+   "Estabilidad Escapular"
+  ],
+  "orig": "Corscrew"
+ },
+ {
+  "pos": "Supino",
+  "n": "Scissors",
+  "libro": "mat2",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Unidad interna y externa, movilidad de columna",
+   "Fuerza y potencia MMSS"
+  ],
+  "orig": "Sissors"
+ },
+ {
+  "pos": "Supino",
+  "n": "Bicycle",
+  "libro": "mat2",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Unidad interna y externa, movilidad de columna",
+   "Fuerza y potencia MMSS"
+  ]
+ },
+ {
+  "pos": "Supino",
+  "n": "Shoulder bridge",
+  "libro": "mat2",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Estabilidad lumbopélvica",
+   "Estabilidad Escapular"
+  ],
+  "orig": "Shoukder Bridgets"
+ },
+ {
+  "pos": "Supino",
+  "n": "Marching Supine",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Flexión de Cadera"
+  ]
+ },
+ {
+  "pos": "Supino",
+  "n": "Serie de tobillos boca arriba (point/flex)",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Fortalecimiento de pies y tobillo"
+  ],
+  "orig": "Serie de tobillos boca arriba(point flex)"
+ },
+ {
+  "pos": "Supino",
+  "n": "Arm Raises (juntos y alternados)",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Ritmo Escapular"
+  ],
+  "orig": "Arm rais toguether and alternathing"
+ },
+ {
+  "pos": "Supino",
+  "n": "Angels in the Snow",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Ritmo Escapular"
+  ],
+  "orig": "Angels in the snow"
+ },
+ {
+  "pos": "Decúbito lateral",
+  "n": "Side leg lifts",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Estabilidad lumbopélvica.Trabaja el tronco lateral",
+   "MMII"
+  ],
+  "orig": "Side leg lift"
+ },
+ {
+  "pos": "Decúbito lateral",
+  "n": "Side leg circles (small & big)",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Estabilidad lumbopélvica.Trabaja el tronco lateral",
+   "MMII"
+  ],
+  "orig": "Side leg circules big and small"
+ },
+ {
+  "pos": "Decúbito lateral",
+  "n": "Side leg kicks",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Estabilidad lumbopélvica.Trabaja el tronco lateral",
+   "MMII"
+  ],
+  "orig": "Side leg Kicks"
+ },
+ {
+  "pos": "Decúbito lateral",
+  "n": "Side leg bicycle",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Estabilidad lumbopélvica.Trabaja el tronco lateral",
+   "MMII"
+  ],
+  "orig": "Side leg Bicycle"
+ },
+ {
+  "pos": "Decúbito lateral",
+  "n": "Side leg bananas",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Estabilidad lumbopélvica.Trabaja el tronco lateral",
+   "MMII"
+  ],
+  "orig": "Side leg Bananas"
+ },
+ {
+  "pos": "Decúbito lateral",
+  "n": "Clamshell",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Aductores de cadera"
+  ],
+  "orig": "Clamchel"
+ },
+ {
+  "pos": "Decúbito lateral",
+  "n": "Telescope Arms",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Movilidad escapular - Coordina escápula dorsal, hombro y cabeza"
+  ],
+  "orig": "Telescope Arme"
+ },
+ {
+  "pos": "Decúbito lateral",
+  "n": "Pinwheel",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Movilidad escapular - Coordina escápula dorsal, hombro y cabeza"
+  ],
+  "orig": "Pinwell"
+ },
+ {
+  "pos": "Decúbito lateral",
+  "n": "Side plank sube y baja",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Trabaja el tronco lateral. Estabilidad escapular, oblicuos abductores"
+  ]
+ },
+ {
+  "pos": "Decúbito lateral",
+  "n": "Tabla lateral antebrazo",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Trabaja el tronco lateral. Estabilidad escapular, oblicuos abductores"
+  ]
+ },
+ {
+  "pos": "Decúbito lateral",
+  "n": "Prep tabla lateral",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Trabaja el tronco lateral. Estabilidad escapular, oblicuos abductores"
+  ]
+ },
+ {
+  "pos": "Decúbito lateral",
+  "n": "Tabla lateral con los pie uno sobre otro",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Trabaja el tronco lateral. Estabilidad escapular, oblicuos abductores"
+  ]
+ },
+ {
+  "pos": "Decúbito lateral",
+  "n": "Levantamiento de la pierna en tabla lateral",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Trabaja el tronco lateral. Estabilidad escapular, oblicuos abductores"
+  ]
+ },
+ {
+  "pos": "Decúbito lateral",
+  "n": "Kneeling side kicks",
+  "libro": "mat2",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Estabilidad Escapular",
+   "Fortalecer MMII",
+   "Integración del Tronco"
+  ]
+ },
+ {
+  "pos": "Decúbito lateral",
+  "n": "Twist (seated twist)",
+  "libro": "mat2",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Estabilidad Escapular",
+   "Fortalecer MMII",
+   "Integración del Tronco"
+  ],
+  "orig": "Seated twist"
+ },
+ {
+  "pos": "Decúbito lateral",
+  "n": "Side bend (mermaid)",
+  "libro": "mat2",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Fortalecer tronco lateral",
+   "Flexión lateral"
+  ],
+  "orig": "Side bend mermaid"
+ },
+ {
+  "pos": "Prono",
+  "n": "Swimming prep — single arm lift",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Estabilidad lumbopélvica-Unidad Externa"
+  ],
+  "orig": "Swiming prep single arm lift"
+ },
+ {
+  "pos": "Prono",
+  "n": "Swimming prep — single leg lift",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Estabilidad lumbopélvica-Unidad Externa"
+  ],
+  "orig": "Swiming prep single leg lift"
+ },
+ {
+  "pos": "Prono",
+  "n": "Swimming",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Estabilidad lumbopélvica-Unidad Externa"
+  ],
+  "orig": "Swiming"
+ },
+ {
+  "pos": "Prono",
+  "n": "Swimming",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Integración del tronco: Estabilidad lumbopélvica",
+   "Movilidad de columna"
+  ],
+  "orig": "Swiming"
+ },
+ {
+  "pos": "Prono",
+  "n": "Rocket",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Movilidad de la Columna"
+  ]
+ },
+ {
+  "pos": "Prono",
+  "n": "Mini Swan",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Movilidad de la Columna"
+  ]
+ },
+ {
+  "pos": "Prono",
+  "n": "Swan",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Movilidad de la Columna"
+  ],
+  "orig": "Swam"
+ },
+ {
+  "pos": "Prono",
+  "n": "Swan",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Movilidad de la Columna"
+  ],
+  "orig": "Swam"
+ },
+ {
+  "pos": "Prono",
+  "n": "Double Leg Kicks",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Integración del tronco",
+   "Movilidad de la columna",
+   "Fuerza y Potencia del MMII"
+  ]
+ },
+ {
+  "pos": "Prono",
+  "n": "Swan Dive",
+  "libro": "mat2",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Movilidad de columna en extensión axial",
+   "MMSS"
+  ]
+ },
+ {
+  "pos": "Prono",
+  "n": "Swan Rocking",
+  "libro": "mat2",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Movilidad de columna en extensión axial",
+   "MMSS"
+  ]
+ },
+ {
+  "pos": "Prono",
+  "n": "Rocking",
+  "libro": "mat2",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Movilidad de columna en extensión axial",
+   "MMSS"
+  ]
+ },
+ {
+  "pos": "Prono",
+  "n": "Variación de Swimming",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Extensión de la Cadera"
+  ],
+  "orig": "Variación swiming"
+ },
+ {
+  "pos": "Prono",
+  "n": "Single leg kicks",
+  "libro": "mat1",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Fortalecer isquiotibiales",
+   "Estirar cuádriceps",
+   "Fortalecer extensión de columna"
+  ],
+  "orig": "Single Leg Kicks-- Sniffi Breath",
+  "nota": "Con sniff breath."
+ },
+ {
+  "pos": "Prono",
+  "n": "Leg Pull Down",
+  "libro": "mat2",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Fortalecimiento de todo el cuerpo"
+  ]
+ },
+ {
+  "pos": "Prono",
+  "n": "Leg pull up",
+  "libro": "mat2",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Fortalecimiento de todo el cuerpo",
+   "Trabajo todo el cuerpo"
+  ]
+ },
+ {
+  "pos": "4 puntos",
+  "n": "All Four Abdominals",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Integración del Tronco"
+  ]
+ },
+ {
+  "pos": "4 puntos",
+  "n": "Opposite single arm lift",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Estabilidad lumbopélvica"
+  ]
+ },
+ {
+  "pos": "4 puntos",
+  "n": "Opposite single leg lift",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Estabilidad lumbopélvica"
+  ]
+ },
+ {
+  "pos": "4 puntos",
+  "n": "Opposite arm and leg reach",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Estabilidad lumbopélvica-Unidad Externa"
+  ]
+ },
+ {
+  "pos": "4 puntos",
+  "n": "Cat Cow",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Movilidad de la Columna"
+  ]
+ },
+ {
+  "pos": "4 puntos",
+  "n": "Tail Wag",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Movilidad de la Columna"
+  ]
+ },
+ {
+  "pos": "4 puntos",
+  "n": "All fours: extensión de cadera",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Extensión de la Cadera"
+  ],
+  "orig": "All fourextensión o extesión a Flex"
+ },
+ {
+  "pos": "4 puntos",
+  "n": "All fours: de flexión a extensión",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Extensión de la Cadera"
+  ],
+  "orig": "All four Flexion to Extensión"
+ },
+ {
+  "pos": "4 puntos",
+  "n": "Single arm lift Plank",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Estabilidad Escapular e integración del tronco"
+  ]
+ },
+ {
+  "pos": "4 puntos",
+  "n": "Sternum Drops",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Estabilidad Escapular e integración del tronco"
+  ]
+ },
+ {
+  "pos": "4 puntos",
+  "n": "Modified plank con rodillas extendidas en el suelo",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Estabilidad Escapular e integración del tronco"
+  ]
+ },
+ {
+  "pos": "Planchas",
+  "n": "Tabla Alta brazos",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Entrenar todo el cuerpo. Estabilidad Escapular. Mejora postura"
+  ],
+  "sub": "Plancha prona"
+ },
+ {
+  "pos": "Planchas",
+  "n": "Tabla con pierna levantada",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Entrenar todo el cuerpo. Estabilidad Escapular. Mejora postura"
+  ],
+  "sub": "Plancha prona"
+ },
+ {
+  "pos": "Planchas",
+  "n": "Tabla en Codos",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Entrenar todo el cuerpo. Estabilidad Escapular. Mejora postura"
+  ],
+  "sub": "Plancha prona"
+ },
+ {
+  "pos": "Planchas",
+  "n": "Tabla con flexión de brazos (sobre las palmas)",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Entrenar todo el cuerpo. Estabilidad Escapular. Mejora postura"
+  ],
+  "sub": "Plancha prona",
+  "orig": "Tabla flexón de brazos- Solo las palmas"
+ },
+ {
+  "pos": "Planchas",
+  "n": "Leg Pull Down",
+  "libro": "mat2",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Fortalecimiento de todo el cuerpo"
+  ],
+  "sub": "Plancha prona"
+ },
+ {
+  "pos": "Planchas",
+  "n": "Preparación de tabla de espalda: elevación y depresión",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Estabilidad Escapular e integración del tronco"
+  ],
+  "sub": "Plancha Supina",
+  "orig": "Preparación de la tabla elevacion y depresión de la espalda"
+ },
+ {
+  "pos": "Planchas",
+  "n": "Tabla de espalda modificada",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Estabilidad Escapular e integración del tronco"
+  ],
+  "sub": "Plancha Supina"
+ },
+ {
+  "pos": "Planchas",
+  "n": "Marchando con tabla espalda",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Estabilidad Escapular e integración del tronco"
+  ],
+  "sub": "Plancha Supina"
+ },
+ {
+  "pos": "Planchas",
+  "n": "Tabla de espalda con pierna estirada",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Estabilidad Escapular e integración del tronco"
+  ],
+  "sub": "Plancha Supina",
+  "orig": "Tabla espalda  pierna estirada"
+ },
+ {
+  "pos": "Planchas",
+  "n": "Levantamiento de piernas en tabla de espalda",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Estabilidad Escapular e integración del tronco"
+  ],
+  "sub": "Plancha Supina",
+  "orig": "Levantamiento de piernas con planca de espalda"
+ },
+ {
+  "pos": "Planchas",
+  "n": "Push up",
+  "libro": "mat1",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Movimiento de todo el cuerpo"
+  ],
+  "sub": "Plancha Supina",
+  "orig": "Puch Up"
+ },
+ {
+  "pos": "Planchas",
+  "n": "Leg pull up",
+  "libro": "mat2",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Fortalecimiento de todo el cuerpo",
+   "Trabajo todo el cuerpo"
+  ],
+  "sub": "Plancha Supina"
+ },
+ {
+  "pos": "Sedente",
+  "n": "Lateral Breathing",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Respiración costal lateral"
+  ]
+ },
+ {
+  "pos": "Sedente",
+  "n": "Seated Twist",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Rotación Columna"
+  ],
+  "orig": "Seated twist"
+ },
+ {
+  "pos": "Sedente",
+  "n": "Seated Side Stretch",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Flexión lateral columna"
+  ],
+  "orig": "Seated side streth"
+ },
+ {
+  "pos": "Sedente",
+  "n": "Spine stretch forward",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Flexión Columna",
+   "Elongación Axial",
+   "Estabilidad pélvica"
+  ],
+  "orig": "Spine strech foward"
+ },
+ {
+  "pos": "Sedente",
+  "n": "Spine stretch side",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Elongación Axial",
+   "Flexión lateral Columna",
+   "Estabilidad pélvica"
+  ],
+  "orig": "Spine strech side"
+ },
+ {
+  "pos": "Sedente",
+  "n": "Saw",
+  "libro": "mat1",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Movilidad de la columna: flexión, extensión y rotación",
+   "Elongación axial",
+   "Estabilidad pélvica"
+  ]
+ },
+ {
+  "pos": "Sedente",
+  "n": "Spine Twist",
+  "libro": "mat2",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Movilidad de Columna: Rotación y fortalecimiento de Columna"
+  ]
+ },
+ {
+  "pos": "Sedente",
+  "n": "Boomerang",
+  "libro": "mat2",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Movimiento Global"
+  ]
+ },
+ {
+  "pos": "Sedente",
+  "n": "Marching Seated",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Flexión de cadera-Fortalece el psoas, íliaco-Estabilidad lumbopélvica vertical"
+  ],
+  "orig": "Marching Seated en la silla"
+ },
+ {
+  "pos": "Sedente",
+  "n": "Sentado con el aro",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Aductores de cadera- Equilibrio-Estabilidad lumbopélvica"
+  ],
+  "orig": "Sentado con el aro en la silla"
+ },
+ {
+  "pos": "Sedente",
+  "n": "Flexión plantar y dorsal en posición sentada",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Flexión plantar y flexión dorsal"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Standing Multifidi Engagement",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Mejorar estabilidad espinal"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Squats",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Patrón funcional de sentadilla"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Single Leg Multifidi",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Mejorar estabilidad unilateral"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Neutral Squats",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Mantener pelvis y columna neutra durante movimiento"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Knee Bend Variation",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Controlar alineación durante flexión de rodillas"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Standing Diagonal Press",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "SOP-SOA"
+  ],
+  "orig": "Standing diagonal Press"
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Standing Marching",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Estabilidad lumbopélvica"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Walking",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Estabilidad lumbopélvica"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Standing Roll Down",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Flexión Columna"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Standing Flexion",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Flexión Columna"
+  ],
+  "orig": "Standing Flx"
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Standing Extension",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Extensión columna"
+  ],
+  "orig": "Standing Extensión"
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Standing Lateral Flexion",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Flexión Lateral de columna"
+  ],
+  "orig": "Standing lateral Flex"
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Standing Full Body Rotation",
+  "libro": "pre",
+  "principio": "Integración del tronco",
+  "obj": [
+   "Rotación de columna"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Marching Standing",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Flexión de Cadera"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Abducción dando un paso al costado",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Abducción de cadera"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Levantamiento lateral pierna de pie",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Abducción de cadera"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "ABD con paso al lado",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Abducción de cadera"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Levantamiento de pierna de pie",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Abducción de cadera"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Aducción De pie",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Aducción de cadera"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Standing Heel Raise",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Fortalecimiento de pies y tobillo"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Marcha con movimiento de brazos",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Patrón de movimiento Funcional"
+  ],
+  "orig": "Marcha con  movimiento de brazos"
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Sentadilla con flexión de rodillas",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Patrón de movimiento Funcional"
+  ],
+  "orig": "Sendatilla Flexión de rodillas"
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Sentadilla con pies hacia afuera ampliado",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Patrón de movimiento Funcional"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Sentadilla estrecha y paralela",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Patrón de movimiento Funcional"
+  ],
+  "orig": "Sentadilla estrecha y paralela 90pág"
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Estocada",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Patrón de movimiento Funcional"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Inclinación zancada hacia adelante",
+  "libro": "pre",
+  "principio": "Fuerza y potencia de MMII",
+  "obj": [
+   "Patrón de movimiento Funcional"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Rotación lateral del hombro con liga",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Estabilidad Glenohumeral"
+  ],
+  "orig": "Rotación Lateral del hombro con la liga dira afuera"
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Rotación medial del hombro con liga",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Estabilidad Glenohumeral"
+  ],
+  "orig": "Rotación medial del hombro , roto adentro"
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Remo con bandas",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Activación del hombro posterior"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Prensa de tríceps con banda (tiro atrás)",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Activación del hombro posterior"
+  ],
+  "orig": "Prensa de Triceps con banda. Tiro atrás"
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Inmersión de tríceps (banca o silla)",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Activación del hombro posterior"
+  ],
+  "orig": "Inmersión de triceps. Bnaca o silla pilates"
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Prensa por encima de la cabeza con banda",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Activación del hombro posterior"
+  ],
+  "orig": "Presna por encima de la cabeza , con banda"
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Prensa lateral con la banda",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Activación del hombro posterior"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Tirón hacia abajo con banda",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Activación del hombro posterior"
+  ],
+  "orig": "Tirando hacia abajo banda abre la banda arriba y abajo"
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Prensa de pecho con banda",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Activación del hombro anterior"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Flexión de bíceps con banda",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Activación del hombro anterior"
+  ],
+  "orig": "Flexión de bíceps de cualquier ángulo. Con banda con apoyo de pies"
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Elevación hacia adelante con banda y sentadilla",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Movimiento del brazo recto"
+  ]
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Elevación Lateral de Brazos",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Movimiento del brazo recto"
+  ],
+  "orig": "Elevación Lateral"
+ },
+ {
+  "pos": "Bípedo",
+  "n": "Tirar los brazos hacia atrás con liga",
+  "libro": "pre",
+  "principio": "Fuerza y equilibrio de MMSS",
+  "obj": [
+   "Movimiento del brazo recto"
+  ],
+  "orig": "Tirar hacia atrás los brazos atrás con una liga"
+ }
+];
+
+</script>
+<script>
+/* ============================================================
+   AnatoApp — Análisis MAT 2 y familias por posición
+   Fuentes:
+     · "Mat 2 ordenado.xlsx" (hoja Mat 2): 23 fichas de análisis, con
+       series, posición, principio, objetivos, regresiones (Pre-Pilates,
+       Mat 1, Mat 2), progresiones, accesorios que asisten y resisten, y
+       respiración. Copia textual en fuentes/mat2-analisis.json.
+     · "Resumen Todos los ejercicios.xlsx" (hojas de familias): los
+       ejercicios de cada posición en Pre-Pilates, Mat 1 y Mat 2. Se
+       genera en datos-familias.js (importar_familias.py).
+
+   Como en el MAT 1: se corrigió la ortografía de los nombres sin cambiar
+   el contenido. Lo que en la planilla se contradice, está corrido de
+   columna o parece copiado de otra fila quedó en `revisar` y NO se usa
+   para generar preguntas.
+   ============================================================ */
+
+TEMAS.mat2an   = { nom: 'Análisis MAT 2',        color: 'magenta', icono: '📗' };
+TEMAS.familias = { nom: 'Familias por posición', color: 'verde',   icono: '🧩' };
+
+(() => {
+  const i = UNIDADES.findIndex(u => u.id === 'u11');
+  UNIDADES.splice(i < 0 ? UNIDADES.length : i, 0,
+    { id: 'u19', nom: 'Análisis MAT 2',        temas: ['mat2an'],   icono: '📗' },
+    { id: 'u20', nom: 'Familias por posición', temas: ['familias'], icono: '🧩' });
+})();
+
+/* ---------- regresiones y accesorios que comparten varias fichas ---------- */
+const R2 = {
+  pmTablas: ['Todas las tablas y tablas laterales'],
+  m1Lado: ['Serie lateral', 'Serie de 5', 'Push up'],
+  pmTeaser: ['Diagonal press', 'Dead bug', 'Abdominal curl', 'Planchas', 'All four abdominals'],
+  m1Teaser: ['Hundred prep', 'Hundred', 'Serie de 5', 'Roll up', 'Rolling like a ball', 'Seal', 'Open leg rocker', 'Serie lateral'],
+  pmRoll: ['Cat cow', 'Abdominal curl', 'Diagonal curl', 'Standing flexion'],
+  m1Roll: ['Hundred prep', 'Hundred', 'Serie de 5', 'Single leg circles', 'Roll up', 'Rolling like a ball', 'Seal', 'Open leg rocker', 'Spine stretch forward'],
+  pmInv: ['Todos los de unidad interna y unidad externa', 'Puentes', 'Planchas'],
+  m1Inv: ['Hundred', 'Serie de 5', 'Serie lateral', 'Push up', 'Rolling like a ball', 'Seal', 'Open leg rocker'],
+  m2Inv: ['Teasers', 'Leg pull up', 'Leg pull down', 'Hip circles', 'Roll over', 'Modified corkscrew', 'Corkscrew'],
+  pmSwan: ['Rocket', 'Swan'],
+  progTeaser: ['Kneeling side kicks', 'Side bend twist', 'Side bend (mermaid)', 'Leg pull up', 'Leg pull down', 'Shoulder bridge', 'Boomerang']
+};
+const P2 = {
+  teaser: {
+    asiste: [['Liga abierta en la planta del pie', 'Se toma con las manos'], ['Aro', 'Se usa igual que la liga']],
+    resiste: [['Bola entre los tobillos', 'Presionarla'], ['Pesas en los tobillos'], ['Aro entre tobillos o piernas', 'Presionarlo']]
+  },
+  lado: { asiste: [['Caja o bloque de yoga', 'Eleva la altura del apoyo de la mano']] },
+  ladoBola: {
+    asiste: [['Caja o bloque de yoga', 'Eleva la altura del apoyo de la mano'], ['Bola en la mano', 'Llevar el recorrido con ella']],
+    resiste: [['Pesa en la mano']]
+  },
+  pelvis: { asiste: [['Bola o rodillo bajo la pelvis']], resiste: [['Aro, bola o banda cerrada en los tobillos']] }
+};
+
+/* ---------- las 23 fichas (bb = ejercicio del manual con animación) ---------- */
+const MAT2 = [
+  { id: 'n01', n: 'Kneeling side kicks', bb: 'mat2-e14', series: '6 a 8 sets', pos: 'Decúbito lateral',
+    principio: 'Fuerza y equilibrio de MMSS', obj: ['Estabilidad escapular', 'Fortalecer MMII', 'Integración del tronco'],
+    reg: { pm: R2.pmTablas, m1: R2.m1Lado, m2: ['Teaser', 'Leg pull up', 'Leg pull down'] },
+    prog: ['Side bend twist', 'Side bend (mermaid)'], ...P2.lado, resiste: [] },
+
+  { id: 'n02', n: 'Twist (seated twist)', bb: 'mat2-e15', series: '4 sets', pos: 'Decúbito lateral',
+    principio: 'Fuerza y equilibrio de MMSS', obj: ['Estabilidad escapular', 'Fortalecer MMII', 'Integración del tronco'],
+    reg: { pm: R2.pmTablas, m1: R2.m1Lado, m2: ['Teaser', 'Leg pull up', 'Leg pull down', 'Kneeling side kicks'] },
+    prog: ['Side bend twist', 'Side bend (mermaid)'], ...P2.ladoBola,
+    nota: 'Es el Twist del manual de Mat 2 (en plancha lateral), no el Seated Twist de Pre-Pilates.' },
+
+  { id: 'n03', n: 'Side bend (mermaid)', bb: 'mat2-e17', series: '4 a 6 sets', pos: 'Decúbito lateral',
+    principio: 'Fuerza y equilibrio de MMSS', obj: ['Fortalecer el tronco lateral', 'Flexión lateral'],
+    reg: { pm: ['Todas las planchas laterales'], m1: ['Serie lateral', 'Push up'], m2: ['Twist (seated twist)', 'Side bend twist'] },
+    prog: ['Boomerang'], ...P2.ladoBola,
+    revisar: ['En las regresiones Mat 2 figura también "seated bend mermaid", que parece el mismo ejercicio.'] },
+
+  { id: 'n04', n: 'Leg pull down', bb: 'mat2-e11', series: '4 a 6 reps', pos: 'Planchas',
+    principio: 'Fuerza y equilibrio de MMSS', obj: ['Fortalecimiento de todo el cuerpo'], resp: 'Sniff breath',
+    reg: { pm: [], m1: [], m2: [] }, prog: [],
+    asiste: [['Caja o bloque de yoga', 'Eleva la altura del apoyo de las manos']],
+    resiste: [['Bola bajo el pie de apoyo'], ['Liga cerrada en los tobillos']],
+    revisar: ['En regresiones solo figura "Cajón" (es un accesorio) y en progresiones "Liga, poner un balón… debe explicar": falta completarlas.'] },
+
+  { id: 'n05', n: 'Leg pull up', bb: 'mat2-e12', series: '4 a 6 reps', pos: 'Planchas',
+    principio: 'Fuerza y equilibrio de MMSS', obj: ['Fortalecimiento de todo el cuerpo'],
+    reg: { pm: ['Todas las planchas: frontal, lateral y posterior', 'Puentes'], m1: ['Push up', 'Serie lateral', 'Serie de 5'], m2: ['Leg pull down'] },
+    prog: ['Shoulder bridge', 'Kneeling side kicks', 'Twist (seated twist)', 'Side bend twist', 'Side bend (mermaid)', 'Boomerang'],
+    asiste: [['Bola o rodillo en la espalda', 'Si no logra subir la espalda del todo']],
+    resiste: [['Rodillo en los tobillos'], ['Bola bajo el tobillo', 'Presionarla con el tobillo'], ['Liga cerrada en los tobillos']] },
+
+  { id: 'n06', n: 'Swan dive', bb: 'mat2-e22', series: '3 a 6 reps', pos: 'Prono',
+    principio: 'Integración del tronco', obj: ['Movilidad de columna en extensión axial', 'MMSS'],
+    reg: { pm: R2.pmSwan, m1: ['Swan'], m2: ['Leg pull up'] }, prog: ['Swan rocking'],
+    asiste: [['Liga cerrada en las muñecas'], ['Aro entre las manos', 'Presionarlo']],
+    resiste: [['Bola bajo las palmas', 'Presionarla y rodarla entre las palmas y el suelo']] },
+
+  { id: 'n07', n: 'Swan rocking', bb: 'mat2-e22', series: '3 a 6 reps', pos: 'Prono',
+    principio: 'Integración del tronco', obj: ['Movilidad de columna en extensión axial', 'MMSS'],
+    reg: { pm: R2.pmSwan, m1: ['Swan'], m2: ['Leg pull up'] }, prog: ['Rocking'],
+    asiste: [['Bola bajo el abdomen o la pelvis'], ['Foam roller']],
+    resiste: [['Banda elástica en las piernas o aro mágico']] },
+
+  { id: 'n08', n: 'Rocking', bb: 'mat2-e23', series: '4 a 6 reps', pos: 'Prono',
+    principio: 'Integración del tronco', obj: ['Movilidad de columna en extensión axial', 'MMSS'],
+    reg: { pm: R2.pmSwan, m1: ['Double leg kicks'], m2: ['Leg pull up', 'Swan dive', 'Swan rocking'] }, prog: [],
+    asiste: [['Aro', 'Para estirar']], resiste: [] },
+
+  { id: 'n09', n: 'Spine twist', bb: 'mat2-e01', series: '4 a 8 sets', pos: 'Sedente',
+    principio: 'Integración del tronco', obj: ['Movilidad de columna: rotación y fortalecimiento de la columna'], resp: 'Sniff breath',
+    reg: { pm: ['Standing lateral flexion', 'Standing full body rotation', 'Tail wag', 'Angels in the snow', 'Pinwheel', 'Arm raises (juntos y alternados)', 'Seated side stretch', 'Seated twist'],
+           m1: ['Spine stretch forward', 'Spine stretch side', 'Saw'], m2: [] },
+    prog: ['Side bend twist', 'Twist (seated twist)', 'Side bend (mermaid)'],
+    asiste: [['Liga abierta cruzada por los glúteos'], ['Liga cerrada en los tobillos y liga abierta en las manos', 'Para hacer los pulsos de la respiración'],
+             ['Rodillo y bloque de yoga para sentarse encima', 'Si hay acortamiento de isquiotibiales']],
+    resiste: [['Pesas'], ['Rodillo vertical bajo las nalgas']],
+    nota: 'El Seated Twist de Pre-Pilates no tiene sniff breath.' },
+
+  { id: 'n10', n: 'Teaser preparation (bent knee, single leg)', bb: 'mat2-e02', series: '3 a 6 reps', pos: 'Supino',
+    principio: 'Integración del tronco', obj: ['Fortalecer abdominales', 'Estabilidad lumbopélvica', 'Flexión de cadera'],
+    reg: { pm: R2.pmTeaser, m1: R2.m1Teaser, m2: [] },
+    prog: ['Teaser 1 (roll down)', 'Teaser 2 (leg lowers)', 'Teaser 3 (arms and legs together)', 'Hip circles (3 planos de movimiento)', 'Kneeling side kicks'],
+    ...P2.teaser },
+
+  { id: 'n11', n: 'Teaser 1 (roll down)', bb: 'mat2-e03', series: '3 a 6 reps', pos: 'Supino',
+    principio: 'Integración del tronco', obj: ['Fortalecer abdominales', 'Estabilidad lumbopélvica', 'Flexión de cadera'],
+    reg: { pm: R2.pmTeaser, m1: R2.m1Teaser, m2: ['Hip circles', 'Teaser preparation'] },
+    prog: ['Teaser 2 (leg lowers)', 'Teaser 3 (arms and legs together)', ...R2.progTeaser], ...P2.teaser },
+
+  { id: 'n12', n: 'Teaser 2 (leg lowers)', bb: 'mat2-e04', series: '3 a 6 reps', pos: 'Supino',
+    principio: 'Integración del tronco', obj: ['Fortalecer abdominales', 'Estabilidad lumbopélvica', 'Flexión de cadera'],
+    reg: { pm: R2.pmTeaser, m1: R2.m1Teaser, m2: ['Hip circles', 'Teaser preparation', 'Teaser 1 (roll down)'] },
+    prog: ['Teaser 3 (arms and legs together)', ...R2.progTeaser], ...P2.teaser },
+
+  { id: 'n13', n: 'Teaser 3 (arms and legs together)', bb: 'mat2-e05', series: '3 a 6 reps', pos: 'Supino',
+    principio: 'Integración del tronco', obj: ['Fortalecer abdominales', 'Estabilidad lumbopélvica', 'Flexión de cadera'],
+    reg: { pm: R2.pmTeaser, m1: R2.m1Teaser, m2: ['Hip circles', 'Teaser preparation', 'Teaser 1 (roll down)', 'Teaser 2 (leg lowers)'] },
+    prog: R2.progTeaser, ...P2.teaser },
+
+  { id: 'n14', n: 'Hip circles', bb: 'mat2-e06', series: '3 a 6 reps', pos: 'Supino',
+    principio: 'Integración del tronco', obj: ['Fortalecer abdominales', 'Flexión de cadera', 'Estabilidad lumbopélvica'],
+    reg: { pm: R2.pmTeaser, m1: ['Hundred prep', 'Hundred', 'Single leg circles', 'Serie de 5', 'Roll up', 'Serie lateral', 'Rolling like a ball', 'Seal', 'Open leg rocker'], m2: ['Teasers'] },
+    prog: [],
+    asiste: [['Rodillo o balón en la espalda'], ['Bola en los tobillos']],
+    resiste: [['Bola o aro entre los tobillos', 'Presionarlos'], ['Pesas en los tobillos']],
+    revisar: ['Las columnas de esta fila parecen corridas: en "Progresiones" hay accesorios. Se muestran como asiste y resiste, sin preguntar.',
+              'En la planilla figura en supino; el manual lo describe sentado en V con las manos atrás.'] },
+
+  { id: 'n15', n: 'Roll over', bb: 'mat2-e07', series: '3 en cada sentido', pos: 'Supino',
+    principio: 'Integración del tronco', obj: ['Fortalecimiento del abdomen', 'Movilidad de columna: flexión, inversión y regreso'],
+    reg: { pm: R2.pmRoll, m1: R2.m1Roll, m2: ['Teasers', 'Hip circles'] },
+    prog: ['Modified corkscrew', 'Corkscrew', 'Jackknife', 'Scissors', 'Bicycle', 'Boomerang'],
+    asiste: [['Bola, rodillo o aro detrás de la espalda']], resiste: [['Liga cerrada entre las piernas', 'Abrirla']] },
+
+  { id: 'n16', n: 'Modified corkscrew', bb: 'mat2-e08', series: '3 a 6 reps', pos: 'Supino',
+    principio: 'Integración del tronco', obj: ['Control abdominal', 'Estabilidad lumbopélvica', 'Movilidad de columna'],
+    reg: { pm: R2.pmRoll, m1: R2.m1Roll, m2: ['Teasers', 'Hip circles'] },
+    prog: ['Corkscrew', 'Jackknife', 'Scissors', 'Bicycle', 'Boomerang'],
+    asiste: [['Bola o aro en los tobillos']], resiste: [['Pesas en los tobillos', 'Asisten y resisten']] },
+
+  { id: 'n17', n: 'Corkscrew', bb: 'mat2-e09', series: '3 a 4 reps', pos: 'Supino',
+    principio: 'Integración del tronco', obj: ['Movilidad de columna: rotación', 'Control abdominal', 'Estabilidad escapular'],
+    reg: { pm: ['Puentes', 'Abdominal curl', 'Oblique abdominals', 'Tail wag', 'Pinwheel', 'Telescope arms', 'Planchas laterales', '4 puntos', 'Standing flexion', 'Standing full body rotation'],
+           m1: ['Roll up', 'Serie de 5', 'Side leg bananas', 'Rolling like a ball', 'Seal', 'Open leg rocker', 'Spine stretch forward', 'Saw'],
+           m2: ['Roll over', 'Hip circles', 'Modified corkscrew'] },
+    prog: ['Jackknife', 'Scissors', 'Bicycle', 'Boomerang'],
+    asiste: [['Bola o aro entre las piernas', 'Presionarlos']], resiste: [['Pesas en los tobillos']],
+    revisar: ['Entre las regresiones Mat 1 figuran los Teaser y el Spine twist, que son de Mat 2.'] },
+
+  { id: 'n18', n: 'Neck pull', bb: 'mat2-e10', series: '3 a 6 reps', pos: 'Supino',
+    principio: 'Integración del tronco', obj: ['Fortalecer los abdominales', 'Movilidad de columna: flexión y extensión'],
+    reg: { pm: [], m1: [], m2: [] }, prog: [],
+    asiste: [['Balón entre los talones', 'Presionarlo'], ['Pesas en los tobillos'], ['Liga cerrada', 'Abrirla']], resiste: [],
+    revisar: ['Regresiones y progresiones son idénticas a las del Corkscrew: parecen copiadas de esa fila.', 'Las pesas y la liga figuran como accesorios que asisten.'] },
+
+  { id: 'n19', n: 'Jackknife', bb: 'mat2-e13', series: '3 a 4 reps', pos: 'Supino',
+    principio: 'Integración del tronco', obj: ['Fortalecer abdominales', 'Estabilizar las escápulas', 'Flexión dinámica de columna en inversión'],
+    reg: { pm: R2.pmInv, m1: R2.m1Inv, m2: R2.m2Inv }, prog: ['Scissors', 'Bicycle', 'Boomerang'], ...P2.pelvis },
+
+  { id: 'n20', n: 'Scissors', bb: 'mat2-e18', series: '4 a 6 reps', pos: 'Supino',
+    principio: 'Integración del tronco', obj: ['Unidad interna y externa, movilidad de columna', 'Fuerza y potencia'],
+    reg: { pm: R2.pmInv, m1: R2.m1Inv, m2: R2.m2Inv }, prog: ['Bicycle', 'Boomerang'],
+    asiste: [['Caja, cojín o soporte bajo la pelvis'], ['Liga abierta para los pies']],
+    resiste: [['Banda elástica en las plantas de los pies', 'Con los extremos en las manos'], ['Aro mágico']],
+    revisar: ['En el objetivo dice "Fuerza y potencia MMSS"; en Scissors trabajan sobre todo los miembros inferiores.'] },
+
+  { id: 'n21', n: 'Bicycle', bb: 'mat2-e19', series: '4 a 6 sets', pos: 'Supino',
+    principio: 'Integración del tronco', obj: ['Unidad interna y externa, movilidad de columna', 'Fuerza y potencia'],
+    reg: { pm: R2.pmInv, m1: R2.m1Inv, m2: R2.m2Inv }, prog: ['Boomerang'], ...P2.pelvis },
+
+  { id: 'n22', n: 'Shoulder bridge', bb: 'mat2-e20', series: '3 a 4 sets', pos: 'Supino',
+    principio: 'Integración del tronco', obj: ['Estabilidad lumbopélvica', 'Estabilidad escapular'],
+    reg: { pm: ['Todos los puentes'], m1: [], m2: ['Leg pull up', 'Leg pull down'] }, prog: ['Boomerang'],
+    asiste: [['Caja bajo los pies'], ['Balón pequeño entre los muslos'], ['Soporte bajo la pelvis']],
+    resiste: [['Aro entre los muslos'], ['Banda elástica sobre los muslos']],
+    nota: 'En la planilla las series dicen "4-4 sets"; el manual indica 3 a 4.' },
+
+  { id: 'n23', n: 'Boomerang', bb: 'mat2-e21', series: '4 reps', pos: 'Sedente',
+    principio: 'Movimiento global', obj: ['Integración del tronco', 'MMSS', 'MMII'],
+    reg: { pm: ['Integración del tronco, MMSS y MMII'], m1: ['Roll up', 'Rolling like a ball', 'Open leg rocker', 'Seal'],
+           m2: ['Roll over', 'Teaser', 'Jackknife', 'Scissors', 'Bicycle', 'Todas las inversiones'] },
+    prog: [], asiste: [], resiste: [['Aro en los tobillos'], ['Bola en los tobillos']] }
+];
+
+/* ============================================================
+   NOMBRES → FICHAS (para mostrar foto o animación de cada ejercicio)
+   ============================================================ */
+const EJ_REF = (() => {
+  const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\(.*?\)/g, ' ').replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+  const bb = {
+    'hundred prep': 'mat1-e01', 'the hundred preparation': 'mat1-e01', 'hundred': 'mat1-e02', 'roll up': 'mat1-e03', 'the roll up': 'mat1-e03',
+    'single leg circles': 'mat1-e04', 'single leg circle': 'mat1-e04', 'rolling like a ball': 'mat1-e05', 'single leg stretch': 'mat1-e06',
+    'double leg stretch': 'mat1-e07', 'single straight leg stretch': 'mat1-e08', 'double straight leg stretch': 'mat1-e09',
+    'criss cross': 'mat1-e10', 'spine stretch forward': 'mat1-e11', 'spine stretch side': 'mat1-e12', 'saw': 'mat1-e13',
+    'open leg rocker': 'mat1-e14', 'single leg kicks': 'mat1-e16', 'double leg kicks': 'mat1-e17',
+    'side leg lifts': 'mat1-e19', 'side leg lift': 'mat1-e19', 'side leg circles': 'mat1-e20', 'side leg kicks': 'mat1-e21',
+    'side leg bicycle': 'mat1-e22', 'side leg bananas': 'mat1-e23', 'seal': 'mat1-e24', 'push up': 'mat1-e25', 'push ups': 'mat1-e25',
+    'spine twist': 'mat2-e01', 'teaser preparation': 'mat2-e02', 'teaser prep': 'mat2-e02', 'teaser 1': 'mat2-e03', 'teaser': 'mat2-e03',
+    'teaser 2': 'mat2-e04', 'teaser 3': 'mat2-e05', 'hip circles': 'mat2-e06', 'roll over': 'mat2-e07',
+    'modified corkscrew': 'mat2-e08', 'corkscrew': 'mat2-e09', 'neck pull': 'mat2-e10', 'leg pull down': 'mat2-e11',
+    'leg pull up': 'mat2-e12', 'jackknife': 'mat2-e13', 'kneeling side kicks': 'mat2-e14', 'twist': 'mat2-e15',
+    'side bend twist': 'mat2-e16', 'side bend': 'mat2-e17', 'side bend mermaid': 'mat2-e17', 'scissors': 'mat2-e18',
+    'shoulder bridge': 'mat2-e20', 'boomerang': 'mat2-e21', 'swan dive': 'mat2-e22', 'swan rocking': 'mat2-e22', 'rocking': 'mat2-e23'
+  };
+  /* nombres que cambian de ejercicio según el libro */
+  const porLibro = { mat1: { swan: 'mat1-e15', swimming: 'mat1-e18', bicycle: 'mat1-e10' }, mat2: { bicycle: 'mat2-e19', 'seated twist': 'mat2-e15' } };
+  const pm = new Map();
+  const alias = { 'diagonal curl': 'Oblique Abdominals', 'deagonal press': 'Diagonal Press', 'arm raises': 'Arm Raises (juntos y alternados)',
+    'angels in the snow': 'Angels in the Snow', 'telescope arms': 'Telescope Arms', 'pinwheel': 'Pinwheel',
+    'tabla de espalda con pierna estirada': 'Tabla espalda pierna estirada' };
+  (typeof PREMAT !== 'undefined' ? PREMAT : []).forEach(e => { pm.set(norm(e.n), e.id); if (e.orig) pm.set(norm(e.orig), e.id); });
+  /* libro: 'pre' | 'mat1' | 'mat2' | '' (sin libro: primero el manual, después Pre-Pilates) */
+  return (nombre, libro = '') => {
+    const k = norm(nombre);
+    if (!k) return null;
+    if (libro !== 'pre') {
+      const id = (porLibro[libro] || {})[k] || bb[k];
+      if (id) return { bb: id };
+    }
+    if (libro !== 'mat1' && libro !== 'mat2') {
+      const id = pm.get(k) || (alias[k] && pm.get(norm(alias[k])));
+      if (id) return { pm: id };
+    }
+    if (!libro && (k === 'swan' || k === 'swimming')) return { bb: porLibro.mat1[k] };
+    return null;
+  };
+})();
+
+/* familias con su ficha resuelta */
+const FAMILIA_POS = ['Supino', 'Decúbito lateral', 'Prono', '4 puntos', 'Planchas', 'Sedente', 'Bípedo'];
+const NOM_LIBRO = { pre: 'Pre-Pilates', mat1: 'Mat 1', mat2: 'Mat 2' };
+FAMILIAS.forEach(f => { f.ref = EJ_REF(f.n, f.libro); });
+
+/* ============================================================
+   EJERCICIOS DE PRÁCTICA
+   ============================================================ */
+(() => {
+  const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, ' ').trim();
+  const ficha = id => MAT2.find(m => m.id === id);
+  const ok = MAT2.filter(m => !m.revisar);
+
+  /* --- ¿en qué familia (posición) está? (Hip circles queda afuera: el manual lo hace sentado) --- */
+  const porPos = {};
+  MAT2.filter(m => m.id !== 'n14').forEach(m => (porPos[m.pos] = porPos[m.pos] || []).push(m.n));
+  CLASIFICACIONES.push(
+    { id: 'c2-pos', tema: 'mat2an', q: 'MAT 2: ¿en qué familia de posición lo ubicaste?', grupos: porPos,
+      tambien: { 'Leg pull down': ['Prono'], 'Leg pull up': ['Prono'] },
+      porque: 'En tu planilla, las familias agrupan los ejercicios por la posición de partida. Kneeling side kicks y el Twist van con el decúbito lateral; los Leg pull, con las planchas.' });
+
+  /* --- asiste o resiste --- */
+  [['n02'], ['n05'], ['n06'], ['n07'], ['n09'], ['n10', 'n11', 'n12', 'n13'], ['n15'], ['n17'], ['n20'], ['n21', 'n19'], ['n22']].forEach(ids => {
+    const m = ficha(ids[0]);
+    if (m.revisar || !m.asiste.length || !m.resiste.length) return;
+    const titulo = ids.length > 2 ? 'Teaser (prep, 1, 2 y 3)' : ids.map(i => ficha(i).n).join(' / ');
+    CLASIFICACIONES.push({
+      id: 'c2-' + ids[0], tema: 'mat2an', q: `${titulo}: ¿el accesorio asiste o resiste?`,
+      grupos: { Asiste: m.asiste.map(p => p[0]), Resiste: m.resiste.map(p => p[0]) },
+      porque: 'Asiste lo que facilita lograr o controlar el movimiento (un apoyo, una liga que ayuda a subir); resiste lo que agrega carga o inestabilidad.'
+    });
+  });
+
+  /* --- progresiones encadenadas (las de tu planilla) --- */
+  SECUENCIAS.push(
+    { id: 's2-teaser', tema: 'mat2an', q: 'MAT 2: ordená la familia del Teaser, de la más fácil a la más difícil',
+      pasos: ['Teaser preparation', 'Teaser 1 (roll down)', 'Teaser 2 (leg lowers)', 'Teaser 3 (arms and legs together)'],
+      porque: 'Cada ficha lista como regresión los Teaser anteriores y como progresión los siguientes.' },
+    { id: 's2-inv', tema: 'mat2an', q: 'MAT 2: ordená la progresión de las inversiones que propusiste desde el Roll over',
+      pasos: ['Roll over', 'Modified corkscrew', 'Corkscrew', 'Jackknife', 'Scissors', 'Bicycle', 'Boomerang'],
+      porque: 'Es la lista de progresiones del Roll over; cada ficha siguiente repite la cadena desde su lugar.' },
+    { id: 's2-swan', tema: 'mat2an', q: 'MAT 2: ordená la familia prona', pasos: ['Swan dive', 'Swan rocking', 'Rocking'],
+      porque: 'Swan dive progresa a Swan rocking, y este a Rocking.' },
+    { id: 's2-lp', tema: 'mat2an', q: 'MAT 2: ¿qué Leg pull va primero?', pasos: ['Leg pull down', 'Leg pull up'],
+      porque: 'El Leg pull down figura entre las regresiones del Leg pull up.' }
+  );
+
+  /* --- series --- */
+  PARES.push({ id: 'p2-series', tema: 'mat2an', q: 'Uní cada ejercicio del MAT 2 con sus series', dinamico: 'mat2series' });
+
+  /* --- tarjetas --- */
+  CARDS.push(
+    { id: 'c2-sniff', tema: 'mat2an', tipo: 'lista', q: 'En tu análisis MAT 2, ¿qué ejercicios llevan sniff breath?',
+      a: ['Leg pull down', 'Spine twist'], dist: ['Shoulder bridge', 'Roll over', 'Hip circles', 'Jackknife'],
+      porque: 'El sniff breath (respiración percusiva, en pulsos) acompaña los dos pulsos de la pierna en el Leg pull down y los de la rotación en el Spine twist.' },
+    { id: 'c2-st-pre', tema: 'mat2an', tipo: 'lista', q: 'Regresiones Pre-Pilates del Spine twist (en tu planilla)',
+      a: ficha('n09').reg.pm, dist: ['Squats', 'Toe taps', 'Marching supine', 'Low back bridge'], noDonar: true,
+      porque: 'Son ejercicios de rotación, flexión lateral y movilidad escapular: preparan la rotación sentada.' },
+    { id: 'c2-st-m1', tema: 'mat2an', tipo: 'lista', q: 'Regresiones Mat 1 del Spine twist',
+      a: ['Spine stretch forward', 'Spine stretch side', 'Saw'], dist: ['Swan', 'Hundred', 'Single leg kicks'], noDonar: true },
+    { id: 'c2-teaser-pre', tema: 'mat2an', tipo: 'lista', q: 'Regresiones Pre-Pilates de los Teaser',
+      a: R2.pmTeaser, dist: ['Rocket', 'Standing extension', 'Squats', 'Seated side stretch'], noDonar: true,
+      porque: 'Unidad interna, unidad externa y movilidad de columna en flexión: lo que pide subir a la V.' },
+    { id: 'c2-roll-pre', tema: 'mat2an', tipo: 'lista', q: 'Regresiones Pre-Pilates del Roll over y el Modified corkscrew',
+      a: R2.pmRoll, dist: ['Rocket', 'Standing extension', 'Squats', 'Marching standing'], noDonar: true },
+    { id: 'c2-obj-jack', tema: 'mat2an', tipo: 'lista', q: 'Objetivos del Jackknife',
+      a: ficha('n19').obj, dist: ['Extensión de columna', 'Flexión lateral de columna', 'Estirar cuádriceps'] },
+    { id: 'c2-obj-cork', tema: 'mat2an', tipo: 'lista', q: 'Objetivos del Corkscrew',
+      a: ficha('n17').obj, dist: ['Extensión de columna', 'Flexión lateral de columna', 'Fuerza de cuádriceps'] },
+    { id: 'c2-obj-sb', tema: 'mat2an', tipo: 'lista', q: 'Objetivos del Shoulder bridge',
+      a: ficha('n22').obj, dist: ['Movilidad de columna en rotación', 'Flexión lateral', 'Estirar isquiotibiales'] },
+    { id: 'c2-boom', tema: 'mat2an', tipo: 'simple', q: '¿Qué principio del movimiento le asignaste al Boomerang?',
+      a: ['Movimiento global'], dist: ['Integración del tronco', 'Fuerza y potencia de MMII', 'Fuerza y equilibrio de MMSS'],
+      porque: 'Es el último del Mat 2 y reúne todo: tronco, brazos y piernas (roll over, teaser y circunducción de brazos).' },
+    { id: 'c2-twist', tema: 'mat2an', tipo: 'simple', q: 'El "Seated twist" de tu análisis MAT 2, ¿qué ejercicio es?',
+      a: ['El Twist del manual: sentado sobre una cadera sube a la plancha lateral y rota'],
+      op: 'El Twist: de sentado de costado a plancha lateral con rotación',
+      dist: ['El Seated Twist de Pre-Pilates: sentado, rota el tronco', 'El Spine twist: sentado con piernas al frente, rota con pulsos', 'El Saw: rota y flexiona hacia el pie contrario'],
+      porque: 'Comparte nombre con el Seated Twist de Pre-Pilates, pero en Mat 2 es el Twist, de la familia lateral (con Kneeling side kicks y Side bend).' }
+  );
+  CLOZES.push(
+    { id: 'z2-1', tema: 'mat2an', t: 'En el Spine twist, sentarse sobre un [rodillo] o un bloque de yoga asiste si hay acortamiento de [isquiotibiales].',
+      dist: [['aro', 'bola'], ['cuádriceps', 'aductores']] },
+    { id: 'z2-2', tema: 'mat2an', t: 'En el Modified corkscrew, las pesas en los tobillos [asisten] y [resisten].', dist: ['estiran', 'relajan'] },
+    { id: 'z2-3', tema: 'mat2an', t: 'En el Leg pull up, una bola o un rodillo en la [espalda] asiste si no logra subir la espalda del todo.',
+      dist: ['nuca', 'muñeca', 'rodilla'] }
+  );
+
+  /* ============================================================
+     FAMILIAS POR POSICIÓN
+     ============================================================ */
+  const enLibros = {};
+  FAMILIAS.forEach(f => { const k = norm(f.n); (enLibros[k] = enLibros[k] || new Set()).add(f.libro); });
+  /* ¿de qué libro es? — por familia; afuera los que comparten nombre en dos libros (Swan, Swimming) */
+  FAMILIA_POS.forEach((pos, i) => {
+    const xs = FAMILIAS.filter(f => f.pos === pos && enLibros[norm(f.n)].size === 1);
+    const grupos = {};
+    xs.forEach(f => { const g = NOM_LIBRO[f.libro]; if (!(grupos[g] || []).includes(f.n)) (grupos[g] = grupos[g] || []).push(f.n); });
+    if (Object.keys(grupos).length >= 2)
+      CLASIFICACIONES.push({ id: 'cf-libro' + i, tema: 'familias', q: `Familia ${pos.toLowerCase()}: ¿de qué libro es cada ejercicio?`, grupos,
+        porque: 'Cada familia arranca en Pre-Pilates (preparación), sigue en Mat 1 y termina en Mat 2: así se arman regresiones y progresiones dentro de la misma posición.' });
+  });
+  /* ¿a qué familia pertenece? (Mat 1 y Mat 2) */
+  const famMat = libro => {
+    const g = {};
+    FAMILIAS.filter(f => f.libro === libro && enLibros[norm(f.n)].size === 1).forEach(f => {
+      const enVarias = FAMILIAS.filter(o => norm(o.n) === norm(f.n)).map(o => o.pos);
+      if (new Set(enVarias).size > 1) return;           // Leg pull: en prono y en planchas
+      if (f.n === 'Hip circles') return;                 // tu planilla lo ubica en supino; el manual, sentado
+      if (!(g[f.pos] || []).includes(f.n)) (g[f.pos] = g[f.pos] || []).push(f.n);
+    });
+    return g;
+  };
+  CLASIFICACIONES.push(
+    { id: 'cf-fam1', tema: 'familias', q: 'Mat 1: ¿en qué familia de posición está?', grupos: famMat('mat1') },
+    { id: 'cf-fam2', tema: 'familias', q: 'Mat 2: ¿en qué familia de posición está?', grupos: famMat('mat2') }
+  );
+  /* las familias, de la preparación al ejercicio más avanzado */
+  SECUENCIAS.push(
+    { id: 'sf-prono', tema: 'familias', q: 'Familia prona: ordená de Pre-Pilates a Mat 2', pasos: ['Mini swan', 'Swan (Mat 1)', 'Swan dive', 'Rocking'],
+      porque: 'Mini swan prepara la extensión; el Swan de Mat 1 la lleva más lejos; Swan dive y Rocking agregan el balanceo.' },
+    { id: 'sf-sed', tema: 'familias', q: 'Familia sedente: ordená de Pre-Pilates a Mat 2', pasos: ['Seated twist (Pre-Pilates)', 'Saw', 'Spine twist'],
+      porque: 'La rotación sentada empieza simple en Pre-Pilates, suma flexión en el Saw y pulsos con piernas largas en el Spine twist.' },
+    { id: 'sf-lado', tema: 'familias', q: 'Familia lateral: ordená de Pre-Pilates a Mat 2', pasos: ['Prep tabla lateral', 'Side leg lifts', 'Kneeling side kicks', 'Side bend (mermaid)'],
+      porque: 'De la preparación de la plancha lateral a la serie lateral acostada, luego de rodillas y por último en plancha lateral completa.' }
+  );
+  CARDS.push(
+    { id: 'cf-1', tema: 'familias', tipo: 'simple', q: '¿Qué agrupa una "familia" en tu resumen de ejercicios?',
+      a: ['Los ejercicios que comparten posición de partida, de Pre-Pilates a Mat 2'],
+      op: 'Ejercicios con la misma posición de partida, de Pre-Pilates a Mat 2',
+      dist: ['Ejercicios con el mismo principio del movimiento', 'Ejercicios que usan el mismo accesorio', 'Ejercicios con la misma cantidad de series'],
+      porque: 'Dentro de una familia, lo de Pre-Pilates suele ser la regresión de lo de Mat 1, y lo de Mat 1, de lo de Mat 2.' },
+    { id: 'cf-2', tema: 'familias', tipo: 'lista', q: 'Familia de planchas: ¿qué ejercicios de Mat están en ella?',
+      a: ['Push up', 'Leg pull down', 'Leg pull up'], dist: ['Swan dive', 'Spine twist', 'Corkscrew', 'Seal'], noDonar: true }
+  );
+})();
+
+</script>
+<script>
 /* ============================================================
    AnatoApp — figuras del manual dibujadas en código (SVG)
 
@@ -12012,6 +14222,12 @@ function ejerciciosClase() {
   });
   return [...pre, ...bb];
 }
+/* foto (Pre-Pilates) o figura del manual de cada ejercicio */
+function miniClase(e) {
+  if (e.f !== 'pre') return miniEj({ bb: e.id });
+  const p = PREMAT.find(x => norm(x.n) === norm(e.n));
+  return p ? miniEj({ pm: p.id }) : '';
+}
 let CATALOGO_CLASE = null;
 const ejClase = id => (CATALOGO_CLASE || (CATALOGO_CLASE = ejerciciosClase())).find(e => e.id === id);
 
@@ -12073,6 +14289,7 @@ function filasClase(c) {
     const trans = prev && prev.pos !== e.pos ? transicionHTML(prev, e) : '';
     return `${trans}<li class="cl-fila" data-i="${i}">
       <span class="cl-n">${i + 1}</span>
+      <span class="cl-mini">${miniClase(e)}</span>
       <div class="cl-info"><b>${esc(e.n)}</b>
         <small><span class="cl-pos p-${e.pos}">${p.ico} ${p.nom}</span> ${e.f === 'pre' ? 'Pre-Pilates' : e.f === 'mat1' ? 'Mat 1' : 'Mat 2'}${e.reps ? ` · manual: ${esc(e.reps)}` : ''}</small></div>
       <label class="cl-reps"><input type="number" inputmode="numeric" min="1" max="100" step="1" value="${x.reps || ''}" placeholder="${r ? r[0] + (r[1] > r[0] ? '–' + r[1] : '') : '#'}" aria-label="Repeticiones de ${esc(e.n)}"><small>${unidadReps(e.reps)}</small></label>
@@ -12120,7 +14337,7 @@ function pintarPoolClase() {
   const lista = ejerciciosClase().filter(e => (e.f === 'pre' || m.fuentes.includes(e.f)) &&
     (!filtroClase.pos || e.pos === filtroClase.pos) && (!filtroClase.f || e.f === filtroClase.f));
   $('#clPool').innerHTML = lista.length ? lista.map(e => `<button type="button" class="cl-ej ${usados.has(e.id) ? 'usado' : ''}" data-id="${e.id}">
-      <span class="cl-pos p-${e.pos}">${POS_CLASE[e.pos].ico}</span><b>${esc(e.n)}</b><small>${e.f === 'pre' ? 'Pre-Pilates' : e.f === 'mat1' ? 'Mat 1' : 'Mat 2'}${usados.has(e.id) ? ' · ya está' : ''}</small></button>`).join('')
+      <span class="cl-mini">${miniClase(e)}</span><span class="cl-pos p-${e.pos}">${POS_CLASE[e.pos].ico}</span><b>${esc(e.n)}</b><small>${e.f === 'pre' ? 'Pre-Pilates' : e.f === 'mat1' ? 'Mat 1' : 'Mat 2'}${usados.has(e.id) ? ' · ya está' : ''}</small></button>`).join('')
     : '<p class="vacio">No hay ejercicios con ese filtro.</p>';
   $$('.cl-ej').forEach(b => b.onclick = () => {
     c.items.push({ id: b.dataset.id, reps: null });
@@ -13017,6 +15234,16 @@ function ejAnim(it) {
   fig.className = 'fig-ej';
   ej.el.prepend(fig);
   FIGURA.reproductor(fig, { ...POSES[e.id], nom: '' }, { fantasma: false });
+  /* después de responder se puede ver el ejercicio paso a paso, con sus fases */
+  const comprobar = ej.comprobar;
+  ej.comprobar = () => {
+    const r = comprobar();
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'btn small ghost ver-pasos'; b.textContent = '⤢ Verlo paso a paso';
+    b.onclick = () => abrirVisorGrande(e);
+    fig.after(b);
+    return r;
+  };
   return ej;
 }
 
@@ -13257,9 +15484,9 @@ function paresRepertorio(n) {
           ['Swan', 'Estabilidad escapular'], ['Kneeling side family', 'Cadena / sistema lateral']];
 }
 /* Ejercicio ↔ series, sin repetir el valor de la derecha en el mismo juego. */
-function paresSeries(n) {
+function paresSeries(n, lista = MAT1) {
   const usados = new Set(), out = [];
-  for (const m of mezclar(MAT1.filter(m => m.series))) {
+  for (const m of mezclar(lista.filter(m => m.series))) {
     if (out.length >= n) break;
     if (usados.has(m.series)) continue;
     usados.add(m.series);
@@ -13271,6 +15498,7 @@ function ejPares(it, joven) {
   const x = it.ref, n = joven ? 4 : 5;
   const pares = x.dinamico === 'repertorio' ? paresRepertorio(n)
               : x.dinamico === 'mat1series' ? paresSeries(n)
+              : x.dinamico === 'mat2series' ? paresSeries(n, MAT2)
               : tomar(x.pares, Math.min(n, x.pares.length));
   const izq = mezclar(pares.map((p, k) => ({ t: p[0], k })));
   const der = mezclar(pares.map((p, k) => ({ t: p[1], k })));
@@ -13605,7 +15833,7 @@ function pintarEjercicio() {
         ${en.it.tema && TEMAS[en.it.tema] && fmt !== 'anim' ? `<span class="tag tag-tema c-${TEMAS[en.it.tema].color}">${TEMAS[en.it.tema].icono} ${TEMAS[en.it.tema].nom}</span>` : ''}
       </div>
       <p class="ses-consigna">${ej.consigna}</p>
-      ${ej.pregunta ? `<h2 class="ses-preg">${ej.pregunta}</h2>` : ''}
+      ${ej.pregunta ? `${ilusPregunta(en.it)}<h2 class="ses-preg">${ej.pregunta}</h2>` : ''}
       <div class="ses-ej"></div>
     </div>
     ${ej.manual ? '' : `<div class="ses-pie"><div class="ses-pie-in">
@@ -13899,6 +16127,8 @@ function vInicio() {
           <p>${Object.keys(S.items).length ? `Mañana ${manana ? `vuelven ${manana}` : 'no vence nada'}. Seguí la ruta para sumar contenido nuevo.` : 'Empezá la ruta: cada lección presenta unos pocos conceptos nuevos.'}</p></div>`}
     </section>
 
+    ${ejDelDiaHTML()}
+
     <h2 class="secc">Tu ruta</h2>
     <div class="ruta">
       ${UNIDADES.map((u, i) => {
@@ -13921,6 +16151,33 @@ function vInicio() {
   if (r) r.onclick = () => iniciarSesion('repaso', sesionRepaso(), 'Repaso del día');
   $('#pjCard').onclick = () => ir('estudio');
   $$('.nodo').forEach(b => b.onclick = () => hojaUnidad(UNIDADES.find(u => u.id === b.dataset.u)));
+  conectarEjDelDia();
+}
+/* ejercicio del día: uno del manual por fecha, animado; se abre paso a paso */
+function ejDelDia() {
+  const con = BB.ejercicios.filter(e => POSES[e.id] && POSES[e.id].poses.length > 1);
+  const d = Math.floor(new Date(HOY() + 'T12:00:00').getTime() / 864e5);
+  return con[((d * 7) % con.length + con.length) % con.length];
+}
+function ejDelDiaHTML() {
+  const e = ejDelDia();
+  if (!e) return '';
+  const a2 = MAT2.find(m => m.bb === e.id), a1 = e.analisis && MAT1.find(m => m.id === e.analisis);
+  const obj = (a2 && a2.obj) || (a1 && a1.obj) || e.prop.slice(0, 2);
+  return `<section class="dia-card" id="ejDia">
+    <div class="dia-fig" aria-hidden="true"></div>
+    <div class="dia-txt"><small>Ejercicio del día · ${esc(NOM_FUENTE[e.f])}</small><b>${esc(e.n)}</b>
+      <p>${esc(obj.slice(0, 2).join(' · '))}</p>
+      <button type="button" class="btn small" id="ejDiaVer">⤢ Verlo paso a paso</button></div>
+  </section>`;
+}
+function conectarEjDelDia() {
+  const c = $('#ejDia');
+  if (!c) return;
+  const e = ejDelDia();
+  FIGURA.reproductor($('.dia-fig', c), { ...POSES[e.id], nom: e.n }, { fantasma: false,
+    resp: POSES[e.id].poses.map((_, k) => { const p = pasoDePose(POSES[e.id], (k + 1) % POSES[e.id].poses.length); return p > 0 && e.seq[p - 1] ? respDeFase(e.seq[p - 1].fase) : null; }) });
+  $('#ejDiaVer').onclick = () => { SND.toque(); abrirVisorGrande(e); };
 }
 
 function hojaUnidad(u) {
@@ -14271,7 +16528,7 @@ function finJuegoMapa() {
 let temaAbierto = null;
 let pestanaApuntes = 'tarjetas';
 function vApuntes() {
-  const pestanas = [['tarjetas', 'Tarjetas'], ['repertorio', `Repertorio · ${BB.ejercicios.length}`], ['premat', `Pre-Pilates · ${PREMAT.length}`],
+  const pestanas = [['tarjetas', 'Tarjetas'], ['repertorio', `Repertorio · ${BB.ejercicios.length}`], ['familias', 'Familias'], ['premat', `Pre-Pilates · ${PREMAT.length}`],
     ['manual', 'Manual'], ['posiciones', 'Posiciones'], ['examenes', 'Tus exámenes']];
   if (pestanaApuntes === 'mat1') pestanaApuntes = 'repertorio';
   app().innerHTML = `
@@ -14279,12 +16536,12 @@ function vApuntes() {
     <p class="sub">Tus apuntes y fichas. Usalos para reparar lo que falló, no para releer de corrido: releer se siente productivo y casi no deja huella.</p>
     <div class="seg pestanas" role="tablist">${pestanas.map(([k, t]) =>
       `<button type="button" role="tab" aria-selected="${pestanaApuntes === k}" class="${pestanaApuntes === k ? 'on' : ''}" data-p="${k}"><b>${t}</b></button>`).join('')}</div>
-    <input class="buscador" id="q" type="search" placeholder="${{ tarjetas: 'Buscar músculo, ejercicio, concepto…', manual: 'Buscar en el manual…', posiciones: 'Buscar posición…', examenes: 'Buscar en tus exámenes…' }[pestanaApuntes] || 'Buscar ejercicio, posición, accesorio…'}" aria-label="Buscar">
+    <input class="buscador" id="q" type="search" placeholder="${{ tarjetas: 'Buscar músculo, ejercicio, concepto…', manual: 'Buscar en el manual…', posiciones: 'Buscar posición…', examenes: 'Buscar en tus exámenes…', familias: 'Buscar ejercicio, posición, objetivo…' }[pestanaApuntes] || 'Buscar ejercicio, posición, accesorio…'}" aria-label="Buscar">
     <div id="lista"></div>`;
   $$('.pestanas button').forEach(b => b.onclick = () => { pestanaApuntes = b.dataset.p; vApuntes(); });
   const activa = $('.pestanas .on');
   if (activa) activa.scrollIntoView({ inline: 'center', block: 'nearest' });
-  const pintar = { tarjetas: pintarApuntes, repertorio: pintarRepertorio, premat: pintarPremat, manual: pintarManual, posiciones: pintarPosiciones, examenes: pintarExamenes }[pestanaApuntes];
+  const pintar = { tarjetas: pintarApuntes, repertorio: pintarRepertorio, familias: pintarFamilias, premat: pintarPremat, manual: pintarManual, posiciones: pintarPosiciones, examenes: pintarExamenes }[pestanaApuntes];
   $('#q').oninput = () => pintar($('#q').value);
   pintar('');
   if (temaAbierto && pestanaApuntes === 'tarjetas') setTimeout(() => { const a = $('.acord.open'); if (a) a.scrollIntoView({ block: 'start' }); }, 30);
@@ -14314,13 +16571,7 @@ function fichaRepHTML(e) {
       <span class="rep-t"><b>${esc(e.n)}</b><small>${esc(NOM_FUENTE[e.f])} · ${esc(BB.nomPos[e.pos] || '')} · ${esc(e.nivel)}</small></span>
       ${e.osteo ? `<span class="pill osteo-${e.osteo}" title="${esc(e.osteoTxt || '')}">${e.osteo === 'evitar' ? '🦴✕' : e.osteo === 'apto' ? '🦴✓' : '🦴~'}</span>` : ''}</summary>
     <div class="rep-cuerpo">
-      ${ej ? `<div class="rep-anim"><div class="rep-fig" aria-live="off"></div>
-        <div class="rep-ctrl">
-          <button type="button" class="btn small ghost" data-acc="ant" aria-label="Paso anterior">◀</button>
-          <button type="button" class="btn small" data-acc="play" aria-label="Pausar o reproducir">⏸</button>
-          <button type="button" class="btn small ghost" data-acc="sig" aria-label="Paso siguiente">▶</button>
-        </div>
-        <div class="rep-fase" aria-live="polite"></div></div>` : ''}
+      ${ej ? visorHTML(e) : ''}
       <ol class="rep-pasos">
         <li data-paso="0"><b>Posición inicial</b> ${esc(e.inicial)}</li>
         ${e.seq.map((s, i) => `<li data-paso="${i + 1}"><b>${esc(s.fase)}</b> ${esc(s.accion)}</li>`).join('')}
@@ -14337,31 +16588,120 @@ function fichaRepHTML(e) {
         ${e.trans ? `<dt>Transición</dt><dd>${esc(e.trans)}</dd>` : ''}
       </dl>
       ${e.analisis && MAT1.find(m => m.id === e.analisis) ? `<div class="rep-analisis"><h5>Tu análisis MAT 1 (accesorios, regresiones y progresiones)</h5>${fichaMat1HTML(MAT1.find(m => m.id === e.analisis))}</div>` : ''}
+      ${MAT2.filter(m => m.bb === e.id).map(m => `<div class="rep-analisis"><h5>Tu análisis MAT 2${MAT2.filter(x => x.bb === e.id).length > 1 ? ` · ${esc(m.n)}` : ''} (accesorios, regresiones y progresiones)</h5>${fichaMat2HTML(m)}</div>`).join('')}
       <p class="pag-manual">📖 Ver manual: ${esc(pagManual(e.f, e.pag))}</p>
     </div>
   </details>`;
 }
-/* un reproductor por ficha abierta; se destruye al cerrarla */
-function activarFichaRep(d) {
-  const e = EJ_BB[d.dataset.ej], ej = POSES[e.id], fig = $('.rep-fig', d);
-  if (!ej || !fig) return;
-  const pasos = $$('.rep-pasos li', d), fase = $('.rep-fase', d), bPlay = $('[data-acc="play"]', d);
+/* --- visor de animación: reproducir, paso a paso, deslizador, cámara lenta y capas --- */
+const respDeFase = fase => /inhala.*exhala|continuo/i.test(fase || '') ? 'ambas' : /inhala/i.test(fase || '') ? 'inhala' : /exhala/i.test(fase || '') ? 'exhala' : null;
+function visorHTML(e, grande = false) {
+  const ej = POSES[e.id], n = ej.poses.length;
+  const marcas = ej.poses.map((_, k) => `<i style="left:${(k / n * 100).toFixed(2)}%"></i>`).join('');
+  return `<div class="visor${grande ? ' grande' : ''}">
+    <div class="rep-fig" aria-live="off"></div>
+    <div class="rep-fase" aria-live="polite"></div>
+    ${n > 1 ? `<label class="visor-tl"><span class="sr">Recorrer el movimiento</span><span class="tl-marcas" aria-hidden="true">${marcas}</span>
+      <input type="range" min="0" max="${n}" step="0.002" value="0"></label>
+    <div class="rep-ctrl">
+      <button type="button" class="btn small ghost" data-acc="ant" aria-label="Paso anterior">◀</button>
+      <button type="button" class="btn small" data-acc="play" aria-label="Pausar o reproducir">⏸</button>
+      <button type="button" class="btn small ghost" data-acc="sig" aria-label="Paso siguiente">▶</button>
+      <span class="vel" role="group" aria-label="Velocidad">${[[1, '1×'], [0.5, '½×'], [0.25, '¼×']].map(([v, t]) =>
+        `<button type="button" class="chip-vel${v === 1 ? ' on' : ''}" data-vel="${v}" aria-pressed="${v === 1}">${t}</button>`).join('')}</span>
+      ${grande ? '' : '<button type="button" class="btn small ghost" data-acc="grande" aria-label="Ver en grande, paso a paso">⤢</button>'}
+    </div>` : ''}
+    <div class="visor-capas">
+      ${n > 1 ? '<button type="button" class="chip-capa" data-capa="tray" aria-pressed="false">〰️ Trayectoria</button>' : ''}
+      <button type="button" class="chip-capa" data-capa="fisica" aria-pressed="false">⚖️ Centro de masa</button>
+      ${n > 1 ? '<button type="button" class="chip-capa on" data-capa="fantasma" aria-pressed="true">👻 Hacia dónde va</button>' : ''}
+    </div>
+    ${n > 1 ? '<div class="visor-tira" role="list"></div>' : ''}
+  </div>`;
+}
+/* conecta un visor; pasos = <li data-paso> de la lista de pasos (opcional) */
+function activarVisor(raiz, e, pasos = []) {
+  const ej = POSES[e.id], n = ej.poses.length, fig = $('.rep-fig', raiz), fase = $('.rep-fase', raiz);
+  const bPlay = $('[data-acc="play"]', raiz), rango = $('.visor-tl input', raiz), tiraEl = $('.visor-tira', raiz);
+  /* respiración de cada transición: la del paso al que se llega */
+  const resp = ej.poses.map((_, k) => { const p = pasoDePose(ej, (k + 1) % n); return p > 0 && e.seq[p - 1] ? respDeFase(e.seq[p - 1].fase) : null; });
+  let arrastrando = false, mostrado = -1;
+  const marcar = p => {
+    if (p === mostrado) return;
+    mostrado = p;
+    pasos.forEach(li => li.classList.toggle('on', +li.dataset.paso === p));
+    fase.innerHTML = faseHTML(e, p);
+  };
+  const tiraOn = k => tiraEl && $$('.tira-p', tiraEl).forEach(b => { b.classList.toggle('on', +b.dataset.k === k); b.setAttribute('aria-current', +b.dataset.k === k ? 'step' : 'false'); });
   const rep = FIGURA.reproductor(fig, ej, {
-    alCambiar: i => {
-      const p = pasoDePose(ej, i);
-      pasos.forEach(li => li.classList.toggle('on', +li.dataset.paso === p));
-      fase.innerHTML = faseHTML(e, p);
+    resp, capas: { fantasma: n > 1 },
+    alCambiar: i => { marcar(pasoDePose(ej, i)); tiraOn(i); },
+    alAvanzar: pos => {
+      if (rango && !arrastrando) rango.value = pos;
+      /* en movimiento se muestra el paso que se está haciendo (el de la pose a la que va) */
+      const i = Math.floor(pos), f = pos - i;
+      if (f > 0.02) marcar(pasoDePose(ej, (i + 1) % n));
     }
   });
-  d._rep = rep;
-  bPlay.onclick = () => { if (rep.reproduciendo) { rep.pausar(); bPlay.textContent = '▶︎'; } else { rep.reanudar(); bPlay.textContent = '⏸'; } SND.toque(); };
-  $('[data-acc="sig"]', d).onclick = () => { rep.pausar(); bPlay.textContent = '▶︎'; rep.siguiente(); SND.toque(); };
-  $('[data-acc="ant"]', d).onclick = () => { rep.pausar(); bPlay.textContent = '▶︎'; rep.anterior(); SND.toque(); };
-  /* tocar un paso lleva la figura a esa pose */
+  const icono = () => { if (bPlay) bPlay.textContent = rep.enBucle ? '⏸' : '▶︎'; };
+  if (bPlay) bPlay.onclick = () => { arrastrando = false; if (rep.enBucle) rep.pausar(); else rep.reanudar(); icono(); SND.toque(); };
+  const sig = $('[data-acc="sig"]', raiz), ant = $('[data-acc="ant"]', raiz);
+  if (sig) sig.onclick = () => { arrastrando = false; rep.siguiente(); icono(); SND.toque(); };
+  if (ant) ant.onclick = () => { arrastrando = false; rep.anterior(); icono(); SND.toque(); };
+  if (rango) {
+    rango.oninput = () => { arrastrando = true; rep.irA(+rango.value % n); icono(); };
+    ['change', 'pointerup', 'touchend', 'keyup', 'blur'].forEach(ev => rango.addEventListener(ev, () => { arrastrando = false; }));
+  }
+  $$('[data-vel]', raiz).forEach(b => b.onclick = () => {
+    rep.velocidad = +b.dataset.vel;
+    $$('[data-vel]', raiz).forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); });
+    SND.toque();
+  });
+  $$('[data-capa]', raiz).forEach(b => b.onclick = () => {
+    const on = !b.classList.contains('on');
+    b.classList.toggle('on', on); b.setAttribute('aria-pressed', on);
+    rep.capa(b.dataset.capa, on); SND.toque();
+  });
+  if (tiraEl) {
+    const mini = FIGURA.tira(ej);
+    tiraEl.innerHTML = mini.map((svg, k) => { const p = pasoDePose(ej, k);
+      const cl = p > 0 && e.seq[p - 1] ? respDeFase(e.seq[p - 1].fase) || '' : 'ini';
+      return `<button type="button" class="tira-p ${cl}" data-k="${k}" role="listitem" aria-label="${p ? 'Paso ' + p : 'Posición inicial'}">${svg}<b>${p ? p : '0'}</b></button>`; }).join('');
+    $$('.tira-p', tiraEl).forEach(b => b.onclick = () => { rep.ir(+b.dataset.k); icono(); SND.toque(); });
+    tiraOn(0);
+  }
+  /* tocar un paso de la lista lleva la figura a esa pose */
   pasos.forEach(li => li.onclick = () => {
     const k = ej.poses.findIndex((_, i) => pasoDePose(ej, i) === +li.dataset.paso);
-    if (k >= 0) { rep.pausar(); bPlay.textContent = '▶︎'; rep.ir(k); SND.toque(); }
+    if (k >= 0) { rep.ir(k); icono(); SND.toque(); }
   });
+  const gr = $('[data-acc="grande"]', raiz);
+  if (gr) gr.onclick = () => { rep.pausar(); icono(); abrirVisorGrande(e); };
+  return rep;
+}
+/* el visor en grande: la figura arriba y los pasos del manual debajo */
+function abrirVisorGrande(e) {
+  const m = abrirModal(`<div class="visor-modal">
+    <div class="vm-cab"><h3>${esc(e.n)}</h3><button type="button" class="btn small ghost" data-cerrar aria-label="Cerrar">✕</button></div>
+    ${visorHTML(e, true)}
+    <ol class="rep-pasos">
+      <li data-paso="0"><b>Posición inicial</b> ${esc(e.inicial)}</li>
+      ${e.seq.map((x, i) => `<li data-paso="${i + 1}"><b>${esc(x.fase)}</b> ${esc(x.accion)}</li>`).join('')}
+    </ol>
+    <p class="micro">◀ ▶ hacen un paso por vez. Arrastrá la barra para ver cualquier instante del movimiento; con ¼× va en cámara lenta. ⚖️ muestra el centro de masa: si cae sobre la base de apoyo (verde) la posición se sostiene.</p>
+  </div>`);
+  m.classList.add('modal-visor');
+  const rep = activarVisor(m, e, $$('.rep-pasos li', m));
+  const cerrar = () => { rep.destruir(); cerrarModal(); };
+  $('[data-cerrar]', m).onclick = cerrar;
+  m.addEventListener('click', ev => { if (ev.target === m) rep.destruir(); });
+}
+/* un reproductor por ficha abierta; se destruye al cerrarla */
+function activarFichaRep(d) {
+  const e = EJ_BB[d.dataset.ej];
+  llenarMinis(d);
+  if (!POSES[e.id] || !$('.visor', d)) return;
+  d._rep = activarVisor($('.visor', d), e, $$('.rep-pasos li', d));
 }
 function conectarFichasRep(cont) {
   $$('.ficha-rep', cont).forEach(d => d.addEventListener('toggle', () => {
@@ -14381,7 +16721,7 @@ function pintarRepertorio(filtro) {
     ${['', ...NIVELES_EJ].map(n => `<button type="button" class="chip-reg ${filtroRep.nivel === n ? 'on' : ''}" data-nivel="${n}">${n || 'Todos los niveles'}</button>`).join('')}
     <button type="button" class="chip-reg ${filtroRep.osteo ? 'on' : ''}" data-osteo="1">🦴 Apto o modificado con osteoporosis</button>
   </div>
-  <p class="micro">Tocá un ejercicio para ver la animación: cada fase muestra si se inhala o se exhala. Con ◀ ▶ vas paso a paso, o tocá un paso de la lista. El orden es el del manual.</p>`;
+  <p class="micro">Tocá un ejercicio para ver la animación: cada fase muestra si se inhala o se exhala (el tórax se expande al inhalar). Con ◀ ▶ vas paso a paso, la barra recorre el movimiento, ¼× es cámara lenta y ⤢ lo abre en grande. El orden es el del manual.</p>`;
   cont.innerHTML = chips + (hits.length ? ['mat1', 'mat2'].map(fu => {
     const xs = hits.filter(e => e.f === fu);
     return xs.length ? `<h3 class="grupo-t">${NOM_FUENTE[fu]} <i>${xs.length}</i></h3>${xs.map(fichaRepHTML).join('')}` : '';
@@ -14467,16 +16807,147 @@ function fichaMat1HTML(m) {
       <dt>Principio (BB)</dt><dd>${esc(m.bb)}</dd>
       <dt>Objetivo</dt><dd>${m.obj.length > 1 ? `<ol>${m.obj.map(o => `<li>${esc(o)}</li>`).join('')}</ol>` : esc(m.obj[0] || '')}</dd>
       ${m.resp ? `<dt>Respiración</dt><dd>${esc(m.resp)}</dd>` : ''}
-      <dt>Regresiones Pre-Pilates</dt><dd>${esc(m.regPre || '—')}</dd>
-      <dt>Regresiones MAT 1</dt><dd>${listaComas(m.regMat1)}</dd>
-      <dt>Progresiones MAT 1</dt><dd>${listaComas(m.progMat1)}</dd>
-      <dt>Progresiones MAT 2</dt><dd>${listaComas(m.progMat2)}</dd>
+      <dt>Regresiones Pre-Pilates</dt><dd>${chipsTexto(m.regPre, 'pre')}</dd>
+      <dt>Regresiones MAT 1</dt><dd>${chipsEj(m.regMat1, 'mat1')}</dd>
+      <dt>Progresiones MAT 1</dt><dd>${chipsEj(m.progMat1, 'mat1')}</dd>
+      <dt>Progresiones MAT 2</dt><dd>${chipsEj(m.progMat2, 'mat2')}</dd>
     </dl>
     <div class="props">${props('Accesorio que asiste', m.asiste)}${props('Accesorio que resiste', m.resiste)}</div>
     ${m.nota ? `<p class="pq"><b>Nota:</b> ${esc(m.nota)}</p>` : ''}
     ${m.revisar ? `<div class="revisar"><b>Para revisar en tu planilla</b>${m.revisar.map(r => `<p>${esc(r)}</p>`).join('')}</div>` : ''}
   </details>`;
 }
+/* --- miniaturas de ejercicios: foto (Pre-Pilates) o figura del manual ---
+   Se insertan al abrir cada ficha (llenarMinis), así la lista no carga cientos
+   de dibujos de entrada. Tocar un chip abre el ejercicio. */
+const _minis = new Map();
+function miniEj(ref) {
+  if (!ref) return '';
+  if (ref.pm) { const src = imagen(ref.pm); return src ? `<img src="${src}" alt="" loading="lazy">` : (POS_PREMAT[(PM[ref.pm] || {}).pos] ? miniEj({ bb: POS_PREMAT[PM[ref.pm].pos] }) : ''); }
+  if (ref.bb && POSES[ref.bb]) {
+    if (!_minis.has(ref.bb)) { const ej = POSES[ref.bb]; _minis.set(ref.bb, FIGURA.svgEstatico(ej, ej.poses.length > 1 ? Math.min(ej.poses.length - 1, 1 + Math.floor((ej.poses.length - 1) / 2)) : 0)); }
+    return _minis.get(ref.bb);
+  }
+  return '';
+}
+const refAttr = r => r ? (r.bb ? ` data-bb="${r.bb}"` : r.pm ? ` data-pm="${r.pm}"` : '') : '';
+function chipEj(nombre, libro = '') {
+  const r = EJ_REF(nombre, libro);
+  return `<button type="button" class="chip-ej${r ? '' : ' sin'}"${refAttr(r)}${r ? '' : ' disabled'}>${r ? '<span class="ce-img" data-mini></span>' : ''}<span>${esc(nombre)}</span></button>`;
+}
+const chipsEj = (xs, libro = '') => xs && xs.length ? `<span class="chips-ej">${xs.map(n => chipEj(n, libro)).join('')}</span>` : '<span class="nada">—</span>';
+/* "Unidad interna: Pelvic clock, Fingertip abdominals · Unidad externa: …" → grupos con chips */
+function chipsTexto(txt, libro = '') {
+  if (!txt) return '<span class="nada">—</span>';
+  return txt.split(' · ').map(g => {
+    const i = g.indexOf(':'), et = i > 0 ? g.slice(0, i) : '', resto = i > 0 ? g.slice(i + 1) : g;
+    return `<div class="grupo-chips">${et ? `<small>${esc(et)}</small>` : ''}${chipsEj(resto.split(/,\s*/).map(x => x.trim()).filter(Boolean), libro)}</div>`;
+  }).join('');
+}
+function llenarMinis(raiz) {
+  $$('[data-mini]', raiz).forEach(sp => {
+    const b = sp.closest('[data-bb],[data-pm]');
+    sp.innerHTML = miniEj(b && (b.dataset.bb ? { bb: b.dataset.bb } : { pm: b.dataset.pm }));
+    sp.removeAttribute('data-mini');
+  });
+}
+/* tocar un ejercicio: animación paso a paso o ficha de Pre-Pilates con foto */
+function abrirEjercicio(ref) {
+  if (ref.bb && EJ_BB[ref.bb] && POSES[ref.bb]) return abrirVisorGrande(EJ_BB[ref.bb]);
+  if (ref.pm && PM[ref.pm]) {
+    const m = abrirModal(`<div class="vm-cab"><h3>${esc(PM[ref.pm].n)}</h3><button type="button" class="btn small ghost" data-cerrar aria-label="Cerrar">✕</button></div>${fichaPremHTML(PM[ref.pm]).replace('<details class="ficha-pm">', '<details class="ficha-pm" open>')}`);
+    m.classList.add('modal-visor');
+    $('[data-cerrar]', m).onclick = cerrarModal;
+  }
+}
+document.addEventListener('click', ev => {
+  const b = ev.target.closest && ev.target.closest('.chip-ej[data-bb], .chip-ej[data-pm], .fam-ej[data-bb], .fam-ej[data-pm]');
+  if (!b) return;
+  ev.preventDefault();
+  SND.toque();
+  abrirEjercicio(b.dataset.bb ? { bb: b.dataset.bb } : { pm: b.dataset.pm });
+});
+
+/* --- ilustración de la pregunta: si nombra un solo ejercicio y pregunta por sus
+   regresiones, objetivos, accesorios, series o respiración, se muestra su foto o
+   su figura. Nunca en preguntas de posición o familia (la imagen las delataría). --- */
+let _nombresEj = null;
+function nombresEj() {
+  if (_nombresEj) return _nombresEj;
+  const out = [], add = (n, ref) => { const k = norm(String(n).replace(/^the /i, '').replace(/\(.*?\)/g, '').replace(/[—–].*$/, '')); if (k.length > 2) out.push([k, ref]); };
+  BB.ejercicios.forEach(e => { if (POSES[e.id]) e.n.split(/\s*(?:\/| y )\s*/).forEach(n => add(n, { bb: e.id })); });
+  MAT2.forEach(m => add(m.n, { bb: m.bb }));
+  MAT1.forEach(m => { const e = BB.ejercicios.find(x => x.analisis === m.id); if (e) add(m.n, { bb: e.id }); });
+  PREMAT.forEach(e => { if (imagen(e.id)) add(e.n, { pm: e.id }); });
+  return (_nombresEj = out.sort((a, b) => b[0].length - a[0].length));
+}
+function ilusPregunta(it) {
+  const c = it.ref;
+  if (!c || it.tipo === 'anim' || it.tipo === 'foto') return '';
+  const q = norm(String(c.q || c.t || ''));
+  if (!/regresi|progresi|objetivo|accesorio|asiste|resiste|serie|respiraci|sniff/.test(q) || /posici|familia|que ejercicio/.test(q)) return '';
+  const tomados = [], refs = new Map();
+  for (const [k, ref] of nombresEj()) {
+    let i = q.indexOf(k);
+    while (i >= 0) {
+      const fin = i + k.length, borde = (j, d) => j < 0 || j >= q.length || !/[a-z0-9]/.test(q[j]);
+      if (borde(i - 1) && borde(fin) && !tomados.some(([a, b]) => i < b && fin > a)) { tomados.push([i, fin]); refs.set(ref.bb || ref.pm, ref); }
+      i = q.indexOf(k, i + 1);
+    }
+  }
+  if (refs.size !== 1) return '';
+  const html = miniEj([...refs.values()][0]);
+  return html ? `<figure class="ses-ilus" aria-hidden="true">${html}</figure>` : '';
+}
+
+/* --- fichas del MAT 2 --- */
+function fichaMat2HTML(m) {
+  const props = (tit, xs) => `<div class="props-col"><h5>${tit}</h5>${xs && xs.length ? `<ul>${xs.map(([c, d]) =>
+    `<li><b>${esc(c)}</b>${d ? ` — ${esc(d)}` : ''}</li>`).join('')}</ul>` : '<p class="nada">—</p>'}</div>`;
+  return `<details class="ficha-ej c-magenta" open>
+    <summary><b>${esc(m.n)}</b><span class="pill">${esc(m.pos)}</span>${m.series ? `<span class="pill gris">${esc(m.series)}</span>` : ''}${m.revisar ? '<span class="pill aviso-p">revisar</span>' : ''}</summary>
+    <dl>
+      <dt>Principio</dt><dd>${esc(m.principio)}</dd>
+      <dt>Objetivo</dt><dd>${m.obj.length > 1 ? `<ol>${m.obj.map(o => `<li>${esc(o)}</li>`).join('')}</ol>` : esc(m.obj[0] || '')}</dd>
+      ${m.resp ? `<dt>Respiración</dt><dd>${esc(m.resp)}</dd>` : ''}
+      <dt>Regresiones Pre-Pilates</dt><dd>${chipsEj(m.reg.pm, 'pre')}</dd>
+      <dt>Regresiones Mat 1</dt><dd>${chipsEj(m.reg.m1, 'mat1')}</dd>
+      <dt>Regresiones Mat 2</dt><dd>${chipsEj(m.reg.m2, 'mat2')}</dd>
+      <dt>Progresiones</dt><dd>${chipsEj(m.prog, 'mat2')}</dd>
+    </dl>
+    <div class="props">${props('Accesorio que asiste', m.asiste)}${props('Accesorio que resiste', m.resiste)}</div>
+    ${m.nota ? `<p class="pq"><b>Nota:</b> ${esc(m.nota)}</p>` : ''}
+    ${m.revisar ? `<div class="revisar"><b>Para revisar en tu planilla</b>${m.revisar.map(r => `<p>${esc(r)}</p>`).join('')}</div>` : ''}
+  </details>`;
+}
+
+/* --- FAMILIAS POR POSICIÓN: de Pre-Pilates a Mat 2, con foto o figura --- */
+const POS_FAMILIA = { 'Supino': 'pos-supino-rodillas', 'Decúbito lateral': 'pos-lateral', 'Prono': 'pos-prono', '4 puntos': 'pos-4-puntos',
+  'Planchas': 'pos-plancha', 'Sedente': 'pos-sedente', 'Bípedo': 'pos-bipedo' };
+function pintarFamilias(filtro) {
+  const f = norm(filtro || ''), cont = $('#lista');
+  const hits = FAMILIAS.filter(x => f.length < 2 || norm([x.n, x.orig, x.pos, x.principio, ...x.obj].join(' ')).includes(f));
+  const tarjeta = x => `<button type="button" class="fam-ej${x.ref ? '' : ' sin'}"${refAttr(x.ref)}${x.ref ? '' : ' disabled'}>
+      <span class="fe-img">${x.ref ? '<span data-mini></span>' : '<span class="fe-nada">sin foto</span>'}</span>
+      <b>${esc(x.ref && x.ref.pm && PM[x.ref.pm] ? PM[x.ref.pm].n : x.n)}</b><small>${esc(x.obj.join(' · '))}</small></button>`;
+  cont.innerHTML = `<p class="micro">Cada familia junta los ejercicios de una misma posición: lo de Pre-Pilates prepara lo de Mat 1, y lo de Mat 1, lo de Mat 2. Tocá un ejercicio para ver su foto o su animación paso a paso.</p>` +
+    (hits.length ? FAMILIA_POS.map(pos => {
+      const xs = hits.filter(x => x.pos === pos);
+      if (!xs.length) return '';
+      const cols = ['pre', 'mat1', 'mat2'].map(l => [l, xs.filter(x => x.libro === l)]).filter(([, ys]) => ys.length);
+      return `<details class="familia"${f.length > 1 ? ' open' : ''}>
+        <summary><span class="gp-fig">${FIGURA.svgEstatico(POSES[POS_FAMILIA[pos]], 0)}</span><b>${esc(pos)}</b>
+          <span class="fam-cuenta">${cols.map(([l, ys]) => `<i class="lb-${l}">${NOM_LIBRO[l]} ${ys.length}</i>`).join('')}</span></summary>
+        ${cols.map(([l, ys]) => `<h4 class="fam-libro lb-${l}">${NOM_LIBRO[l]}</h4>
+          ${[...new Set(ys.map(y => y.sub || ''))].map(sub => `${sub ? `<h5 class="fam-sub">${esc(sub)}</h5>` : ''}<div class="fam-grid">${ys.filter(y => (y.sub || '') === sub).map(tarjeta).join('')}</div>`).join('')}`).join('')}
+      </details>`;
+    }).join('') : '<p class="vacio">Nada con ese término.</p>');
+  $$('.familia', cont).forEach(d => {
+    if (d.open) llenarMinis(d);
+    d.addEventListener('toggle', () => { if (d.open) llenarMinis(d); });
+  });
+}
+
 function pintarMat1(filtro) {
   const f = norm(filtro), cont = $('#lista');
   const hits = f.length > 1 ? MAT1.filter(m => norm(JSON.stringify(m)).includes(f)) : MAT1;

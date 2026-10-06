@@ -1043,9 +1043,9 @@ function paresRepertorio(n) {
           ['Swan', 'Estabilidad escapular'], ['Kneeling side family', 'Cadena / sistema lateral']];
 }
 /* Ejercicio ↔ series, sin repetir el valor de la derecha en el mismo juego. */
-function paresSeries(n) {
+function paresSeries(n, lista = MAT1) {
   const usados = new Set(), out = [];
-  for (const m of mezclar(MAT1.filter(m => m.series))) {
+  for (const m of mezclar(lista.filter(m => m.series))) {
     if (out.length >= n) break;
     if (usados.has(m.series)) continue;
     usados.add(m.series);
@@ -1057,6 +1057,7 @@ function ejPares(it, joven) {
   const x = it.ref, n = joven ? 4 : 5;
   const pares = x.dinamico === 'repertorio' ? paresRepertorio(n)
               : x.dinamico === 'mat1series' ? paresSeries(n)
+              : x.dinamico === 'mat2series' ? paresSeries(n, MAT2)
               : tomar(x.pares, Math.min(n, x.pares.length));
   const izq = mezclar(pares.map((p, k) => ({ t: p[0], k })));
   const der = mezclar(pares.map((p, k) => ({ t: p[1], k })));
@@ -1391,7 +1392,7 @@ function pintarEjercicio() {
         ${en.it.tema && TEMAS[en.it.tema] && fmt !== 'anim' ? `<span class="tag tag-tema c-${TEMAS[en.it.tema].color}">${TEMAS[en.it.tema].icono} ${TEMAS[en.it.tema].nom}</span>` : ''}
       </div>
       <p class="ses-consigna">${ej.consigna}</p>
-      ${ej.pregunta ? `<h2 class="ses-preg">${ej.pregunta}</h2>` : ''}
+      ${ej.pregunta ? `${ilusPregunta(en.it)}<h2 class="ses-preg">${ej.pregunta}</h2>` : ''}
       <div class="ses-ej"></div>
     </div>
     ${ej.manual ? '' : `<div class="ses-pie"><div class="ses-pie-in">
@@ -1685,6 +1686,8 @@ function vInicio() {
           <p>${Object.keys(S.items).length ? `Mañana ${manana ? `vuelven ${manana}` : 'no vence nada'}. Seguí la ruta para sumar contenido nuevo.` : 'Empezá la ruta: cada lección presenta unos pocos conceptos nuevos.'}</p></div>`}
     </section>
 
+    ${ejDelDiaHTML()}
+
     <h2 class="secc">Tu ruta</h2>
     <div class="ruta">
       ${UNIDADES.map((u, i) => {
@@ -1707,6 +1710,33 @@ function vInicio() {
   if (r) r.onclick = () => iniciarSesion('repaso', sesionRepaso(), 'Repaso del día');
   $('#pjCard').onclick = () => ir('estudio');
   $$('.nodo').forEach(b => b.onclick = () => hojaUnidad(UNIDADES.find(u => u.id === b.dataset.u)));
+  conectarEjDelDia();
+}
+/* ejercicio del día: uno del manual por fecha, animado; se abre paso a paso */
+function ejDelDia() {
+  const con = BB.ejercicios.filter(e => POSES[e.id] && POSES[e.id].poses.length > 1);
+  const d = Math.floor(new Date(HOY() + 'T12:00:00').getTime() / 864e5);
+  return con[((d * 7) % con.length + con.length) % con.length];
+}
+function ejDelDiaHTML() {
+  const e = ejDelDia();
+  if (!e) return '';
+  const a2 = MAT2.find(m => m.bb === e.id), a1 = e.analisis && MAT1.find(m => m.id === e.analisis);
+  const obj = (a2 && a2.obj) || (a1 && a1.obj) || e.prop.slice(0, 2);
+  return `<section class="dia-card" id="ejDia">
+    <div class="dia-fig" aria-hidden="true"></div>
+    <div class="dia-txt"><small>Ejercicio del día · ${esc(NOM_FUENTE[e.f])}</small><b>${esc(e.n)}</b>
+      <p>${esc(obj.slice(0, 2).join(' · '))}</p>
+      <button type="button" class="btn small" id="ejDiaVer">⤢ Verlo paso a paso</button></div>
+  </section>`;
+}
+function conectarEjDelDia() {
+  const c = $('#ejDia');
+  if (!c) return;
+  const e = ejDelDia();
+  FIGURA.reproductor($('.dia-fig', c), { ...POSES[e.id], nom: e.n }, { fantasma: false,
+    resp: POSES[e.id].poses.map((_, k) => { const p = pasoDePose(POSES[e.id], (k + 1) % POSES[e.id].poses.length); return p > 0 && e.seq[p - 1] ? respDeFase(e.seq[p - 1].fase) : null; }) });
+  $('#ejDiaVer').onclick = () => { SND.toque(); abrirVisorGrande(e); };
 }
 
 function hojaUnidad(u) {
@@ -2057,7 +2087,7 @@ function finJuegoMapa() {
 let temaAbierto = null;
 let pestanaApuntes = 'tarjetas';
 function vApuntes() {
-  const pestanas = [['tarjetas', 'Tarjetas'], ['repertorio', `Repertorio · ${BB.ejercicios.length}`], ['premat', `Pre-Pilates · ${PREMAT.length}`],
+  const pestanas = [['tarjetas', 'Tarjetas'], ['repertorio', `Repertorio · ${BB.ejercicios.length}`], ['familias', 'Familias'], ['premat', `Pre-Pilates · ${PREMAT.length}`],
     ['manual', 'Manual'], ['posiciones', 'Posiciones'], ['examenes', 'Tus exámenes']];
   if (pestanaApuntes === 'mat1') pestanaApuntes = 'repertorio';
   app().innerHTML = `
@@ -2065,12 +2095,12 @@ function vApuntes() {
     <p class="sub">Tus apuntes y fichas. Usalos para reparar lo que falló, no para releer de corrido: releer se siente productivo y casi no deja huella.</p>
     <div class="seg pestanas" role="tablist">${pestanas.map(([k, t]) =>
       `<button type="button" role="tab" aria-selected="${pestanaApuntes === k}" class="${pestanaApuntes === k ? 'on' : ''}" data-p="${k}"><b>${t}</b></button>`).join('')}</div>
-    <input class="buscador" id="q" type="search" placeholder="${{ tarjetas: 'Buscar músculo, ejercicio, concepto…', manual: 'Buscar en el manual…', posiciones: 'Buscar posición…', examenes: 'Buscar en tus exámenes…' }[pestanaApuntes] || 'Buscar ejercicio, posición, accesorio…'}" aria-label="Buscar">
+    <input class="buscador" id="q" type="search" placeholder="${{ tarjetas: 'Buscar músculo, ejercicio, concepto…', manual: 'Buscar en el manual…', posiciones: 'Buscar posición…', examenes: 'Buscar en tus exámenes…', familias: 'Buscar ejercicio, posición, objetivo…' }[pestanaApuntes] || 'Buscar ejercicio, posición, accesorio…'}" aria-label="Buscar">
     <div id="lista"></div>`;
   $$('.pestanas button').forEach(b => b.onclick = () => { pestanaApuntes = b.dataset.p; vApuntes(); });
   const activa = $('.pestanas .on');
   if (activa) activa.scrollIntoView({ inline: 'center', block: 'nearest' });
-  const pintar = { tarjetas: pintarApuntes, repertorio: pintarRepertorio, premat: pintarPremat, manual: pintarManual, posiciones: pintarPosiciones, examenes: pintarExamenes }[pestanaApuntes];
+  const pintar = { tarjetas: pintarApuntes, repertorio: pintarRepertorio, familias: pintarFamilias, premat: pintarPremat, manual: pintarManual, posiciones: pintarPosiciones, examenes: pintarExamenes }[pestanaApuntes];
   $('#q').oninput = () => pintar($('#q').value);
   pintar('');
   if (temaAbierto && pestanaApuntes === 'tarjetas') setTimeout(() => { const a = $('.acord.open'); if (a) a.scrollIntoView({ block: 'start' }); }, 30);
@@ -2117,6 +2147,7 @@ function fichaRepHTML(e) {
         ${e.trans ? `<dt>Transición</dt><dd>${esc(e.trans)}</dd>` : ''}
       </dl>
       ${e.analisis && MAT1.find(m => m.id === e.analisis) ? `<div class="rep-analisis"><h5>Tu análisis MAT 1 (accesorios, regresiones y progresiones)</h5>${fichaMat1HTML(MAT1.find(m => m.id === e.analisis))}</div>` : ''}
+      ${MAT2.filter(m => m.bb === e.id).map(m => `<div class="rep-analisis"><h5>Tu análisis MAT 2${MAT2.filter(x => x.bb === e.id).length > 1 ? ` · ${esc(m.n)}` : ''} (accesorios, regresiones y progresiones)</h5>${fichaMat2HTML(m)}</div>`).join('')}
       <p class="pag-manual">📖 Ver manual: ${esc(pagManual(e.f, e.pag))}</p>
     </div>
   </details>`;
@@ -2227,6 +2258,7 @@ function abrirVisorGrande(e) {
 /* un reproductor por ficha abierta; se destruye al cerrarla */
 function activarFichaRep(d) {
   const e = EJ_BB[d.dataset.ej];
+  llenarMinis(d);
   if (!POSES[e.id] || !$('.visor', d)) return;
   d._rep = activarVisor($('.visor', d), e, $$('.rep-pasos li', d));
 }
@@ -2334,16 +2366,147 @@ function fichaMat1HTML(m) {
       <dt>Principio (BB)</dt><dd>${esc(m.bb)}</dd>
       <dt>Objetivo</dt><dd>${m.obj.length > 1 ? `<ol>${m.obj.map(o => `<li>${esc(o)}</li>`).join('')}</ol>` : esc(m.obj[0] || '')}</dd>
       ${m.resp ? `<dt>Respiración</dt><dd>${esc(m.resp)}</dd>` : ''}
-      <dt>Regresiones Pre-Pilates</dt><dd>${esc(m.regPre || '—')}</dd>
-      <dt>Regresiones MAT 1</dt><dd>${listaComas(m.regMat1)}</dd>
-      <dt>Progresiones MAT 1</dt><dd>${listaComas(m.progMat1)}</dd>
-      <dt>Progresiones MAT 2</dt><dd>${listaComas(m.progMat2)}</dd>
+      <dt>Regresiones Pre-Pilates</dt><dd>${chipsTexto(m.regPre, 'pre')}</dd>
+      <dt>Regresiones MAT 1</dt><dd>${chipsEj(m.regMat1, 'mat1')}</dd>
+      <dt>Progresiones MAT 1</dt><dd>${chipsEj(m.progMat1, 'mat1')}</dd>
+      <dt>Progresiones MAT 2</dt><dd>${chipsEj(m.progMat2, 'mat2')}</dd>
     </dl>
     <div class="props">${props('Accesorio que asiste', m.asiste)}${props('Accesorio que resiste', m.resiste)}</div>
     ${m.nota ? `<p class="pq"><b>Nota:</b> ${esc(m.nota)}</p>` : ''}
     ${m.revisar ? `<div class="revisar"><b>Para revisar en tu planilla</b>${m.revisar.map(r => `<p>${esc(r)}</p>`).join('')}</div>` : ''}
   </details>`;
 }
+/* --- miniaturas de ejercicios: foto (Pre-Pilates) o figura del manual ---
+   Se insertan al abrir cada ficha (llenarMinis), así la lista no carga cientos
+   de dibujos de entrada. Tocar un chip abre el ejercicio. */
+const _minis = new Map();
+function miniEj(ref) {
+  if (!ref) return '';
+  if (ref.pm) { const src = imagen(ref.pm); return src ? `<img src="${src}" alt="" loading="lazy">` : (POS_PREMAT[(PM[ref.pm] || {}).pos] ? miniEj({ bb: POS_PREMAT[PM[ref.pm].pos] }) : ''); }
+  if (ref.bb && POSES[ref.bb]) {
+    if (!_minis.has(ref.bb)) { const ej = POSES[ref.bb]; _minis.set(ref.bb, FIGURA.svgEstatico(ej, ej.poses.length > 1 ? Math.min(ej.poses.length - 1, 1 + Math.floor((ej.poses.length - 1) / 2)) : 0)); }
+    return _minis.get(ref.bb);
+  }
+  return '';
+}
+const refAttr = r => r ? (r.bb ? ` data-bb="${r.bb}"` : r.pm ? ` data-pm="${r.pm}"` : '') : '';
+function chipEj(nombre, libro = '') {
+  const r = EJ_REF(nombre, libro);
+  return `<button type="button" class="chip-ej${r ? '' : ' sin'}"${refAttr(r)}${r ? '' : ' disabled'}>${r ? '<span class="ce-img" data-mini></span>' : ''}<span>${esc(nombre)}</span></button>`;
+}
+const chipsEj = (xs, libro = '') => xs && xs.length ? `<span class="chips-ej">${xs.map(n => chipEj(n, libro)).join('')}</span>` : '<span class="nada">—</span>';
+/* "Unidad interna: Pelvic clock, Fingertip abdominals · Unidad externa: …" → grupos con chips */
+function chipsTexto(txt, libro = '') {
+  if (!txt) return '<span class="nada">—</span>';
+  return txt.split(' · ').map(g => {
+    const i = g.indexOf(':'), et = i > 0 ? g.slice(0, i) : '', resto = i > 0 ? g.slice(i + 1) : g;
+    return `<div class="grupo-chips">${et ? `<small>${esc(et)}</small>` : ''}${chipsEj(resto.split(/,\s*/).map(x => x.trim()).filter(Boolean), libro)}</div>`;
+  }).join('');
+}
+function llenarMinis(raiz) {
+  $$('[data-mini]', raiz).forEach(sp => {
+    const b = sp.closest('[data-bb],[data-pm]');
+    sp.innerHTML = miniEj(b && (b.dataset.bb ? { bb: b.dataset.bb } : { pm: b.dataset.pm }));
+    sp.removeAttribute('data-mini');
+  });
+}
+/* tocar un ejercicio: animación paso a paso o ficha de Pre-Pilates con foto */
+function abrirEjercicio(ref) {
+  if (ref.bb && EJ_BB[ref.bb] && POSES[ref.bb]) return abrirVisorGrande(EJ_BB[ref.bb]);
+  if (ref.pm && PM[ref.pm]) {
+    const m = abrirModal(`<div class="vm-cab"><h3>${esc(PM[ref.pm].n)}</h3><button type="button" class="btn small ghost" data-cerrar aria-label="Cerrar">✕</button></div>${fichaPremHTML(PM[ref.pm]).replace('<details class="ficha-pm">', '<details class="ficha-pm" open>')}`);
+    m.classList.add('modal-visor');
+    $('[data-cerrar]', m).onclick = cerrarModal;
+  }
+}
+document.addEventListener('click', ev => {
+  const b = ev.target.closest && ev.target.closest('.chip-ej[data-bb], .chip-ej[data-pm], .fam-ej[data-bb], .fam-ej[data-pm]');
+  if (!b) return;
+  ev.preventDefault();
+  SND.toque();
+  abrirEjercicio(b.dataset.bb ? { bb: b.dataset.bb } : { pm: b.dataset.pm });
+});
+
+/* --- ilustración de la pregunta: si nombra un solo ejercicio y pregunta por sus
+   regresiones, objetivos, accesorios, series o respiración, se muestra su foto o
+   su figura. Nunca en preguntas de posición o familia (la imagen las delataría). --- */
+let _nombresEj = null;
+function nombresEj() {
+  if (_nombresEj) return _nombresEj;
+  const out = [], add = (n, ref) => { const k = norm(String(n).replace(/^the /i, '').replace(/\(.*?\)/g, '').replace(/[—–].*$/, '')); if (k.length > 2) out.push([k, ref]); };
+  BB.ejercicios.forEach(e => { if (POSES[e.id]) e.n.split(/\s*(?:\/| y )\s*/).forEach(n => add(n, { bb: e.id })); });
+  MAT2.forEach(m => add(m.n, { bb: m.bb }));
+  MAT1.forEach(m => { const e = BB.ejercicios.find(x => x.analisis === m.id); if (e) add(m.n, { bb: e.id }); });
+  PREMAT.forEach(e => { if (imagen(e.id)) add(e.n, { pm: e.id }); });
+  return (_nombresEj = out.sort((a, b) => b[0].length - a[0].length));
+}
+function ilusPregunta(it) {
+  const c = it.ref;
+  if (!c || it.tipo === 'anim' || it.tipo === 'foto') return '';
+  const q = norm(String(c.q || c.t || ''));
+  if (!/regresi|progresi|objetivo|accesorio|asiste|resiste|serie|respiraci|sniff/.test(q) || /posici|familia|que ejercicio/.test(q)) return '';
+  const tomados = [], refs = new Map();
+  for (const [k, ref] of nombresEj()) {
+    let i = q.indexOf(k);
+    while (i >= 0) {
+      const fin = i + k.length, borde = (j, d) => j < 0 || j >= q.length || !/[a-z0-9]/.test(q[j]);
+      if (borde(i - 1) && borde(fin) && !tomados.some(([a, b]) => i < b && fin > a)) { tomados.push([i, fin]); refs.set(ref.bb || ref.pm, ref); }
+      i = q.indexOf(k, i + 1);
+    }
+  }
+  if (refs.size !== 1) return '';
+  const html = miniEj([...refs.values()][0]);
+  return html ? `<figure class="ses-ilus" aria-hidden="true">${html}</figure>` : '';
+}
+
+/* --- fichas del MAT 2 --- */
+function fichaMat2HTML(m) {
+  const props = (tit, xs) => `<div class="props-col"><h5>${tit}</h5>${xs && xs.length ? `<ul>${xs.map(([c, d]) =>
+    `<li><b>${esc(c)}</b>${d ? ` — ${esc(d)}` : ''}</li>`).join('')}</ul>` : '<p class="nada">—</p>'}</div>`;
+  return `<details class="ficha-ej c-magenta" open>
+    <summary><b>${esc(m.n)}</b><span class="pill">${esc(m.pos)}</span>${m.series ? `<span class="pill gris">${esc(m.series)}</span>` : ''}${m.revisar ? '<span class="pill aviso-p">revisar</span>' : ''}</summary>
+    <dl>
+      <dt>Principio</dt><dd>${esc(m.principio)}</dd>
+      <dt>Objetivo</dt><dd>${m.obj.length > 1 ? `<ol>${m.obj.map(o => `<li>${esc(o)}</li>`).join('')}</ol>` : esc(m.obj[0] || '')}</dd>
+      ${m.resp ? `<dt>Respiración</dt><dd>${esc(m.resp)}</dd>` : ''}
+      <dt>Regresiones Pre-Pilates</dt><dd>${chipsEj(m.reg.pm, 'pre')}</dd>
+      <dt>Regresiones Mat 1</dt><dd>${chipsEj(m.reg.m1, 'mat1')}</dd>
+      <dt>Regresiones Mat 2</dt><dd>${chipsEj(m.reg.m2, 'mat2')}</dd>
+      <dt>Progresiones</dt><dd>${chipsEj(m.prog, 'mat2')}</dd>
+    </dl>
+    <div class="props">${props('Accesorio que asiste', m.asiste)}${props('Accesorio que resiste', m.resiste)}</div>
+    ${m.nota ? `<p class="pq"><b>Nota:</b> ${esc(m.nota)}</p>` : ''}
+    ${m.revisar ? `<div class="revisar"><b>Para revisar en tu planilla</b>${m.revisar.map(r => `<p>${esc(r)}</p>`).join('')}</div>` : ''}
+  </details>`;
+}
+
+/* --- FAMILIAS POR POSICIÓN: de Pre-Pilates a Mat 2, con foto o figura --- */
+const POS_FAMILIA = { 'Supino': 'pos-supino-rodillas', 'Decúbito lateral': 'pos-lateral', 'Prono': 'pos-prono', '4 puntos': 'pos-4-puntos',
+  'Planchas': 'pos-plancha', 'Sedente': 'pos-sedente', 'Bípedo': 'pos-bipedo' };
+function pintarFamilias(filtro) {
+  const f = norm(filtro || ''), cont = $('#lista');
+  const hits = FAMILIAS.filter(x => f.length < 2 || norm([x.n, x.orig, x.pos, x.principio, ...x.obj].join(' ')).includes(f));
+  const tarjeta = x => `<button type="button" class="fam-ej${x.ref ? '' : ' sin'}"${refAttr(x.ref)}${x.ref ? '' : ' disabled'}>
+      <span class="fe-img">${x.ref ? '<span data-mini></span>' : '<span class="fe-nada">sin foto</span>'}</span>
+      <b>${esc(x.ref && x.ref.pm && PM[x.ref.pm] ? PM[x.ref.pm].n : x.n)}</b><small>${esc(x.obj.join(' · '))}</small></button>`;
+  cont.innerHTML = `<p class="micro">Cada familia junta los ejercicios de una misma posición: lo de Pre-Pilates prepara lo de Mat 1, y lo de Mat 1, lo de Mat 2. Tocá un ejercicio para ver su foto o su animación paso a paso.</p>` +
+    (hits.length ? FAMILIA_POS.map(pos => {
+      const xs = hits.filter(x => x.pos === pos);
+      if (!xs.length) return '';
+      const cols = ['pre', 'mat1', 'mat2'].map(l => [l, xs.filter(x => x.libro === l)]).filter(([, ys]) => ys.length);
+      return `<details class="familia"${f.length > 1 ? ' open' : ''}>
+        <summary><span class="gp-fig">${FIGURA.svgEstatico(POSES[POS_FAMILIA[pos]], 0)}</span><b>${esc(pos)}</b>
+          <span class="fam-cuenta">${cols.map(([l, ys]) => `<i class="lb-${l}">${NOM_LIBRO[l]} ${ys.length}</i>`).join('')}</span></summary>
+        ${cols.map(([l, ys]) => `<h4 class="fam-libro lb-${l}">${NOM_LIBRO[l]}</h4>
+          ${[...new Set(ys.map(y => y.sub || ''))].map(sub => `${sub ? `<h5 class="fam-sub">${esc(sub)}</h5>` : ''}<div class="fam-grid">${ys.filter(y => (y.sub || '') === sub).map(tarjeta).join('')}</div>`).join('')}`).join('')}
+      </details>`;
+    }).join('') : '<p class="vacio">Nada con ese término.</p>');
+  $$('.familia', cont).forEach(d => {
+    if (d.open) llenarMinis(d);
+    d.addEventListener('toggle', () => { if (d.open) llenarMinis(d); });
+  });
+}
+
 function pintarMat1(filtro) {
   const f = norm(filtro), cont = $('#lista');
   const hits = f.length > 1 ? MAT1.filter(m => norm(JSON.stringify(m)).includes(f)) : MAT1;

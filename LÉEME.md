@@ -1,7 +1,7 @@
 # AnatoApp 2
 
 App de estudio construida a partir de tu material de **Anatomía aplicada al método Pilates**:
-444 ejercicios en 18 unidades.
+484 ejercicios en 20 unidades.
 
 ## Fuentes del contenido
 
@@ -12,6 +12,8 @@ App de estudio construida a partir de tu material de **Anatomía aplicada al mé
 | `Principios Movimiento y Posiciones.xlsx` | 99 ejercicios Pre-Pilates con posición, principio, componente, objetivo y 109 fotos | `datos-premat.js` e `imagenes.js`, generados por `importar_premat.py` |
 | Material Balanced Body (`fuentes/modulo-01.json`, `mat1.json`, `mat2.json`) | Principios del Movimiento (módulo 1), Mat 1 (25 ejercicios) y Mat 2 (23 ejercicios): secciones, 64 flashcards, 30 preguntas, tus notas a mano y notas de traducción, cada cosa con su página del manual | `datos-bb.js`, generado por `importar_bb.py`; práctica en `contenido-bb.js` |
 | Tus 4 exámenes previos (revisiones en PDF: Principios del Movimiento 35/37, Mat 1 77/96, Mat 2 62/116, Mat 3 30/77) | 68 ejercicios con lo que te preguntaron, lo que marcó la corrección y las preguntas falladas. Transcripción en `fuentes/examenes-previos.md` | `datos-examenes.js` |
+| `Mat 2 ordenado.xlsx` (hoja Mat 2) | 23 fichas del MAT 2: series, posición, principio, objetivos, regresiones (Pre-Pilates, Mat 1, Mat 2), progresiones, accesorios que asisten o resisten y respiración. Copia textual en `fuentes/mat2-analisis.json` | `datos-mat2.js` |
+| `Resumen Todos los ejercicios.xlsx` (hojas de familias) | 146 ejercicios agrupados por familia de posición (supino, decúbito lateral, prono, 4 puntos, planchas, sedente, bípedo) y libro (Pre-Pilates, Mat 1, Mat 2). La primera hoja es la misma planilla de Principios que ya estaba | `datos-familias.js`, generado por `importar_familias.py` desde `fuentes/familias.json`; práctica en `datos-mat2.js` |
 
 Las 30 preguntas del material se reescribieron (`fuentes/quiz_revisado.json`): en 20 la respuesta correcta
 era mucho más larga que las demás y se delataba sola. Ahora mide lo mismo que las otras opciones, y los
@@ -32,6 +34,9 @@ Las columnas de músculos, cadena miofascial y plano de la planilla de Principio
 pero **no se preguntan**: varias filas se contradicen (por ejemplo, un ejercicio de *aducción* con músculos
 abductores) y una tiene un texto que no corresponde. Las filas con problemas quedan marcadas con
 **revisar** en Apuntes → Pre-Pilates, igual que las fichas del MAT 1 con datos que parecen copiados de otra hoja.
+En el análisis MAT 2 pasa lo mismo con cinco fichas: Leg pull down (regresiones incompletas), Hip circles
+(columnas corridas y posición distinta de la del manual), Corkscrew (regresiones de Mat 2 listadas como Mat 1),
+Neck pull (regresiones iguales a las del Corkscrew) y Scissors (objetivo con MMSS). Se muestran, no se preguntan.
 
 ### Fotos
 
@@ -122,21 +127,43 @@ nombra un músculo y lo buscás en la figura. Es un dibujo didáctico, no una im
 y los lugares son correctos a grandes rasgos, pero están simplificados.
 
 **Ejercicios animados** — los 48 ejercicios de Mat 1 y Mat 2 tienen una figura que hace el ejercicio fase
-por fase, con el cartel de **Inhala / Exhala** y la acción de cada paso sincronizados (Apuntes → Repertorio).
-Se puede pausar, avanzar paso a paso o tocar un paso de la lista. Las figuras se dibujan en código
+por fase, con el cartel de **Inhala / Exhala** y la acción de cada paso sincronizados (Apuntes → Repertorio),
+y el tórax que se expande al inhalar. **Paso a paso:** ◀ ▶ animan un solo paso y se detienen; la barra recorre
+cualquier instante del movimiento; ½× y ¼× son cámara lenta; la tira de abajo muestra cada pose clave; ⤢ lo
+abre en grande con los pasos del manual. Tres capas opcionales: **Trayectoria** (el camino de manos, pies y
+cabeza), **Centro de masa** (con su plomada: verde si cae sobre la base de apoyo, naranja si no) y **Hacia
+dónde va** (la pose siguiente, en transparencia). En la práctica con animación, después de responder se puede
+abrir el ejercicio paso a paso, y en Inicio hay un **ejercicio del día** animado. Las figuras se dibujan en código
 (`figura.js` + `poses.js`): cada pose está definida con los ángulos de cada segmento y se revisó contra la
 descripción del manual. No son fotos ni imágenes generadas por IA (que suelen errar manos, pelvis y curvas),
 y no tienen derechos de terceros. Se usan también en la pregunta **¿Qué ejercicio es? (animación)**.
-El motor (versión 2) trabaja como un muñeco articulado real: proporciones antropométricas estándar, columna
-en 4 segmentos (para la curva en C), rodillas que solo flexionan hacia atrás y codos hacia adelante. Cada
+El motor (versión 3) trabaja como un muñeco articulado real: proporciones antropométricas estándar, columna
+en 4 segmentos (para la curva en C), rodillas que solo flexionan hacia atrás y codos hacia adelante.
+Se mueve como un cuerpo: con la velocidad de "mínimo jerk" de los movimientos humanos (arranca y frena
+suave); la columna **articula vértebra por vértebra** (en el Roll Up despega primero la cabeza y la lumbar
+al final; al bajar apoya primero la pelvis; en el Roll Over y los puentes, al revés); hombros y caderas
+giran solo por su rango articular; al rodar (Rolling like a ball, Seal, Open leg rocker, Rocking) el cuerpo
+**no patina**: avanza lo que gira; y un brazo o una pierna que bajaría de más **choca con el piso** en vez de
+levantar el cuerpo. El **centro de masa** se calcula con las proporciones de cada segmento (Winter) y en las
+posiciones de equilibrio (sentado en V, Open leg rocker, planchas, de rodillas) cae sobre la base de apoyo.
+Con esto se corrigieron poses: el abdominal despega solo hasta la punta de los omóplatos (la lumbar queda en
+el mat), el Roll Over apila la pelvis sobre los hombros con el peso en los omóplatos y nunca en el cuello, y
+en el Boomerang los brazos circulan por arriba de la cabeza hasta entrelazarse atrás. Cada
 pose declara qué toca el piso (pelvis, espalda, pies, talones, puntas, manos, rodillas, antebrazos) y el
 motor calcula rodillas y codos con cinemática inversa para que esos puntos queden en el piso en **todos**
 los cuadros; lo que está apoyado en dos poses seguidas queda clavado y no patina. Los agarres (manos en los
 tobillos, en la nuca, bajo la pelvis) también se calculan. Un control automático revisa cada cuadro de las
 61 animaciones: apoyos que no tocan el piso, partes que lo atraviesan, articulaciones fuera de rango,
-agarres que no llegan y saltos bruscos. Todas lo pasan.
+agarres que no llegan, saltos bruscos (más de ~3,5 m/s) y poses de equilibrio con el centro de masa fuera
+de la base. Todas lo pasan.
 Para revisar o corregir una pose: abrí `_galeria.html` con el servidor local (muestra cada transición y
 el resultado del control).
+
+**Familias** (Apuntes) — los ejercicios de cada posición en Pre-Pilates, Mat 1 y Mat 2, con su foto o su
+figura: se ve de un vistazo qué prepara a qué. Tocar un ejercicio abre su foto o su animación paso a paso.
+En las fichas del análisis (MAT 1 y MAT 2, dentro de cada ejercicio del Repertorio) las regresiones y
+progresiones también tienen miniatura y se pueden tocar. Las preguntas sobre un ejercicio en particular
+(objetivos, regresiones, accesorios) muestran su figura, y en Armá tu clase cada ejercicio tiene la suya.
 
 **Posiciones** — las 13 posiciones base (supino, prono, sedente, en silla, 4 puntos, planchas, decúbito
 lateral, de rodillas, bípedo…) dibujadas con la misma figura; los ejercicios Pre-Pilates sin foto muestran
@@ -210,8 +237,10 @@ El progreso vive en el navegador y **no se sincroniza con Google Drive**.
 
 ## Agregar o corregir contenido
 
-El contenido está en **`datos.js`** (apuntes), **`datos-mat1.js`** (fichas del MAT 1) y
-**`datos-examenes.js`** (tus exámenes), comentados.
+El contenido está en **`datos.js`** (apuntes), **`datos-mat1.js`** (fichas del MAT 1),
+**`datos-mat2.js`** (fichas del MAT 2 y preguntas de familias) y **`datos-examenes.js`** (tus exámenes),
+comentados. Las familias por posición se regeneran con `python importar_familias.py` a partir de
+`fuentes/familias.json`.
 Además de las tarjetas (`CARDS`) hay `CLOZES` (completar), `PARES` (emparejar), `CLASIFICACIONES` y
 `SECUENCIAS` (ordenar). Los ejercicios Pre-Pilates no se editan a mano: corregí la planilla y corré
 `python importar_premat.py "ruta/a/Principios Movimiento y Posiciones.xlsx"`.

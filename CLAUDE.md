@@ -8,7 +8,7 @@ como un único archivo HTML. Textos en **voseo rioplatense y sin género** ("Tod
 ## Entorno y reglas de trabajo
 
 - El proyecto vive en el repo de GitHub `quirodeicr/anatoapp` (raíz del repo; antes era la carpeta `Anatoapp`). Finales de línea LF (`.gitattributes`); `publicar/` no se versiona.
-- Orden de carga (index.html): datos… → contenido-bb.js → datos-examenes.js → diagramas/mapa/efectos → estudio.js → clase.js → app.js (estadoInicial usa `PJ_BASE` de estudio.js).
+- Orden de carga (index.html): datos… → contenido-bb.js → datos-examenes.js → datos-familias.js → datos-mat2.js → diagramas/mapa/efectos → estudio.js → clase.js → app.js (estadoInicial usa `PJ_BASE` de estudio.js).
 - **Sin Node.js ni build tools.** JavaScript plano; los scripts auxiliares son Python 3 (pymupdf, openpyxl, Pillow para los importadores).
 - `index.html` carga los `.js` sueltos (versión de carpeta). **Después de cualquier cambio** correr:
   ```
@@ -30,9 +30,11 @@ como un único archivo HTML. Textos en **voseo rioplatense y sin género** ("Tod
 | `datos-bb.js` | Material Balanced Body. **Generado** por `importar_bb.py` desde `fuentes/*.json` (+ `fuentes/quiz_revisado.json`). |
 | `contenido-bb.js` | Convierte datos-bb en práctica: temas bb-mov/bb-mat1/bb-mat2, unidades u14–u16, flashcards, preguntas, ordenar, osteoporosis, ANIMS ("¿Qué ejercicio es?" animado). |
 | `datos-examenes.js` | Los 4 exámenes previos de BB (Principios 35/37, Mat 1 77/96, Mat 2 62/116, Mat 3 30/77): temas ex-pm/ex-mat, unidades u17/u18 (68 ítems, `examen: {ex, n, fallada, formato}`), EXAMENES, LECCIONES_EXAMEN y REVISION_EXAMEN (Apuntes → Tus exámenes). Fuente: `fuentes/examenes-previos.md`. |
+| `datos-mat2.js` | Análisis MAT 2 (23 fichas de "Mat 2 ordenado.xlsx", `bb` = ejercicio del manual), tema `mat2an` (u19) y preguntas de familias, tema `familias` (u20). `EJ_REF(nombre, libro)` resuelve un nombre a su ficha (`{pm}` con foto o `{bb}` con animación). Copia textual en `fuentes/mat2-analisis.json`. |
+| `datos-familias.js` | 146 ejercicios por familia de posición y libro. **Generado** por `importar_familias.py` desde `fuentes/familias.json` (hojas de familias de "Resumen Todos los ejercicios.xlsx"; su primera hoja es la planilla de Principios que ya estaba). |
 | `clase.js` | "Armá tu clase" (Práctica): arma una clase con BB.ejercicios + Pre-Pilates y la revisa como la corrección (cantidad, reps exactas, orden de posiciones, transiciones, calentamiento, balance). Estado en `S.clase`, `S.clasesOk`. |
 | `estudio.js` | Personaje y estudio (pestaña Estudio, tarjeta en Inicio, festejo en el cierre de lección): avatar SVG personalizable, aparatos/prendas/accesorios que se desbloquean por nivel, lecciones, racha, logros, clases aprobadas. Estado en `S.pj` (`vistos` = desbloqueos ya anunciados). |
-| `figura.js` | Motor de la figura articulada (v2). |
+| `figura.js` | Motor de la figura articulada (v3): mínimo jerk, columna articulada por segmentos, articulaciones por rango, rodar sin deslizar, choque con el piso, centro de masa; reproductor con paso a paso, deslizador, velocidad y capas (trayectoria, centro de masa, pose siguiente) y respiración. |
 | `poses.js` | Poses de 48 ejercicios de Mat 1/Mat 2 y 13 posiciones. |
 | `diagramas.js` | Figuras del manual en SVG (plomada, pelvis con deslizador, columna, rodillas, pies, escápulas, Janda, aprendizaje motor, orden de clase). |
 | `mapa.js` | Lámina anatómica del mapa corporal (LAMINA): frente/espalda, mitad superficial y mitad profunda. |
@@ -48,6 +50,7 @@ como un único archivo HTML. Textos en **voseo rioplatense y sin género** ("Tod
 - Datos inconsistentes de las planillas (columnas de músculos/plano autogeneradas, Push Up del MAT 1 que copia accesorios del Seal) se muestran marcados **revisar** pero no se preguntan. Fotos con el nombre escrito se recortan en `importar_premat.py` (CON_TEXTO); fotos casi iguales en PARECIDAS; dudosas en FOTO_DUDOSA.
 - Los "Por qué" son elaboración propia, no texto de los apuntes.
 - Exámenes: "Todas las anteriores" / "A y B" / "Ninguna" no sobreviven a mezclar opciones → pasan a lista ("seleccioná las correctas") o a emparejar. Lo que la revisión no aclara (grilla de la bola de Mat 3, 3.er ejercicio escapular de Mat 2) no se pregunta. Las falladas van primero en su tema.
+- Análisis MAT 2 y familias: los nombres se corrigen sin cambiar el contenido; lo contradictorio o corrido de columna va en `revisar` y no se pregunta (Hip circles: tu planilla dice supino, el manual sentado). "Seated twist" de Mat 2 es el Twist del manual, no el Seated Twist de Pre-Pilates. Las ilustraciones de preguntas (`ilusPregunta`) solo aparecen si la pregunta nombra un único ejercicio y no pregunta posición ni familia.
 - Personaje: nada de género en los textos; los tonos de piel y los peinados son todos libres (se desbloquean colores de fantasía, prendas, accesorios y aparatos). Las fichas de aparatos solo afirman lo que está en el material o es conocimiento general ("se cuenta que…" para las anécdotas).
 - Las fotos Pre-Pilates parecen del manual del curso: advertir antes de compartir públicamente.
 
@@ -56,7 +59,8 @@ como un único archivo HTML. Textos en **voseo rioplatense y sin género** ("Tod
 - Decisión: **figura articulada propia**, no imágenes de Google (derechos) ni generadas por IA (poses erradas).
 - `figura.js` v2: proporciones antropométricas; columna en 4 segmentos. Pose = `tr` (dirección del tronco), `fl` (flexión de columna, + enrolla), `cab` (cuello), `bc/bl/pc/pl` = brazos/piernas `[ángulo absoluto, flexión ≥0, muñeca/tobillo]`, `apoyo` = lo que toca el piso (pelvis, tronco, espalda, hombros, cabeza, pieC/L, talonC/L, puntaC/L, manoC/L, rodillaC/L, antebrazoC/L), `ik` = agarres (tobilloC, pantorrillaC, rodillaC, nuca, pelvis, cintura, sien), `k` = escorzos, `s` = paso del manual. Supino con la cabeza a la izquierda; prono con la cabeza a la derecha.
 - El motor resuelve rodillas y codos con cinemática inversa; lo apoyado en dos poses seguidas queda clavado (no patina). Opciones por ejercicio: `vista:'frente'`, `camara:'arriba'`, `persp` (sentado visto de frente), `rueda` (rodar), `ancla`, `libre`.
-- **Toda pose nueva debe pasar `FIGURA.validar(ej)` con 0 fallas** (apoyos que flotan, partes que atraviesan el piso, articulaciones fuera de rango, agarres que no llegan, saltos). Hoy las 61 pasan.
+- Transiciones (v3): `mezclar()` interpola con mínimo jerk; `articulacion()` decide el orden de los segmentos (ancla pelvis: al despegar/flexionar va primero la cabeza, al apoyar/enderezar la pelvis; ancla hombros: al revés; `art` en la pose lo fuerza). Brazos orientados en el espacio y piernas en el aire con la pelvis cuando la columna articula; el sentido de giro lo decide el rango articular (`giro: {bc: ±1}` lo obliga, p. ej. circunducción del Boomerang). `rueda`: la cadera avanza h·Δθ (se ignora `dx`). Miembros libres que atravesarían el piso giran hasta apoyarse (`chocar`).
+- **Toda pose nueva debe pasar `FIGURA.validar(ej)` con 0 fallas** (apoyos que flotan, partes que atraviesan el piso, articulaciones fuera de rango, agarres que no llegan, saltos de más de 30 unidades cada 100 ms, y en poses de equilibrio el centro de masa fuera de la base de apoyo real). Hoy las 61 pasan. Validación rápida sin navegador: cargar figura.js y poses.js en un `vm` de Node.
 
 ## Otras decisiones
 
@@ -65,5 +69,7 @@ como un único archivo HTML. Textos en **voseo rioplatense y sin género** ("Tod
 - Mapa corporal: cada forma lleva los nombres EXACTOS de REGIONES (datos.js); si se agregan músculos, darles forma en mapa.js. Zoom con pellizco, doble toque y botones.
 
 ## Pendiente conocido
+
+- "Mat 3 Props.xlsx" (Drive, 68 MB): no se pudo leer (el conector devuelve texto vacío y la red del entorno bloquea `drive.usercontent.google.com`). Falta sumarla.
 
 - Material BB: faltan los módulos 2 a 5 de Principios del Movimiento (el material de origen los marca como pendientes). Cuando lleguen: copiarlos a `fuentes/`, sumarlos a FUENTES en `importar_bb.py` y correrlo.
