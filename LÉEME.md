@@ -105,8 +105,9 @@ abre una ventana: el músculo resaltado en el mapa corporal con su región, su a
 apuntes y los ejercicios que lo trabajan; o el ejercicio con su animación, sus pasos y sus propósitos.
 Dentro de una pregunta no se subraya nada hasta que respondés.
 
-**Tu personaje y tu estudio** (pestaña Estudio) — un personaje con nombre propio (el 🎲 propone juegos de
-palabras: *Core-azón*, *Pelvis Presley*, *Glúteo Máximo*, *Teaser Rex*…) que se viste a gusto: piel, pelo,
+**Tu personaje y tu estudio** (pestaña Estudio) — el estudio y el personaje tienen cada uno su nombre:
+tocalos para escribir el que quieras (el del estudio aparece en el cartel de la escena) o usá el 🎲, que propone
+juegos de palabras (*Core-azón*, *Pelvis Presley*, *Glúteo Máximo*, *Teaser Rex*… o *Casa Contrología*, *La Plomada*) que se viste a gusto: piel, pelo,
 ropa, medias antideslizantes y accesorios. Vive en un estudio que se va llenando con el progreso: la pelota
 con la primera lección, la banda, el Magic circle con 3 días seguidos, el rodillo, la pizarra al aprobar una
 clase, el Spine corrector, la Wunda chair, el Ladder barrel, el Reformer, el diploma al terminar tus

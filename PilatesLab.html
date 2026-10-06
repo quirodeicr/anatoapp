@@ -1086,10 +1086,21 @@ article.ex-rev{margin-bottom:10px}
 @keyframes salto{0%{transform:translateY(0)}35%{transform:translateY(-14%) scale(1.02,.98)}70%{transform:translateY(0) scale(1.04,.95)}100%{transform:none}}
 .pj-escena:focus,.escena .ap:focus{outline:none}
 .pj-escena:focus-visible,.escena .ap:focus-visible{outline:3px solid var(--azul);outline-offset:3px}
+.pj-campo{margin-bottom:10px}
+.pj-campo label{display:block;font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--tx2);margin-bottom:3px}
 .pj-cab .pj-nombre{display:flex;gap:8px;align-items:center}
-.pj-nombre input{flex:1;min-width:0;font:inherit;font-size:25px;font-weight:800;letter-spacing:-.02em;color:var(--tx);background:transparent;border:2px dashed transparent;border-radius:10px;padding:2px 6px;margin-left:-6px}
-.pj-nombre input:hover,.pj-nombre input:focus{border-color:var(--linea2);outline:none;background:var(--sup)}
+.pj-edit{flex:1;min-width:0;position:relative;display:flex;align-items:center}
+/* se ve que se puede escribir: borde punteado y lápiz */
+.pj-nombre input{flex:1;min-width:0;font:inherit;font-weight:800;letter-spacing:-.02em;color:var(--tx);background:var(--sup);border:2px dashed var(--linea2);border-radius:12px;padding:5px 34px 5px 10px}
+.pj-campo-estudio input{font-size:23px}
+.pj-campo-personaje input{font-size:19px}
+.pj-nombre input:hover{border-color:var(--verde)}
+.pj-nombre input:focus{border-style:solid;border-color:var(--verde);outline:none}
+.pj-lapiz{position:absolute;right:11px;color:var(--tx2);font-size:16px;pointer-events:none}
 .pj-nombre .btn{font-size:18px;padding:6px 10px}
+.esc-cartel-tabla{fill:#b07a4a;stroke:#7c5230;stroke-width:1}
+.esc-cartel-hilo{stroke:#7c5230;stroke-width:1}
+.esc-cartel text{font:800 11.5px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#fff7ea;letter-spacing:.02em}
 .escena-wrap{position:relative;margin-top:14px;border-radius:var(--r);overflow:hidden;border:2px solid var(--linea)}
 .escena{display:block;width:100%;height:auto}
 .esc-pared{fill:color-mix(in srgb,var(--verde-cl) 60%,var(--bg))}
@@ -14558,6 +14569,12 @@ const APARATOS = {
 const NOMBRES_PJ = ['Core-azón', 'Pelvis Presley', 'Glúteo Máximo', 'Mat-emática', 'Teaser Rex', 'Pili Plomada',
   'Rolling Stone', 'Swan Lake', 'Cien-cia', 'Ada Ductora', 'Powerhouse', 'Roll-Upa', 'Reformín', 'Contrología'];
 
+/* nombres para el estudio (el 🎲 de "Tu estudio" los va proponiendo) */
+const NOMBRES_ESTUDIO = ['Estudio Powerhouse', 'Casa Contrología', 'El Rincón del Core', 'Mat y Respiro', 'La Plomada', 'Columna Neutra',
+  'Estudio Inhalá', 'Centro y Control', 'El Reformer Feliz', 'Estudio Teaser', 'Ciento por Ciento', 'El Aro Mágico'];
+/* el estudio lleva su propio nombre; si no le pusiste uno, es "Estudio de" y el personaje */
+const nombreEstudio = () => (pj().estudio || '').trim() || `Estudio de ${pj().nombre}`;
+
 const FRASES_PJ = [
   'Inhalá… y exhalá. Así arranca todo.',
   '¿Sabías que Joseph llamaba a su método «Contrología»?',
@@ -14574,12 +14591,16 @@ const FRASES_PJ = [
 ];
 
 const PJ_BASE = () => ({
-  nombre: 'Core-azón', piel: 2, pelo: 'rodete', colorPelo: 'castano',
+  nombre: 'Core-azón', estudio: '', piel: 2, pelo: 'rodete', colorPelo: 'castano',
   arriba: 'remera', colorArriba: 'verde', abajo: 'calza', colorAbajo: 'negro', medias: 'coral',
   acc: [], vistos: []
 });
+/* completa lo que falte sin reemplazar el objeto: así lo que se edita (nombre, estudio)
+   queda en S.pj aunque otra parte haya llamado a pj() mientras tanto */
 function pj() {
-  S.pj = Object.assign(PJ_BASE(), S.pj || {});
+  const base = PJ_BASE();
+  if (!S.pj || typeof S.pj !== 'object') S.pj = base;
+  else for (const k in base) if (S.pj[k] === undefined) S.pj[k] = base[k];
   if (!Array.isArray(S.pj.acc)) S.pj.acc = [];
   if (!Array.isArray(S.pj.vistos)) S.pj.vistos = [];
   return S.pj;
@@ -14898,13 +14919,18 @@ function escenaSVG() {
   const iMat = orden.indexOf('mat');
   const antes = visibles.filter(k => orden.indexOf(k) <= iMat).map(pieza);
   const despues = visibles.filter(k => orden.indexOf(k) > iMat).map(pieza);
-  return `<svg class="escena" viewBox="0 0 420 262" role="group" aria-label="Estudio de ${esc(pj().nombre)}">
+  /* cartel con el nombre del estudio, colgado arriba de la pared */
+  const nom = nombreEstudio(), ancho = Math.min(236, Math.max(90, nom.length * 7.4 + 26));
+  const cartel = `<g class="esc-cartel" transform="translate(${Math.min(414 - ancho, 296 - ancho / 2)} 1)"><path d="M${ancho * 0.2} 0 L${ancho * 0.2} 3 M${ancho * 0.8} 0 L${ancho * 0.8} 3" class="esc-cartel-hilo"/>
+    <rect x="0" y="3" width="${ancho}" height="19" rx="4" class="esc-cartel-tabla"/><text x="${ancho / 2}" y="16.6" text-anchor="middle"${nom.length * 7.4 + 26 > ancho ? ` textLength="${ancho - 16}" lengthAdjust="spacingAndGlyphs"` : ''}>${esc(nom)}</text></g>`;
+  return `<svg class="escena" viewBox="0 0 420 262" role="group" aria-label="${esc(nom)}">
     <rect x="0" y="0" width="420" height="160" class="esc-pared"/>
     <rect x="0" y="158" width="420" height="104" class="esc-piso"/>
     <path d="M0 158 L420 158" class="esc-zocalo"/>
     ${[196, 226].map(y => `<path d="M0 ${y} L420 ${y}" class="esc-tabla"/>`).join('')}
     <g class="esc-ventana"><rect x="22" y="20" width="62" height="70" rx="4"/><path d="M53 20 L53 90 M22 55 L84 55"/></g>
     <circle cx="44" cy="40" r="7" class="esc-sol"/>
+    ${cartel}
     ${antes.join('')}
     <g transform="translate(151 44)"><g class="pj-escena" data-pj tabindex="0" role="button" aria-label="${esc(pj().nombre)}: tocá para charlar">${avatarG(equipado(), pjPose)}</g></g>
     ${despues.join('')}
@@ -14927,7 +14953,7 @@ function frasePJ() {
 /* tarjeta chica en Inicio */
 function tarjetaPJ() {
   const p = pj(), prox = proximoDesbloqueo(), nuevos = nuevosDesbloqueos().length;
-  return `<button type="button" class="pj-card" id="pjCard" aria-label="Ir al estudio de ${esc(p.nombre)}">
+  return `<button type="button" class="pj-card" id="pjCard" aria-label="Ir a ${esc(nombreEstudio())}">
     <span class="pj-card-av">${avatarSVG('quieto')}</span>
     <span class="pj-card-txt">
       <b>${esc(p.nombre)} ${nuevos ? `<span class="pj-nuevo">${nuevos} nuevo${nuevos === 1 ? '' : 's'}</span>` : ''}</b>
@@ -14945,7 +14971,7 @@ function bloqueFinPJ() {
   const html = `<div class="fin-pj ${nuevos.length ? 'con-nuevos' : ''}">
     <span class="fin-pj-av">${avatarSVG('festeja', 'salta')}</span>
     <div>${nuevos.length
-      ? `<b>¡Nuevo para el estudio de ${esc(p.nombre)}!</b><ul>${nuevos.slice(0, 5).map(it =>
+      ? `<b>¡Nuevo para ${esc(nombreEstudio())}!</b><ul>${nuevos.slice(0, 5).map(it =>
           `<li>${it.cat === 'aparato' ? '🏋️' : it.ico || '👕'} ${esc(it.nom)}</li>`).join('')}${nuevos.length > 5 ? `<li>y ${nuevos.length - 5} más</li>` : ''}</ul>`
       : `<b>${esc(p.nombre)} festeja con vos</b><small>${esc(azar(FRASES_PJ))}</small>`}</div>
   </div>`;
@@ -14961,11 +14987,17 @@ function vEstudio() {
   const recien = new Set(nuevosDesbloqueos().map(it => it.id));
   app().innerHTML = `
     <div class="pj-cab">
-      <div class="pj-nombre">
-        <input id="pjNombre" value="${esc(p.nombre)}" maxlength="24" aria-label="Nombre de tu personaje" spellcheck="false">
-        <button type="button" class="btn small" id="pjDado" title="Otro nombre" aria-label="Proponer otro nombre">🎲</button>
+      <div class="pj-campo pj-campo-estudio">
+        <label for="pjEstudio">🏠 Tu estudio</label>
+        <div class="pj-nombre"><span class="pj-edit"><input id="pjEstudio" value="${esc(nombreEstudio())}" maxlength="32" placeholder="Estudio de ${esc(p.nombre)}" spellcheck="false" autocomplete="off"><span class="pj-lapiz" aria-hidden="true">✎</span></span>
+          <button type="button" class="btn small" id="estDado" title="Otro nombre para el estudio" aria-label="Proponer otro nombre para el estudio">🎲</button></div>
       </div>
-      <p class="sub">Tu estudio de Pilates. Con cada lección, racha y logro se suman prendas, accesorios y aparatos. Tocá a ${esc(p.nombre)} para charlar y cada aparato para ver su ficha.</p>
+      <div class="pj-campo pj-campo-personaje">
+        <label for="pjNombre">🧘 Tu personaje</label>
+        <div class="pj-nombre"><span class="pj-edit"><input id="pjNombre" value="${esc(p.nombre)}" maxlength="24" spellcheck="false" autocomplete="off"><span class="pj-lapiz" aria-hidden="true">✎</span></span>
+          <button type="button" class="btn small" id="pjDado" title="Otro nombre para tu personaje" aria-label="Proponer otro nombre para tu personaje">🎲</button></div>
+      </div>
+      <p class="sub">Tocá los nombres para cambiarlos. Con cada lección, racha y logro se suman prendas, accesorios y aparatos. Tocá a <span data-nom-pj>${esc(p.nombre)}</span> para charlar y cada aparato para ver su ficha.</p>
     </div>
     <div class="escena-wrap">
       ${escenaSVG()}
@@ -14980,13 +15012,33 @@ function vEstudio() {
       `<button type="button" role="tab" aria-selected="${pestanaEstudio === k}" class="${pestanaEstudio === k ? 'on' : ''}" data-p="${k}"><b>${t}</b></button>`).join('')}</div>
     <div id="pjPanel">${pestanaEstudio === 'vestuario' ? panelVestuario(recien) : panelAparatos(recien)}</div>`;
 
-  $('#pjNombre').onchange = e => { p.nombre = e.target.value.trim().slice(0, 24) || 'Core-azón'; guardar(); };
+  /* los nombres se actualizan en vivo (texto, cartel del estudio, etiquetas) y se guardan al soltar */
+  const refrescarNombres = () => {
+    $$('[data-nom-pj]').forEach(x => { x.textContent = p.nombre; });
+    const est = nombreEstudio(), t = $('.esc-cartel text');
+    if (t) { t.textContent = est; t.removeAttribute('textLength'); }
+    $('#pjEstudio').placeholder = `Estudio de ${p.nombre}`;
+    const esc_ = $('.escena'); if (esc_) esc_.setAttribute('aria-label', est);
+    const fig = $('.pj-escena'); if (fig) fig.setAttribute('aria-label', `${p.nombre}: tocá para charlar`);
+  };
+  $('#pjNombre').oninput = e => { p.nombre = e.target.value.trim().slice(0, 24) || 'Core-azón'; refrescarNombres(); };
+  $('#pjNombre').onchange = e => { p.nombre = e.target.value.trim().slice(0, 24) || 'Core-azón'; e.target.value = p.nombre; guardar(); redibujarEstudio(); hablar(`¡Hola! Ahora me llamo ${p.nombre}.`); };
+  $('#pjEstudio').oninput = e => { p.estudio = e.target.value.slice(0, 32); refrescarNombres(); };
+  $('#pjEstudio').onchange = e => { p.estudio = e.target.value.trim().slice(0, 32); guardar(); redibujarEstudio(); };
   $('#pjDado').onclick = () => {
     const otros = NOMBRES_PJ.filter(n => n !== p.nombre);
     p.nombre = otros[(NOMBRES_PJ.indexOf(p.nombre) + 1) % otros.length] || azar(otros);
     guardar(); SND.toque();
-    $('#pjNombre').value = p.nombre;
+    $('#pjNombre').value = p.nombre; refrescarNombres();
+    if (!p.estudio) $('#pjEstudio').value = nombreEstudio();
     hablar(`¿«${p.nombre}»? ¡Me encanta!`);
+  };
+  $('#estDado').onclick = () => {
+    const actual = nombreEstudio(), otros = NOMBRES_ESTUDIO.filter(n => n !== actual);
+    p.estudio = otros[(NOMBRES_ESTUDIO.indexOf(actual) + 1) % otros.length] || azar(otros);
+    guardar(); SND.toque();
+    $('#pjEstudio').value = p.estudio; refrescarNombres();
+    hablar(`«${p.estudio}»… ¡suena a un lugar donde da gusto entrenar!`);
   };
   $$('.pestanas button').forEach(b => b.onclick = () => { pestanaEstudio = b.dataset.p; redibujarEstudio(); });
   conectarEscena();

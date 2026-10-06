@@ -1086,10 +1086,21 @@ article.ex-rev{margin-bottom:10px}
 @keyframes salto{0%{transform:translateY(0)}35%{transform:translateY(-14%) scale(1.02,.98)}70%{transform:translateY(0) scale(1.04,.95)}100%{transform:none}}
 .pj-escena:focus,.escena .ap:focus{outline:none}
 .pj-escena:focus-visible,.escena .ap:focus-visible{outline:3px solid var(--azul);outline-offset:3px}
+.pj-campo{margin-bottom:10px}
+.pj-campo label{display:block;font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--tx2);margin-bottom:3px}
 .pj-cab .pj-nombre{display:flex;gap:8px;align-items:center}
-.pj-nombre input{flex:1;min-width:0;font:inherit;font-size:25px;font-weight:800;letter-spacing:-.02em;color:var(--tx);background:transparent;border:2px dashed transparent;border-radius:10px;padding:2px 6px;margin-left:-6px}
-.pj-nombre input:hover,.pj-nombre input:focus{border-color:var(--linea2);outline:none;background:var(--sup)}
+.pj-edit{flex:1;min-width:0;position:relative;display:flex;align-items:center}
+/* se ve que se puede escribir: borde punteado y lápiz */
+.pj-nombre input{flex:1;min-width:0;font:inherit;font-weight:800;letter-spacing:-.02em;color:var(--tx);background:var(--sup);border:2px dashed var(--linea2);border-radius:12px;padding:5px 34px 5px 10px}
+.pj-campo-estudio input{font-size:23px}
+.pj-campo-personaje input{font-size:19px}
+.pj-nombre input:hover{border-color:var(--verde)}
+.pj-nombre input:focus{border-style:solid;border-color:var(--verde);outline:none}
+.pj-lapiz{position:absolute;right:11px;color:var(--tx2);font-size:16px;pointer-events:none}
 .pj-nombre .btn{font-size:18px;padding:6px 10px}
+.esc-cartel-tabla{fill:#b07a4a;stroke:#7c5230;stroke-width:1}
+.esc-cartel-hilo{stroke:#7c5230;stroke-width:1}
+.esc-cartel text{font:800 11.5px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#fff7ea;letter-spacing:.02em}
 .escena-wrap{position:relative;margin-top:14px;border-radius:var(--r);overflow:hidden;border:2px solid var(--linea)}
 .escena{display:block;width:100%;height:auto}
 .esc-pared{fill:color-mix(in srgb,var(--verde-cl) 60%,var(--bg))}
