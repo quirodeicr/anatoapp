@@ -1,0 +1,198 @@
+<title>Laboratorio de figura</title>
+<style>
+/* Mesa de prueba: dos ejercicios en tarjetas apiladas, cada uno con su visor y los pasos del manual al costado. */
+:root {
+  --bg: #f7f7f5; --sup: #ffffff; --sup2: #f0efec; --sup3: #e7e5e1;
+  --tx: #1c1b19; --tx2: #6b6862; --linea: #e3e1dc; --linea2: #d2cec7;
+  --verde: #0d9488; --verde-cl: #ccfbf1; --mag: #c026d3; --mag-cl: #fae8ff;
+  --inhala-fondo: #dbeafe; --inhala-tx: #1d4ed8; --exhala-fondo: #ffedd5; --exhala-tx: #c2410c; --ambas-fondo: #ede9fe; --ambas-tx: #6d28d9;
+  --mat: #7b6de0; --hueso: #f3e6c8; --hueso-borde: #a78b5c; --sombra-fig: rgba(0,0,0,.22);
+  --cuerpo: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --r: 16px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #14141a; --sup: #1d1d24; --sup2: #26262f; --sup3: #30303a; --tx: #f0efec; --tx2: #a3a09a; --linea: #33333d; --linea2: #454552;
+  --verde: #2dd4bf; --verde-cl: #0f3a36; --mag: #e879f9; --mag-cl: #3d1043;
+  --inhala-fondo: #172a4a; --inhala-tx: #93c5fd; --exhala-fondo: #3b2412; --exhala-tx: #fdba74; --ambas-fondo: #2a1f45; --ambas-tx: #c4b5fd;
+  --mat: #8b7ff0; --sombra-fig: rgba(0,0,0,.45); color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #14141a; --sup: #1d1d24; --sup2: #26262f; --sup3: #30303a; --tx: #f0efec; --tx2: #a3a09a; --linea: #33333d; --linea2: #454552;
+  --verde: #2dd4bf; --verde-cl: #0f3a36; --mag: #e879f9; --mag-cl: #3d1043;
+  --inhala-fondo: #172a4a; --inhala-tx: #93c5fd; --exhala-fondo: #3b2412; --exhala-tx: #fdba74; --ambas-fondo: #2a1f45; --ambas-tx: #c4b5fd;
+  --mat: #8b7ff0; --sombra-fig: rgba(0,0,0,.45); color-scheme: dark }
+body { background: var(--bg); color: var(--tx); font-family: var(--cuerpo); }
+.pag { max-width: 1060px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 48px; display: grid; gap: 18px; }
+header h1 { font-size: 26px; letter-spacing: -.01em; text-wrap: balance; margin: 0 0 6px; }
+header p { color: var(--tx2); line-height: 1.5; max-width: 62ch; margin: 0; }
+.ej { background: var(--sup); border: 1px solid var(--linea); border-radius: var(--r); padding: 14px; display: grid; gap: 12px; }
+.ej-cab { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+.ej-cab h2 { margin: 0; font-size: 20px; }
+.ej-cab small { display: block; color: var(--tx2); font-size: 13px; }
+.seg { display: inline-flex; background: var(--sup3); border-radius: 99px; padding: 3px; gap: 2px; }
+.seg button { border: 0; background: transparent; color: var(--tx2); font: inherit; font-size: 13.5px; font-weight: 700; padding: 7px 13px; border-radius: 99px; cursor: pointer; min-height: 36px; }
+.seg button[aria-pressed="true"] { background: var(--sup); color: var(--tx); box-shadow: 0 1px 2px rgba(0,0,0,.14); }
+.cuerpo { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+@media (max-width: 760px) { .cuerpo { grid-template-columns: 1fr; } }
+.visor { background: var(--sup2); border-radius: 14px; padding: 6px 6px 10px; display: grid; gap: 6px; min-width: 0; }
+.fig { max-width: 100%; }
+.fase { min-height: 46px; padding: 0 6px; font-size: 14.5px; line-height: 1.45; }
+.chip { display: inline-block; font-size: 11.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; padding: 3px 9px; border-radius: 99px; margin-right: 6px; vertical-align: 1px; background: var(--sup3); color: var(--tx); }
+.chip.inhala { background: var(--inhala-fondo); color: var(--inhala-tx); } .chip.exhala { background: var(--exhala-fondo); color: var(--exhala-tx); } .chip.ambas { background: var(--ambas-fondo); color: var(--ambas-tx); }
+.tl { display: block; position: relative; margin: 0 10px; height: 26px; }
+.tl input { position: absolute; inset: 0; width: 100%; margin: 0; accent-color: var(--mag); background: transparent; cursor: pointer; }
+.tl .marcas { position: absolute; left: 8px; right: 8px; top: 50%; pointer-events: none; }
+.tl .marcas i { position: absolute; top: -7px; width: 2px; height: 14px; margin-left: -1px; border-radius: 1px; background: var(--linea2); }
+.ctrl { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
+.btn { border: 1.5px solid var(--linea2); background: var(--sup); color: var(--tx); font: inherit; font-weight: 800; font-size: 15px; min-width: 46px; min-height: 40px; border-radius: 12px; cursor: pointer; }
+.btn:focus-visible, .seg button:focus-visible, .capa:focus-visible, .paso:focus-visible, .cuadro:focus-visible { outline: 3px solid var(--mag); outline-offset: 2px; }
+.capas { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.capa { border: 1.5px solid var(--linea2); background: var(--sup); color: var(--tx2); font: inherit; font-size: 13px; font-weight: 700; padding: 6px 11px; min-height: 36px; border-radius: 99px; cursor: pointer; }
+.capa[aria-pressed="true"] { border-color: var(--mag); color: var(--tx); background: var(--mag-cl); }
+.secuencia { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.cuadro { background: var(--sup); border: 2px solid transparent; border-radius: 12px; padding: 4px 4px 8px; text-align: left; font: inherit; color: var(--tx); cursor: pointer; display: grid; gap: 4px; }
+.cuadro[aria-current="step"] { border-color: var(--mag); }
+.cuadro b { font-size: 12.5px; } .cuadro span { font-size: 12.5px; color: var(--tx2); line-height: 1.35; }
+.pasos { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; min-width: 0; }
+.paso { font-size: 14px; line-height: 1.45; padding: 8px 10px 8px 38px; border-radius: 10px; position: relative; cursor: pointer; }
+.paso::before { content: attr(data-n); position: absolute; left: 9px; top: 8px; width: 21px; height: 21px; border-radius: 50%; background: var(--sup3); font-size: 11.5px; font-weight: 800; display: grid; place-items: center; }
+.paso.on { background: var(--mag-cl); } .paso.on::before { background: var(--mag); color: #fff; }
+.paso b { margin-right: 4px; }
+.nota { color: var(--tx2); font-size: 13.5px; line-height: 1.5; margin: 0; }
+.mirar { background: var(--sup); border: 1px solid var(--linea); border-radius: var(--r); padding: 14px 16px; }
+.mirar h2 { font-size: 17px; margin: 0 0 8px; }
+.mirar ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; line-height: 1.5; max-width: 70ch; }
+/* figura */
+.fig-svg { width: 100%; height: auto; display: block; }
+.fig-mat { fill: var(--mat); } .fig-mat-sombra { fill: rgba(0,0,0,.16); } .fig-sombra { fill: var(--sombra-fig); }
+.fig-fantasma { opacity: .13; }
+.vert { fill: var(--hueso); stroke: var(--hueso-borde); stroke-width: .35; } .vert.lumbar { fill: #f6d9bb; } .vert.sacro { fill: #ead7ad; } .vert.cervical { fill: #f7ecd6; }
+.tray { fill: none; stroke-width: 1.6; stroke-dasharray: 3 2.4; stroke-linecap: round; }
+.tray-flecha { fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.tray-mano { stroke: #e11d48; } .tray-pie { stroke: #2563eb; } .tray-cab { stroke: #c026d3; } .tray-pel { stroke: #f59e0b; }
+.fis-plomada { stroke-width: 1; stroke-dasharray: 2 2; } .fis-cm { stroke-width: 1.2; } .fis-cruz { stroke-width: 1; } .fis-base { opacity: .75; }
+.fis-ok .fis-plomada, .fis-ok .fis-cm, .fis-ok .fis-cruz { stroke: #15803d; } .fis-ok .fis-cm { fill: #dcfce7; } .fis-ok .fis-base { fill: #22c55e; }
+.fis-fuera .fis-plomada, .fis-fuera .fis-cm, .fis-fuera .fis-cruz { stroke: #c2410c; } .fis-fuera .fis-cm { fill: #ffedd5; } .fis-fuera .fis-base { fill: #f97316; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
+</style>
+
+<div class="pag">
+  <header>
+    <h1>Laboratorio de figura</h1>
+    <p>Dos ejercicios para ajustar la modelo nueva antes de pasarla a los 48: más anatómica (músculos, rodillas y codos, manos y pies, cara de perfil) y con los pasos del manual más precisos. Compará con la anterior, mirala en secuencia o prendé la columna vertebral para ver cómo articula.</p>
+  </header>
+  <div id="ejercicios"></div>
+  <section class="mirar">
+    <h2>Qué mirar para ajustar</h2>
+    <ul>
+      <li><b>Cuerpo y cara:</b> proporciones, curvas (glúteos, pantorrillas, hombros), rasgos, pelo, ropa y colores.</li>
+      <li><b>Cada paso:</b> si la posición coincide con el manual (dónde van los brazos, cuánto sube la espalda, la cabeza).</li>
+      <li><b>El movimiento:</b> el ritmo, el orden en que se despega o se apoya la columna, si algo se ve brusco o falso.</li>
+      <li>Las fotos de los ejercicios van a ir en la vista <b>Secuencia</b>, alternando con la animación, cuando tenga el archivo.</li>
+    </ul>
+  </section>
+</div>
+
+<script>/*FIGURA*/</script>
+<script>/*POSES*/</script>
+<script>/*PRUEBA*/</script>
+<script>
+(() => {
+  const MANUAL = {
+    'mat1-e03': { n: 'The Roll Up', nivel: 'Mat 1', inicial: 'Supino, brazos por encima de la cabeza solo hasta donde las costillas bajas sigan en el mat.', seq: [
+      ['Inhala', 'Unir los muslos, flexionar los pies, activar abdomen; brazos al techo y enrollar cabeza y espalda alta.'],
+      ['Exhala', 'Seguir despegando vértebra por vértebra hasta sentarse sobre los isquiones, con la columna curvada sobre las piernas (como abrazando una pelota de playa).'],
+      ['Inhala', 'Abdominales y glúteos redondean la pelvis para empezar a bajar, manteniendo la curva.'],
+      ['Exhala', 'Terminar de bajar y regresar los brazos por encima de la cabeza.']],
+      cuadros: ['Supino, brazos arriba sin apoyarlos', 'Brazos al techo, pies flexionados, la cabeza asiente', 'Enrolla cabeza y espalda alta', 'C sobre las piernas: abraza una pelota de playa', 'Retroversión: la pelvis redondea y empieza a bajar', 'Apoya vértebra por vértebra, brazos al techo', 'Brazos de vuelta arriba de la cabeza'] },
+    'mat1-e15': { n: 'Swan', nivel: 'Mat 1', inicial: 'Prono, palmas en el mat al ancho de hombros, codos flexionados; piernas tan juntas como permita la comodidad lumbar.', seq: [
+      ['Inhala', 'Activar abdomen, deslizar omóplatos hacia abajo y extender la espalda alta empujando el mat; subir solo hasta lo cómodo para la zona lumbar, cabeza en línea con la columna.'],
+      ['Exhala', 'Bajar con control.']],
+      cuadros: ['Prono, manos bajo los hombros', 'Omóplatos abajo, despega el esternón', 'Espalda alta extendida, pubis en el mat', 'Baja con control'] }
+  };
+  const respDe = f => /inhala.*exhala|continuo/i.test(f || '') ? 'ambas' : /inhala/i.test(f || '') ? 'inhala' : /exhala/i.test(f || '') ? 'exhala' : null;
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const cont = document.getElementById('ejercicios');
+  cont.style.display = 'grid'; cont.style.gap = '18px';
+
+  Object.entries(MANUAL).forEach(([id, m]) => {
+    const sec = document.createElement('section');
+    sec.className = 'ej';
+    sec.innerHTML = `
+      <div class="ej-cab"><div><h2>${esc(m.n)}</h2><small>${m.nivel} · manual de Balanced Body</small></div>
+        <div class="ctrl">
+          <div class="seg" role="group" aria-label="Modelo"><button type="button" data-modelo="nueva" aria-pressed="true">Modelo nueva</button><button type="button" data-modelo="anterior" aria-pressed="false">Anterior</button></div>
+          <div class="seg" role="group" aria-label="Vista"><button type="button" data-vista="anim" aria-pressed="true">Animación</button><button type="button" data-vista="sec" aria-pressed="false">Secuencia</button></div>
+        </div></div>
+      <div class="cuerpo">
+        <div class="visor">
+          <div class="vista-anim">
+            <div class="fig" aria-live="off"></div>
+            <div class="fase" aria-live="polite"></div>
+            <label class="tl"><span class="marcas" aria-hidden="true"></span><input type="range" min="0" step="0.002" value="0" aria-label="Recorrer el movimiento"></label>
+            <div class="ctrl">
+              <button type="button" class="btn" data-acc="ant" aria-label="Paso anterior">◀</button>
+              <button type="button" class="btn" data-acc="play" aria-label="Pausar o reproducir">⏸</button>
+              <button type="button" class="btn" data-acc="sig" aria-label="Paso siguiente">▶</button>
+              <div class="seg" role="group" aria-label="Velocidad">${[[1, '1×'], [0.5, '½×'], [0.25, '¼×']].map(([v, t]) => `<button type="button" data-vel="${v}" aria-pressed="${v === 1}">${t}</button>`).join('')}</div>
+            </div>
+            <div class="capas">
+              <button type="button" class="capa" data-capa="columna" aria-pressed="false">Columna vertebral</button>
+              <button type="button" class="capa" data-capa="fisica" aria-pressed="false">Centro de masa</button>
+              <button type="button" class="capa" data-capa="tray" aria-pressed="false">Trayectoria</button>
+              <button type="button" class="capa" data-capa="fantasma" aria-pressed="true">Hacia dónde va</button>
+            </div>
+          </div>
+          <div class="vista-sec" hidden><div class="secuencia" role="list"></div></div>
+        </div>
+        <ol class="pasos">
+          <li class="paso" data-paso="0" data-n="0" tabindex="0"><b>Posición inicial</b>${esc(m.inicial)}</li>
+          ${m.seq.map(([f, a], i) => `<li class="paso" data-paso="${i + 1}" data-n="${i + 1}" tabindex="0"><b>${f}</b>${esc(a)}</li>`).join('')}
+        </ol>
+      </div>`;
+    cont.appendChild(sec);
+
+    const $ = s => sec.querySelector(s), $$ = s => [...sec.querySelectorAll(s)];
+    const capas = { columna: false, fisica: false, tray: false, fantasma: true };
+    let modelo = 'nueva', rep = null, arrastrando = false, vel = 1;
+    const ejDe = () => modelo === 'nueva' ? { ...POSES_PRUEBA[id], estilo: 'anatomico', _prep: null, _enc: null } : { ...POSES[id], estilo: 'clasico', _prep: null, _enc: null };
+    let ej = ejDe();
+    const paso = i => ej.poses[i].s != null ? ej.poses[i].s : i;
+    const faseHTML = p => p === 0 ? `<span class="chip">Inicio</span>${esc(m.inicial)}` : `<span class="chip ${respDe(m.seq[p - 1][0]) || ''}">${m.seq[p - 1][0]}</span>${esc(m.seq[p - 1][1])}`;
+    let mostrado = -1;
+    const marcar = p => { if (p === mostrado) return; mostrado = p; $$('.paso').forEach(li => li.classList.toggle('on', +li.dataset.paso === p)); $('.fase').innerHTML = faseHTML(p); };
+    const icono = () => { $('[data-acc="play"]').textContent = rep && rep.enBucle ? '⏸' : '▶'; };
+    function armar() {
+      if (rep) rep.destruir();
+      ej = ejDe(); mostrado = -1;
+      const n = ej.poses.length, rango = $('.tl input');
+      rango.max = n;
+      $('.marcas').innerHTML = ej.poses.map((_, k) => `<i style="left:${(k / n * 100).toFixed(2)}%"></i>`).join('');
+      const resp = ej.poses.map((_, k) => { const p = paso((k + 1) % n); return p > 0 ? respDe(m.seq[p - 1][0]) : null; });
+      rep = FIGURA.reproductor($('.fig'), ej, { resp, capas: { ...capas },
+        alCambiar: i => { marcar(paso(i)); $$('.cuadro').forEach(c => c.setAttribute('aria-current', +c.dataset.k === i ? 'step' : 'false')); },
+        alAvanzar: pos => { if (!arrastrando) rango.value = pos; const i = Math.floor(pos); if (pos - i > 0.02) marcar(paso((i + 1) % n)); } });
+      rep.velocidad = vel;
+      icono();
+      /* secuencia: una imagen por pose clave (acá irán las fotos del ejercicio) */
+      const cap = modelo === 'nueva' ? m.cuadros : null;
+      $('.secuencia').innerHTML = ej.poses.map((_, k) => { const p = paso(k), f = p > 0 ? m.seq[p - 1][0] : '';
+        return `<button type="button" class="cuadro" role="listitem" data-k="${k}">${FIGURA.svgEstatico(ej, k, 0)}
+          <b><span class="chip ${respDe(f) || ''}">${p ? 'Paso ' + p : 'Inicio'}</span></b><span>${esc(cap && cap[k] ? cap[k] : (p ? m.seq[p - 1][1] : m.inicial))}</span></button>`; }).join('');
+      $$('.cuadro').forEach(c => c.onclick = () => { rep.ir(+c.dataset.k); icono(); });
+    }
+    armar();
+    $$('[data-modelo]').forEach(b => b.onclick = () => { modelo = b.dataset.modelo; $$('[data-modelo]').forEach(x => x.setAttribute('aria-pressed', x === b)); armar(); });
+    $$('[data-vista]').forEach(b => b.onclick = () => { const sq = b.dataset.vista === 'sec'; $$('[data-vista]').forEach(x => x.setAttribute('aria-pressed', x === b)); $('.vista-anim').hidden = sq; $('.vista-sec').hidden = !sq; if (sq) rep.pausar(); icono(); });
+    $('[data-acc="play"]').onclick = () => { arrastrando = false; if (rep.enBucle) rep.pausar(); else rep.reanudar(); icono(); };
+    $('[data-acc="sig"]').onclick = () => { arrastrando = false; rep.siguiente(); icono(); };
+    $('[data-acc="ant"]').onclick = () => { arrastrando = false; rep.anterior(); icono(); };
+    const rango = $('.tl input');
+    rango.oninput = () => { arrastrando = true; rep.irA(+rango.value % ej.poses.length); icono(); };
+    ['change', 'pointerup', 'touchend', 'keyup', 'blur'].forEach(ev => rango.addEventListener(ev, () => { arrastrando = false; }));
+    $$('[data-vel]').forEach(b => b.onclick = () => { vel = +b.dataset.vel; rep.velocidad = vel; $$('[data-vel]').forEach(x => x.setAttribute('aria-pressed', x === b)); });
+    $$('[data-capa]').forEach(b => b.onclick = () => { const on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', on); capas[b.dataset.capa] = on; rep.capa(b.dataset.capa, on); });
+    $$('.paso').forEach(li => { const ir = () => { const k = ej.poses.findIndex((_, i) => paso(i) === +li.dataset.paso); if (k >= 0) { rep.ir(k); icono(); } };
+      li.onclick = ir; li.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ir(); } }; });
+  });
+})();
+</script>

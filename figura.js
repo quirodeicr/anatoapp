@@ -657,6 +657,231 @@ const FIGURA = (() => {
     const seq = orden || (E.fr ? ['PL', 'PC', 'T', 'C', 'BL', 'BC'] : ['BL', 'PL', 'C', 'T', 'PC', 'BC']);
     return `<g class="${fantasma ? 'fig-fantasma' : 'fig-cuerpo'}">${seq.map(k => partes[k]).join('')}</g>`;
   }
+  /* =====================================================================
+     FIGURA ANATÓMICA (v4, en prueba): misma cinemática, otro dibujo.
+     Siluetas con relieves musculares (deltoides, bíceps y tríceps,
+     cuádriceps, isquiotibiales, gemelos), rótula y pliegues reales de
+     rodilla y codo, manos con pulgar, pies con talón, arco y dedos,
+     cara de perfil (frente, nariz, labios, mentón, ojo, ceja, oreja),
+     pelo con rodete y ropa de entrenamiento. Solo de perfil: de frente
+     y desde arriba se usa el dibujo clásico.
+     ===================================================================== */
+  let ESTILO = 'clasico';
+  const ANAT = {
+    cerca: { piel: '#eec19c', pielS: '#d8a27c', top: '#2f8f8a', calza: '#2d3042', calzaS: '#3b3f55', pelo: '#3a2618', linea: 'rgba(60,34,20,.55)', fino: 'rgba(60,34,20,.28)', ojo: '#2b1d14', labio: '#c4766c', blanco: '#fbf4ec' },
+    lejos: { piel: '#d3a07a', pielS: '#bd8762', top: '#226b67', calza: '#1f2231', calzaS: '#2b2e40', pelo: '#2a1b10', linea: 'rgba(40,22,12,.5)', fino: 'rgba(40,22,12,.22)' }
+  };
+  /* perfiles de ancho [t, anterior, posterior] a lo largo de cada hueso */
+  const PERF = {
+    muslo:  [[0, 7.6, 8.6], [0.15, 7.6, 8.3], [0.4, 7.1, 7.1], [0.7, 6.1, 5.9], [0.9, 5.5, 5.0], [1, 5.3, 4.8]],
+    pierna: [[0, 5.0, 4.8], [0.12, 4.3, 5.6], [0.3, 3.9, 6.0], [0.5, 3.4, 4.8], [0.75, 2.8, 3.2], [1, 2.5, 2.6]],
+    brazo:  [[0, 5.2, 5.0], [0.16, 5.6, 5.0], [0.38, 4.6, 4.7], [0.62, 4.2, 4.4], [0.88, 3.3, 3.6], [1, 3.1, 3.3]],
+    ante:   [[0, 3.2, 3.3], [0.22, 3.7, 3.3], [0.5, 3.0, 2.8], [0.85, 2.2, 2.1], [1, 2.1, 2.0]]
+  };
+  /* tronco: distancia del eje al frente y a la espalda según la altura (0 cadera … 1 hombros) */
+  const TR_FRENTE = [[0, 7.0], [0.1, 8.6], [0.22, 8.5], [0.36, 7.8], [0.5, 8.3], [0.62, 9.4], [0.74, 10.9], [0.84, 10.5], [0.93, 9.0], [1, 8.0]];
+  const TR_ESPALDA = [[0, 11.6], [0.08, 11.1], [0.2, 9.1], [0.32, 8.8], [0.5, 9.3], [0.7, 10.0], [0.88, 10.1], [1, 9.4]];
+  const enPerfil = (tabla, s) => { for (let q = 1; q < tabla.length; q++) if (s <= tabla[q][0]) { const [a, va] = tabla[q - 1], [b, vb] = tabla[q]; return lerp(va, vb, (s - a) / (b - a || 1)); } return tabla[tabla.length - 1][1]; };
+  const unit = (a, b) => { const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 0.001; return { x: dx / d, y: dy / d, d }; };
+  /* lado anterior (+1) o posterior (−1) de un hueso; normal anterior = ángulo − 90° */
+  function ladoHueso(a, b, perfil, signo) {
+    const u = unit(a, b), n = { x: u.y, y: -u.x };
+    return perfil.map(([t, an, po]) => { const w = (signo > 0 ? an : po) * signo; return { x: a.x + (b.x - a.x) * t + n.x * w, y: a.y + (b.y - a.y) * t + n.y * w, t, dist: t * u.d }; });
+  }
+  /* articulación que flexiona: del lado del pliegue se cortan los puntos que se
+     cruzarían y se pone el pliegue; del lado convexo, el relieve (rótula, olécranon) */
+  function articular(prox, dist, centro, uA, uB, flex, w, lado) {
+    const interior = rad(Math.max(10, 180 - Math.abs(flex)));
+    const sAst = Math.min(14, w / Math.tan(interior / 2));
+    const nA = lado > 0 ? { x: uA.y, y: -uA.x } : { x: -uA.y, y: uA.x }, nB = lado > 0 ? { x: uB.y, y: -uB.x } : { x: -uB.y, y: uB.x };
+    let bx = nA.x + nB.x, by = nA.y + nB.y; const bl = Math.hypot(bx, by) || 1; bx /= bl; by /= bl;
+    const pliegue = { x: centro.x + bx * Math.min(w / Math.sin(interior / 2), 7), y: centro.y + by * Math.min(w / Math.sin(interior / 2), 7) };
+    const A = prox.filter(p => (prox[prox.length - 1].dist - p.dist) > sAst * 0.9 || p === prox[0]);
+    const B = dist.filter(p => p.dist > sAst * 0.9 || p === dist[dist.length - 1]);
+    return Math.abs(flex) > 25 ? [...A, pliegue, ...B] : [...prox, ...dist];
+  }
+  function convexo(centro, uA, uB, r, lado) {
+    const nA = lado > 0 ? { x: uA.y, y: -uA.x } : { x: -uA.y, y: uA.x }, nB = lado > 0 ? { x: uB.y, y: -uB.x } : { x: -uB.y, y: uB.x };
+    let bx = nA.x + nB.x, by = nA.y + nB.y; const bl = Math.hypot(bx, by) || 1;
+    return { x: centro.x + bx / bl * r, y: centro.y + by / bl * r };
+  }
+  /* puntos en el marco de un hueso: x a lo largo, y hacia la normal elegida */
+  const enMarco = (o, ang, k, pts, signoY = 1) => {
+    const u = { x: Math.cos(rad(ang)), y: Math.sin(rad(ang)) }, n = { x: -u.y * signoY, y: u.x * signoY };
+    return pts.map(([x, y]) => ({ x: o.x + u.x * x * k + n.x * y, y: o.y + u.y * x * k + n.y * y }));
+  };
+  const cerrar = pts => `M${suave(pts)} Z`;
+  /* tapa redondeada en la raíz (hombro, cadera): media vuelta por detrás de la articulación */
+  function tapa(centro, u, rA, rP, n = 5) {
+    const nA = { x: u.y, y: -u.x }, pts = [];
+    for (let k = 1; k < n; k++) {
+      const g = Math.PI * k / n, r = lerp(rP, rA, k / n);
+      /* de posterior (−nA) a anterior (+nA) pasando por −u */
+      pts.push({ x: centro.x - nA.x * r * Math.cos(g) - u.x * r * Math.sin(g) * 0.9, y: centro.y - nA.y * r * Math.cos(g) - u.y * r * Math.sin(g) * 0.9 });
+    }
+    return pts;
+  }
+  /* cada parte devuelve formas (relleno) y detalles (líneas finas); el contorno lo pone dibujoAnat */
+  const forma = (d, fill) => ({ d, fill });
+  const linea = (pts, col, ancho = 0.45) => `<path d="M${suave(pts)}" fill="none" stroke="${col.fino}" stroke-width="${ancho}" stroke-linecap="round"/>`;
+
+  function piernaAnat(m, col) {
+    const uA = unit(m.raiz, m.rod), uB = unit(m.rod, m.tobillo), flex = n180(m.aP - m.a0);
+    const mA = ladoHueso(m.raiz, m.rod, PERF.muslo, 1), mP = ladoHueso(m.raiz, m.rod, PERF.muslo, -1);
+    const pA = ladoHueso(m.rod, m.tobillo, PERF.pierna, 1), pP = ladoHueso(m.rod, m.tobillo, PERF.pierna, -1);
+    const rotula = convexo(m.rod, uA, uB, 5.6, 1);
+    const ant = [...mA, rotula, ...pA.slice(1)];
+    const post = articular(mP, pP, m.rod, uA, uB, flex, 4.9, -1);
+    /* pie en su marco: x hacia los dedos, y hacia la planta */
+    const pie = enMarco(m.tobillo, m.aPie, m.e[2], [[0.8, -2.4], [5, -1.9], [9.5, -1.2], [12.8, -0.5], [14.3, 0.7], [13.1, 2.1], [10, 2.5], [6.5, 1.8], [2.5, 2.3], [-1.6, 2.9], [-3.9, 1.5], [-3.5, -0.7], [-2.2, -2.6]]);
+    /* la calza llega al tobillo; el pie va descalzo */
+    const raiz = tapa(m.raiz, uA, 7.6, 8.6);
+    /* la calza llega hasta el 88 % de la pierna (el tobillo y el pie quedan descubiertos) */
+    const corta = PERF.pierna.filter(([t]) => t <= 0.75).concat([[0.88, lerp(2.8, 2.5, 0.52), lerp(3.2, 2.6, 0.52)]]);
+    const pAc = ladoHueso(m.rod, m.tobillo, corta, 1), pPc = ladoHueso(m.rod, m.tobillo, corta, -1);
+    const calza = [...raiz, ...mA, rotula, ...pAc.slice(1), ...[...articular(mP, pPc, m.rod, uA, uB, flex, 4.9, -1)].reverse()];
+    /* piel solo donde se ve (tobillo y pie): así no asoma un borde claro bajo la calza */
+    const pielPie = [...pA.filter(p => p.t >= 0.7), ...pie, ...[...pP.filter(p => p.t >= 0.7)].reverse()];
+    return { f: [forma(cerrar(pielPie), col.piel), forma(cerrar(calza), col.calza)],
+      l: [linea([rotula, { x: rotula.x - uB.x * 2.4 + uA.x * 0.6, y: rotula.y - uB.y * 2.4 + uA.y * 0.6 }], col),
+          linea(ladoHueso(m.rod, m.tobillo, [[0.1, 0, 3.9], [0.3, 0, 4.6], [0.52, 0, 3.4]], -1), col),
+          linea(enMarco(m.tobillo, m.aPie, m.e[2], [[11.6, -0.9], [12.2, 0.9]]), col, 0.3)] };
+  }
+  function brazoAnat(m, col) {
+    const uA = unit(m.raiz, m.codo), uB = unit(m.codo, m.muneca), flex = n180(m.a0 - m.aA);
+    const bA = ladoHueso(m.raiz, m.codo, PERF.brazo, 1), bP = ladoHueso(m.raiz, m.codo, PERF.brazo, -1);
+    const aA = ladoHueso(m.codo, m.muneca, PERF.ante, 1), aP = ladoHueso(m.codo, m.muneca, PERF.ante, -1);
+    const olecranon = convexo(m.codo, uA, uB, 3.7, -1);
+    const ant = articular(bA, aA, m.codo, uA, uB, flex, 3.4, 1);
+    const post = [...bP, olecranon, ...aP.slice(1)];
+    /* mano en su marco: x hacia los dedos, y hacia adelante (pulgar) */
+    const mano = enMarco(m.muneca, m.aM, m.e[2], [[0, -2.0], [2.2, -2.7], [5.4, -3.5], [6.2, -2.8], [5.6, -2.1], [8.6, -1.6], [10.2, -0.4], [9.7, 1.0], [6, 2.2], [2, 2.2], [0, 2.0]], -1);
+    const deltoides = ladoHueso(m.raiz, m.codo, [[0.04, 4.6, 0], [0.22, 3.4, 0], [0.36, 1.0, 0], [0.24, -2.6, 0], [0.06, -4.2, 0]], 1);
+    const raiz = tapa(m.raiz, uA, 5.2, 5.0);
+    const dedos = enMarco(m.muneca, m.aM, m.e[2], [[6.4, 0.9], [8.9, 0.4]], -1);
+    return { f: [forma(cerrar([...raiz, ...ant, mano[mano.length - 1], ...mano.slice(0, -1).reverse(), ...[...post].reverse()]), col.piel)],
+      l: [linea(deltoides, col, 0.4), linea(dedos, col, 0.3)] };
+  }
+  function troncoAnat(E, col, aire) {
+    /* eje del tronco suavizado (Catmull-Rom por las 5 vértebras de control) */
+    const P = E.col, ejes = [];
+    for (let i = 0; i < 4; i++) for (let k = 0; k < 4; k++) {
+      const t = k / 4, p0 = P[Math.max(0, i - 1)], p1 = P[i], p2 = P[i + 1], p3 = P[Math.min(4, i + 2)];
+      const t2 = t * t, t3 = t2 * t, cr = (a, b, c, d) => 0.5 * (2 * b + (-a + c) * t + (2 * a - 5 * b + 4 * c - d) * t2 + (-a + 3 * b - 3 * c + d) * t3);
+      ejes.push({ x: cr(p0.x, p1.x, p2.x, p3.x), y: cr(p0.y, p1.y, p2.y, p3.y) });
+    }
+    ejes.push(P[4]);
+    let largo = 0; const acum = [0];
+    for (let i = 1; i < ejes.length; i++) { largo += Math.hypot(ejes[i].x - ejes[i - 1].x, ejes[i].y - ejes[i - 1].y); acum.push(largo); }
+    const a = aire - 0.5, N = ejes.length;
+    const nor = i => { const u = unit(ejes[Math.max(0, i - 1)], ejes[Math.min(N - 1, i + 1)]); return { x: u.y, y: -u.x, u }; };
+    const fr = [], es = [];
+    ejes.forEach((p, i) => {
+      const s = acum[i] / largo, q = nor(i);
+      let wf = enPerfil(TR_FRENTE, s), we = enPerfil(TR_ESPALDA, s);
+      if (s > 0.5 && s < 0.95) wf *= 1 + 0.08 * a * Math.sin((s - 0.5) / 0.45 * Math.PI);
+      if (s > 0.15 && s < 0.4) wf *= 1 + 0.06 * a;
+      if (s > 0.45 && s < 0.9) we *= 1 + 0.03 * a;
+      fr.push({ x: p.x + q.x * wf, y: p.y + q.y * wf, s }); es.push({ x: p.x - q.x * we, y: p.y - q.y * we, s });
+    });
+    const q0 = nor(0), u0 = q0.u, H0 = ejes[0];
+    /* glúteo: arco por detrás y por debajo de la cadera hasta el muslo; pubis adelante */
+    const gl = (g, r) => ({ x: H0.x + (-q0.x * Math.cos(rad(g)) - u0.x * Math.sin(rad(g))) * r, y: H0.y + (-q0.y * Math.cos(rad(g)) - u0.y * Math.sin(rad(g))) * r });
+    const nalga = [gl(28, 11.2), gl(55, 9.6), gl(82, 7.2)];
+    const pubis = { x: H0.x + q0.x * 4.6 - u0.x * 5.2, y: H0.y + q0.y * 4.6 - u0.y * 5.2 };
+    const qN = nor(N - 1), uN = qN.u, S = ejes[N - 1];
+    const cuelloF = { x: S.x + uN.x * 3.6 + qN.x * 3.8, y: S.y + uN.y * 3.6 + qN.y * 3.8 }, cuelloE = { x: S.x + uN.x * 4.2 - qN.x * 4.2, y: S.y + uN.y * 4.2 - qN.y * 4.2 };
+    const contorno = [pubis, ...fr, cuelloF, cuelloE, ...[...es].reverse(), ...nalga];
+    /* calza: de la cadera hasta la cintura (s < 0.3) */
+    const corte = 0.3, frC = fr.filter(p => p.s <= corte), esC = es.filter(p => p.s <= corte);
+    const calza = [pubis, ...frC, ...[...esC].reverse(), ...nalga];
+    /* borde de la calza (cintura) */
+    const cint = [frC[frC.length - 1], esC[esC.length - 1]];
+    return { f: [forma(cerrar(contorno), col.top), forma(cerrar(calza), col.calza)],
+      l: [`<path d="M${f1(cint[0].x)},${f1(cint[0].y)} L${f1(cint[1].x)},${f1(cint[1].y)}" stroke="rgba(255,255,255,.18)" stroke-width=".8"/>`] };
+  }
+  function cabezaAnat(E, col) {
+    const c = E.C, f = E.antCab, u = E.arriba;
+    const P = ([x, y]) => ({ x: c.x + f.x * x + u.x * y, y: c.y + f.y * x + u.y * y });
+    const pts = xs => xs.map(P);
+    const piel = pts([[6.3, 6.8], [8.7, 3.6], [9.6, 1.4], [9.1, 0.2], [10.8, -1.6], [12.0, -2.7], [10.4, -3.3], [9.7, -3.4], [10.2, -4.3], [9.6, -4.9], [10.0, -5.4], [9.2, -6.2], [9.7, -7.3], [8.3, -8.6], [5.0, -8.6], [1.4, -6.6], [-4.6, -6.4], [-8.6, -2.6], [-9.4, 1.6], [-6.4, 7.6], [0, 9.8], [4.0, 9.0]]);
+    const pelo = pts([[6.6, 6.4], [5.6, 8.4], [2.0, 10.2], [-3.4, 10.0], [-8.4, 6.4], [-10.0, 1.4], [-9.2, -3.0], [-6.4, -5.2], [-4.2, -3.6], [-2.6, 0.6], [0.2, 3.4], [3.6, 5.0]]);
+    const rodete = P([-9.4, 6.2]);
+    const ojo = pts([[5.9, 0.5], [7.0, 1.25], [8.1, 0.6], [7.0, -0.1]]);
+    const iris = P([7.25, 0.5]);
+    const ceja = pts([[5.6, 2.3], [7.2, 2.8], [8.7, 2.3]]);
+    const boca = pts([[9.6, -4.9], [8.2, -5.0]]);
+    const labioS = pts([[9.7, -3.5], [10.2, -4.3], [9.6, -4.9], [8.6, -4.6]]);
+    const labioI = pts([[9.6, -4.9], [10.0, -5.4], [9.3, -6.0], [8.6, -5.3]]);
+    const fosa = pts([[10.9, -2.9], [10.2, -2.6], [9.9, -3.0]]);
+    const oreja = P([-0.6, -0.8]), angOreja = Math.atan2(u.y, u.x) * 180 / Math.PI;
+    const mechones = [pts([[4.0, 8.4], [0.4, 8.6], [-4.6, 7.0]]), pts([[2.6, 5.2], [-1.6, 6.6], [-6.8, 3.8]]), pts([[-1.0, 2.4], [-5.2, 3.0], [-8.0, -0.6]])];
+    return { f: [forma(cerrar(piel), col.piel), { d: `M${f1(rodete.x + 4.1)},${f1(rodete.y)} A4.1,4.1 0 1 0 ${f1(rodete.x - 4.1)},${f1(rodete.y)} A4.1,4.1 0 1 0 ${f1(rodete.x + 4.1)},${f1(rodete.y)} Z`, fill: col.pelo }, forma(cerrar(pelo), col.pelo)],
+      l: [`<path d="M${suave(labioS)} Z" fill="${col.labio || col.piel}" opacity=".8"/><path d="M${suave(labioI)} Z" fill="${col.labio || col.piel}" opacity=".65"/>`,
+        `<ellipse cx="${f1(oreja.x)}" cy="${f1(oreja.y)}" rx="2.3" ry="1.45" transform="rotate(${f1(angOreja)} ${f1(oreja.x)} ${f1(oreja.y)})" fill="${col.pielS}" opacity=".55"/><path d="M${suave(pts([[0.3, 0.9], [-1.4, 0.4], [-1.5, -1.6], [-0.4, -2.6]]))}" fill="none" stroke="${col.linea}" stroke-width=".35"/>`,
+        `<path d="M${suave([...ojo, ojo[0]])}" fill="${col.blanco || '#fff'}" stroke="${col.linea}" stroke-width=".3"/><circle cx="${f1(iris.x)}" cy="${f1(iris.y)}" r=".62" fill="${col.ojo || '#222'}"/>`,
+        `<path d="M${suave(ojo.slice(0, 3))}" fill="none" stroke="${col.ojo || '#222'}" stroke-width=".55" stroke-linecap="round"/>`,
+        `<path d="M${suave(ceja)}" fill="none" stroke="${col.pelo}" stroke-width=".8" stroke-linecap="round"/>`,
+        `<path d="M${suave(boca)}" fill="none" stroke="${col.linea}" stroke-width=".4" stroke-linecap="round"/>`,
+        `<path d="M${suave(fosa)}" fill="none" stroke="${col.linea}" stroke-width=".35"/>`,
+        ...mechones.map(m => `<path d="M${suave(m)}" fill="none" stroke="rgba(255,255,255,.14)" stroke-width=".5"/>`)] };
+  }
+  function cuelloAnat(E, col) {
+    const u = unit(E.S, E.C), n = { x: u.y, y: -u.x };
+    const p = (t, w) => ({ x: E.S.x + (E.C.x - E.S.x) * t + n.x * w, y: E.S.y + (E.C.y - E.S.y) * t + n.y * w });
+    /* el frente del cuello es la normal anterior del tronco */
+    const fr = E.antCab, sig = (n.x * fr.x + n.y * fr.y) > 0 ? 1 : -1;
+    const pts = [p(-0.15, 4.6 * sig), p(0.5, 3.9 * sig), p(0.95, 3.6 * sig), p(0.95, -4.4 * sig), p(0.4, -4.3 * sig), p(-0.2, -5.4 * sig)];
+    return { f: [forma(cerrar(pts), col.piel)], l: [linea([p(0.1, -2.6 * sig), p(0.55, 1.6 * sig), p(0.85, 2.8 * sig)], col, 0.35)] };
+  }
+  /* columna vertebral (capa didáctica): sacro, 5 lumbares, 12 dorsales y 7 cervicales */
+  function columnaSVG(E) {
+    const P = E.col, ejes = [];
+    for (let i = 0; i < 4; i++) for (let k = 0; k < 6; k++) { const t = k / 6; ejes.push({ x: lerp(P[i].x, P[i + 1].x, t), y: lerp(P[i].y, P[i + 1].y, t) }); }
+    ejes.push(P[4]);
+    let largo = 0; const acum = [0];
+    for (let i = 1; i < ejes.length; i++) { largo += Math.hypot(ejes[i].x - ejes[i - 1].x, ejes[i].y - ejes[i - 1].y); acum.push(largo); }
+    const en = s => { const L = s * largo; let i = 1; while (i < acum.length - 1 && acum[i] < L) i++; const t = (L - acum[i - 1]) / (acum[i] - acum[i - 1] || 1); const a = ejes[i - 1], b = ejes[i], u = unit(a, b); return { x: lerp(a.x, b.x, t), y: lerp(a.y, b.y, t), u }; };
+    const vert = (q, w, l, extra = '') => { const ang = Math.atan2(q.u.y, q.u.x) * 180 / Math.PI; return `<rect x="${f1(q.x - l / 2)}" y="${f1(q.y - w / 2)}" width="${f1(l)}" height="${f1(w)}" rx="${f1(w / 3)}" transform="rotate(${f1(ang)} ${f1(q.x)} ${f1(q.y)})" class="vert${extra}"/>`; };
+    let out = '';
+    for (let k = 0; k < 17; k++) {
+      const s = 0.1 + (k + 0.5) / 17 * 0.9, q = en(s), atras = enPerfil(TR_ESPALDA, s) - 3.8;
+      const pt = { x: q.x - q.u.y * atras, y: q.y + q.u.x * atras, u: q.u };
+      out += vert(pt, k < 5 ? 3.4 : 2.9, largo * 0.9 / 17 * 0.74, k < 5 ? ' lumbar' : ' dorsal');
+    }
+    const q0 = en(0.04), at0 = enPerfil(TR_ESPALDA, 0.04) - 3.6;
+    out += vert({ x: q0.x - q0.u.y * at0, y: q0.y + q0.u.x * at0, u: q0.u }, 4.2, largo * 0.09, ' sacro');
+    const uc = unit(E.S, E.C);
+    for (let k = 0; k < 7; k++) {
+      const t = (k + 0.5) / 7 * 0.9, q = { x: lerp(E.S.x, E.C.x, t) - uc.y * 1.8 * 0, y: lerp(E.S.y, E.C.y, t), u: uc };
+      const fr = E.antCab, pt = { x: q.x - fr.x * 1.8, y: q.y - fr.y * 1.8, u: uc };
+      out += vert(pt, 2.3, Math.hypot(E.C.x - E.S.x, E.C.y - E.S.y) * 0.9 / 7 * 0.72, ' cervical');
+    }
+    return `<g class="columna">${out}</g>`;
+  }
+  /* Capas por profundidad (lado lejano, cuerpo con la pierna cercana, brazo cercano).
+     En cada capa: primero todas las formas con un trazo grueso (el contorno) y
+     encima los rellenos, así las uniones (cadera, cuello) no muestran costuras y
+     la silueta queda bien definida. */
+  function dibujoAnat(E, fantasma, orden, aire) {
+    const c1 = ANAT.cerca, c2 = ANAT.lejos;
+    const P = { BC: brazoAnat(E.seg.bc, c1), BL: brazoAnat(E.seg.bl, c2), PC: piernaAnat(E.seg.pc, c1), PL: piernaAnat(E.seg.pl, c2), T: troncoAnat(E, c1, aire ?? 0.5) };
+    const cu = cuelloAnat(E, c1), ca = cabezaAnat(E, c1);
+    P.C = { f: [...cu.f, ...ca.f], l: [...cu.l, ...ca.l] };
+    const seq = orden || ['BL', 'PL', 'C', 'T', 'PC', 'BC'];
+    const capas = [];
+    for (const k of seq) {
+      const grupo = k === 'BL' || k === 'PL' ? 'lejos' : k === 'BC' ? 'brazo' : 'cuerpo';
+      const ult = capas[capas.length - 1];
+      if (ult && ult.g === grupo) ult.ks.push(k); else capas.push({ g: grupo, ks: [k] });
+    }
+    const svg = capas.map(({ g, ks }) => {
+      const col = g === 'lejos' ? c2 : c1, fs = ks.flatMap(k => P[k].f);
+      return `<g>${fs.map(x => `<path d="${x.d}" fill="${col.linea}" stroke="${col.linea}" stroke-width="1.1" stroke-linejoin="round"/>`).join('')}${fs.map(x => `<path d="${x.d}" fill="${x.fill}"/>`).join('')}${ks.flatMap(k => P[k].l).join('')}</g>`;
+    }).join('');
+    return `<g class="${fantasma ? 'fig-fantasma' : 'fig-cuerpo'}">${svg}</g>`;
+  }
+
   /* sombra en el mat bajo lo que está apoyado: ayuda a leer el contacto */
   function sombra(E) {
     const pts = contorno(E).filter(p => p.y > PISO - 5);
@@ -686,7 +911,8 @@ const FIGURA = (() => {
     const E = mover(r.E, enc.cx, enc.cy);
     const silla = ej.silla && !fantasma
       ? `<g class="fig-silla"><rect x="${f1(E.H.x - 16)}" y="${f1(E.H.y + 12)}" width="30" height="5" rx="2"/><rect x="${f1(E.H.x - 14)}" y="${f1(E.H.y + 16)}" width="4" height="${f1(PISO - E.H.y - 16)}"/><rect x="${f1(E.H.x + 8)}" y="${f1(E.H.y + 16)}" width="4" height="${f1(PISO - E.H.y - 16)}"/><rect x="${f1(E.H.x - 18)}" y="${f1(E.H.y - 30)}" width="4" height="46" rx="2"/></g>` : '';
-    return (fantasma || ej.camara === 'arriba' ? '' : sombra(E)) + silla + dibujo(E, fantasma, ej.orden, aire);
+    const anat = (ej.estilo || ESTILO) === 'anatomico' && !E.fr && ej.camara !== 'arriba';
+    return (fantasma || ej.camara === 'arriba' ? '' : sombra(E)) + silla + (anat ? dibujoAnat(E, fantasma, ej.orden, aire) : dibujo(E, fantasma, ej.orden, aire));
   }
   function fondo(ej) {
     if (ej.camara === 'arriba') return ej.matV ? `<rect x="${W / 2 - 48}" y="6" width="96" height="${H - 12}" rx="10" class="fig-mat-arriba"/>`
@@ -774,7 +1000,7 @@ const FIGURA = (() => {
       gC.innerHTML = figuraSVG(ej, r, enc, false, aire(i, f));
       gF.innerHTML = capa.fantasma && n > 1 ? figuraSVG(ej, cuadro(ej, f > 0 && f < 1 ? (i + 1) % n : (i + 1) % n, 0), enc, true) : '';
       if (capa.tray && n > 1) { if (trayDe !== i) { gT.innerHTML = trayectorias(ej, i, enc); trayDe = i; } } else { gT.innerHTML = ''; trayDe = -1; }
-      gFis.innerHTML = capa.fisica ? capaFisica(ej, r, enc) : '';
+      gFis.innerHTML = (capa.columna && ej.camara !== 'arriba' && !r.E.fr ? columnaSVG(mover(r.E, enc.cx, enc.cy)) : '') + (capa.fisica ? capaFisica(ej, r, enc) : '');
       if (alAvanzar) alAvanzar(i + f);
     };
     const llegar = k => { i = ((k % n) + n) % n; f = 0; alCambiar(i); };
@@ -845,5 +1071,5 @@ const FIGURA = (() => {
     return { masBajo: bajo.p + ' ' + (bajo.y - PISO).toFixed(1), apoyos: cont.join(' '), agarres: ags, avisos: r.avisos };
   }
 
-  return { svgEstatico, reproductor, tira, esqueletoEn, validar, cuadro, preparar, diag, centroMasa, equilibrio, W, H, PISO };
+  return { estilo(v) { if (v) ESTILO = v; return ESTILO; }, svgEstatico, reproductor, tira, esqueletoEn, validar, cuadro, preparar, diag, centroMasa, equilibrio, W, H, PISO };
 })();
