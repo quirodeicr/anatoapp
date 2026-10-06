@@ -48,6 +48,13 @@ misma pregunta, y las que no parecen corresponder a su ejercicio no se usan. Tod
 > Las fotos parecen provenir del manual del curso. Para estudio propio no hay problema; antes de compartir
 > el archivo o el link con terceros, tené en cuenta que las estás distribuyendo.
 
+**Fotos con accesorios (Mat 3 Props)** — en el visor de cada ejercicio del manual que las tiene, el botón
+**📷 Fotos con props** alterna la animación con tus fotos (bola, liga, aro, pesas, rodillo) y sus
+observaciones; tocá una para verla grande. Las caras de quienes miran la clase están pixeladas.
+`importar_mat3.py` las saca de "Mat 3 Props.xlsx" a `privado/`, que **no se sube al repo** (es público): solo
+viajan en la copia `publicar/PilatesLab-con-fotos.html` (`python empaquetar.py --con-fotos`) y en la
+versión web. `PilatesLab.html` no las incluye.
+
 ---
 
 ## Cómo abrirla
@@ -81,6 +88,16 @@ ejercicio. Entre dos posiciones distintas aparece la transición (la del manual 
 clase** controla lo mismo que la corrección: cantidad, repeticiones exactas, orden de posiciones del manual
 (sin volver a supino después del prono), cantidad de cambios de posición, calentamiento y balance
 (flexión, movilidad, extensión, rotación o lateral, tren superior, tren inferior). La clase queda guardada.
+
+**Mis sesiones** (pestaña 📋 Sesiones) — para planear tus clases reales y que queden guardadas. Cada sesión
+tiene nombre, fecha, para quién es, la duración buscada, focos (columna, cadera, tren superior,
+respiración, *Osteoporosis: cuidar la flexión*…) y notas. Sumás ejercicios del manual (Mat 1 y Mat 2) y
+Pre-Pilates con buscador y filtros por posición; a cada uno le ponés repeticiones, un accesorio (bola,
+liga, aro, pesas, rodillo) y una nota. Si hay foto de ese ejercicio con ese accesorio aparece 📷. La app
+estima la duración, muestra las transiciones y **Revisar sesión** marca orden de posiciones, transiciones,
+repeticiones, calentamiento, balance, lo que el manual pide evitar con osteoporosis y si te sobra o falta
+tiempo. Se puede duplicar una sesión, copiarla como texto (para WhatsApp o notas) y, desde Armá tu clase,
+**Guardar como sesión**.
 
 **Tu personaje y tu estudio** (pestaña Estudio) — un personaje con nombre propio (el 🎲 propone juegos de
 palabras: *Core-azón*, *Pelvis Presley*, *Glúteo Máximo*, *Teaser Rex*…) que se viste a gusto: piel, pelo,
@@ -216,7 +233,7 @@ entender, no texto literal de tus apuntes: contrastalos con tu manual antes de d
 
 ## Cómo compartirla
 
-**`PilatesLab.html`** es la app entera en un solo archivo (~1,6 MB, con las fotos). Mandalo por WhatsApp o correo:
+**`PilatesLab.html`** es la app entera en un solo archivo (~2,2 MB, con las fotos Pre-Pilates). Mandalo por WhatsApp o correo:
 la otra persona le hace doble clic y funciona sin internet, con **su propio** progreso.
 
 Desde **Perfil → Guardar y compartir** la app genera copias de sí misma:

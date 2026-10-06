@@ -968,6 +968,33 @@ article.ex-rev{margin-bottom:10px}
 .cl-acc{margin-top:12px}
 .cl-pre{font-size:11px;text-transform:none;letter-spacing:0;color:var(--tx3)}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+/* ===== Mis sesiones (planes.js) ===== */
+.pl-acc{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.pl-lista{display:grid;gap:8px}
+.pl-tarjeta{display:flex;gap:6px;align-items:stretch;background:var(--sup);border:2px solid var(--linea);border-radius:14px;overflow:hidden}
+.pl-tarjeta.proxima{border-color:color-mix(in srgb,var(--verde) 55%,var(--linea))}
+.pl-abrir{flex:1;min-width:0;background:none;border:0;text-align:left;padding:10px 12px;cursor:pointer;color:var(--tx);font:inherit;display:grid;gap:2px}
+.pl-abrir b{font-size:16px;font-weight:800}.pl-abrir small{color:var(--tx2);font-size:12.5px}
+.pl-datos{font-size:13px;color:var(--tx2)}
+.pl-focos{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}.pl-focos i{font-style:normal;font-size:11.5px;font-weight:700;background:var(--sup3);border-radius:99px;padding:2px 8px}
+.pl-mini-acc{display:flex;flex-direction:column;border-left:2px solid var(--linea)}
+.pl-mini-acc button{flex:1;min-width:46px;background:none;border:0;cursor:pointer;font-size:16px;color:var(--tx2)}
+.pl-mini-acc button+button{border-top:2px solid var(--linea)}
+.pl-nombre input{width:100%;font:inherit;font-size:22px;font-weight:900;border:0;border-bottom:2px dashed var(--linea2);background:transparent;color:var(--tx);padding:6px 2px;margin:6px 0 10px}
+.pl-campos{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:10px}
+.pl-campos label,.pl-notas{display:grid;gap:3px;font-size:12.5px;font-weight:800;color:var(--tx2)}
+.pl-campos input,.pl-notas textarea,.pl-buscar input,.pl-extra select,.pl-extra input{font:inherit;font-size:14px;color:var(--tx);background:var(--sup);border:2px solid var(--linea2);border-radius:10px;padding:7px 9px;width:100%;min-width:0}
+.pl-min{display:flex;align-items:center;gap:6px;font-weight:700}.pl-min input{width:80px}
+.pl-notas{margin:6px 0 10px}.pl-notas textarea{resize:vertical;font-weight:500}
+.pl-resumen{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;background:var(--sup2);border-radius:12px;padding:9px 12px;font-size:14px}
+.pl-aviso{color:var(--exhala-tx,#c2410c);font-weight:700}.pl-ok{color:var(--verde-o,var(--verde));font-weight:700}
+.pl-extra{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;align-items:center}
+.pl-extra .pl-prop{flex:0 1 130px}.pl-extra .pl-nota{flex:1 1 140px}
+.pl-extra select,.pl-extra input{padding:4px 7px;font-size:13px;border-radius:8px}
+.pl-foto{border:2px solid var(--linea2);background:var(--sup);border-radius:8px;min-width:34px;min-height:30px;cursor:pointer}
+.pl-buscar{display:block;margin-bottom:8px}
+.pl-texto{display:grid;gap:10px}.pl-texto textarea{width:100%;font:inherit;font-size:13px;border:2px solid var(--linea2);border-radius:10px;padding:8px;background:var(--sup);color:var(--tx)}
+@media (max-width:520px){.pl-fila{flex-wrap:wrap}.pl-fila .cl-info{flex-basis:calc(100% - 120px)}}
 .chips button{background:var(--sup);border:2px solid var(--linea2);border-radius:99px;padding:5px 11px;font-size:13px;font-weight:700;cursor:pointer}
 .chips button.on{border-color:var(--verde);background:var(--verde-cl);color:var(--verde-o)}
 .cl-pool{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
@@ -1090,6 +1117,7 @@ article.ex-rev{margin-bottom:10px}
 <nav class="nav" aria-label="Secciones">
   <button type="button" data-v="inicio" class="on"><span>🏠</span>Inicio</button>
   <button type="button" data-v="practica"><span>🎯</span>Práctica</button>
+  <button type="button" data-v="planes"><span>📋</span>Sesiones</button>
   <button type="button" data-v="mapa"><span>🧍</span>Mapa</button>
   <button type="button" data-v="apuntes"><span>📒</span>Apuntes</button>
   <button type="button" data-v="estudio"><span>🧘</span>Estudio</button>
@@ -1116,6 +1144,7 @@ article.ex-rev{margin-bottom:10px}
 <script src="efectos.js"></script>
 <script src="estudio.js"></script>
 <script src="clase.js"></script>
+<script src="planes.js"></script>
 <script src="privado/fotos-mat3.js"></script>
 <script src="app.js"></script>
 <script>

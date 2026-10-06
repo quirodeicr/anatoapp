@@ -125,6 +125,7 @@ function vClase() {
     <div class="fila cl-acc">
       <button type="button" class="btn3d verde" id="clRevisar" ${c.items.length ? '' : 'disabled'}>Revisar mi clase</button>
       <button type="button" class="btn ghost" id="clVaciar" ${c.items.length ? '' : 'disabled'}>Vaciar</button>
+      <button type="button" class="btn ghost" id="clGuardar" ${c.items.length ? '' : 'disabled'}>Guardar como sesión</button>
     </div>
     <div id="clRes"></div>
 
@@ -146,6 +147,7 @@ function vClase() {
   $$('#clPos button').forEach(b => b.onclick = () => { filtroClase.pos = b.dataset.p; vClase(); });
   $$('#clF button').forEach(b => b.onclick = () => { filtroClase.f = b.dataset.f; vClase(); });
   $('#clRevisar').onclick = revisarClase;
+  $('#clGuardar').onclick = () => { const p = planDesdeClase(); planAbierto = p.id; ir('planes'); toast('Guardada en <b>Mis sesiones</b>: ahí la podés ajustar.', 'toast-suave'); };
   $('#clVaciar').onclick = async () => {
     if (!(await confirmar('¿Vaciar la clase y empezar de nuevo?', 'Vaciar'))) return;
     c.items = []; guardar(); vClase();

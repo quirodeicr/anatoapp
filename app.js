@@ -150,6 +150,7 @@ function estadoInicial() {
     sesiones: 0, perfectas: 0, combosMax: 0, totalResp: 0,
     pj: PJ_BASE(),      // personaje y estudio (estudio.js)
     clase: null, clasesOk: 0, claseXpDia: null,   // Armá tu clase (clase.js)
+    planes: [],         // Mis sesiones (planes.js): sesiones de Pilates planeadas
     cfg: { retencion: 0.9, meta: 50, sonido: true, sesion: 15,
            musica: true, estiloMusica: 'lofi', volMusica: 0.35, volSonido: 0.8, vibracion: true,
            efectos: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'suaves' : 'completos' }
@@ -1632,6 +1633,8 @@ function finSesion() {
 const app = () => $('#app');
 
 function ir(v) {
+  /* tocar "Sesiones" estando en una sesión vuelve a la lista */
+  if (v === 'planes' && vista === 'planes') planAbierto = null;
   L = null;
   juegoMapa = null;
   vista = v;
@@ -1642,7 +1645,7 @@ function ir(v) {
   render();
 }
 function render() {
-  ({ inicio: vInicio, practica: vPractica, mapa: vMapa, apuntes: vApuntes, perfil: vPerfil, estudio: vEstudio, clase: vClase }[vista] || vInicio)();
+  ({ inicio: vInicio, practica: vPractica, mapa: vMapa, apuntes: vApuntes, perfil: vPerfil, estudio: vEstudio, clase: vClase, planes: vPlanes }[vista] || vInicio)();
   pintarHud();
 }
 function pintarHud() {

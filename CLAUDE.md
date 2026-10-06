@@ -8,7 +8,7 @@ como un único archivo HTML. Textos en **voseo rioplatense y sin género** ("Tod
 ## Entorno y reglas de trabajo
 
 - El proyecto vive en el repo de GitHub `quirodeicr/anatoapp` (raíz del repo; antes era la carpeta `Anatoapp`). Finales de línea LF (`.gitattributes`); `publicar/` no se versiona.
-- Orden de carga (index.html): datos… → contenido-bb.js → datos-examenes.js → datos-familias.js → datos-mat2.js → diagramas/mapa/efectos → estudio.js → clase.js → app.js (estadoInicial usa `PJ_BASE` de estudio.js).
+- Orden de carga (index.html): datos… → contenido-bb.js → datos-examenes.js → datos-familias.js → datos-mat2.js → diagramas/mapa/efectos → estudio.js → clase.js → planes.js → privado/fotos-mat3.js (si existe) → app.js (estadoInicial usa `PJ_BASE` de estudio.js).
 - **Sin Node.js ni build tools.** JavaScript plano; los scripts auxiliares son Python 3 (pymupdf, openpyxl, Pillow para los importadores).
 - `index.html` carga los `.js` sueltos (versión de carpeta). **Después de cualquier cambio** correr:
   ```
@@ -33,6 +33,7 @@ como un único archivo HTML. Textos en **voseo rioplatense y sin género** ("Tod
 | `datos-mat2.js` | Análisis MAT 2 (23 fichas de "Mat 2 ordenado.xlsx", `bb` = ejercicio del manual), tema `mat2an` (u19) y preguntas de familias, tema `familias` (u20). `EJ_REF(nombre, libro)` resuelve un nombre a su ficha (`{pm}` con foto o `{bb}` con animación). Copia textual en `fuentes/mat2-analisis.json`. |
 | `datos-familias.js` | 146 ejercicios por familia de posición y libro. **Generado** por `importar_familias.py` desde `fuentes/familias.json` (hojas de familias de "Resumen Todos los ejercicios.xlsx"; su primera hoja es la planilla de Principios que ya estaba). |
 | `clase.js` | "Armá tu clase" (Práctica): arma una clase con BB.ejercicios + Pre-Pilates y la revisa como la corrección (cantidad, reps exactas, orden de posiciones, transiciones, calentamiento, balance). Estado en `S.clase`, `S.clasesOk`. |
+| `planes.js` | "Mis sesiones" (pestaña 📋 Sesiones): planificador de clases reales que quedan guardadas en `S.planes` (nombre, fecha, para, duración, focos, notas; ejercicios BB + Pre-Pilates con reps, accesorio, foto de Mat 3 si hay y nota). Revisión (orden, transiciones, reps, calentamiento, balance, osteoporosis, duración), copiar como texto, duplicar; "Guardar como sesión" desde Armá tu clase. Reusa POS_CLASE, TRANSICIONES, rangoReps… de clase.js. |
 | `estudio.js` | Personaje y estudio (pestaña Estudio, tarjeta en Inicio, festejo en el cierre de lección): avatar SVG personalizable, aparatos/prendas/accesorios que se desbloquean por nivel, lecciones, racha, logros, clases aprobadas. Estado en `S.pj` (`vistos` = desbloqueos ya anunciados). |
 | `figura.js` | Motor de la figura articulada (v3): mínimo jerk, columna articulada por segmentos, articulaciones por rango, rodar sin deslizar, choque con el piso, centro de masa; reproductor con paso a paso, deslizador, velocidad y capas (trayectoria, centro de masa, pose siguiente) y respiración. |
 | `poses.js` | Poses de 48 ejercicios de Mat 1/Mat 2 y 13 posiciones. |
