@@ -320,11 +320,31 @@ const POSES = (() => {
     X(V, { tr: -172, fl: 0, cab: 0, bc: [-174, 0, 0], bl: [-173, 0, 0], pc: [-8, 0, 85], pl: [-7, 0, 85], s: 1, dur: 1800 }),
     X(V, { s: 2, dur: 1800 })
   ]);
-  const HIPC = { tr: -132, fl: 4, cab: 0, bc: [118, 0, 0], bl: [119, 0, 0], pc: [-52, 0, 85], pl: [-51, 0, 85], apoyo: ['pelvis', 'manoC', 'manoL'] };
-  ej('mat2-e06', 'Hip Circles', {}, [
+  /* Hip Circles — sentada en V apoyada en las manos, vista DESDE ARRIBA: de perfil el
+     círculo no se ve (las piernas van hacia los costados). Desde arriba la figura mira
+     hacia abajo de la imagen: el tronco reclinado se ve en escorzo (se ve el pecho); los
+     hombros quedan más atrás que las manos, así que los brazos bajan hacia las caderas
+     (las manos en el mat a los costados, detrás de la pelvis) y las piernas van hacia adelante. Los pies dibujan
+     el círculo: a la derecha de quien lo hace (izquierda de la imagen), lejos al bajar
+     (la pierna se ve más larga), a su izquierda y cerca al subir (más corta, en escorzo).
+     a = dirección de las piernas en la imagen, l = largo aparente */
+  const hipc = (a, l, c = {}) => ({ tr: -90, fl: 0, cab: 0, bc: [101, 0, 0], bl: [79, 0, 0], pc: [a - 3, 0, 85], pl: [a + 3, 0, 85],
+    k: { tronco: 0.7, bc: [0.38, 0.38, 0.75], bl: [0.38, 0.38, 0.75], pc: [l, l, 0.8], pl: [l, l, 0.8] }, ...c });
+  const HIPC = hipc(90, 0.5);
+  /* la trayectoria de los pies arranca visible: es el círculo */
+  ej('mat2-e06', 'Hip Circles', { vista: 'frente', camara: 'arriba', capas: { tray: true } }, [
     HIPC,
-    X(HIPC, { pc: [-22, 0, 85], pl: [-21, 0, 85], k: { pc: [0.9, 0.9, 1], pl: [0.9, 0.9, 1] }, s: 1 }),
-    X(HIPC, { pc: [-36, 0, 85], pl: [-35, 0, 85], k: { pc: [0.86, 0.86, 1], pl: [0.86, 0.86, 1] }, s: 2 })
+    /* 1 · inhala: a su derecha, bajando hacia el mat… */
+    hipc(116, 0.72, { s: 1, dur: 700, alto: false }),
+    /* …abajo: lejos, cerca del mat */
+    hipc(90, 0.92, { s: 1, dur: 700, alto: false }),
+    /* 2 · exhala: a su izquierda y de vuelta arriba */
+    hipc(64, 0.72, { s: 2, dur: 700, alto: false }),
+    hipc(90, 0.5, { s: 2, dur: 700, alto: true }),
+    /* en el otro sentido */
+    hipc(64, 0.72, { s: 1, dur: 700, alto: false }),
+    hipc(90, 0.92, { s: 1, dur: 700, alto: false }),
+    hipc(116, 0.72, { s: 2, dur: 700, alto: false })
   ]);
   const RO0 = X(SUPINO_PUNTA, { bc: [3, 0, 0], bl: [4, 0, 0] });
   ej('mat2-e07', 'Roll Over', { ancla: 'S' }, [

@@ -2202,7 +2202,7 @@ function visorHTML(e, grande = false) {
     <div class="visor-capas">
       ${n > 1 ? `<span class="vel" role="group" aria-label="Ritmo">${[['fluido', 'Fluido'], ['pasos', 'Por pasos']].map(([r, t]) =>
         `<button type="button" class="chip-vel${(r === 'fluido') === ritmoFluido() ? ' on' : ''}" data-ritmo="${r}" aria-pressed="${(r === 'fluido') === ritmoFluido()}">${t}</button>`).join('')}</span>` : ''}
-      ${n > 1 ? '<button type="button" class="chip-capa" data-capa="tray" aria-pressed="false">〰️ Trayectoria</button>' : ''}
+      ${n > 1 ? `<button type="button" class="chip-capa${(ej.capas || {}).tray ? ' on' : ''}" data-capa="tray" aria-pressed="${!!(ej.capas || {}).tray}">〰️ Trayectoria</button>` : ''}
       <button type="button" class="chip-capa" data-capa="fisica" aria-pressed="false">⚖️ Centro de masa</button>
       ${n > 1 ? '<button type="button" class="chip-capa on" data-capa="fantasma" aria-pressed="true">👻 Hacia dónde va</button>' : ''}
     </div>
