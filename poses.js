@@ -276,14 +276,34 @@ const POSES = (() => {
   /* rodar hacia abajo "como sobre una pelota de playa" hasta apoyar las manos con los brazos rectos
      (antes el tronco colgaba más y los codos se doblaban 79°) */
   const PU_ROLL = { tr: 40, fl: 65, cab: 20, bc: [90, 0, 0], bl: [91, 0, 0], pc: [84, 15, 0], pl: [85, 15, 0], apoyo: ['pieC', 'pieL', 'manoC', 'manoL'] };
+  /* 2 · "caminar con las manos hasta la plancha": una mano por vez (3 pasos cada una), la
+     otra queda clavada en el mat con el codo apenas flojo; la que avanza se despega unos
+     7 cm; los talones se despegan a mitad
+     de camino. Cada pose se resolvió para que el hombro quede al alcance de las manos
+     apoyadas (antes las manos se deslizaban hasta la plancha). Al volver, el mismo camino. */
+  const PU_CAMINAR = [
+    {tr: 43, fl: 58, cab: 17, bc: [77.7, 36.1, 0], bl: [80.6, 0, 0], pc: [86, 0, 0], pl: [87, 0, 0], apoyo: ['pieC', 'pieL', 'manoL'], s: 2, dur: 520},
+    {tr: 42, fl: 51, cab: 15, bc: [77.7, 0, 0], bl: [102, 0, 0], pc: [100, 0, 0], pl: [101, 0, 0], apoyo: ['pieC', 'pieL', 'manoC', 'manoL'], s: 2, dur: 420},
+    {tr: 39, fl: 45, cab: 14, bc: [82.2, 0, 0], bl: [105.3, 62.1, 0], pc: [102, 0, 0], pl: [103, 0, 0], apoyo: ['pieC', 'pieL', 'manoC'], s: 2, dur: 520},
+    {tr: 33, fl: 34, cab: 10, bc: [98.3, 0, 0], bl: [79, 0, 0], pc: [112, 0, 0], pl: [113, 0, 0], apoyo: ['pieC', 'pieL', 'manoC', 'manoL'], s: 2, dur: 420},
+    {tr: 40, fl: 23, cab: 7, bc: [117.1, 62.9, 0], bl: [92.2, 0, 0], pc: [123, 0, 40], pl: [124, 0, 40], apoyo: ['puntaC', 'puntaL', 'manoL'], s: 2, dur: 520},
+    {tr: 35, fl: 20, cab: 6, bc: [86.2, 0, 0], bl: [100.6, 0, 0], pc: [128, 0, 40], pl: [129, 0, 40], apoyo: ['puntaC', 'puntaL', 'manoC', 'manoL'], s: 2, dur: 420},
+    {tr: 28, fl: 12, cab: 4, bc: [93.7, 0, 0], bl: [113.2, 62.6, 0], pc: [132, 0, 40], pl: [133, 0, 40], apoyo: ['puntaC', 'puntaL', 'manoC'], s: 2, dur: 520},
+    {tr: 23, fl: 12, cab: 4, bc: [100.8, 0, 0], bl: [81.4, 0, 0], pc: [137, 0, 40], pl: [138, 0, 40], apoyo: ['puntaC', 'puntaL', 'manoC', 'manoL'], s: 2, dur: 420},
+    {tr: 18, fl: 4, cab: 1, bc: [104.8, 59.9, 0], bl: [84.9, 0, 0], pc: [139, 0, 40], pl: [140, 0, 40], apoyo: ['puntaC', 'puntaL', 'manoL'], s: 2, dur: 520},
+    {tr: -1, fl: 4, cab: 1, bc: [78.7, 0, 0], bl: [98.2, 0, 0], pc: [152, 0, 40], pl: [153, 0, 40], apoyo: ['puntaC', 'puntaL', 'manoC', 'manoL'], s: 2, dur: 420},
+    {tr: -6, fl: 4, cab: 1, bc: [80.4, 0, 0], bl: [114.4, 68.9, 0], pc: [155, 0, 40], pl: [156, 0, 40], apoyo: ['puntaC', 'puntaL', 'manoC'], s: 2, dur: 520}
+  ];
   ej('mat1-e25', 'Push Ups', { ancla: 'pie' }, [
     X(DE_PIE, { bc: [-90, 0, 0], bl: [-88, 0, 0] }),
     X(PU_ROLL, { s: 1, dur: 1800 }),
-    X(PLANCHA, { libre: ['manoC', 'manoL'], s: 2, dur: 1800 }),
+    ...PU_CAMINAR,
+    X(PLANCHA, { s: 2, dur: 420 }),
     /* 3 · baja en bloque (codos flexionados): el cuerpo sigue recto de la cabeza a los talones */
     X(PLANCHA, { tr: -8, pc: [172, 0, 40], pl: [172, 0, 40], s: 3 }),
-    X(PLANCHA, { s: 4 }),
-    X(PU_ROLL, { libre: ['manoC', 'manoL'], s: 4, dur: 1800 })
+    X(PLANCHA, { s: 4, alto: true }),
+    ...[...PU_CAMINAR].reverse().map(p => X(p, { s: 4 })),
+    X(PU_ROLL, { s: 4, dur: 520 })
   ]);
 
   /* ================= MAT 2 ================= */
