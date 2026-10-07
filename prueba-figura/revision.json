@@ -61,7 +61,8 @@
         "Cada pose de la caminata se calculó para que el hombro quede al alcance de las manos apoyadas: así no hay manos flotando ni codos que se doblen de más.",
         "Rodar hacia abajo y hacia arriba van por el mismo camino: la columna se enrolla vértebra por vértebra con los brazos junto a las orejas y la subida pasa por las mismas posiciones al revés (antes subía con otra forma, rarísima).",
         "En la flexión de brazos los codos van hacia afuera, no hacia atrás: el brazo se abre al costado, así que de perfil se ve en escorzo (más corto) y el pecho baja cerca del mat con el cuerpo recto de la cabeza a los talones.",
-        "Los pies quedan clavados en el mat en todo el ejercicio (antes resbalaban un poco al rodar)."
+        "Los pies quedan clavados en el mat en todo el ejercicio (antes resbalaban un poco al rodar).",
+        "Física: cuando los talones se despegan para ir a la plancha, el pie rueda sobre la punta en vez de levantarse del mat (sin ese apoyo el cuerpo se habría caído hacia adelante) y la bajada y la subida rodando son un poco más lentas, así el peso queda siempre sobre los pies."
       ]
     },
     {
@@ -206,7 +207,8 @@
       "cambios": [
         "En equilibrio sobre los isquiones con la espalda redondeada en C: así las piernas pueden abrirse en V. Antes el tronco iba casi recto y la cadera quedaba flexionada 159°, más de lo que da el cuerpo (unos 130–150°).",
         "Al estirar o doblar una pierna, la mano se desliza por ella y a mitad de camino toma la pantorrilla. Sosteniendo el tobillo todo el recorrido, la cadera tendría que flexionarse más de la cuenta.",
-        "Rueda hacia atrás sin pasar de los omóplatos y vuelve a la V sin deslizarse."
+        "Rueda hacia atrás sin pasar de los omóplatos y vuelve a la V sin deslizarse.",
+        "Se detiene en la V antes de cada rodada (\"registrar el punto de equilibrio antes de cada rodada\") y estira o dobla las piernas sin apuro, con el peso sobre los isquiones."
       ]
     },
     {
@@ -219,7 +221,8 @@
         ]
       ],
       "cambios": [
-        "Al flexionar la rodilla de la pierna de adelante \"como pedaleando\", el muslo se iba más atrás de lo que da la articulación (53° de extensión de cadera). Ahora llega a unos 45°, el límite de un cuerpo entrenado."
+        "Al flexionar la rodilla de la pierna de adelante \"como pedaleando\", el muslo se iba más atrás de lo que da la articulación (53° de extensión de cadera). Ahora llega a unos 45°, el límite de un cuerpo entrenado.",
+        "El puente de hombros es el de Scissors: los brazos apoyados hasta los codos y las manos en la zona lumbar (antes los codos quedaban en el aire y el peso fuera de la base)."
       ]
     },
     {
@@ -229,12 +232,83 @@
           "Cadera al volver al inicio",
           "se deslizaba sentada por el mat",
           "quieta"
+        ],
+        [
+          "Peso fuera de los isquiones al bajar las piernas",
+          "18 cm",
+          "0"
         ]
       ],
       "cambios": [
         "Al rodar del Roll Over al Teaser la cadera vuelve hacia adelante lo mismo que retrocedió (rodar sin deslizar). Antes quedaba atrás y, al final, el cuerpo se deslizaba sentado por el mat para volver al inicio.",
         "Para volver a la posición inicial rueda hacia arriba con los brazos al frente y los baja abiertos hacia los costados hasta apoyar las manos junto a la cadera. Antes las manos bajaban de golpe atravesando el mat y la muñeca se doblaba de más.",
-        "Empieza y termina sentado con las manos a los costados de la cadera y los dedos al frente (ver Sedente)."
+        "Empieza y termina sentado con las manos a los costados de la cadera y los dedos al frente (ver Sedente).",
+        "Al empezar, el tronco rueda un poco hacia atrás antes de que despeguen las piernas, y rueda por la columna sin deslizar (la cadera retrocede lo que rueda).",
+        "Al final, primero bajan las piernas al mat (con el tronco un poco atrás) y después el tronco se flexiona sobre ellas: si se flexionaba con las piernas todavía en el aire, el peso quedaba 18 cm delante de los isquiones y el cuerpo se habría ido hacia adelante."
+      ]
+    },
+    {
+      "id": "mat1-e04",
+      "medidas": [
+        [
+          "Círculo del pie",
+          "una línea (de perfil)",
+          "un círculo (en 3D)"
+        ]
+      ],
+      "cambios": [
+        "De perfil el círculo no se entendía: el pie va en un círculo paralelo al piso, y visto de costado eso es una línea que se acorta y se alarga.",
+        "Ahora la figura tiene profundidad: cada pierna y cada brazo pueden salir de su plano hacia el costado (abducción) y la cámara se eleva y gira. La animación se ve en 3D y la línea azul muestra el círculo que dibuja el pie.",
+        "El círculo sigue al manual: arriba, cruza sobre el cuerpo hacia la otra pierna, baja hacia los pies, se abre hacia el costado y vuelve arriba, con la cadera quieta.",
+        "En el visor, el botón 🧊 3D prende o apaga la vista en 3D en cualquier ejercicio de costado; arrastrando la figura se gira la cámara."
+      ]
+    },
+    {
+      "id": "mat2-e09",
+      "cambios": [
+        "En 3D las piernas unidas se van juntas a un costado, bajan, pasan por el centro y suben por el otro costado (\"tocar cada hora del reloj\"). Antes cada pierna se acortaba por separado y, al girar la cámara, se habrían separado."
+      ]
+    },
+    {
+      "id": "mat2-e18",
+      "medidas": [
+        [
+          "Peso fuera de la base",
+          "17 cm",
+          "0"
+        ]
+      ],
+      "cambios": [
+        "Física con pesos: cada parte del cuerpo tiene su masa (cabeza, tronco, brazos, piernas, como en una persona de 60 kg). Con eso se ve dónde cae el peso y qué fuerza hace el piso en cada instante.",
+        "En el puente de hombros las manos tomaban la pelvis con los codos en el aire: el peso de la cadera y las piernas quedaba 17 cm fuera de los hombros y el cuerpo se habría caído hacia los pies. Ahora los brazos apoyan en el mat hasta los codos y las manos sostienen la zona lumbar (\"sosteniendo la zona lumbar\"): los codos son parte de la base.",
+        "Para bajar vuelve al centro, apoya los brazos y rueda con las piernas sobre la cara como contrapeso; antes bajaba directo con las piernas al techo, fuera de la base."
+      ]
+    },
+    {
+      "id": "mat2-e03",
+      "medidas": [
+        [
+          "Peso fuera de la espalda apoyada",
+          "6 cm",
+          "0"
+        ]
+      ],
+      "cambios": [
+        "Al despegar el tronco con los brazos todavía por encima de la cabeza, el peso quedaba del lado de la cabeza, fuera de la parte de la espalda que seguía en el mat: el cuerpo habría caído de vuelta. Ahora, como dice el manual, los brazos van primero hacia las piernas y el tronco se enrolla con ellos hasta la V.",
+        "Al bajar, la espalda llega al mat con los brazos al frente y recién ahí los brazos pasan por encima de la cabeza.",
+        "Lo mismo en Teaser Preparation, Teaser 2 (las piernas bajan desde el techo mientras sube el tronco) y Teaser 3 (el tronco baja enrollándose hasta apoyar la espalda: con el tronco en el aire y los brazos atrás, el cuerpo caía de espaldas)."
+      ]
+    },
+    {
+      "id": "mat2-e16",
+      "cambios": [
+        "Para pasar el brazo por debajo del cuerpo, el brazo de arriba bajaba por el costado, chocaba con el mat y saltaba de golpe al otro lado (la física lo detectó: hacía falta una fuerza horizontal imposible). Ahora pasa por delante del pecho, hacia quien mira, y sigue por debajo."
+      ]
+    },
+    {
+      "id": "mat2-e17",
+      "cambios": [
+        "El brazo de arriba volvía por abajo, atravesaba el mat y saltaba. Ahora vuelve por encima de la cabeza."
       ]
     }
   ]

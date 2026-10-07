@@ -2216,7 +2216,8 @@ function visorHTML(e, grande = false) {
       ${n > 1 ? `<span class="vel" role="group" aria-label="Ritmo">${[['fluido', 'Fluido'], ['pasos', 'Por pasos']].map(([r, t]) =>
         `<button type="button" class="chip-vel${(r === 'fluido') === ritmoFluido() ? ' on' : ''}" data-ritmo="${r}" aria-pressed="${(r === 'fluido') === ritmoFluido()}">${t}</button>`).join('')}</span>` : ''}
       ${n > 1 ? `<button type="button" class="chip-capa${(ej.capas || {}).tray ? ' on' : ''}" data-capa="tray" aria-pressed="${!!(ej.capas || {}).tray}">〰️ Trayectoria</button>` : ''}
-      <button type="button" class="chip-capa" data-capa="fisica" aria-pressed="false">⚖️ Centro de masa</button>
+      <button type="button" class="chip-capa" data-capa="fisica" aria-pressed="false" title="Centro de masa, base de apoyo y la fuerza que hace el piso (flecha azul)">⚖️ Peso y apoyo</button>
+      ${FIGURA.puede3D(ej) ? `<button type="button" class="chip-capa${ej.cam ? ' on' : ''}" data-cam3d aria-pressed="${!!ej.cam}" title="Ver en 3D: arrastrá la figura para girarla">🧊 3D</button>` : ''}
       ${n > 1 ? '<button type="button" class="chip-capa on" data-capa="fantasma" aria-pressed="true">👻 Hacia dónde va</button>' : ''}
     </div>
     ${n > 1 ? '<div class="visor-tira" role="list"></div>' : ''}
@@ -2271,6 +2272,14 @@ function activarVisor(raiz, e, pasos = []) {
     $$('[data-ritmo]', raiz).forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); });
     SND.toque();
   });
+  /* 3D: la cámara se eleva y gira; arrastrando la figura se gira (con el mouse, también se eleva) */
+  const b3 = $('[data-cam3d]', raiz);
+  if (b3) b3.onclick = () => {
+    const on = !b3.classList.contains('on');
+    b3.classList.toggle('on', on); b3.setAttribute('aria-pressed', on);
+    rep.camara(on ? (ej.cam || FIGURA.CAM3D) : null);
+    SND.toque();
+  };
   $$('[data-capa]', raiz).forEach(b => b.onclick = () => {
     const on = !b.classList.contains('on');
     b.classList.toggle('on', on); b.setAttribute('aria-pressed', on);

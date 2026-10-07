@@ -177,7 +177,9 @@ por fase, con el cartel de **Inhala / Exhala** y la acción de cada paso sincron
 y el tórax que se expande al inhalar. **Paso a paso:** ◀ ▶ animan un solo paso y se detienen; la barra recorre
 cualquier instante del movimiento; ½× y ¼× son cámara lenta; la tira de abajo muestra cada pose clave; ⤢ lo
 abre en grande con los pasos del manual. Tres capas opcionales: **Trayectoria** (el camino de manos, pies y
-cabeza), **Centro de masa** (con su plomada: verde si cae sobre la base de apoyo, naranja si no) y **Hacia
+cabeza), **Peso y apoyo** (el centro de masa con su plomada, la base de apoyo y una flecha azul: la fuerza que
+hace el piso y desde dónde empuja; verde si cae dentro de lo que apoya, naranja si no), **🧊 3D** (la cámara se
+eleva y gira: arrastrá la figura para verla desde otro lado; Single Leg Circles y Corkscrew vienen en 3D) y **Hacia
 dónde va** (la pose siguiente, en transparencia). En la práctica con animación, después de responder se puede
 abrir el ejercicio paso a paso, y en Inicio hay un **ejercicio del día** animado. Las figuras se dibujan en código
 (`figura.js` + `poses.js`): cada pose está definida con los ángulos de cada segmento y se revisó contra la
@@ -204,7 +206,11 @@ agarres que no llegan, saltos bruscos (más de ~3,5 m/s) y poses de equilibrio c
 de la base. Además tiene un **control de física**: las manos, pies, rodillas y antebrazos apoyados no se
 deslizan por el mat (solo ruedan talón y punta cuando el pie gira), y ninguna articulación pasa su rango
 real (columna de −60° a 125°, cuello ±60°, cadera de −45° a 150°, tobillo, muñeca ±100°, codo y rodilla).
-Lo que se hamaca como una mecedora (Swan Rocking) rueda sin deslizar y sin cambiar de forma. Todas lo pasan.
+Lo que se hamaca como una mecedora (Swan Rocking) rueda sin deslizar y sin cambiar de forma. Y **física con
+pesos**: cada parte del cuerpo tiene su masa y su inercia (como una persona de 60 kg); con los movimientos en
+tiempo real se calcula la fuerza que hace el piso: tiene que empujar (no tirar), no hacer resbalar y caer dentro
+de lo que apoya, si no el cuerpo se caería. Así se corrigieron el puente de hombros de Scissors y Bicycle (los
+codos apoyados), los Teasers (los brazos van primero hacia las piernas), el Boomerang y Push Ups. Todas lo pasan.
 Para revisar o corregir una pose: abrí `_galeria.html` con el servidor local (muestra cada transición y
 el resultado del control).
 

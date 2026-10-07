@@ -70,6 +70,7 @@ dd ol, dd ul, .cambios ul { margin: 0; padding-left: 20px; display: grid; gap: 4
 .fig-mat { fill: var(--mat); } .fig-mat-sombra { fill: rgba(0,0,0,.15); }
 .fig-mat-arriba { fill: var(--mat-arriba); } .fig-mat-raya { stroke: rgba(255,255,255,.35); stroke-width: .6; }
 .fig-mat-persp { fill: var(--mat-arriba); }
+.fig-mat-3d { fill: var(--mat-arriba); } .fig-3d svg { touch-action: pan-y; cursor: grab; }
 .fig-sombra { fill: var(--sombra-fig); } .fig-fantasma { opacity: .12; }
 .fig-cam { font: 700 8.5px var(--cuerpo); fill: var(--tx2); letter-spacing: .04em; text-transform: uppercase; }
 .tray { fill: none; stroke-width: 1.6; stroke-dasharray: 3 2.4; stroke-linecap: round; opacity: .9; }
@@ -82,7 +83,7 @@ dd ol, dd ul, .cambios ul { margin: 0; padding-left: 20px; display: grid; gap: 4
 <div class="pag">
   <header class="cab">
     <h1>Revisión de animaciones</h1>
-    <p>Cada ejercicio con la animación de antes (las poses y el dibujo que tenía la app) y la corregida, tus fotos de la clase de Mat 3 Props cuando las hay, lo que dice el manual de Balanced Body y qué cambié. La animación de ahora pasa el control de física de la app: lo apoyado no flota ni atraviesa el piso, manos, pies y rodillas apoyados no se deslizan por el mat, las articulaciones no pasan sus rangos reales (columna, cuello, cadera, tobillo, muñeca, codo y rodilla), el centro de masa queda sobre la base en los equilibrios y lo que se hamaca como una mecedora rueda sin cambiar de forma.</p>
+    <p>Cada ejercicio con la animación de antes (las poses y el dibujo que tenía la app) y la corregida, tus fotos de la clase de Mat 3 Props cuando las hay, lo que dice el manual de Balanced Body y qué cambié. La animación de ahora pasa el control de física de la app: lo apoyado no flota ni atraviesa el piso, manos, pies y rodillas apoyados no se deslizan por el mat, las articulaciones no pasan sus rangos reales (columna, cuello, cadera, tobillo, muñeca, codo y rodilla), el centro de masa queda sobre la base en los equilibrios y lo que se hamaca como una mecedora rueda sin cambiar de forma. Además tiene física con pesos (cada parte del cuerpo con su masa: el piso solo empuja, sin resbalar, y la fuerza del piso cae dentro de lo que apoya) y profundidad 3D (Single Leg Circles y Corkscrew se ven en 3D; arrastrá la figura para girarla).</p>
     <div class="barra">
       <button type="button" id="pausa" aria-pressed="false">Pausar todo</button>
       <button type="button" id="lento" aria-pressed="false">Cámara lenta</button>
