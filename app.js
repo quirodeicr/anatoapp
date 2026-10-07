@@ -1364,7 +1364,7 @@ function iniciarSesion(tipo, entradas, titulo) {
   L = { tipo, titulo, cola: entradas, total: entradas.length, hechos: 0, xp: 0, combo: 0, comboMax: 0,
         primeras: 0, primerasOk: 0, inicio: Date.now(), nuevosLogros: [],
         metaAntes: !!(S.log[HOY()] || {}).metaOk, nivelAntes: nivelDe(S.xp), rachaAntes: rachaVigente(), pctAnt: 0 };
-  vistaPrevia = ['inicio', 'practica', 'mapa', 'apuntes', 'perfil', 'estudio'].includes(vista) ? vista : 'inicio';
+  vistaPrevia = ['inicio', 'practica', 'mapa', 'apuntes', 'perfil', 'estudio', 'ejercicios'].includes(vista) ? vista : 'inicio';
   vista = 'sesion';
   cerrarModal();
   document.body.classList.add('en-sesion');
@@ -1651,7 +1651,7 @@ function ir(v) {
   render();
 }
 function render() {
-  ({ inicio: vInicio, practica: vPractica, mapa: vMapa, apuntes: vApuntes, perfil: vPerfil, estudio: vEstudio, clase: vClase, planes: vPlanes }[vista] || vInicio)();
+  ({ inicio: vInicio, practica: vPractica, mapa: vMapa, apuntes: vApuntes, perfil: vPerfil, estudio: vEstudio, clase: vClase, planes: vPlanes, ejercicios: vEjercicios }[vista] || vInicio)();
   pintarHud();
 }
 function pintarHud() {
@@ -1748,7 +1748,7 @@ function conectarEjDelDia() {
   const e = ejDelDia();
   FIGURA.reproductor($('.dia-fig', c), { ...POSES[e.id], nom: e.n }, { fantasma: false, fluido: ritmoFluido(),
     resp: POSES[e.id].poses.map((_, k) => { const p = pasoDePose(POSES[e.id], (k + 1) % POSES[e.id].poses.length); return p > 0 && e.seq[p - 1] ? respDeFase(e.seq[p - 1].fase) : null; }) });
-  $('#ejDiaVer').onclick = () => { SND.toque(); abrirVisorGrande(e); };
+  $('#ejDiaVer').onclick = () => { SND.toque(); abrirFichaEj(e.id); };
 }
 
 function hojaUnidad(u) {
@@ -2133,10 +2133,27 @@ function faseHTML(e, paso) {
   const cl = /inhala.*exhala|continuo/i.test(s.fase) ? 'ambas' : /inhala/i.test(s.fase) ? 'inhala' : /exhala/i.test(s.fase) ? 'exhala' : 'ambas';
   return `<span class="fase-chip ${cl}">${esc(s.fase)}</span><p>${esc(s.accion)}</p>`;
 }
+/* datos de la ficha de un ejercicio del manual (la usan el repertorio y la pestaña Ejercicios) */
+function datosRepHTML(e) {
+  const prec = Object.entries(e.prec || {});
+  return `<dl>
+      <dt>Nivel</dt><dd>${esc(e.nivel || '—')}</dd>
+      <dt>Repeticiones</dt><dd>${esc(e.reps || '—')}</dd>
+      ${e.optima ? `<dt>Forma óptima</dt><dd>${esc(e.optima)}</dd>` : ''}
+      ${e.indic.length ? `<dt>Indicaciones</dt><dd><ul>${e.indic.map(x => `<li>${esc(x)}</li>`).join('')}</ul></dd>` : ''}
+      ${e.prop.length ? `<dt>Propósito</dt><dd><ul>${e.prop.map(x => `<li>${esc(x)}</li>`).join('')}</ul></dd>` : ''}
+      ${prec.length || e.osteoTxt ? `<dt>Precauciones</dt><dd><ul>${prec.map(([k, v]) => `<li><b>${esc(PREC_NOM(k))}:</b> ${esc(v)}</li>`).join('')}
+        ${e.osteoTxt ? `<li class="osteo-li osteo-${e.osteo}"><b>Osteoporosis:</b> ${esc(e.osteoTxt)}</li>` : ''}</ul></dd>` : ''}
+      ${e.var.length ? `<dt>Variantes</dt><dd><ul>${e.var.map(v => `<li><b>${esc(v.nombre)}</b>${v.descripcion ? ` — ${esc(v.descripcion)}` : ''}</li>`).join('')}</ul></dd>` : ''}
+      ${e.trans ? `<dt>Transición</dt><dd>${esc(e.trans)}</dd>` : ''}
+    </dl>
+    ${e.analisis && MAT1.find(m => m.id === e.analisis) ? `<div class="rep-analisis"><h5>Tu análisis MAT 1 (accesorios, regresiones y progresiones)</h5>${fichaMat1HTML(MAT1.find(m => m.id === e.analisis))}</div>` : ''}
+    ${MAT2.filter(m => m.bb === e.id).map(m => `<div class="rep-analisis"><h5>Tu análisis MAT 2${MAT2.filter(x => x.bb === e.id).length > 1 ? ` · ${esc(m.n)}` : ''} (accesorios, regresiones y progresiones)</h5>${fichaMat2HTML(m)}</div>`).join('')}
+    <p class="pag-manual">📖 Ver manual: ${esc(pagManual(e.f, e.pag))}</p>`;
+}
 function fichaRepHTML(e) {
   const ej = POSES[e.id];
   const ico = ej ? FIGURA.svgEstatico(ej, Math.floor(ej.poses.length / 2)) : '';
-  const prec = Object.entries(e.prec || {});
   return `<details class="ficha-rep" data-ej="${e.id}" data-sujeto="e:bb=${e.id}">
     <summary><span class="rep-mini">${ico}</span>
       <span class="rep-t"><b>${esc(e.n)}</b><small>${esc(NOM_FUENTE[e.f])} · ${esc(BB.nomPos[e.pos] || '')} · ${esc(e.nivel)}</small></span>
@@ -2147,20 +2164,7 @@ function fichaRepHTML(e) {
         <li data-paso="0"><b>Posición inicial</b> ${esc(e.inicial)}</li>
         ${e.seq.map((s, i) => `<li data-paso="${i + 1}"><b>${esc(s.fase)}</b> ${esc(s.accion)}</li>`).join('')}
       </ol>
-      <dl>
-        <dt>Nivel</dt><dd>${esc(e.nivel || '—')}</dd>
-        <dt>Repeticiones</dt><dd>${esc(e.reps || '—')}</dd>
-        ${e.optima ? `<dt>Forma óptima</dt><dd>${esc(e.optima)}</dd>` : ''}
-        ${e.indic.length ? `<dt>Indicaciones</dt><dd><ul>${e.indic.map(x => `<li>${esc(x)}</li>`).join('')}</ul></dd>` : ''}
-        ${e.prop.length ? `<dt>Propósito</dt><dd><ul>${e.prop.map(x => `<li>${esc(x)}</li>`).join('')}</ul></dd>` : ''}
-        ${prec.length || e.osteoTxt ? `<dt>Precauciones</dt><dd><ul>${prec.map(([k, v]) => `<li><b>${esc(PREC_NOM(k))}:</b> ${esc(v)}</li>`).join('')}
-          ${e.osteoTxt ? `<li class="osteo-li osteo-${e.osteo}"><b>Osteoporosis:</b> ${esc(e.osteoTxt)}</li>` : ''}</ul></dd>` : ''}
-        ${e.var.length ? `<dt>Variantes</dt><dd><ul>${e.var.map(v => `<li><b>${esc(v.nombre)}</b>${v.descripcion ? ` — ${esc(v.descripcion)}` : ''}</li>`).join('')}</ul></dd>` : ''}
-        ${e.trans ? `<dt>Transición</dt><dd>${esc(e.trans)}</dd>` : ''}
-      </dl>
-      ${e.analisis && MAT1.find(m => m.id === e.analisis) ? `<div class="rep-analisis"><h5>Tu análisis MAT 1 (accesorios, regresiones y progresiones)</h5>${fichaMat1HTML(MAT1.find(m => m.id === e.analisis))}</div>` : ''}
-      ${MAT2.filter(m => m.bb === e.id).map(m => `<div class="rep-analisis"><h5>Tu análisis MAT 2${MAT2.filter(x => x.bb === e.id).length > 1 ? ` · ${esc(m.n)}` : ''} (accesorios, regresiones y progresiones)</h5>${fichaMat2HTML(m)}</div>`).join('')}
-      <p class="pag-manual">📖 Ver manual: ${esc(pagManual(e.f, e.pag))}</p>
+      ${datosRepHTML(e)}
     </div>
   </details>`;
 }
@@ -2473,6 +2477,8 @@ function llenarMinis(raiz) {
 }
 /* tocar un ejercicio: animación paso a paso o ficha de Pre-Pilates con foto */
 function abrirEjercicio(ref) {
+  /* la ficha completa (animación + instrucciones) de la pestaña Ejercicios */
+  if (typeof abrirFichaEj === 'function' && ((ref.bb && EJ_BB[ref.bb]) || (ref.pm && PM[ref.pm]))) return abrirFichaEj(ref.bb || ref.pm);
   if (ref.bb && EJ_BB[ref.bb] && POSES[ref.bb]) return abrirVisorGrande(EJ_BB[ref.bb]);
   if (ref.pm && PM[ref.pm]) {
     const m = abrirModal(`<div class="vm-cab"><h3>${esc(PM[ref.pm].n)}</h3><button type="button" class="btn small ghost" data-cerrar aria-label="Cerrar">✕</button></div>${fichaPremHTML(PM[ref.pm]).replace('<details class="ficha-pm"', '<details open class="ficha-pm"')}`);
@@ -2579,13 +2585,10 @@ function pintarMat1(filtro) {
 }
 
 /* --- ejercicios Pre-Pilates (con foto) --- */
-function fichaPremHTML(e) {
+/* fotos y datos de un ejercicio de Pre-Pilates (ficha del apunte y pestaña Ejercicios) */
+function cuerpoPremHTML(e) {
   const fotos = [imagen(e.id), imagen(e.id + '_2')].filter(Boolean);
-  return `<details class="ficha-pm" data-sujeto="e:pm=${e.id}">
-    <summary>${fotos[0] ? `<img class="mini" src="${fotos[0]}" alt="" loading="lazy">` : POS_PREMAT[e.pos] ? `<span class="mini mini-fig" title="Posición: ${esc(e.pos)}">${FIGURA.svgEstatico(POSES[POS_PREMAT[e.pos]], 0)}</span>` : '<span class="mini"></span>'}
-      <span class="pm-t"><b>${esc(e.n)}</b><small>${esc(e.principio)} · ${esc(e.comp)}</small></span>
-      ${e.revisar || e.fotoDudosa ? '<span class="pill aviso-p">revisar</span>' : ''}</summary>
-    <div class="pm-body">
+  return `
       ${fotos.length ? `<div class="pm-fotos">${fotos.map(s => `<img src="${s}" alt="${esc(e.n)}" loading="lazy">`).join('')}</div>` : ''}
       <dl>
         <dt>Posición</dt><dd>${esc(e.pos)}</dd>
@@ -2598,8 +2601,15 @@ function fichaPremHTML(e) {
         ${e.plano ? `<dt>Plano</dt><dd>${esc(e.plano)}</dd>` : ''}
       </dl>
       ${e.orig ? `<p class="pq">En tu planilla figura como “${esc(e.orig)}”.</p>` : ''}
-      ${e.revisar || e.fotoDudosa ? `<div class="revisar"><b>Para revisar en tu planilla</b>${[...(e.revisar || []), ...(e.fotoDudosa ? [e.fotoDudosa] : [])].map(r => `<p>${esc(r)}</p>`).join('')}</div>` : ''}
-    </div>
+      ${e.revisar || e.fotoDudosa ? `<div class="revisar"><b>Para revisar en tu planilla</b>${[...(e.revisar || []), ...(e.fotoDudosa ? [e.fotoDudosa] : [])].map(r => `<p>${esc(r)}</p>`).join('')}</div>` : ''}`;
+}
+function fichaPremHTML(e) {
+  const fotos = [imagen(e.id), imagen(e.id + '_2')].filter(Boolean);
+  return `<details class="ficha-pm" data-sujeto="e:pm=${e.id}">
+    <summary>${fotos[0] ? `<img class="mini" src="${fotos[0]}" alt="" loading="lazy">` : POS_PREMAT[e.pos] ? `<span class="mini mini-fig" title="Posición: ${esc(e.pos)}">${FIGURA.svgEstatico(POSES[POS_PREMAT[e.pos]], 0)}</span>` : '<span class="mini"></span>'}
+      <span class="pm-t"><b>${esc(e.n)}</b><small>${esc(e.principio)} · ${esc(e.comp)}</small></span>
+      ${e.revisar || e.fotoDudosa ? '<span class="pill aviso-p">revisar</span>' : ''}</summary>
+    <div class="pm-body">${cuerpoPremHTML(e)}</div>
   </details>`;
 }
 function pintarPremat(filtro) {

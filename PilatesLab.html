@@ -95,9 +95,11 @@ main{max-width:720px;margin:0 auto;padding:20px 16px 40px}
 }
 .nav button{
   flex:1;background:none;border:2px solid transparent;cursor:pointer;color:var(--tx2);
-  display:flex;flex-direction:column;align-items:center;gap:2px;
-  padding:6px 2px;border-radius:12px;font-size:11px;font-weight:700;
+  display:flex;flex-direction:column;align-items:center;gap:2px;white-space:nowrap;
+  padding:6px 1px;border-radius:12px;font-size:clamp(9px,2.4vw,11px);font-weight:700;
 }
+/* 8 pestañas: en pantallas muy angostas, la letra un poco más chica */
+@media(max-width:350px){.nav{padding-inline:2px}.nav button{font-size:8.2px;padding-inline:0;border-width:1px}}
 .nav button span{font-size:19px;line-height:1.1}
 .nav button.on{color:var(--verde);background:var(--verde-cl);border-color:color-mix(in srgb,var(--verde) 40%,transparent)}
 body.en-sesion header, body.en-sesion .nav{display:none}
@@ -1013,6 +1015,45 @@ article.ex-rev{margin-bottom:10px}
 .cl-ej small{font-size:11.5px;color:var(--tx2)}
 .cl-ej.usado{opacity:.55}
 .cl-ej .cl-mini{grid-column:1/-1;width:100%;height:auto;aspect-ratio:16/9;margin-bottom:6px}
+/* ===== Ejercicios (ejercicios.js): lista por posición y ficha ===== */
+.chips button small{font-weight:700;color:var(--tx2);margin-left:2px;font-variant-numeric:tabular-nums}
+.chips button.cero{opacity:.5}
+.ej-cuenta{margin:2px 0 0}
+@media(max-width:620px){
+  .ej-chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding:0 16px 2px;scroll-padding-inline:16px;
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 28px),transparent)}
+  .ej-chips::-webkit-scrollbar{display:none}
+  .ej-chips button{flex-shrink:0;white-space:nowrap}
+}
+.ej-grupo .grupo-t{margin-top:16px}
+.ej-pool{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.ej-t{min-width:0;grid-template-columns:1fr;align-content:start}
+.ej-t.ej-foto .cl-mini img{object-fit:contain;background:#fff}
+.ej-vacio{display:grid;gap:8px;justify-items:start}
+.ef-acc{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.ef-flechas{display:flex;align-items:center;gap:2px}
+.ef-flechas .btn{min-width:36px;min-height:34px;font-size:18px;line-height:1;padding:4px 8px}
+.ef-n{font-size:12px;font-weight:700;color:var(--tx2);font-variant-numeric:tabular-nums;min-width:40px;text-align:center}
+.ef-ficha .vm-cab{align-items:flex-start}
+.ef-ficha .vm-cab h3{padding-top:5px;line-height:1.25}
+.ef-meta{display:flex;flex-wrap:wrap;gap:5px;margin:2px 0 10px}
+.ef-et{font-size:12px;font-weight:700;background:var(--sup2);color:var(--tx2);border-radius:99px;padding:3px 9px;line-height:1.35}
+.ef-et.libro{background:color-mix(in srgb,var(--lb) 16%,transparent);color:color-mix(in srgb,var(--lb) 75%,var(--tx))}
+.ef-et.osteo-evitar{background:var(--mal-cl);color:var(--mal-tx)}.ef-et.osteo-apto{background:var(--ok-cl);color:var(--ok-tx)}.ef-et.osteo-modificar{background:var(--xp-cl);color:var(--xp-tx)}
+.ef-h{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--tx2);margin:14px 0 6px}
+.ef-ficha dl{display:grid;grid-template-columns:minmax(110px,max-content) 1fr;gap:6px 14px;font-size:13.5px;line-height:1.5;padding:0}
+.ef-ficha dt{font-weight:800;color:var(--tx2);font-size:12px;text-transform:uppercase;letter-spacing:.04em;padding-top:2px}
+.ef-ficha dd ul{margin-left:16px}
+@media(max-width:520px){.ef-ficha dl{grid-template-columns:1fr;gap:2px}.ef-ficha dt{padding-top:6px}}
+.ef-datos{margin-top:12px;border-top:2px solid var(--linea);padding-top:12px}
+.ef-pm .pm-fotos{padding:0 0 12px}.ef-pm .pm-fotos img{max-height:300px}
+.ef-pm .pq,.ef-pm .revisar{margin:10px 0 0}
+.ef-pos-fig{background:var(--sup2);border-radius:12px;padding:8px;margin-bottom:12px;display:grid;gap:4px}
+.ef-pos-fig small{font-size:12px;color:var(--tx2)}
+.ef-nav{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px;border-top:2px solid var(--linea);padding-top:12px}
+.ef-nav .btn{flex-direction:column;align-items:flex-start;text-align:left;gap:1px;min-width:0;white-space:normal;line-height:1.3}
+.ef-nav .ef-sig{align-items:flex-end;text-align:right;grid-column:2}
+.ef-nav small{font-size:11.5px;color:var(--tx2);font-weight:700}
 .cl-res{margin-top:16px;background:var(--sup);border:2px solid var(--linea);border-radius:var(--r);padding:14px 16px}
 .cl-res.ok{border-color:var(--ok);background:var(--ok-cl)}
 .cl-res.detalles{border-color:var(--xp);background:var(--xp-cl)}
@@ -1218,6 +1259,7 @@ article.ex-rev{margin-bottom:10px}
 <nav class="nav" aria-label="Secciones">
   <button type="button" data-v="inicio" class="on"><span>🏠</span>Inicio</button>
   <button type="button" data-v="practica"><span>🎯</span>Práctica</button>
+  <button type="button" data-v="ejercicios"><span>🤸</span>Ejercicios</button>
   <button type="button" data-v="planes"><span>📋</span>Sesiones</button>
   <button type="button" data-v="mapa"><span>🧍</span>Mapa</button>
   <button type="button" data-v="apuntes"><span>📒</span>Apuntes</button>
@@ -15944,6 +15986,198 @@ async function copiarPlan(p) {
 </script>
 <script>
 /* ============================================================
+   Pilates Lab — Ejercicios (pestaña 🤸)
+
+   Para mirar cada ejercicio: la animación de los de Mat 1 y Mat 2
+   con sus pasos (inhala / exhala), la forma óptima, las indicaciones,
+   los propósitos y las precauciones; y las fotos y datos de los de
+   Pre-Pilates. Se filtra como en Sesiones: por posición (de pie,
+   cuatro apoyos, supino, inversión, sentado, prono, plancha, de
+   costado), por libro y buscando por nombre o por lo que trabaja.
+   Tocar un ejercicio abre su ficha; ‹ › pasan al anterior o al
+   siguiente de la lista filtrada (también con las flechas del teclado).
+   Usa el catálogo de planes.js y POS_CLASE de clase.js.
+   ============================================================ */
+'use strict';
+
+const LIBROS_EJ = [['bb', 'Mat 1 y 2'], ['mat1', 'Mat 1'], ['mat2', 'Mat 2'], ['pre', 'Pre-Pilates'], ['', 'Todos']];
+let filtroEj = { pos: '', f: 'bb', q: '' }, listaEj = [];
+
+/* primero los del manual (en el orden del libro) y después Pre-Pilates */
+let CATALOGO_EJ = null;
+const catalogoEj = () => CATALOGO_EJ || (CATALOGO_EJ = [...catalogoPlan().filter(e => !e.pm), ...catalogoPlan().filter(e => e.pm)]);
+const deLibroEj = (e, f) => !f || (f === 'bb' ? !e.pm : e.f === f);
+/* se busca en el nombre y en lo que trabaja (propósitos, indicaciones, objetivo, músculos) */
+const _textoEj = new Map();
+function textoEj(e) {
+  if (!_textoEj.has(e.id)) {
+    const x = e.pm ? PM[e.id] : EJ_BB[e.id];
+    _textoEj.set(e.id, norm((e.pm ? [x.obj, x.musculos, x.principio, x.comp, x.orig] : [x.optima, ...x.prop, ...x.indic]).filter(Boolean).join(' ')));
+  }
+  return _textoEj.get(e.id);
+}
+const nombreEj = e => norm(e.n + ' ' + ((e.pm && PM[e.id].orig) || ''));
+const ORDEN_POS = Object.keys(POS_CLASE);
+
+function filtrarEj(f = filtroEj.f, pos = filtroEj.pos) {
+  const q = norm(filtroEj.q.trim());
+  const xs = catalogoEj().filter(e => deLibroEj(e, f) && (!pos || e.pos === pos) && (q.length < 2 || nombreEj(e).includes(q) || textoEj(e).includes(q)));
+  /* agrupados en el orden de la clase; con búsqueda, primero los que la tienen en el nombre */
+  return xs.map((e, i) => ({ e, i, k: ORDEN_POS.indexOf(e.pos), nom: q.length < 2 || nombreEj(e).includes(q) ? 0 : 1 }))
+    .sort((a, b) => a.k - b.k || a.nom - b.nom || a.i - b.i).map(x => x.e);
+}
+
+function detalleEj(e) {
+  if (e.pm) return 'Pre-Pilates · 📷';
+  const x = EJ_BB[e.id];
+  return `${fuenteNom(e.f)}${nivelBase(x.nivel) ? ' · ' + nivelBase(x.nivel) : ''}`;
+}
+const tarjetaEj = e => `<button type="button" class="cl-ej ej-t${e.pm ? ' ej-foto' : ''}" data-id="${e.id}">
+    <span class="cl-mini" data-mini-ej></span><b>${esc(e.n)}</b><small>${detalleEj(e)}</small></button>`;
+
+function vEjercicios() {
+  app().innerHTML = `
+    <h1 class="tit">Ejercicios</h1>
+    <p class="sub">Animación e instrucciones de Mat 1 y Mat 2, y fotos de Pre-Pilates. Filtrá por posición o libro, o buscá por nombre o por lo que trabaja.</p>
+    <label class="pl-buscar"><span class="sr">Buscar ejercicio</span><input type="search" id="ejQ" placeholder="Buscar (Roll Up, swan, glúteos…)" value="${esc(filtroEj.q)}" autocomplete="off"></label>
+    <div class="cl-filtros">
+      <div class="chips ej-chips" id="ejPos" role="group" aria-label="Posición"></div>
+      <div class="chips ej-chips" id="ejF" role="group" aria-label="Libro">${LIBROS_EJ.map(([k, t]) =>
+        `<button type="button" data-f="${k}" class="${filtroEj.f === k ? 'on' : ''}" aria-pressed="${filtroEj.f === k}">${t}</button>`).join('')}</div>
+    </div>
+    <p class="micro ej-cuenta" id="ejCuenta" aria-live="polite"></p>
+    <div id="ejLista"></div>`;
+  let t = 0;
+  $('#ejQ').oninput = ev => { clearTimeout(t); t = setTimeout(() => { filtroEj.q = ev.target.value; pintarEjercicios(); }, 140); };
+  $$('#ejF button').forEach(b => b.onclick = () => {
+    filtroEj.f = b.dataset.f; SND.toque();
+    $$('#ejF button').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); });
+    pintarEjercicios();
+  });
+  pintarEjercicios();
+}
+
+function pintarEjercicios() {
+  const todas = filtrarEj(filtroEj.f, '');
+  const cuenta = k => todas.filter(e => e.pos === k).length;
+  $('#ejPos').innerHTML = `<button type="button" data-p="" class="${filtroEj.pos ? '' : 'on'}" aria-pressed="${!filtroEj.pos}">Todas <small>${todas.length}</small></button>`
+    + ORDEN_POS.map(k => { const n = cuenta(k), on = filtroEj.pos === k;
+      /* sin ejercicios en ese libro: el chip no aparece (salvo que sea el elegido) */
+      return !n && !on ? '' : `<button type="button" data-p="${k}" class="${on ? 'on' : ''}${n ? '' : ' cero'}" aria-pressed="${on}">${POS_CLASE[k].ico} ${POS_CLASE[k].nom} <small>${n}</small></button>`; }).join('');
+  $$('#ejPos button').forEach(b => b.onclick = () => { filtroEj.pos = b.dataset.p; SND.toque(); pintarEjercicios(); });
+  /* en el celular cada fila de chips es una sola línea que se desliza: la elegida queda a la vista */
+  $$('.ej-chips .on').forEach(b => { const f = b.parentElement; if (f.scrollWidth > f.clientWidth) f.scrollLeft = b.offsetLeft - f.offsetLeft - 24; });
+
+  const lista = filtroEj.pos ? todas.filter(e => e.pos === filtroEj.pos) : todas;
+  listaEj = lista.map(e => e.id);
+  const libro = (LIBROS_EJ.find(([k]) => k === filtroEj.f) || [, ''])[1];
+  const verQue = lista.every(e => e.pm) ? 'la foto y los datos' : lista.some(e => e.pm) ? 'la animación (o la foto) y las instrucciones' : 'la animación y las instrucciones';
+  $('#ejCuenta').textContent = lista.length ? `${lista.length} ejercicio${lista.length === 1 ? '' : 's'}. Tocá uno para ver ${verQue}.` : '';
+  const cont = $('#ejLista');
+  if (!lista.length) {
+    /* ¿hay en otro libro? */
+    const otros = filtroEj.f ? filtrarEj('', filtroEj.pos) : [];
+    const donde = filtroEj.pos ? ` ${POS_CLASE[filtroEj.pos].nom.toLowerCase()}` : '';
+    cont.innerHTML = `<div class="vacio ej-vacio"><p>${filtroEj.q.trim().length > 1 ? `Nada con «${esc(filtroEj.q.trim())}»${donde ? ' en' + donde : ''} en ${esc(libro)}.` : `En ${esc(libro)} no hay ejercicios${donde ? ' en posición' + donde : ''}.`}</p>
+      ${otros.length ? `<button type="button" class="btn small" id="ejTodos">Ver en todos los libros (${otros.length})</button>` : ''}</div>`;
+    const b = $('#ejTodos');
+    if (b) b.onclick = () => { filtroEj.f = ''; vEjercicios(); };
+    return;
+  }
+  cont.innerHTML = ORDEN_POS.map(k => {
+    const xs = lista.filter(e => e.pos === k);
+    return xs.length ? `<section class="ej-grupo" aria-label="${POS_CLASE[k].nom}"><h3 class="grupo-t">${POS_CLASE[k].ico} ${POS_CLASE[k].nom} <i>${xs.length}</i></h3>
+      <div class="cl-pool ej-pool">${xs.map(tarjetaEj).join('')}</div></section>` : '';
+  }).join('');
+  $$('.ej-t', cont).forEach(b => b.onclick = () => abrirFichaEj(b.dataset.id, listaEj));
+  minisEj(cont);
+}
+
+/* las miniaturas se dibujan al acercarse a la pantalla (99 fotos y 48 figuras) */
+let ioEj = null;
+function minisEj(raiz) {
+  if (ioEj) ioEj.disconnect();
+  const llenar = sp => { const e = ejPlan(sp.closest('[data-id]').dataset.id); sp.innerHTML = e ? miniPlan(e) : ''; sp.removeAttribute('data-mini-ej'); };
+  const sps = $$('[data-mini-ej]', raiz);
+  if (!('IntersectionObserver' in window)) { sps.forEach(llenar); return; }
+  ioEj = new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting) { ioEj.unobserve(x.target); llenar(x.target); } }), { rootMargin: '400px 0px' });
+  sps.forEach(sp => ioEj.observe(sp));
+}
+
+/* ---------------- la ficha: animación + instrucciones ---------------- */
+function metaEj(c) {
+  const pz = POS_CLASE[c.pos];
+  if (c.pm) {
+    const x = PM[c.id];
+    return [['libro lb-pre', 'Pre-Pilates'], ['', `${pz.ico} ${esc(x.pos)}`], ['', esc(x.principio)], x.reps ? ['', esc(x.reps)] : null];
+  }
+  const x = EJ_BB[c.id];
+  return [[`libro lb-${x.f}`, esc(NOM_FUENTE[x.f])], ['', `${pz.ico} ${esc(BB.nomPos[x.pos] || pz.nom)}`], x.nivel ? ['', esc(x.nivel)] : null,
+    x.reps ? ['', `${esc(x.reps)}`] : null,
+    x.osteo ? [`osteo-${x.osteo}`, `${x.osteo === 'evitar' ? '🦴✕ Evitar' : x.osteo === 'apto' ? '🦴✓ Apto' : '🦴~ Modificar'} con osteoporosis`] : null];
+}
+function abrirFichaEj(id, lista = null, foco = null) {
+  const c = ejPlan(id);
+  if (!c) return;
+  const i = lista ? lista.indexOf(id) : -1, n = i >= 0 ? lista.length : 0;
+  const ant = n && i > 0 ? ejPlan(lista[i - 1]) : null, sig = n && i < n - 1 ? ejPlan(lista[i + 1]) : null;
+  const e = c.pm ? PM[id] : EJ_BB[id];
+  const flechas = n > 1 ? `<span class="ef-flechas">
+      <button type="button" class="btn small ghost" data-ir="-1" ${ant ? `aria-label="Anterior: ${esc(ant.n)}"` : 'disabled aria-label="Anterior"'}>‹</button>
+      <span class="ef-n">${i + 1} / ${n}</span>
+      <button type="button" class="btn small ghost" data-ir="1" ${sig ? `aria-label="Siguiente: ${esc(sig.n)}"` : 'disabled aria-label="Siguiente"'}>›</button></span>` : '';
+  const pie = n > 1 ? `<nav class="ef-nav" aria-label="Otros ejercicios">
+      ${ant ? `<button type="button" class="btn ghost" data-ir="-1"><small>◀ Anterior</small>${esc(ant.n)}</button>` : '<span></span>'}
+      ${sig ? `<button type="button" class="btn ghost ef-sig" data-ir="1"><small>Siguiente ▶</small>${esc(sig.n)}</button>` : '<span></span>'}</nav>` : '';
+  const meta = `<p class="ef-meta">${metaEj(c).filter(Boolean).map(([cl, t]) => `<span class="ef-et ${cl}">${t}</span>`).join('')}</p>`;
+  const cuerpo = c.pm
+    ? `${!imagen(id) && POS_PREMAT[e.pos] ? `<div class="ef-pos-fig">${FIGURA.svgEstatico(POSES[POS_PREMAT[e.pos]], 0)}<small>La posición (${esc(e.pos)}); este ejercicio no tiene foto.</small></div>` : ''}
+      <div class="pm-body ef-pm">${cuerpoPremHTML(e)}</div>`
+    : `${POSES[id] ? visorHTML(e, true) : ''}
+      <h4 class="ef-h">Paso a paso</h4>
+      <ol class="rep-pasos">
+        <li data-paso="0"><b>Posición inicial</b> ${esc(e.inicial)}</li>
+        ${e.seq.map((x, k) => `<li data-paso="${k + 1}"><b>${esc(x.fase)}</b> ${esc(x.accion)}</li>`).join('')}
+      </ol>
+      <p class="micro">Tocá un paso para ver esa pose. ◀ ▶ van de a un paso, la barra recorre el movimiento y ¼× es cámara lenta.</p>
+      <div class="ef-datos">${datosRepHTML(e)}</div>`;
+  const m = abrirModal(`<div class="ef-ficha" data-sujeto="e:${c.pm ? 'pm' : 'bb'}=${id}">
+    <div class="vm-cab"><h3>${esc(c.n)}</h3><span class="ef-acc">${flechas}<button type="button" class="btn small ghost" data-cerrar aria-label="Cerrar">✕</button></span></div>
+    ${meta}${cuerpo}${pie}</div>`);
+  m.classList.add('modal-visor', 'modal-ficha-ej');
+  if (foco) m.style.animation = 'none';
+  const rep = !c.pm && POSES[id] ? activarVisor($('.visor', m), e, $$('.rep-pasos li', m)) : null;
+  llenarMinis(m);
+  const cerrar = () => { if (rep) rep.destruir(); cerrarModal(); };
+  $('[data-cerrar]', m).onclick = cerrar;
+  $$('[data-ir]', m).forEach(b => b.onclick = () => {
+    const d = +b.dataset.ir, otro = lista[i + d];
+    if (!otro) return;
+    if (rep) rep.destruir();
+    SND.toque();
+    abrirFichaEj(otro, lista, { pie: !!b.closest('.ef-nav'), d });
+  });
+  /* el foco queda en el mismo botón que se tocó (teclado) */
+  if (foco) {
+    const zona = foco.pie ? '.ef-nav' : '.ef-flechas';
+    const b = $(`${zona} [data-ir="${foco.d}"]:not([disabled])`, m) || $(`${zona} [data-ir]:not([disabled])`, m);
+    if (b) b.focus({ preventScroll: true });
+  }
+}
+/* ← → pasan de ejercicio y Escape cierra (si no hay una ventana de término encima) */
+document.addEventListener('keydown', ev => {
+  const m = $('.modal-ficha-ej');
+  if (!m || ev.defaultPrevented || ev.ctrlKey || ev.metaKey || ev.altKey || $('.pop-term')) return;
+  if (ev.target.matches && ev.target.matches('input, textarea, select')) return;
+  if (ev.key === 'Escape') { ev.preventDefault(); cerrarModal(); return; }
+  if (ev.key !== 'ArrowLeft' && ev.key !== 'ArrowRight') return;
+  const b = $(`.ef-flechas [data-ir="${ev.key === 'ArrowLeft' ? -1 : 1}"]`, m);
+  if (b && !b.disabled) { ev.preventDefault(); b.click(); }
+});
+
+</script>
+<script>
+/* ============================================================
    Pilates Lab — motor de estudio
 
    Principios que implementa (ver "Cómo aprende tu cerebro acá"
@@ -17309,7 +17543,7 @@ function iniciarSesion(tipo, entradas, titulo) {
   L = { tipo, titulo, cola: entradas, total: entradas.length, hechos: 0, xp: 0, combo: 0, comboMax: 0,
         primeras: 0, primerasOk: 0, inicio: Date.now(), nuevosLogros: [],
         metaAntes: !!(S.log[HOY()] || {}).metaOk, nivelAntes: nivelDe(S.xp), rachaAntes: rachaVigente(), pctAnt: 0 };
-  vistaPrevia = ['inicio', 'practica', 'mapa', 'apuntes', 'perfil', 'estudio'].includes(vista) ? vista : 'inicio';
+  vistaPrevia = ['inicio', 'practica', 'mapa', 'apuntes', 'perfil', 'estudio', 'ejercicios'].includes(vista) ? vista : 'inicio';
   vista = 'sesion';
   cerrarModal();
   document.body.classList.add('en-sesion');
@@ -17596,7 +17830,7 @@ function ir(v) {
   render();
 }
 function render() {
-  ({ inicio: vInicio, practica: vPractica, mapa: vMapa, apuntes: vApuntes, perfil: vPerfil, estudio: vEstudio, clase: vClase, planes: vPlanes }[vista] || vInicio)();
+  ({ inicio: vInicio, practica: vPractica, mapa: vMapa, apuntes: vApuntes, perfil: vPerfil, estudio: vEstudio, clase: vClase, planes: vPlanes, ejercicios: vEjercicios }[vista] || vInicio)();
   pintarHud();
 }
 function pintarHud() {
@@ -17693,7 +17927,7 @@ function conectarEjDelDia() {
   const e = ejDelDia();
   FIGURA.reproductor($('.dia-fig', c), { ...POSES[e.id], nom: e.n }, { fantasma: false, fluido: ritmoFluido(),
     resp: POSES[e.id].poses.map((_, k) => { const p = pasoDePose(POSES[e.id], (k + 1) % POSES[e.id].poses.length); return p > 0 && e.seq[p - 1] ? respDeFase(e.seq[p - 1].fase) : null; }) });
-  $('#ejDiaVer').onclick = () => { SND.toque(); abrirVisorGrande(e); };
+  $('#ejDiaVer').onclick = () => { SND.toque(); abrirFichaEj(e.id); };
 }
 
 function hojaUnidad(u) {
@@ -18078,10 +18312,27 @@ function faseHTML(e, paso) {
   const cl = /inhala.*exhala|continuo/i.test(s.fase) ? 'ambas' : /inhala/i.test(s.fase) ? 'inhala' : /exhala/i.test(s.fase) ? 'exhala' : 'ambas';
   return `<span class="fase-chip ${cl}">${esc(s.fase)}</span><p>${esc(s.accion)}</p>`;
 }
+/* datos de la ficha de un ejercicio del manual (la usan el repertorio y la pestaña Ejercicios) */
+function datosRepHTML(e) {
+  const prec = Object.entries(e.prec || {});
+  return `<dl>
+      <dt>Nivel</dt><dd>${esc(e.nivel || '—')}</dd>
+      <dt>Repeticiones</dt><dd>${esc(e.reps || '—')}</dd>
+      ${e.optima ? `<dt>Forma óptima</dt><dd>${esc(e.optima)}</dd>` : ''}
+      ${e.indic.length ? `<dt>Indicaciones</dt><dd><ul>${e.indic.map(x => `<li>${esc(x)}</li>`).join('')}</ul></dd>` : ''}
+      ${e.prop.length ? `<dt>Propósito</dt><dd><ul>${e.prop.map(x => `<li>${esc(x)}</li>`).join('')}</ul></dd>` : ''}
+      ${prec.length || e.osteoTxt ? `<dt>Precauciones</dt><dd><ul>${prec.map(([k, v]) => `<li><b>${esc(PREC_NOM(k))}:</b> ${esc(v)}</li>`).join('')}
+        ${e.osteoTxt ? `<li class="osteo-li osteo-${e.osteo}"><b>Osteoporosis:</b> ${esc(e.osteoTxt)}</li>` : ''}</ul></dd>` : ''}
+      ${e.var.length ? `<dt>Variantes</dt><dd><ul>${e.var.map(v => `<li><b>${esc(v.nombre)}</b>${v.descripcion ? ` — ${esc(v.descripcion)}` : ''}</li>`).join('')}</ul></dd>` : ''}
+      ${e.trans ? `<dt>Transición</dt><dd>${esc(e.trans)}</dd>` : ''}
+    </dl>
+    ${e.analisis && MAT1.find(m => m.id === e.analisis) ? `<div class="rep-analisis"><h5>Tu análisis MAT 1 (accesorios, regresiones y progresiones)</h5>${fichaMat1HTML(MAT1.find(m => m.id === e.analisis))}</div>` : ''}
+    ${MAT2.filter(m => m.bb === e.id).map(m => `<div class="rep-analisis"><h5>Tu análisis MAT 2${MAT2.filter(x => x.bb === e.id).length > 1 ? ` · ${esc(m.n)}` : ''} (accesorios, regresiones y progresiones)</h5>${fichaMat2HTML(m)}</div>`).join('')}
+    <p class="pag-manual">📖 Ver manual: ${esc(pagManual(e.f, e.pag))}</p>`;
+}
 function fichaRepHTML(e) {
   const ej = POSES[e.id];
   const ico = ej ? FIGURA.svgEstatico(ej, Math.floor(ej.poses.length / 2)) : '';
-  const prec = Object.entries(e.prec || {});
   return `<details class="ficha-rep" data-ej="${e.id}" data-sujeto="e:bb=${e.id}">
     <summary><span class="rep-mini">${ico}</span>
       <span class="rep-t"><b>${esc(e.n)}</b><small>${esc(NOM_FUENTE[e.f])} · ${esc(BB.nomPos[e.pos] || '')} · ${esc(e.nivel)}</small></span>
@@ -18092,20 +18343,7 @@ function fichaRepHTML(e) {
         <li data-paso="0"><b>Posición inicial</b> ${esc(e.inicial)}</li>
         ${e.seq.map((s, i) => `<li data-paso="${i + 1}"><b>${esc(s.fase)}</b> ${esc(s.accion)}</li>`).join('')}
       </ol>
-      <dl>
-        <dt>Nivel</dt><dd>${esc(e.nivel || '—')}</dd>
-        <dt>Repeticiones</dt><dd>${esc(e.reps || '—')}</dd>
-        ${e.optima ? `<dt>Forma óptima</dt><dd>${esc(e.optima)}</dd>` : ''}
-        ${e.indic.length ? `<dt>Indicaciones</dt><dd><ul>${e.indic.map(x => `<li>${esc(x)}</li>`).join('')}</ul></dd>` : ''}
-        ${e.prop.length ? `<dt>Propósito</dt><dd><ul>${e.prop.map(x => `<li>${esc(x)}</li>`).join('')}</ul></dd>` : ''}
-        ${prec.length || e.osteoTxt ? `<dt>Precauciones</dt><dd><ul>${prec.map(([k, v]) => `<li><b>${esc(PREC_NOM(k))}:</b> ${esc(v)}</li>`).join('')}
-          ${e.osteoTxt ? `<li class="osteo-li osteo-${e.osteo}"><b>Osteoporosis:</b> ${esc(e.osteoTxt)}</li>` : ''}</ul></dd>` : ''}
-        ${e.var.length ? `<dt>Variantes</dt><dd><ul>${e.var.map(v => `<li><b>${esc(v.nombre)}</b>${v.descripcion ? ` — ${esc(v.descripcion)}` : ''}</li>`).join('')}</ul></dd>` : ''}
-        ${e.trans ? `<dt>Transición</dt><dd>${esc(e.trans)}</dd>` : ''}
-      </dl>
-      ${e.analisis && MAT1.find(m => m.id === e.analisis) ? `<div class="rep-analisis"><h5>Tu análisis MAT 1 (accesorios, regresiones y progresiones)</h5>${fichaMat1HTML(MAT1.find(m => m.id === e.analisis))}</div>` : ''}
-      ${MAT2.filter(m => m.bb === e.id).map(m => `<div class="rep-analisis"><h5>Tu análisis MAT 2${MAT2.filter(x => x.bb === e.id).length > 1 ? ` · ${esc(m.n)}` : ''} (accesorios, regresiones y progresiones)</h5>${fichaMat2HTML(m)}</div>`).join('')}
-      <p class="pag-manual">📖 Ver manual: ${esc(pagManual(e.f, e.pag))}</p>
+      ${datosRepHTML(e)}
     </div>
   </details>`;
 }
@@ -18418,6 +18656,8 @@ function llenarMinis(raiz) {
 }
 /* tocar un ejercicio: animación paso a paso o ficha de Pre-Pilates con foto */
 function abrirEjercicio(ref) {
+  /* la ficha completa (animación + instrucciones) de la pestaña Ejercicios */
+  if (typeof abrirFichaEj === 'function' && ((ref.bb && EJ_BB[ref.bb]) || (ref.pm && PM[ref.pm]))) return abrirFichaEj(ref.bb || ref.pm);
   if (ref.bb && EJ_BB[ref.bb] && POSES[ref.bb]) return abrirVisorGrande(EJ_BB[ref.bb]);
   if (ref.pm && PM[ref.pm]) {
     const m = abrirModal(`<div class="vm-cab"><h3>${esc(PM[ref.pm].n)}</h3><button type="button" class="btn small ghost" data-cerrar aria-label="Cerrar">✕</button></div>${fichaPremHTML(PM[ref.pm]).replace('<details class="ficha-pm"', '<details open class="ficha-pm"')}`);
@@ -18524,13 +18764,10 @@ function pintarMat1(filtro) {
 }
 
 /* --- ejercicios Pre-Pilates (con foto) --- */
-function fichaPremHTML(e) {
+/* fotos y datos de un ejercicio de Pre-Pilates (ficha del apunte y pestaña Ejercicios) */
+function cuerpoPremHTML(e) {
   const fotos = [imagen(e.id), imagen(e.id + '_2')].filter(Boolean);
-  return `<details class="ficha-pm" data-sujeto="e:pm=${e.id}">
-    <summary>${fotos[0] ? `<img class="mini" src="${fotos[0]}" alt="" loading="lazy">` : POS_PREMAT[e.pos] ? `<span class="mini mini-fig" title="Posición: ${esc(e.pos)}">${FIGURA.svgEstatico(POSES[POS_PREMAT[e.pos]], 0)}</span>` : '<span class="mini"></span>'}
-      <span class="pm-t"><b>${esc(e.n)}</b><small>${esc(e.principio)} · ${esc(e.comp)}</small></span>
-      ${e.revisar || e.fotoDudosa ? '<span class="pill aviso-p">revisar</span>' : ''}</summary>
-    <div class="pm-body">
+  return `
       ${fotos.length ? `<div class="pm-fotos">${fotos.map(s => `<img src="${s}" alt="${esc(e.n)}" loading="lazy">`).join('')}</div>` : ''}
       <dl>
         <dt>Posición</dt><dd>${esc(e.pos)}</dd>
@@ -18543,8 +18780,15 @@ function fichaPremHTML(e) {
         ${e.plano ? `<dt>Plano</dt><dd>${esc(e.plano)}</dd>` : ''}
       </dl>
       ${e.orig ? `<p class="pq">En tu planilla figura como “${esc(e.orig)}”.</p>` : ''}
-      ${e.revisar || e.fotoDudosa ? `<div class="revisar"><b>Para revisar en tu planilla</b>${[...(e.revisar || []), ...(e.fotoDudosa ? [e.fotoDudosa] : [])].map(r => `<p>${esc(r)}</p>`).join('')}</div>` : ''}
-    </div>
+      ${e.revisar || e.fotoDudosa ? `<div class="revisar"><b>Para revisar en tu planilla</b>${[...(e.revisar || []), ...(e.fotoDudosa ? [e.fotoDudosa] : [])].map(r => `<p>${esc(r)}</p>`).join('')}</div>` : ''}`;
+}
+function fichaPremHTML(e) {
+  const fotos = [imagen(e.id), imagen(e.id + '_2')].filter(Boolean);
+  return `<details class="ficha-pm" data-sujeto="e:pm=${e.id}">
+    <summary>${fotos[0] ? `<img class="mini" src="${fotos[0]}" alt="" loading="lazy">` : POS_PREMAT[e.pos] ? `<span class="mini mini-fig" title="Posición: ${esc(e.pos)}">${FIGURA.svgEstatico(POSES[POS_PREMAT[e.pos]], 0)}</span>` : '<span class="mini"></span>'}
+      <span class="pm-t"><b>${esc(e.n)}</b><small>${esc(e.principio)} · ${esc(e.comp)}</small></span>
+      ${e.revisar || e.fotoDudosa ? '<span class="pill aviso-p">revisar</span>' : ''}</summary>
+    <div class="pm-body">${cuerpoPremHTML(e)}</div>
   </details>`;
 }
 function pintarPremat(filtro) {
@@ -19523,7 +19767,7 @@ const TERMINOS = (() => {
       ${e.seq && e.seq.length ? `<ol class="pt-pasos">${e.seq.map(x => `<li><b>${esc(x.fase)}</b> ${esc(x.accion)}</li>`).join('')}</ol>` : ''}
       ${e.prop && e.prop.length ? `<h4>Propósitos</h4><ul class="pt-lista">${e.prop.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
       ${e.osteoTxt ? `<p class="micro">🦴 ${esc(e.osteoTxt)}</p>` : ''}
-      ${POSES[e.id] ? '<div class="fila"><button type="button" class="btn small" data-pt="grande">Ver en grande, paso a paso</button></div>' : ''}`;
+      ${POSES[e.id] ? '<div class="fila"><button type="button" class="btn small" data-pt="grande">Ver en grande, con las instrucciones</button></div>' : ''}`;
   }
   function conectarEjercicio(p, r) {
     if (!r.bb || !POSES[r.bb]) return;
@@ -19531,7 +19775,7 @@ const TERMINOS = (() => {
     if (caja) p._rep = FIGURA.reproductor(caja, { ...POSES[e.id], nom: e.n }, { fantasma: false, fluido: ritmoFluido(),
       resp: POSES[e.id].poses.map((_, k) => { const q = pasoDePose(POSES[e.id], (k + 1) % POSES[e.id].poses.length); return q > 0 && e.seq[q - 1] ? respDeFase(e.seq[q - 1].fase) : null; }) });
     const g = $('[data-pt="grande"]', p);
-    if (g) g.onclick = () => { cerrar(); abrirVisorGrande(e); };
+    if (g) g.onclick = () => { cerrar(); abrirFichaEj(e.id); };
   }
 
   /* ---------- tocar un término ---------- */

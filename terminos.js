@@ -253,7 +253,7 @@ const TERMINOS = (() => {
       ${e.seq && e.seq.length ? `<ol class="pt-pasos">${e.seq.map(x => `<li><b>${esc(x.fase)}</b> ${esc(x.accion)}</li>`).join('')}</ol>` : ''}
       ${e.prop && e.prop.length ? `<h4>Propósitos</h4><ul class="pt-lista">${e.prop.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
       ${e.osteoTxt ? `<p class="micro">🦴 ${esc(e.osteoTxt)}</p>` : ''}
-      ${POSES[e.id] ? '<div class="fila"><button type="button" class="btn small" data-pt="grande">Ver en grande, paso a paso</button></div>' : ''}`;
+      ${POSES[e.id] ? '<div class="fila"><button type="button" class="btn small" data-pt="grande">Ver en grande, con las instrucciones</button></div>' : ''}`;
   }
   function conectarEjercicio(p, r) {
     if (!r.bb || !POSES[r.bb]) return;
@@ -261,7 +261,7 @@ const TERMINOS = (() => {
     if (caja) p._rep = FIGURA.reproductor(caja, { ...POSES[e.id], nom: e.n }, { fantasma: false, fluido: ritmoFluido(),
       resp: POSES[e.id].poses.map((_, k) => { const q = pasoDePose(POSES[e.id], (k + 1) % POSES[e.id].poses.length); return q > 0 && e.seq[q - 1] ? respDeFase(e.seq[q - 1].fase) : null; }) });
     const g = $('[data-pt="grande"]', p);
-    if (g) g.onclick = () => { cerrar(); abrirVisorGrande(e); };
+    if (g) g.onclick = () => { cerrar(); abrirFichaEj(e.id); };
   }
 
   /* ---------- tocar un término ---------- */

@@ -103,6 +103,14 @@ clase** controla lo mismo que la corrección: cantidad, repeticiones exactas, or
 (sin volver a supino después del prono), cantidad de cambios de posición, calentamiento y balance
 (flexión, movilidad, extensión, rotación o lateral, tren superior, tren inferior). La clase queda guardada.
 
+**Ejercicios** (pestaña 🤸 Ejercicios) — para mirar cualquier ejercicio. Arriba, el buscador (por nombre o por lo que
+trabaja: "glúteos", "isquiotibiales"…) y los filtros como en Sesiones: posición (de pie, cuatro apoyos, supino,
+inversión, sentado, prono, plancha, de costado, con cuántos hay en cada una) y libro (Mat 1 y 2, Mat 1, Mat 2,
+Pre-Pilates o todos). Tocás uno y se abre su ficha: la animación con sus controles, el paso a paso con inhala y
+exhala, forma óptima, indicaciones, propósito, precauciones (osteoporosis incluida), variantes, transición, tus
+análisis de MAT 1 y MAT 2 y la página del manual; los de Pre-Pilates muestran la foto y los datos de tu planilla.
+Con ‹ › (o las flechas del teclado) pasás al anterior o al siguiente sin volver a la lista.
+
 **Mis sesiones** (pestaña 📋 Sesiones) — para planear tus clases reales y que queden guardadas. Cada sesión
 tiene nombre, fecha, para quién es, la duración buscada, focos (columna, cadera, tren superior,
 respiración, *Osteoporosis: cuidar la flexión*…) y notas. Sumás ejercicios del manual (Mat 1 y Mat 2) y
