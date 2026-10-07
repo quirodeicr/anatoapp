@@ -29,11 +29,15 @@ const POSES = (() => {
   const RODILLAS = { tr: 180, fl: 0, cab: 0, bc: [3, 0, 0], bl: [4, 0, 0], pc: [-55, 115, 30], pl: [-57, 115, 30], apoyo: ['pelvis', 'tronco', 'pieC', 'pieL', 'manoC', 'manoL'] };
   const MESA = X(RODILLAS, { pc: [-90, 90, 60], pl: [-91, 90, 60], apoyo: ['pelvis', 'tronco', 'manoC', 'manoL'] });
   const PRONO = { tr: 0, fl: 0, cab: 0, bc: [178, 0, 0], bl: [179, 0, 0], pc: [180, 0, 90], pl: [180, 0, 90], apoyo: ['pelvis', 'tronco', 'puntaC', 'puntaL'] };
-  const SENTADO = { tr: -90, fl: 0, cab: 0, bc: [95, 10, 0], bl: [97, 10, 0], pc: [0, 0, -5], pl: [0, 0, -5], apoyo: ['pelvis', 'talonC', 'talonL', 'manoC', 'manoL'] };
-  const CUADRUPEDIA = { tr: -15, fl: 0, cab: 0, bc: [90, 0, 0], bl: [91, 0, 0], pc: [90, 90, 90], pl: [91, 90, 90], apoyo: ['rodillaC', 'rodillaL', 'manoC', 'manoL'] };
+  /* manos en el mat apenas detrás de la cadera con los brazos rectos (a 95° el codo se doblaba 40°) */
+  const SENTADO = { tr: -90, fl: 0, cab: 0, bc: [112, 0, 0], bl: [114, 0, 0], pc: [0, 0, -5], pl: [0, 0, -5], apoyo: ['pelvis', 'talonC', 'talonL', 'manoC', 'manoL'] };
+  /* manos bajo los hombros y rodillas bajo la cadera, brazos rectos (con -15° el codo se doblaba 21°) */
+  const CUADRUPEDIA = { tr: -18, fl: 0, cab: -10, bc: [90, 0, 0], bl: [91, 0, 0], pc: [90, 90, 90], pl: [91, 90, 90], apoyo: ['rodillaC', 'rodillaL', 'puntaC', 'puntaL', 'manoC', 'manoL'] };
   /* plancha: brazos estirados bajo los hombros y el cuerpo en una línea de la cabeza a los talones */
   const PLANCHA = { tr: -19, fl: 0, cab: 0, bc: [81, 0, 0], bl: [82, 0, 0], pc: [160, 0, 40], pl: [160, 0, 40], apoyo: ['manoC', 'manoL', 'puntaC', 'puntaL'] };
-  const PL_SUPINA = { tr: -165, fl: 0, cab: 6, bc: [95, 0, 0], bl: [96, 0, 0], pc: [14, 0, 70], pl: [15, 0, 70], apoyo: ['manoC', 'manoL', 'talonC', 'talonL'] };
+  /* plancha supina (Leg Pull Up): brazos rectos con las manos bajo los hombros y el cuerpo en línea
+     de los talones a los hombros, a unos 26° del piso (con el tronco más bajo los codos se doblaban) */
+  const PL_SUPINA = { tr: -154, fl: 0, cab: 18, bc: [95, 0, 0], bl: [96, 0, 0], pc: [27, 0, 70], pl: [27, 0, 70], apoyo: ['manoC', 'manoL', 'talonC', 'talonL'] };
   /* abdominal: cabeza y espalda alta despegadas hasta la punta de los omóplatos;
      la lumbar y la torácica baja siguen en el mat (la curva va arriba) */
   const CURL = { tr: -159, fl: 42, cur: [-0.5, -0.5, -0.143, 0.5], cab: 22 };
@@ -204,7 +208,9 @@ const POSES = (() => {
     /* 2 · exhala: baja con control */
     X(SWAN0, { s: 2, dur: 1800 })
   ]);
-  const SLK = X(PRONO, { tr: -14, fl: -28, cab: 0, bc: [95, 95, 0], bl: [96, 95, 0], pc: [180, 0, 90], pl: [180, 0, 90], apoyo: ['pelvis', 'antebrazoC', 'antebrazoL', 'puntaC', 'puntaL'] });
+  /* esfinge: tórax elevado con el brazo vertical, el codo bajo el hombro a 90° y el antebrazo en el mat
+     (con el tórax a -14° el codo quedaba muy atrás, doblado 147°) */
+  const SLK = X(PRONO, { tr: -34, fl: -20, cab: 0, bc: [95, 90, 0], bl: [96, 90, 0], pc: [180, 0, 90], pl: [180, 0, 90], apoyo: ['pelvis', 'antebrazoC', 'antebrazoL', 'puntaC', 'puntaL'] });
   const kickC = f => X(SLK, { pc: [180, f, 90], apoyo: ['pelvis', 'antebrazoC', 'antebrazoL', 'rodillaC', 'puntaL'], s: 1, dur: 550, pausa: 80 });
   const kickL = f => X(SLK, { pl: [180, f, 90], apoyo: ['pelvis', 'antebrazoC', 'antebrazoL', 'rodillaL', 'puntaC'], s: 1, dur: 550, pausa: 80 });
   ej('mat1-e16', 'Single Leg Kicks', {}, [
@@ -267,7 +273,9 @@ const POSES = (() => {
     rotar(SEAL, -80, { apoyo: ['hombros'], dx: -22, s: 2 }),
     X(SEAL_AP, { s: 3, dur: 1300 }), X(SEAL, { s: 3, dur: 350, pausa: 40 })
   ]);
-  const PU_ROLL = { tr: 72, fl: 60, cab: 20, bc: [96, 0, 0], bl: [97, 0, 0], pc: [84, 18, 0], pl: [85, 18, 0], apoyo: ['pieC', 'pieL', 'manoC', 'manoL'] };
+  /* rodar hacia abajo "como sobre una pelota de playa" hasta apoyar las manos con los brazos rectos
+     (antes el tronco colgaba más y los codos se doblaban 79°) */
+  const PU_ROLL = { tr: 40, fl: 65, cab: 20, bc: [90, 0, 0], bl: [91, 0, 0], pc: [84, 15, 0], pl: [85, 15, 0], apoyo: ['pieC', 'pieL', 'manoC', 'manoL'] };
   ej('mat1-e25', 'Push Ups', { ancla: 'pie' }, [
     X(DE_PIE, { bc: [-90, 0, 0], bl: [-88, 0, 0] }),
     X(PU_ROLL, { s: 1, dur: 1800 }),
@@ -380,10 +388,15 @@ const POSES = (() => {
     X(PLANCHA, { pc: [-162, 0, 90], apoyo: ['manoC', 'manoL', 'puntaL'], s: 1 }),
     X(PLANCHA, { s: 2 })
   ]);
+  /* patada al techo con dos pulsos arriba (respiración percusiva), bajar y alternar;
+     la pierna de apoyo sostiene la línea y la cadera no baja */
+  const lpu = (m, a, c = {}) => X(PL_SUPINA, { [m]: [a, 0, 85], apoyo: ['manoC', 'manoL', m === 'pc' ? 'talonL' : 'talonC'], s: 1, ...c });
   ej('mat2-e12', 'Leg Pull Up', { ancla: 'mano' }, [
     PL_SUPINA,
-    X(PL_SUPINA, { pc: [-80, 0, 85], apoyo: ['manoC', 'manoL', 'talonL'], s: 1 }),
-    X(PL_SUPINA, { s: 2 })
+    lpu('pc', -66, { dur: 1000 }), lpu('pc', -56, { dur: 260, alto: false }), lpu('pc', -72, { dur: 300 }),
+    X(PL_SUPINA, { s: 2, dur: 900 }),
+    lpu('pl', -66, { dur: 1000 }), lpu('pl', -56, { dur: 260, alto: false }), lpu('pl', -72, { dur: 300 }),
+    X(PL_SUPINA, { s: 2, dur: 900 })
   ]);
   ej('mat2-e13', 'Jackknife', { ancla: 'S' }, [
     X(RO0, { pc: [-90, 0, 88], pl: [-89, 0, 88], apoyo: ['pelvis', 'tronco', 'manoC', 'manoL'] }),
@@ -444,7 +457,7 @@ const POSES = (() => {
     X(PUENTE, { pc: [-100, 0, -10], apoyo: ['hombros', 'pieL'], s: 3 })
   ]);
   ej('mat2-e21', 'Boomerang', {}, [
-    X(SENTADO, { pc: [0, 0, 85], pl: [1, 0, 85], apoyo: ['pelvis', 'manoC', 'manoL'] }),
+    X(SENTADO, { pc: [0, 0, 85], pl: [1, 0, 85], apoyo: ['pelvis', 'talonC', 'talonL', 'manoC', 'manoL'] }),
     X(SUPINO_PUNTA, { pc: [-80, 0, 88], pl: [-79, 0, 88], apoyo: ['tronco', 'manoC', 'manoL'], libre: ['manoC', 'manoL'], s: 1, dur: 1400 }),
     X(ROLL_OVER, { s: 1, dur: 1400 }),
     X(V, { s: 2, dur: 2000 }),

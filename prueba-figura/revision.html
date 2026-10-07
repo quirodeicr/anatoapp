@@ -1,0 +1,152 @@
+<title>Revisión de animaciones</title>
+<style>
+/* Revisión de las animaciones de Pilates Lab: para cada ejercicio, la animación
+   de antes y la corregida lado a lado, las fotos de la clase (Mat 3 Props), el
+   texto del manual y qué se cambió. Paleta de Pilates Lab. */
+:root {
+  --bg: #f7f7f5; --sup: #ffffff; --sup2: #f0efec; --sup3: #e7e5e1;
+  --tx: #1c1b19; --tx2: #67645e; --linea: #e3e1dc;
+  --verde: #0d9488; --verde-cl: #ccfbf1; --verde-tx: #0f766e;
+  --mal: #c2410c; --mal-cl: #ffedd5; --mal-tx: #9a3412;
+  --inhala: #1d4ed8; --inhala-cl: #dbeafe; --exhala: #c2410c; --exhala-cl: #ffedd5;
+  --mat: #7b6de0; --mat-arriba: #dcd6f7; --sombra-fig: rgba(0,0,0,.2); --tray-pie: #2563eb; --mag: #c026d3;
+  --ap-calza: #6d3d68; --ap-calza-l: #4f2b4c; --ap-borde: rgba(60,34,20,.6);
+  --cuerpo: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --r: 16px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #14141a; --sup: #1d1d24; --sup2: #26262f; --sup3: #30303a; --tx: #f0efec; --tx2: #a6a39d; --linea: #33333d;
+  --verde: #2dd4bf; --verde-cl: #0f3a36; --verde-tx: #5eead4;
+  --mal: #fb923c; --mal-cl: #431d0b; --mal-tx: #fdba74;
+  --inhala: #93c5fd; --inhala-cl: #172554; --exhala: #fdba74; --exhala-cl: #431d0b;
+  --mat: #8b7ff0; --mat-arriba: #3a3560; --sombra-fig: rgba(0,0,0,.45); --tray-pie: #60a5fa; --mag: #e879f9;
+  --ap-calza: #8a4f84; --ap-calza-l: #6a3c66; --ap-borde: rgba(255,238,226,.55); color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #14141a; --sup: #1d1d24; --sup2: #26262f; --sup3: #30303a; --tx: #f0efec; --tx2: #a6a39d; --linea: #33333d;
+  --verde: #2dd4bf; --verde-cl: #0f3a36; --verde-tx: #5eead4;
+  --mal: #fb923c; --mal-cl: #431d0b; --mal-tx: #fdba74;
+  --inhala: #93c5fd; --inhala-cl: #172554; --exhala: #fdba74; --exhala-cl: #431d0b;
+  --mat: #8b7ff0; --mat-arriba: #3a3560; --sombra-fig: rgba(0,0,0,.45); --tray-pie: #60a5fa; --mag: #e879f9;
+  --ap-calza: #8a4f84; --ap-calza-l: #6a3c66; --ap-borde: rgba(255,238,226,.55); color-scheme: dark }
+body { background: var(--bg); color: var(--tx); font-family: var(--cuerpo); }
+.pag { max-width: 1040px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 48px; display: grid; gap: 22px; }
+header.cab h1 { font-size: 26px; letter-spacing: -.01em; text-wrap: balance; margin: 0 0 6px; }
+header.cab p { color: var(--tx2); line-height: 1.5; max-width: 66ch; margin: 0; }
+.barra { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
+button { font: inherit; font-weight: 800; font-size: 14px; color: var(--tx); background: var(--sup); border: 2px solid var(--linea); border-radius: 12px; padding: 8px 14px; cursor: pointer; min-height: 40px; }
+button:hover { border-color: var(--verde); }
+button[aria-pressed="true"] { border-color: var(--verde); background: var(--verde-cl); color: var(--verde-tx); }
+button:focus-visible { outline: 3px solid var(--mag); outline-offset: 2px; }
+.ej { background: var(--sup); border: 1px solid var(--linea); border-radius: var(--r); padding: 14px; display: grid; gap: 14px; min-width: 0; }
+.ej > header h2 { margin: 0; font-size: 21px; text-wrap: balance; }
+.meta { margin: 2px 0 0; color: var(--tx2); font-size: 13.5px; font-weight: 600; }
+.par { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.panel { background: var(--sup2); border-radius: 12px; padding: 8px; display: grid; gap: 6px; min-width: 0; margin: 0; align-content: start; }
+.etq { font-size: 12.5px; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; }
+.etq::before { content: ""; width: 9px; height: 9px; border-radius: 50%; }
+.etq.antes::before { background: var(--mal); } .etq.ahora::before { background: var(--verde); }
+.fig svg { width: 100%; height: auto; display: block; }
+.fase { font-size: 13px; line-height: 1.4; min-height: 2.8em; color: var(--tx2); }
+.fase b { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; padding: 2px 7px; border-radius: 99px; margin-right: 4px; }
+.fase b.inhala { background: var(--inhala-cl); color: var(--inhala); } .fase b.exhala { background: var(--exhala-cl); color: var(--exhala); }
+.medidas { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.medidas li { background: var(--sup2); border-radius: 10px; padding: 6px 10px; font-size: 13px; font-variant-numeric: tabular-nums; }
+.medidas s { color: var(--mal-tx); text-decoration-thickness: 2px; } .medidas strong { color: var(--verde-tx); }
+h3 { font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--tx2); margin: 0 0 8px; }
+/* las fotos enteras (sin recortar), en una tira que se desliza */
+.fotos-g { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; scroll-snap-type: x proximity; }
+.fotos-g figure { margin: 0; display: grid; gap: 3px; flex-shrink: 0; scroll-snap-align: start; }
+.fotos-g img { height: 230px; width: auto; max-width: 78vw; object-fit: contain; border-radius: 10px; display: block; background: var(--sup2); }
+.fotos-g figcaption { font-size: 12px; color: var(--tx2); font-weight: 700; }
+.dos { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.dos > section { min-width: 0; }
+dl { margin: 0; display: grid; gap: 4px; font-size: 14px; line-height: 1.5; }
+dt { font-weight: 800; font-size: 12px; color: var(--tx2); text-transform: uppercase; letter-spacing: .04em; margin-top: 6px; }
+dd { margin: 0; }
+dd ol, dd ul, .cambios ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+.cambios li { font-size: 14px; line-height: 1.5; }
+.nota { font-size: 13px; color: var(--tx2); line-height: 1.5; max-width: 72ch; margin: 0; }
+/* figura (las clases que dibuja figura.js) */
+.fig-mat { fill: var(--mat); } .fig-mat-sombra { fill: rgba(0,0,0,.15); }
+.fig-mat-arriba { fill: var(--mat-arriba); } .fig-mat-raya { stroke: rgba(255,255,255,.35); stroke-width: .6; }
+.fig-mat-persp { fill: var(--mat-arriba); }
+.fig-sombra { fill: var(--sombra-fig); } .fig-fantasma { opacity: .12; }
+.fig-cam { font: 700 8.5px var(--cuerpo); fill: var(--tx2); letter-spacing: .04em; text-transform: uppercase; }
+.tray { fill: none; stroke-width: 1.6; stroke-dasharray: 3 2.4; stroke-linecap: round; opacity: .9; }
+.tray-flecha { fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.tray-mano { stroke: #e11d48; } .tray-pie { stroke: var(--tray-pie); } .tray-cab { stroke: var(--mag); } .tray-pel { stroke: #f59e0b; }
+@media (max-width: 680px) { .dos { grid-template-columns: 1fr; } }
+@media (max-width: 460px) { .par { grid-template-columns: 1fr; } .fotos-g img { height: 190px; } }
+</style>
+
+<div class="pag">
+  <header class="cab">
+    <h1>Revisión de animaciones</h1>
+    <p>Cada ejercicio con la animación de antes (las poses y el dibujo que tenía la app) y la corregida, tus fotos de la clase de Mat 3 Props cuando las hay, lo que dice el manual de Balanced Body y qué cambié. Las dos animaciones pasan la misma validación física (apoyos, piso, rangos articulares, equilibrio).</p>
+    <div class="barra">
+      <button type="button" id="pausa" aria-pressed="false">Pausar todo</button>
+      <button type="button" id="lento" aria-pressed="false">Cámara lenta</button>
+    </div>
+  </header>
+  <div id="ejs" style="display:grid;gap:18px"></div>
+  <p class="nota">Página privada: tiene fotos de la clase (con las caras de quienes miran pixeladas). No compartas el link.</p>
+</div>
+
+<script>/*FIGURA*/</script>
+<script>/*POSES*/</script>
+<script>/*POSES_ANTES*/</script>
+<script>/*DATOS*/</script>
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const resp = f => /inhala.*exhala|continuo/i.test(f || '') ? '' : /inhala/i.test(f || '') ? 'inhala' : /exhala/i.test(f || '') ? 'exhala' : '';
+  const reps = [];
+  const cont = $('#ejs');
+  for (const x of REV.ejercicios) {
+    const deManual = !x.n && REV.manual[x.id], m = deManual || { n: x.n, inicial: x.texto }, fotos = REV.fotos[x.id] || [];
+    const pag = m.pag ? `pág. ${m.pag[0]}${m.pag[1] && m.pag[1] !== m.pag[0] ? '–' + m.pag[1] : ''}` : '';
+    const el = document.createElement('article');
+    el.className = 'ej';
+    el.innerHTML = `<header><h2>${esc(m.n || x.id)}</h2><p class="meta">${[m.libro, pag, m.nivel, m.reps].filter(Boolean).map(esc).join(' · ')}</p></header>
+      <div class="par">
+        <figure class="panel"><figcaption><span class="etq antes">Antes</span></figcaption><div class="fig" data-v="antes"></div><div class="fase" data-f="antes"></div></figure>
+        <figure class="panel"><figcaption><span class="etq ahora">Ahora</span></figcaption><div class="fig" data-v="ahora"></div><div class="fase" data-f="ahora"></div></figure>
+      </div>
+      ${x.medidas && x.medidas.length ? `<ul class="medidas">${x.medidas.map(([q, a, b]) => `<li>${esc(q)}: <s>${esc(a)}</s> → <strong>${esc(b)}</strong></li>`).join('')}</ul>` : ''}
+      ${fotos.length ? `<section style="min-width:0"><h3>${fotos.some(f => /^Pre-Pilates/.test(f.prop)) ? 'Fotos de referencia' : 'Tus fotos de Mat 3 Props'}${fotos.length > 2 ? ' (deslizá para ver todas)' : ''}</h3><div class="fotos-g">${fotos.map(f => `<figure><img src="${f.src}" alt="${esc(m.n)} con ${esc(f.prop)}" loading="lazy" ${f.w ? `width="${f.w}" height="${f.h}"` : ''}><figcaption>${esc(f.prop)}</figcaption></figure>`).join('')}</div></section>` : ''}
+      <div class="dos">
+        <section><h3>${deManual ? 'Lo que dice el manual' : 'Qué se busca'}</h3><dl>
+          <dt>${deManual ? 'Posición inicial' : 'Cómo es'}</dt><dd>${esc(m.inicial)}</dd>
+          ${m.seq ? `<dt>Pasos</dt><dd><ol>${m.seq.map(s => `<li><b>${esc(s.fase)}:</b> ${esc(s.accion)}</li>`).join('')}</ol></dd>` : ''}
+          ${m.optima ? `<dt>Forma óptima</dt><dd>${esc(m.optima)}</dd>` : ''}
+          ${m.indic && m.indic.length ? `<dt>Indicaciones</dt><dd><ul>${m.indic.map(i => `<li>${esc(i)}</li>`).join('')}</ul></dd>` : ''}
+        </dl></section>
+        <section class="cambios"><h3>Qué corregí</h3><ul>${x.cambios.map(c => `<li>${esc(c)}</li>`).join('')}</ul></section>
+      </div>`;
+    cont.appendChild(el);
+    for (const v of ['antes', 'ahora']) {
+      const base = (v === 'antes' ? POSES_ANTES : POSES)[x.id];
+      if (!base) continue;
+      const ej = { ...base, _prep: null, _enc: null }, f = $(`[data-f="${v}"]`, el);
+      const paso = k => { const p = ej.poses[k].s != null ? ej.poses[k].s : k; const s = (m.seq || [])[p - 1];
+        f.innerHTML = p === 0 || !s ? '<b>Inicio</b> ' + esc(m.inicial || '').slice(0, 90) + '…' : `<b class="${resp(s.fase)}">${esc(s.fase)}</b>${esc(s.accion)}`; };
+      const F = v === 'antes' && window.FIGURA_ANTES ? FIGURA_ANTES : FIGURA;
+      const rep = F.reproductor($(`[data-v="${v}"]`, el), ej, { fantasma: false, fluido: true, alCambiar: paso });
+      paso(0);
+      reps.push({ el, rep });
+    }
+  }
+  /* solo se animan los que están a la vista */
+  let pausado = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const visibles = new Set();
+  const aplicar = () => reps.forEach(r => { if (!pausado && visibles.has(r.el)) r.rep.reanudar(); else r.rep.pausar(); });
+  const io = new IntersectionObserver(es => { es.forEach(e => e.isIntersecting ? visibles.add(e.target) : visibles.delete(e.target)); aplicar(); }, { rootMargin: '120px' });
+  document.querySelectorAll('.ej').forEach(e => io.observe(e));
+  const bp = $('#pausa'), bl = $('#lento');
+  const rotulo = () => { bp.textContent = pausado ? 'Reproducir todo' : 'Pausar todo'; bp.setAttribute('aria-pressed', pausado); };
+  bp.onclick = () => { pausado = !pausado; rotulo(); aplicar(); };
+  bl.onclick = () => { const on = bl.getAttribute('aria-pressed') !== 'true'; bl.setAttribute('aria-pressed', on); reps.forEach(r => { r.rep.velocidad = on ? 0.4 : 1; }); };
+  rotulo(); aplicar();
+})();
+</script>

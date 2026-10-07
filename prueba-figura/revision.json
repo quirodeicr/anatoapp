@@ -1,0 +1,118 @@
+{
+  "nota": "Revisión de las animaciones contra el manual de Balanced Body y las fotos de Mat 3 Props. 'antes' es el commit con el que se compara (las poses de entonces). armar_revision.py arma publicar/revision.html.",
+  "antes": "6a84068",
+  "ejercicios": [
+    {
+      "id": "mat1-e11",
+      "n": "Cuello y hombros (en todas las figuras)",
+      "texto": "De perfil, el cuello es una columna que se funde con el tronco: atrás la nuca baja al trapecio y a la espalda alta, adelante la garganta baja a la clavícula. La musculosa tiene escote y bretel.",
+      "cambios": [
+        "Antes el tronco terminaba plano en la base del cuello y la remera lo rodeaba como un cuello de tubo: se veía un rectángulo entre el cuello y los hombros.",
+        "Ahora la unión es una curva (Bézier) que sale del tronco en su dirección y llega al cuello en la del cuello: se adapta sola si la cabeza se flexiona o se extiende, sin muescas ni bultos.",
+        "Los anchos del tronco se interpolan con una curva suave (cúbica monótona): ya no hay pequeñas esquinas en cada punto de la tabla.",
+        "La musculosa termina en un escote adelante y atrás con el bretel por el hombro; arriba se ve la piel del trapecio y la clavícula."
+      ]
+    },
+    {
+      "id": "mat2-e12",
+      "medidas": [
+        [
+          "Codos (flexión)",
+          "107°",
+          "0°"
+        ],
+        [
+          "Tronco sobre el piso",
+          "15°",
+          "26°"
+        ]
+      ],
+      "cambios": [
+        "Brazos rectos. El tronco iba casi horizontal (15° del piso) y los hombros quedaban más bajos que el largo del brazo: para que las manos llegaran al mat, el motor doblaba los codos 107°. Ahora el cuerpo va en línea de los talones a los hombros a unos 26° del piso, así los brazos quedan rectos con las manos bajo los hombros y los dedos hacia los pies, como piden el manual y tus fotos.",
+        "Las manos miran siempre hacia la cadera (\"dedos hacia las caderas\"). El motor elegía el sentido de la mano con el ángulo del antebrazo y, con el brazo casi vertical, la daba vuelta: a veces miraba hacia la cabeza. Ahora el sentido es fijo.",
+        "Cadera alta y en línea: talones, cadera y hombros alineados (\"caderas elevadas lo más posible\"); la pierna de apoyo sostiene la línea mientras la otra patea.",
+        "Barbilla ligeramente baja, como dice el manual (antes la cabeza iba hacia atrás).",
+        "La patada sube al techo con dos pulsos arriba (respiración percusiva) y después baja; antes subía una sola vez.",
+        "Alterna las piernas (\"Alternar\"); antes pateaba siempre la misma."
+      ]
+    },
+    {
+      "id": "mat1-e25",
+      "medidas": [
+        [
+          "Codos al apoyar las manos (rodar hacia abajo)",
+          "79°",
+          "0°"
+        ]
+      ],
+      "cambios": [
+        "Al rodar hacia abajo hasta apoyar las manos, el tronco colgaba de más y los hombros quedaban por debajo del largo del brazo: los codos se doblaban 79°. Ahora la columna rueda redondeada (\"como sobre una pelota de playa\") y las manos llegan al mat con los brazos rectos, apenas delante de los pies.",
+        "La flexión de brazos (paso 3) sigue con los codos doblados: ahí sí corresponde, con el cuerpo recto de la cabeza a los talones."
+      ]
+    },
+    {
+      "id": "mat1-e16",
+      "medidas": [
+        [
+          "Codo",
+          "147°",
+          "95°"
+        ],
+        [
+          "Tórax sobre el piso",
+          "14°",
+          "34°"
+        ]
+      ],
+      "cambios": [
+        "Esfinge de verdad: el tórax iba casi en el piso (14°), así que el codo quedaba muy por detrás del hombro y doblado 147°. Ahora el tórax está elevado (\"Prono sobre antebrazos, tórax elevado\"), el brazo vertical con el codo debajo del hombro y el antebrazo apoyado hacia adelante.",
+        "Con el tórax arriba, la mirada queda unos centímetros delante de las manos, como pide la indicación.",
+        "La muñeca ya no se \"quiebra\": el antebrazo apoyado iba a la altura del codo y la mano caía al piso, con un escalón. Ahora el antebrazo baja apenas hasta la muñeca con su borde sobre el mat y la mano lo continúa, plana."
+      ]
+    },
+    {
+      "id": "pos-4-puntos",
+      "n": "Cuatro apoyos (posición)",
+      "texto": "Manos debajo de los hombros, rodillas debajo de la cadera, brazos rectos y la cabeza en línea con la columna.",
+      "fotos_pm": [
+        "pm008",
+        "pm029"
+      ],
+      "medidas": [
+        [
+          "Codos",
+          "21°",
+          "0°"
+        ],
+        [
+          "Pies sobre el mat",
+          "en el aire",
+          "apoyados"
+        ]
+      ],
+      "cambios": [
+        "Brazos rectos: con el tronco a 15° los hombros quedaban bajos y los codos se doblaban 21°. Ahora a 18° los brazos quedan rectos y verticales, con las manos bajo los hombros.",
+        "Las dos manos miran hacia adelante: con los brazos a 90° y 91°, una mano quedaba para cada lado (el mismo error de sentido que en Leg Pull Up, corregido en el motor).",
+        "Los pies apoyados: el empeine y la punta en el mat, como en tus fotos (antes quedaban en el aire).",
+        "La cabeza sigue la línea de la espalda (antes colgaba hacia el piso), como en las fotos de All Four Abdominals y Cat Cow.",
+        "La usan Cat Cow, Sternum Drops, All Fours y el resto de los ejercicios de Pre-Pilates en cuatro apoyos."
+      ]
+    },
+    {
+      "id": "pos-sedente",
+      "n": "Sedente (posición) y comienzo del Boomerang",
+      "texto": "Sentado con las piernas largas y las manos en el mat a los costados de la cadera.",
+      "medidas": [
+        [
+          "Codos",
+          "42°",
+          "0°"
+        ]
+      ],
+      "cambios": [
+        "Las manos estaban justo al costado de la cadera y, como el brazo es más largo que la altura del hombro, el codo se doblaba 42° hacia atrás. Ahora las manos apoyan apenas detrás de la cadera con los brazos rectos.",
+        "En el Boomerang, la posición inicial apoya también los talones (\"Sentado con piernas largas al frente\"): antes las piernas quedaban en el aire y el equilibrio no cerraba."
+      ]
+    }
+  ]
+}

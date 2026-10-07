@@ -339,9 +339,14 @@ const FIGURA = (() => {
       /* la rodilla apoya; la pierna conserva su flexión (en 4 puntos queda en el piso, en una patada sube) */
       E.seg[clave] = piernaFK(m.raiz, [a0, P[clave][1], P[clave][2]], m.e);
     } else {
+      /* sobre el antebrazo: del codo (su relieve en el piso) baja apenas hasta la muñeca,
+         que queda a la altura de la mano apoyada, y la mano sigue plana en el mat
+         (antes el antebrazo iba a la altura del codo y la mano caía al piso: muñeca "quebrada") */
       const haciaX = Math.cos(rad(m.aA)) >= 0 ? 0 : 180;
-      const flex = ((a0 - haciaX + 540) % 360) - 180;
-      E.seg[clave] = brazoFK(m.raiz, [a0, flex, 0], m.e);
+      const baja = grad(Math.asin(Math.max(0, Math.min(0.3, (RCODO - RMANO) / (L.ante * m.e[1])))));
+      const aAnte = haciaX === 0 ? baja : 180 - baja;
+      const flex = ((a0 - aAnte + 540) % 360) - 180;
+      E.seg[clave] = brazoFK(m.raiz, [a0, flex, haciaX - aAnte], m.e);
     }
     void codo;
   }
@@ -363,7 +368,13 @@ const FIGURA = (() => {
       if (tipo === 'mano') {
         T = { x, y: PISO - RMANO };
         ok = ubicarMiembro(E, clave, T, P, PISO);
-        const m2 = E.seg[clave], sentido = Math.cos(rad(m2.aM)) >= 0 ? 0 : 180;
+        /* hacia dónde apuntan los dedos: lo dice la pose (dedos: 0 = a la derecha, 180 = a la
+           izquierda, o { bc, bl }); si no, la dirección de la mano, y con el antebrazo casi
+           vertical, a la derecha (en la app: hacia la cabeza en prono y plancha, hacia los
+           pies en supino y sentado). Antes, con el brazo a 90° y 91°, una mano miraba para
+           cada lado. */
+        const m2 = E.seg[clave], c = Math.cos(rad(m2.aM)), dd = P.dedos == null ? null : typeof P.dedos === 'object' ? P.dedos[clave] : P.dedos;
+        const sentido = dd != null ? dd : Math.abs(c) < 0.4 ? 0 : c >= 0 ? 0 : 180;
         E.seg[clave] = brazoFK(m2.raiz, [m2.a0, m2.a0 - m2.aA, sentido - m2.aA], m2.e);
         break;
       }
@@ -879,7 +890,27 @@ const FIGURA = (() => {
      debajo de la ropa): redondeado, con el pliegue submamario marcado en s ≈ 0,57 */
   const TR_FRENTE = [[0, 6.0], [0.1, 6.6], [0.22, 6.5], [0.36, 6.2], [0.48, 6.8], [0.545, 7.2], [0.57, 7.6], [0.6, 9.6], [0.65, 10.8], [0.7, 11.2], [0.76, 10.9], [0.84, 9.9], [0.92, 8.6], [1, 7.2]];
   const TR_ESPALDA = [[0, 10.8], [0.08, 10.2], [0.2, 8.4], [0.32, 7.8], [0.48, 8.3], [0.7, 9.3], [0.86, 9.5], [0.94, 9.0], [1, 8.2]];
-  const enPerfil = (tabla, s) => { for (let q = 1; q < tabla.length; q++) if (s <= tabla[q][0]) { const [a, va] = tabla[q - 1], [b, vb] = tabla[q]; return lerp(va, vb, (s - a) / (b - a || 1)); } return tabla[tabla.length - 1][1]; };
+  /* anchos del tronco con una cúbica monótona (Fritsch–Carlson): pasa por cada valor de la
+     tabla sin rebotes y sin las esquinas que dejaba la interpolación lineal en cada nodo */
+  const _pend = new Map();
+  function pendientes(tabla) {
+    if (_pend.has(tabla)) return _pend.get(tabla);
+    const n = tabla.length, d = [], m = new Array(n).fill(0);
+    for (let i = 0; i < n - 1; i++) d.push((tabla[i + 1][1] - tabla[i][1]) / (tabla[i + 1][0] - tabla[i][0]));
+    m[0] = d[0]; m[n - 1] = d[n - 2];
+    for (let i = 1; i < n - 1; i++) m[i] = d[i - 1] * d[i] <= 0 ? 0 : (2 * d[i - 1] * d[i]) / (d[i - 1] + d[i]);
+    _pend.set(tabla, m);
+    return m;
+  }
+  const enPerfil = (tabla, s) => {
+    if (s <= tabla[0][0]) return tabla[0][1];
+    const m = pendientes(tabla);
+    for (let q = 1; q < tabla.length; q++) if (s <= tabla[q][0]) {
+      const [a, va] = tabla[q - 1], [b, vb] = tabla[q], h = b - a || 1, t = (s - a) / h, t2 = t * t, t3 = t2 * t;
+      return (2 * t3 - 3 * t2 + 1) * va + (t3 - 2 * t2 + t) * h * m[q - 1] + (-2 * t3 + 3 * t2) * vb + (t3 - t2) * h * m[q];
+    }
+    return tabla[tabla.length - 1][1];
+  };
   const unit = (a, b) => { const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 0.001; return { x: dx / d, y: dy / d, d }; };
   /* lado anterior (+1) o posterior (−1) de un hueso; normal anterior = ángulo − 90° */
   function ladoHueso(a, b, perfil, signo) {
@@ -985,6 +1016,16 @@ const FIGURA = (() => {
        que se afinan hacia la punta y el pulgar recogido junto al índice */
     const mano = enMarco(m.muneca, m.aM, m.e[2], C.MANO, -1);
     const raiz = tapa(m.raiz, uA, 4.8, 4.6);
+    /* antebrazo apoyado (casi horizontal): la mano lo continúa; el dorso baja del borde de
+       arriba del antebrazo a los nudillos y la palma sigue sobre el mat */
+    if (piso != null && Math.abs(m.muneca.y - (piso - RMANO)) < 1.6 && Math.abs(Math.sin(rad(m.aM))) < 0.25 && Math.abs(Math.sin(rad(m.aA))) < 0.3) {
+      const sg = Math.cos(rad(m.aM)) >= 0 ? 1 : -1, k = m.e[2], W = m.muneca;
+      const P = ([x, h]) => ({ x: W.x + sg * x * k, y: piso - h });
+      const antArriba = ant[ant.length - 1].y < post[post.length - 1].y;
+      const dorso = C.DORSO.map(P), palma = C.PALMA.map(P), mano = [...dorso, ...palma];
+      const contornoM = antArriba ? [...raiz, ...ant, ...mano, ...[...post].reverse()] : [...raiz, ...ant, ...[...mano].reverse(), ...[...post].reverse()];
+      return { f: [forma(cerrar(contornoM), col.piel)], l: [linea(C.DEDOS_PISO.map(P), col, 0.22)] };
+    }
     if (piso != null && Math.abs(m.muneca.y - (piso - RMANO)) < 1.6 && Math.abs(Math.sin(rad(m.aM))) < 0.25) {
       const z = manoEnPiso(m, ant, post, piso), sg = Math.cos(rad(m.aM)) >= 0 ? 1 : -1, k = m.e[2];
       const P = ([x, h]) => ({ x: m.muneca.x + sg * x * k, y: piso - h });
@@ -1057,18 +1098,40 @@ const FIGURA = (() => {
     if (nC.x * E.antCab.x + nC.y * E.antCab.y < 0) nC = { x: -nC.x, y: -nC.y };
     const enCuello = (t, w) => ({ x: S.x + (E.C.x - S.x) * t + nC.x * w, y: S.y + (E.C.y - S.y) * t + nC.y * w });
     const bordeF = t => lerp(4.2, 3.5, (t + 0.15) / 0.65), bordeE = t => -lerp(5.0, 3.9, (t + 0.2) / 0.6);
-    const hombroF = [sobre(0.9, 6.0), enCuello(0.08, bordeF(0.08)), enCuello(0.2, bordeF(0.2))];
-    const hombroE = [enCuello(0.22, bordeE(0.22)), enCuello(0.08, bordeE(0.08)), sobre(1.5, -6.8)];
+    /* sin escalón ni "cuello de tubo": adelante la clavícula baja a la garganta; atrás el
+       trapecio baja en diagonal desde la mitad del cuello hasta la espalda alta */
+    /* termina justo en los vértices del contorno del cuello (cuelloAnat: 3,75 adelante a
+       0,2 y 4,05 atrás a 0,22), así el borde es uno solo y no quedan muescas */
+    /* las dos uniones son curvas (Bézier) que salen del tronco en su dirección y llegan
+       al cuello en la del cuello: se adaptan solas si la cabeza se flexiona o se extiende */
+    const mas = (p, u, k) => ({ x: p.x + u.x * k, y: p.y + u.y * k });
+    const bez = (A, B, D, F, n) => Array.from({ length: n }, (_, i) => { const t = (i + 1) / (n + 1), m = 1 - t;
+      return { x: m * m * m * A.x + 3 * m * m * t * B.x + 3 * m * t * t * D.x + t * t * t * F.x, y: m * m * m * A.y + 3 * m * m * t * B.y + 3 * m * t * t * D.y + t * t * t * F.y }; });
+    /* arrancan donde termina el perfil (s ≤ 0,93) siguiendo su dirección: sin el escalón
+       que quedaba entre el ancho del perfil y el comienzo de la curva */
+    const sH = 0.93, frH = fr.filter(p => p.s <= sH), esH = es.filter(p => p.s <= sH);
+    /* el cuello sigue siendo una columna: la unión es corta (de la base del cuello, t ≈ 0,2,
+       a la línea de los hombros), una curva que redondea sin abrirse en cono */
+    const F3 = frH[frH.length - 1], B3 = esH[esH.length - 1], F0 = enCuello(0.2, 3.75), B0 = enCuello(0.22, -4.05);
+    const tF = unit(frH[frH.length - 2], F3), tB = unit(esH[esH.length - 2], B3);
+    const hombroF = [...bez(F3, mas(F3, tF, 2.2), mas(F0, uC, -1.8), F0, 4), { ...F0, esq: true }];
+    const hombroE = [{ ...B0, esq: true }, ...bez(B0, mas(B0, uC, -1.8), mas(B3, tB, 2.6), B3, 5)];
     /* lo blando que toca el piso (glúteo, busto, espalda) se aplana un poco contra él */
     const apl = p => (piso == null ? p : p.y > piso + 0.5 ? { ...p, y: piso + 0.5 } : p.y > piso - 1 ? { ...p, y: piso } : p);
-    const contorno = [pubis, ...fr, ...hombroF, ...hombroE, ...[...es].reverse(), ...nalga].map(apl);
+    const contorno = [pubis, ...frH, ...hombroF, ...hombroE, ...[...esH].reverse(), ...nalga].map(apl);
+    /* musculosa: escote adelante (sobre el busto) y atrás (espalda alta), con el bretel
+       que pasa por el hombro; arriba de eso se ve la piel (trapecio, clavícula, cuello) */
+    const sF = 0.87, sE = 0.95, frT = fr.filter(p => p.s <= sF), esT = es.filter(p => p.s <= sE);
+    const escote = [{ ...frT[frT.length - 1], esq: true }, sobre(-1.2, 3.6), sobre(0.6, 1.6), sobre(1.5, -1.2), sobre(1.0, -4.6), { ...esT[esT.length - 1], esq: true }];
+    const musculosa = [pubis, ...frT.slice(0, -1), ...escote, ...[...esT.slice(0, -1)].reverse(), ...nalga].map(apl);
     /* calza: de la cadera hasta la cintura (s < 0.3) */
     const corte = 0.3, frC = fr.filter(p => p.s <= corte), esC = es.filter(p => p.s <= corte);
     const calza = [pubis, ...frC.slice(0, -1), { ...frC[frC.length - 1], esq: true }, { ...esC[esC.length - 1], esq: true }, ...[...esC.slice(0, -1)].reverse(), ...nalga].map(apl);
     /* borde de la calza (cintura) */
     const cint = [frC[frC.length - 1], esC[esC.length - 1]];
-    return { f: [forma(cerrar(contorno), col.top), forma(cerrar(calza), col.calza)],
-      l: [`<path d="M${f1(cint[0].x)},${f1(cint[0].y)} L${f1(cint[1].x)},${f1(cint[1].y)}" style="stroke:${col.fino}" stroke-width=".4"/>`] };
+    return { f: [forma(cerrar(contorno), col.piel), forma(cerrar(musculosa), col.top), forma(cerrar(calza), col.calza)],
+      l: [`<path d="M${f1(cint[0].x)},${f1(cint[0].y)} L${f1(cint[1].x)},${f1(cint[1].y)}" style="stroke:${col.fino}" stroke-width=".4"/>`,
+        `<path d="M${suave(escote.map(apl))}" fill="none" style="stroke:${col.fino}" stroke-width=".4"/>`] };
   }
   function cabezaAnat(E, col) {
     const c = E.C, f = E.antCab, u = E.arriba;
@@ -1101,7 +1164,12 @@ const FIGURA = (() => {
     const p = (t, w) => ({ x: E.S.x + (E.C.x - E.S.x) * t + n.x * w, y: E.S.y + (E.C.y - E.S.y) * t + n.y * w });
     /* el frente del cuello es la normal anterior del tronco */
     const fr = E.antCab, sig = (n.x * fr.x + n.y * fr.y) > 0 ? 1 : -1;
-    const pts = [p(-0.15, 4.2 * sig), p(0.5, 3.5 * sig), p(0.95, 3.3 * sig), p(0.95, -4.0 * sig), p(0.4, -3.9 * sig), p(-0.2, -5.0 * sig)];
+    /* la base del cuello nace dentro del tronco y sus bordes empiezan en los vértices donde
+       termina el tronco (trapecio y clavícula): así su contorno no asoma en la unión */
+    /* bordes limpios (esquinas en las uniones, donde la curva del tronco llega tangente al
+       cuello): sin el suavizado que inflaba la garganta y la nuca; la nuca, apenas cóncava */
+    const E_ = q => ({ ...q, esq: true });
+    const pts = [E_(p(-0.3, 0)), E_(p(0.2, 3.75 * sig)), E_(p(0.98, 3.3 * sig)), E_(p(0.98, -4.0 * sig)), p(0.6, -3.8 * sig), E_(p(0.22, -4.05 * sig))];
     return { f: [forma(cerrar(pts), col.piel)], l: [linea([p(0.1, -2.6 * sig), p(0.55, 1.6 * sig), p(0.85, 2.8 * sig)], col, 0.35)] };
   }
   /* columna vertebral (capa didáctica): sacro, 5 lumbares, 12 dorsales y 7 cervicales */
