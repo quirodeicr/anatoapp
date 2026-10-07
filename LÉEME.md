@@ -74,6 +74,20 @@ Funciona sin internet. Tu progreso de la versión anterior se migra solo, sin pe
 **Inicio** — una ruta de 18 unidades, como en Duolingo. Cada nodo muestra cuánto viste, tus estrellas y
 cuánto recordás hoy. Arriba: tu personaje, meta diaria, racha y el **Repaso del día**.
 
+**Preparar examen** (en Inicio) — un acceso rápido para cada examen:
+- **📝 Examen teórico**: 12 preguntas (unos 8 minutos) del área que elijas (Principios del movimiento,
+  Anatomía, Mat 1, Mat 2, Poblaciones especiales o todo). Primero lo que fallaste en tus exámenes y todavía no
+  está firme, después lo que tu memoria tiene más débil y algo nuevo. Cada área muestra cuánto tenés preparado
+  (la probabilidad promedio de recordar hoy cada pregunta; lo que no viste cuenta 0), y tenés a mano lo que
+  marcó la corrección y el simulacro.
+- **🧑‍🏫 Examen práctico (dar la clase)**: el *ensayo en voz alta* te nombra un ejercicio y lo enseñás como en
+  la clase —posición inicial, respiración de cada paso, dos indicaciones, un número de repeticiones y la
+  transición al siguiente—; después lo ves con la animación y la respuesta completa y calificás cómo te salió
+  (lo que no salió vuelve al final). Podés ensayar el repertorio de Mat 1 o Mat 2 (primero lo que peor te
+  salió), tu clase de examen o una de tus sesiones entera. El *drill* son 10 preguntas rápidas: ¿inhala o
+  exhala?, ¿qué sigue en el orden del manual?, transiciones, ¿de qué ejercicio es esta indicación?,
+  repeticiones y osteoporosis.
+
 **Tus exámenes** — dos unidades con lo que te preguntaron en los cuatro exámenes (*Examen: Principios* y
 *Exámenes de Mat*); lo que fallaste aparece primero y lleva la etiqueta "La fallaste en tu examen". En
 **Práctica → Simulacro de examen** salen mezcladas, también con lo fallado adelante. En **Apuntes → Tus

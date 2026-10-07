@@ -151,6 +151,7 @@ function estadoInicial() {
     pj: PJ_BASE(),      // personaje y estudio (estudio.js)
     clase: null, clasesOk: 0, claseXpDia: null,   // Armá tu clase (clase.js)
     planes: [],         // Mis sesiones (planes.js): sesiones de Pilates planeadas
+    ensayo: {},         // Preparar examen práctico (preparar.js): id -> { n, ok, nota, ult }
     cfg: { retencion: 0.9, meta: 50, sonido: true, sesion: 15,
            musica: true, estiloMusica: 'lofi', volMusica: 0.35, volSonido: 0.8, vibracion: true,
            efectos: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'suaves' : 'completos' }
@@ -602,7 +603,7 @@ function formatoPara(it, reintento) {
 function construir(it, fmt, joven) {
   const f = { opcion: ejOpcion, flash: ejFlash, banco: ejBanco, escribir: ejEscribir, orden: ejOrden,
               pares: ejPares, clasif: ejClasif, cloze: ejCloze, gen: ejGen, foto: ejFoto,
-              quiz: ejQuiz, anim: ejAnim }[fmt];
+              quiz: ejQuiz, anim: ejAnim, ensayo: typeof ejEnsayo === 'function' ? ejEnsayo : null }[fmt];
   const ej = f(it, joven);
   if (!ej.cambio) ej.cambio = () => {};
   return ej;
@@ -730,6 +731,11 @@ function qSemaforo() {
   };
 }
 function ejGen(it) {
+  /* preguntas generadas de otros módulos (preparar.js: el drill de la clase) */
+  if (typeof GEN_EXTRA !== 'undefined' && GEN_EXTRA[it.gen]) {
+    const g = GEN_EXTRA[it.gen](it.ref || {});
+    return opcionesUI({ consigna: g.consigna, pregunta: g.enunciado, contexto: g.contexto, opciones: g.opciones, correcta: g.correcta, reconocimiento: true, explica: g.explica });
+  }
   const q = it.gen === 'semaforo' ? qSemaforo() : qIntruso();
   return opcionesUI({ consigna: it.gen === 'semaforo' ? 'Semáforo' : 'Encontrá el intruso', pregunta: q.enunciado,
     contexto: q.contexto, opciones: q.opciones, correcta: q.correcta, reconocimiento: true, explica: q.explica });
@@ -1689,6 +1695,8 @@ function vInicio() {
           <p>${Object.keys(S.items).length ? `Mañana ${manana ? `vuelven ${manana}` : 'no vence nada'}. Seguí la ruta para sumar contenido nuevo.` : 'Empezá la ruta: cada lección presenta unos pocos conceptos nuevos.'}</p></div>`}
     </section>
 
+    ${typeof prepExamenHTML === 'function' ? prepExamenHTML() : ''}
+
     ${ejDelDiaHTML()}
 
     <h2 class="secc">Tu ruta</h2>
@@ -1713,6 +1721,7 @@ function vInicio() {
   if (r) r.onclick = () => iniciarSesion('repaso', sesionRepaso(), 'Repaso del día');
   $('#pjCard').onclick = () => ir('estudio');
   $$('.nodo').forEach(b => b.onclick = () => hojaUnidad(UNIDADES.find(u => u.id === b.dataset.u)));
+  if (typeof conectarPrepExamen === 'function') conectarPrepExamen();
   conectarEjDelDia();
 }
 /* ejercicio del día: uno del manual por fecha, animado; se abre paso a paso */

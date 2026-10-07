@@ -1064,6 +1064,49 @@ article.ex-rev{margin-bottom:10px}
 .pt-in > p{font-size:14.5px;line-height:1.5;margin:6px 0}
 .pt-in .fila{margin-top:12px}
 
+/* ===== preparar examen (preparar.js) ===== */
+.prep-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.prep-card{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;background:var(--sup);border:2px solid var(--linea);border-bottom-width:4px;border-radius:var(--r);padding:12px;cursor:pointer;color:var(--tx);font:inherit;box-shadow:var(--sombra)}
+.prep-card.teo{border-color:color-mix(in srgb,var(--azul) 45%,var(--linea))}
+.prep-card.pra{border-color:color-mix(in srgb,var(--mag) 45%,var(--linea))}
+.prep-card:hover{transform:translateY(-1px)}
+.prep-card:focus-visible{outline:3px solid var(--mag);outline-offset:2px}
+.prep-ico{font-size:26px;line-height:1}
+.prep-card b{font-size:16px;font-weight:800}
+.prep-card small{font-size:12.5px;color:var(--tx2);line-height:1.35}
+.prep-card i{font-style:normal;font-size:11.5px;font-weight:700;color:var(--tx2)}
+.prep-barra{display:block;width:100%;height:7px;border-radius:99px;background:var(--sup3);overflow:hidden;margin-top:4px}
+.prep-barra span{display:block;height:100%;border-radius:99px;background:var(--azul)}
+.prep-card.pra .prep-barra span{background:var(--mag)}
+.prep-hoja .sub{margin:6px 0 12px}
+.prep-areas{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.prep-area{display:flex;flex-direction:column;gap:3px;text-align:left;background:var(--sup);border:2px solid var(--linea2);border-radius:14px;padding:9px 10px;cursor:pointer;color:var(--tx);font:inherit;font-size:13.5px;font-weight:800}
+.prep-area small{font-size:11.5px;font-weight:600;color:var(--tx2)}
+.prep-area.on{border-color:var(--verde);background:var(--verde-cl)}
+.prep-area:focus-visible{outline:3px solid var(--mag);outline-offset:2px}
+.prep-hoja .btn3d,.prep-hoja .btn.ancho{margin-top:8px}
+.prep-recordar{margin-top:14px;background:var(--sup);border:2px solid var(--linea);border-radius:14px;padding:10px 12px}
+.prep-recordar summary{font-weight:800;cursor:pointer}
+.prep-recordar ul{list-style:none;display:grid;gap:7px;margin-top:10px;font-size:13.5px;line-height:1.45}
+.prep-bloque{background:var(--sup);border:2px solid var(--linea);border-radius:16px;padding:12px;margin:10px 0}
+.prep-bloque h4{font-size:16px;font-weight:800}
+.prep-bloque .sub{font-size:13.5px}
+.prep-bloque .chips button small{font-weight:700;color:var(--tx2);margin-left:2px}
+.ens-cab{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:6px}
+.ens-num{font-size:12px;font-weight:800;color:var(--tx2);margin-right:4px}
+.ens-nom{font-size:27px;font-weight:900;letter-spacing:-.02em;line-height:1.15;margin:4px 0 12px}
+.ens-pide{font-weight:800;margin-bottom:8px}
+.ens-check{list-style:none;display:grid;gap:8px;margin-bottom:12px}
+.ens-check li{background:var(--sup);border:2px solid var(--linea);border-radius:12px;padding:9px 12px;font-size:15px;font-weight:700}
+.ens-crono{font-size:13px;font-weight:800;color:var(--tx2);margin:4px 0 10px;font-variant-numeric:tabular-nums}
+.ens-dl{display:grid;gap:4px;margin:8px 0 14px}
+.ens-dl dt{font-size:12.5px;font-weight:900;letter-spacing:.03em;text-transform:uppercase;color:var(--tx2);margin-top:8px}
+.ens-dl dd{font-size:14.5px;line-height:1.5}
+.ens-dl ul,.ens-pasos{padding-left:18px;display:grid;gap:5px}
+.ens-pasos .fase-chip{margin-right:4px}
+.ens-dl small{color:var(--tx2)}
+.notas3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+
 /* ===== personaje y estudio (estudio.js) ===== */
 .pj-card{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:var(--sup);border:2px solid var(--linea);border-bottom-width:4px;border-radius:var(--r);padding:8px 14px 8px 6px;margin-bottom:12px;cursor:pointer}
 .pj-card:hover{border-color:var(--verde)}
@@ -1205,6 +1248,7 @@ article.ex-rev{margin-bottom:10px}
 <script src="planes.js"></script>
 <script src="privado/fotos-mat3.js"></script>
 <script src="app.js"></script>
+<script src="preparar.js"></script>
 <script src="terminos.js"></script>
 <script>
 (function(){
