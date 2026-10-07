@@ -201,7 +201,10 @@ los cuadros; lo que está apoyado en dos poses seguidas queda clavado y no patin
 tobillos, en la nuca, bajo la pelvis) también se calculan. Un control automático revisa cada cuadro de las
 61 animaciones: apoyos que no tocan el piso, partes que lo atraviesan, articulaciones fuera de rango,
 agarres que no llegan, saltos bruscos (más de ~3,5 m/s) y poses de equilibrio con el centro de masa fuera
-de la base. Todas lo pasan.
+de la base. Además tiene un **control de física**: las manos, pies, rodillas y antebrazos apoyados no se
+deslizan por el mat (solo ruedan talón y punta cuando el pie gira), y ninguna articulación pasa su rango
+real (columna de −60° a 125°, cuello ±60°, cadera de −45° a 150°, tobillo, muñeca ±100°, codo y rodilla).
+Lo que se hamaca como una mecedora (Swan Rocking) rueda sin deslizar y sin cambiar de forma. Todas lo pasan.
 Para revisar o corregir una pose: abrí `_galeria.html` con el servidor local (muestra cada transición y
 el resultado del control).
 

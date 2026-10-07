@@ -193,7 +193,10 @@ const FIGURA = (() => {
     }
     const lado = nombre.slice(-1) === 'C' ? 'c' : 'l', b = E.seg['b' + lado], p = E.seg['p' + lado];
     switch (nombre.slice(0, -1)) {
-      case 'pie': return { x: p.tobillo.x, y: Math.max(p.talon.y + RPIE, p.punta.y + RPIE * 0.7) };
+      /* la planta apoyada queda plana: el tobillo va a RPIE del piso. Antes se medía el pie
+         inclinado como venía en la pose; al aplanarlo bajaba el tobillo y la pierna recta no
+         llegaba al apoyo clavado (el pie patinaba) */
+      case 'pie': return { x: p.tobillo.x, y: p.tobillo.y + RPIE };
       case 'talon': return abajo(p.talon, RPIE);
       case 'punta': return abajo(p.punta, RPIE * 0.7);
       case 'mano': return { x: b.muneca.x, y: Math.max(b.muneca.y + RMANO, b.mano.y + RMANO * 0.9) };
@@ -272,9 +275,18 @@ const FIGURA = (() => {
     let dx = ancla ? ancla.x - anclaX(E, ej.ancla) : xoff;
     const pinR = rig.find(n => pins[n] != null);
     if (pinR) dx = pins[pinR] - contactoDe(E, pinR).x;
+    /* anclado en el pie (o la mano) que sigue apoyado: ese apoyo clavado decide el
+       corrimiento; si lo decidía el tobillo, al doblarse la pierna el pie patinaba */
+    else if (ej.ancla === 'pie' || ej.ancla === 'mano') {
+      const pinA = ap.find(n => (ej.ancla === 'pie' ? /^(pie|talon|punta)C$/ : /^manoC$/).test(n) && pins[n] != null);
+      if (pinA) dx = pins[pinA] - contactoDe(E, pinA).x;
+    }
     E = mover(E, dx, dy);
     /* 3. rodilla / antebrazo en el piso */
     for (const n of rig.filter(n => UNIHUESO.test(n))) unHueso(E, n, P);
+    /* apoyar la rodilla (o el antebrazo) gira el muslo y la corre: si es el apoyo clavado,
+       se vuelve a poner en su lugar (antes el cuerpo se iba corriendo de pose en pose) */
+    if (pinR && UNIHUESO.test(pinR)) E = mover(E, pins[pinR] - contactoDe(E, pinR).x, 0);
     /* 4. extremos apoyados: cinemática inversa hasta el piso (y al pin) */
     for (const n of ext) {
       const clave = miembroDe(n), cont = contactoDe(E, n);
@@ -443,7 +455,9 @@ const FIGURA = (() => {
      la pelvis y al bajar se apoya primero la columna alta. */
   function articulacion(ej, A, B) {
     if (B.art != null) return B.art;
-    if (ej.rueda || ej.vista === 'frente' || ej.camara === 'arriba') return 0;
+    /* lo que se hamaca (meces) se mueve en bloque: si la columna articulara por
+       segmentos, la forma cambiaría mientras rueda */
+    if (ej.rueda || (A.meces && B.meces) || ej.vista === 'frente' || ej.camara === 'arriba') return 0;
     const hombros = sobreHombros(A) || sobreHombros(B);
     const tA = tieneTronco(A), tB = tieneTronco(B);
     if (tA !== tB) { const despega = tA; return hombros ? (despega ? -1 : 1) : (despega ? 1 : -1); }
@@ -475,7 +489,7 @@ const FIGURA = (() => {
     }
     for (let i = 0; i < n; i++) K[i].art = n > 1 ? articulacion(ej, poses[i], poses[(i + 1) % n]) : 0;
     ej._prep = { poses, K };
-    if (ej.rueda && n > 1) rodar(ej);
+    if ((ej.rueda || poses.some(p => p.meces)) && n > 1) rodar(ej);
     return ej._prep;
   }
   /* Rodar sin deslizar: en cada instante el cuerpo gira alrededor del punto
@@ -486,6 +500,8 @@ const FIGURA = (() => {
     const { poses, K } = ej._prep, n = poses.length, M = 24;
     for (let i = 0; i < n; i++) {
       const A = poses[i], B = poses[(i + 1) % n], tabla = [0];
+      /* todo el ejercicio rueda (ej.rueda) o solo las transiciones entre poses que se hamacan */
+      if (!ej.rueda && !(A.meces && B.meces)) continue;
       let x = 0, prev = null;
       for (let k = 0; k <= M; k++) {
         const P = mezclar(A, B, k / M, ej, 0), r = resolver(P, ej, { xoff: 0 });
@@ -495,12 +511,19 @@ const FIGURA = (() => {
       }
       K[i].rueda = tabla;
     }
+    /* se recolocan las poses: después de una transición que rueda, la pose queda donde
+       llegó rodando; las que siguen sin rodar se corren lo mismo (con sus apoyos clavados) */
+    let delta = 0;
     for (let i = 1; i < n; i++) {
-      K[i].xoff = K[i - 1].xoff + K[i - 1].rueda[M];
-      const r = resolver(poses[i], ej, { xoff: K[i].xoff });
+      const prev = K[i - 1], nuevo = prev.rueda ? prev.xoff + prev.rueda[M] : K[i].xoff + delta;
+      delta = nuevo - K[i].xoff;
+      if (!prev.rueda && Math.abs(delta) < 1e-9) continue;
+      const pins = Object.fromEntries(Object.entries(K[i].pins || {}).map(([a, v]) => [a, v + delta]));
+      K[i].xoff = nuevo; K[i].pins = pins;
+      const r = resolver(poses[i], ej, { xoff: nuevo, pins });
       K[i].E = r.E; K[i].cont = r.contactos;
     }
-    K[n - 1].resto = K[0].xoff - K[n - 1].xoff - K[n - 1].rueda[M];
+    if (K[n - 1].rueda) K[n - 1].resto = K[0].xoff - K[n - 1].xoff - K[n - 1].rueda[M];
   }
   /* la tabla se muestreó en tiempo con mínimo jerk: se busca por avance (e = mj(f)),
      así sirve igual para el modo fluido (e = f) */
@@ -530,6 +553,13 @@ const FIGURA = (() => {
     const fr = (q, c, d) => fluido ? herm(ret ? f + 0.1 * (2 - ret[q]) * Math.sin(Math.PI * f) ** 2 : f, ch(c, d))
       : ret ? mj((f - ret[q] * D / 4) / (1 - D)) : e;
     r.segs = [0, 1, 2, 3].map(q => { const a = A.tr + A.fl * ca[q], d = dTr + B.fl * cb[q] - A.fl * ca[q]; return a + d * fr(q, 's' + q, d); });
+    /* la columna no se enrolla (ni se arquea) más de lo que da un cuerpo: con la
+       articulación por segmentos, a mitad de camino la parte de arriba ya giró y la de
+       abajo todavía no, y la curva total pasaba los 125°. Se limita respecto del segmento
+       de la pelvis (que queda donde está); si las poses piden más, manda la pose */
+    const spr = r.segs[3] - r.segs[0], cA = A.fl * (ca[3] - ca[0]), cB = B.fl * (cb[3] - cb[0]);
+    const hi = Math.max(118, cA, cB), lo = Math.min(-55, cA, cB);
+    if (spr > hi || spr < lo) { const k = (spr > hi ? hi : lo) / spr; r.segs = r.segs.map(v => r.segs[0] + (v - r.segs[0]) * k); }
     r.tr = A.tr + dTr * pe('tr', dTr);
     const efl = pe('fl', B.fl - A.fl);
     r.fl = lerp(A.fl, B.fl, efl);
@@ -732,7 +762,9 @@ const FIGURA = (() => {
   function equilibrio(ej, i) {
     const P = preparar(ej).poses[i];
     const ap = P.apoyo || [];
-    if (!ap.length || ej.silla || ej.camara === 'arriba' || ej.persp || ap.some(a => SIN_CONTROL.test(a))) return null;
+    /* en el extremo de un hamaqueo (meces) el cuerpo queda quieto un instante con el centro
+       de masa corrido: por eso vuelve; no es una pose de equilibrio */
+    if (!ap.length || P.meces || ej.silla || ej.camara === 'arriba' || ej.persp || ap.some(a => SIN_CONTROL.test(a))) return null;
     const r = cuadro(ej, i, 0), cm = centroMasa(r.E), b = baseApoyo(r.E);
     /* sentado sobre la pelvis, los isquiones y el cóccix ocupan unos 6 más de cada lado */
     const tol = ap.length === 1 && ap[0] === 'pelvis' ? 6 : 2;
@@ -747,6 +779,27 @@ const FIGURA = (() => {
       for (const k of ['pc', 'pl']) { const m = E.seg[k], fx = ((m.aP - m.a0 + 540) % 360) - 180; if (!E.fr && (fx < -6 || fx > 162)) fallas.push(`${donde}: rodilla ${k} fuera de rango (${fx.toFixed(0)}°)`); }
       for (const k of ['bc', 'bl']) { const m = E.seg[k], fx = ((m.a0 - m.aA + 540) % 360) - 180; if (!E.fr && (fx < -8 || fx > 160)) fallas.push(`${donde}: codo ${k} fuera de rango (${fx.toFixed(0)}°)`); }
     };
+    /* control de física (de perfil): rangos que un cuerpo real no pasa. La columna se
+       mide entre el segmento de la pelvis y el de arriba; la cadera, del eje de la pelvis
+       al muslo; el cuello, del tórax a la cabeza (+ hacia el frente). El hombro no se
+       controla: de perfil no se distingue un brazo atrás de una rotación o un círculo. */
+    const sangr = (a, b, frente) => { const th = Math.atan2(a.x * b.y - a.y * b.x, a.x * b.x + a.y * b.y) * 180 / Math.PI; return (a.x * frente.y - a.y * frente.x) >= 0 ? th : -th; };
+    const fisica = (E, donde) => {
+      if (E.fr || ej.camara === 'arriba') return;
+      const P = E.col, up0 = unit(P[0], P[1]), upT = unit(P[3], P[4]);
+      const r90 = v => ({ x: -v.y, y: v.x }), lado = Math.sign(r90(upT).x * E.ant.x + r90(upT).y * E.ant.y) || 1;
+      const fr0 = { x: r90(up0).x * lado, y: r90(up0).y * lado };
+      const fuera = (q, v, lo, hi) => { if (v < lo || v > hi) fallas.push(`${donde}: ${q} fuera de rango (${v.toFixed(0)}°)`); };
+      fuera('columna', sangr(up0, upT, fr0), -60, 125);
+      fuera('cuello', sangr(upT, unit(E.S, E.C), E.ant), -60, 60);
+      for (const k of ['pc', 'pl']) { const m = E.seg[k];
+        fuera(`cadera ${k}`, sangr({ x: -up0.x, y: -up0.y }, unit(m.raiz, m.rod), fr0), -45, 150);
+        fuera(`tobillo ${k}`, ((m.aPie - m.aP + 90 + 540) % 360) - 180, -35, 96); }
+      for (const k of ['bc', 'bl']) { const m = E.seg[k]; fuera(`muñeca ${k}`, ((m.aM - m.aA + 540) % 360) - 180, -100, 100); }
+    };
+    /* forma interna (para lo que se hamaca como una mecedora: no cambia mientras rueda) */
+    const forma = E => { const P = E.col, a = (p, q) => Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI, d = (x, y) => ((x - y + 540) % 360) - 180, base = a(P[0], P[1]);
+      return [a(P[1], P[2]), a(P[2], P[3]), a(P[3], P[4]), a(E.S, E.C), E.seg.pc.a0, E.seg.pl.a0, E.seg.pc.aP, E.seg.pl.aP, E.seg.bc.a0, E.seg.bl.a0, E.seg.bc.aA, E.seg.bl.aA].map(v => d(v, base)); };
     let previo = null;
     /* r: cuadro; clave: es una pose clave; ms: tiempo desde el cuadro anterior */
     const revisar = (r, donde, i, clave, ms) => {
@@ -762,16 +815,29 @@ const FIGURA = (() => {
         for (const a of ap) { const c = contactoDe(r.E, a); if (Math.abs(c.y - piso) > 1.2) fallas.push(`${donde}: ${a} no toca el piso (${(PISO - c.y).toFixed(1)})`); }
       }
       limite(r.E, donde);
+      fisica(r.E, donde);
       if (clave) { const q = equilibrio(ej, i); if (q && q.fuera > 0) fallas.push(`${donde}: fuera de equilibrio (centro de masa ${q.fuera.toFixed(1)} fuera de la base)`); }
       const marcas = [r.E.H, r.E.S, r.E.C, r.E.seg.pc.tobillo, r.E.seg.bc.muneca];
       /* velocidad de las marcas en unidades cada 100 ms: más de 30 (~3,5 m/s) es un salto */
       if (previo && ms) { const salto = Math.max(...marcas.map((p, q) => Math.hypot(p.x - previo[q].x, p.y - previo[q].y))) * 100 / ms; if (salto > 30) fallas.push(`${donde}: salto brusco (${salto.toFixed(0)} cada 100 ms)`); }
       previo = marcas;
     };
+    /* lo que queda apoyado de una pose a la siguiente (manos, pies, rodillas, antebrazos)
+       no se desliza por el mat; lo que se hamaca (meces en las dos poses) no cambia de forma */
+    const EXTREMO = /^(pie|talon|punta|mano|rodilla|antebrazo)/;
     for (let i = 0; i < (n > 1 ? n : 1); i++) {
+      const j = (i + 1) % n, libres = new Set([...(poses[i].libre || []), ...(poses[j].libre || [])]);
+      const quedan = n > 1 && !ej.rueda && ej.camara !== 'arriba' ? (poses[i].apoyo || []).filter(a => EXTREMO.test(a) && !libres.has(a) && (poses[j].apoyo || []).includes(a)) : [];
+      const meces = n > 1 && poses[i].meces && poses[j].meces;
+      let x0 = null, g0 = null, f0 = null;
       for (let s = 0; s < (n > 1 ? pasos : 1); s++) {
-        const f = s / pasos;
-        revisar(cuadro(ej, i, f), `pose ${i}${f ? ` → ${(i + 1) % n} (${Math.round(f * 100)}%)` : ''}`, i, !f, (poses[(i + 1) % n].dur || ej.dur || 1500) / pasos);
+        const f = s / pasos, r = cuadro(ej, i, f), donde = `pose ${i}${f ? ` → ${j} (${Math.round(f * 100)}%)` : ''}`;
+        revisar(r, donde, i, !f, (poses[j].dur || ej.dur || 1500) / pasos);
+        /* talón y punta son curvos: si el pie gira, el punto de contacto rueda (radio × ángulo) */
+        if (quedan.length) { const xs = quedan.map(a => contactoDe(r.E, a).x), gs = quedan.map(a => r.E.seg[miembroDe(a)].aPie || 0);
+          if (!x0) { x0 = xs; g0 = gs; } else xs.forEach((x, q) => { const rueda = /^(talon|punta)/.test(quedan[q]) ? RPIE * Math.abs(((gs[q] - g0[q] + 540) % 360) - 180) * Math.PI / 180 : 0;
+            if (Math.abs(x - x0[q]) > 1.5 + rueda) fallas.push(`pose ${i} → ${j}: ${quedan[q]} se desliza por el mat (${Math.abs(x - x0[q]).toFixed(1)})`); }); }
+        if (meces) { const fo = forma(r.E); if (!f0) f0 = fo; else fo.forEach((v, q) => { if (Math.abs(((v - f0[q] + 540) % 360) - 180) > 5) fallas.push(`pose ${i} → ${j}: al hamacarse cambia la forma del cuerpo`); }); }
       }
     }
     /* modo fluido: se recorre cada frase en tiempo real */

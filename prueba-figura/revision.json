@@ -48,13 +48,20 @@
           "Manos hasta la plancha",
           "se deslizaban",
           "6 pasos alternados"
+        ],
+        [
+          "Subida desde el mat",
+          "otro camino",
+          "espejo de la bajada"
         ]
       ],
       "cambios": [
         "Al rodar hacia abajo hasta apoyar las manos, el tronco colgaba de más y los hombros quedaban por debajo del largo del brazo: los codos se doblaban 79°. Ahora la columna rueda redondeada (\"como sobre una pelota de playa\") y las manos llegan al mat con los brazos rectos, apenas delante de los pies.",
         "\"Caminar con las manos hasta la plancha\": antes las dos manos se deslizaban juntas por el mat, como un fantasma. Ahora caminan de verdad: una mano por vez (tres pasos cada una), la que avanza se despega unos 7 cm y la otra queda clavada en el mat con el codo apenas flojo, mientras el cuerpo pasa de la flexión a la plancha y los talones se despegan a mitad de camino. Al final vuelve por el mismo camino y rueda hacia arriba.",
         "Cada pose de la caminata se calculó para que el hombro quede al alcance de las manos apoyadas: así no hay manos flotando ni codos que se doblen de más.",
-        "La flexión de brazos (paso 3) sigue con los codos doblados: ahí sí corresponde, con el cuerpo recto de la cabeza a los talones."
+        "Rodar hacia abajo y hacia arriba van por el mismo camino: la columna se enrolla vértebra por vértebra con los brazos junto a las orejas y la subida pasa por las mismas posiciones al revés (antes subía con otra forma, rarísima).",
+        "En la flexión de brazos los codos van hacia afuera, no hacia atrás: el brazo se abre al costado, así que de perfil se ve en escorzo (más corto) y el pecho baja cerca del mat con el cuerpo recto de la cabeza a los talones.",
+        "Los pies quedan clavados en el mat en todo el ejercicio (antes resbalaban un poco al rodar)."
       ]
     },
     {
@@ -108,17 +115,126 @@
     {
       "id": "pos-sedente",
       "n": "Sedente (posición) y comienzo del Boomerang",
-      "texto": "Sentado con las piernas largas y las manos en el mat a los costados de la cadera.",
+      "texto": "Sentado con las piernas largas y las manos en el mat a los costados de la cadera, dedos hacia adelante.",
       "medidas": [
         [
           "Codos",
           "42°",
           "0°"
+        ],
+        [
+          "Manos",
+          "delante de la cadera, codo doblado",
+          "a los costados de la cadera"
         ]
       ],
       "cambios": [
-        "Las manos estaban justo al costado de la cadera y, como el brazo es más largo que la altura del hombro, el codo se doblaba 42° hacia atrás. Ahora las manos apoyan apenas detrás de la cadera con los brazos rectos.",
+        "El brazo es más largo que la altura del hombro sentado: con las manos justo al costado de la cadera y el brazo pegado al cuerpo, el codo se doblaba 42°. En el cuerpo real el brazo se separa apenas hacia el costado; de perfil eso se ve como un brazo un poco más corto. Ahora los brazos van rectos, las manos al lado de la cadera y los dedos hacia adelante.",
+        "Los dedos miran hacia adelante y la muñeca queda como al apoyar la mano con el antebrazo vertical (unos 90°), lo que da una muñeca que carga peso. Con las manos más atrás y los dedos al frente se extendía 113°: por eso no se corren hacia atrás.",
         "En el Boomerang, la posición inicial apoya también los talones (\"Sentado con piernas largas al frente\"): antes las piernas quedaban en el aire y el equilibrio no cerraba."
+      ]
+    },
+    {
+      "id": "mat2-e22",
+      "medidas": [
+        [
+          "Forma del cuerpo al hamacarse",
+          "se doblaba 25° en la cadera",
+          "fija (mecedora)"
+        ],
+        [
+          "Pies al hamacarse hacia atrás",
+          "apoyados en el mat",
+          "en el aire"
+        ],
+        [
+          "Hamacadas",
+          "1",
+          "2 y vuelve a Swan"
+        ]
+      ],
+      "cambios": [
+        "Antes no era un hamacarse posible: el cuerpo se doblaba en la cadera como un subibaja (al subir el pecho las piernas bajaban hasta apoyar los pies, y al revés). Sin empujar con algo, un cuerpo así no sube ni baja.",
+        "Ahora el cuerpo mantiene su curva \"como una mecedora\": columna extendida (sobre todo la torácica), piernas largas apenas despegadas, brazos en diagonal sobre la cabeza y la cabeza en línea. Esa forma no cambia mientras se hamaca.",
+        "Rueda sin deslizar sobre el frente del cuerpo: hacia adelante apoya el esternón y suben las piernas; hacia atrás apoyan los muslos y la pelvis y sube el pecho. El punto de apoyo avanza lo mismo que gira el arco, como el patín de una mecedora.",
+        "Se suelta de las manos, se hamaca dos veces y se recibe con las manos de vuelta en Swan, en el mismo lugar donde estaban."
+      ]
+    },
+    {
+      "id": "mat1-e17",
+      "medidas": [
+        [
+          "Codos con las manos en la cintura",
+          "133°",
+          "97°"
+        ]
+      ],
+      "cambios": [
+        "Manos entrelazadas detrás de la cintura: el brazo va hacia atrás y se abre al costado, con los codos relajados hacia el mat. De perfil eso se ve en escorzo (el brazo más corto). Antes el brazo se dibujaba largo y, para que la mano llegara a la cintura, el codo se doblaba 133° y apuntaba al techo.",
+        "Las tres patadas llevan los talones hacia los glúteos con la cadera en el mat; después las piernas se alargan, los brazos se estiran hacia los pies y el tronco se extiende con la cabeza en línea."
+      ]
+    },
+    {
+      "id": "mat2-e14",
+      "cambios": [
+        "Vista de frente. La pierna de apoyo: la rodilla en el mat y la canilla hacia atrás, en escorzo, con el pie apoyado detrás de la rodilla. Antes el pie flotaba al costado y se veía rarísimo.",
+        "Al patear al frente la pierna viene hacia quien mira y el pie va flexionado, con los dedos hacia arriba (\"tobillo flexionado\"); al llevarla atrás, el pie en punta.",
+        "La rodilla de apoyo queda clavada en el mat de una pose a otra (antes se corría un poco en cada patada)."
+      ]
+    },
+    {
+      "id": "mat2-e15",
+      "cambios": [
+        "Posición inicial \"sentado sobre una cadera con rodillas flexionadas\", vista de frente: las rodillas vienen hacia quien mira (el muslo en escorzo) y las canillas quedan sobre el mat hacia el costado, la pierna de arriba delante de la de abajo. Antes la canilla se doblaba sobre el muslo de frente y las piernas se veían quebradas.",
+        "Desde ahí la cadera sube al techo estirando las piernas, el brazo libre sube y baja rotando el tronco hacia los pies, y vuelve flexionando las piernas."
+      ]
+    },
+    {
+      "id": "mat1-e14",
+      "medidas": [
+        [
+          "Flexión de cadera",
+          "159°",
+          "134°"
+        ],
+        [
+          "Espalda",
+          "casi recta",
+          "en C"
+        ]
+      ],
+      "cambios": [
+        "En equilibrio sobre los isquiones con la espalda redondeada en C: así las piernas pueden abrirse en V. Antes el tronco iba casi recto y la cadera quedaba flexionada 159°, más de lo que da el cuerpo (unos 130–150°).",
+        "Al estirar o doblar una pierna, la mano se desliza por ella y a mitad de camino toma la pantorrilla. Sosteniendo el tobillo todo el recorrido, la cadera tendría que flexionarse más de la cuenta.",
+        "Rueda hacia atrás sin pasar de los omóplatos y vuelve a la V sin deslizarse."
+      ]
+    },
+    {
+      "id": "mat2-e19",
+      "medidas": [
+        [
+          "Extensión de cadera de la pierna de adelante",
+          "53°",
+          "45°"
+        ]
+      ],
+      "cambios": [
+        "Al flexionar la rodilla de la pierna de adelante \"como pedaleando\", el muslo se iba más atrás de lo que da la articulación (53° de extensión de cadera). Ahora llega a unos 45°, el límite de un cuerpo entrenado."
+      ]
+    },
+    {
+      "id": "mat2-e21",
+      "medidas": [
+        [
+          "Cadera al volver al inicio",
+          "se deslizaba sentada por el mat",
+          "quieta"
+        ]
+      ],
+      "cambios": [
+        "Al rodar del Roll Over al Teaser la cadera vuelve hacia adelante lo mismo que retrocedió (rodar sin deslizar). Antes quedaba atrás y, al final, el cuerpo se deslizaba sentado por el mat para volver al inicio.",
+        "Para volver a la posición inicial rueda hacia arriba con los brazos al frente y los baja abiertos hacia los costados hasta apoyar las manos junto a la cadera. Antes las manos bajaban de golpe atravesando el mat y la muñeca se doblaba de más.",
+        "Empieza y termina sentado con las manos a los costados de la cadera y los dedos al frente (ver Sedente)."
       ]
     }
   ]
