@@ -1,0 +1,146 @@
+<title>Comparador de silueta</title>
+<style>
+/* Comparador: misma figura, dos pieles. Arriba la foto de referencia junto a las dos
+   siluetas quietas; abajo cada ejercicio animado lado a lado. Paleta de Pilates Lab. */
+:root {
+  --bg: #f7f7f5; --sup: #ffffff; --sup2: #f0efec; --sup3: #e7e5e1;
+  --tx: #1c1b19; --tx2: #6b6862; --linea: #e3e1dc;
+  --verde: #0d9488; --verde-cl: #ccfbf1; --mag: #c026d3; --mag-cl: #fae8ff;
+  --mat: #7b6de0; --mat-arriba: #dcd6f7; --sombra-fig: rgba(0,0,0,.2); --tray-pie: #2563eb;
+  --ap-calza: #6d3d68; --ap-calza-l: #4f2b4c; --ap-borde: rgba(60,34,20,.6);
+  --cuerpo: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --r: 16px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #14141a; --sup: #1d1d24; --sup2: #26262f; --sup3: #30303a; --tx: #f0efec; --tx2: #a3a09a; --linea: #33333d;
+  --verde: #2dd4bf; --verde-cl: #0f3a36; --mag: #e879f9; --mag-cl: #3d1043;
+  --mat: #8b7ff0; --mat-arriba: #3a3560; --sombra-fig: rgba(0,0,0,.45); --tray-pie: #60a5fa;
+  --ap-calza: #8a4f84; --ap-calza-l: #6a3c66; --ap-borde: rgba(255,238,226,.55); color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #14141a; --sup: #1d1d24; --sup2: #26262f; --sup3: #30303a; --tx: #f0efec; --tx2: #a3a09a; --linea: #33333d;
+  --verde: #2dd4bf; --verde-cl: #0f3a36; --mag: #e879f9; --mag-cl: #3d1043;
+  --mat: #8b7ff0; --mat-arriba: #3a3560; --sombra-fig: rgba(0,0,0,.45); --tray-pie: #60a5fa;
+  --ap-calza: #8a4f84; --ap-calza-l: #6a3c66; --ap-borde: rgba(255,238,226,.55); color-scheme: dark }
+body { background: var(--bg); color: var(--tx); font-family: var(--cuerpo); }
+.pag { max-width: 1040px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 48px; display: grid; gap: 22px; }
+header h1 { font-size: 26px; letter-spacing: -.01em; text-wrap: balance; margin: 0 0 6px; }
+header p { color: var(--tx2); line-height: 1.5; max-width: 64ch; margin: 0; }
+.cambios { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; padding: 0; list-style: none; }
+.cambios li { background: var(--verde-cl); color: var(--tx); border-radius: 99px; padding: 5px 11px; font-size: 13px; font-weight: 700; }
+h2 { font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: var(--tx2); margin: 0 0 10px; }
+.ref { display: grid; grid-template-columns: 1.05fr 1fr 1fr; gap: 10px; align-items: stretch; }
+.panel { background: var(--sup); border: 1px solid var(--linea); border-radius: var(--r); padding: 8px; display: grid; gap: 6px; min-width: 0; align-content: start; }
+.panel img { width: 100%; height: auto; border-radius: 10px; display: block; }
+.etq { font-size: 12.5px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
+.etq::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--tx2); }
+.etq.modelo::before { background: var(--verde); }
+.etq.foto::before { background: var(--mag); }
+.fig svg { width: 100%; height: auto; display: block; }
+.ejs { display: grid; gap: 14px; }
+.ej { background: var(--sup); border: 1px solid var(--linea); border-radius: var(--r); padding: 10px 12px 12px; display: grid; gap: 8px; }
+.ej h3 { margin: 0; font-size: 16px; display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
+.ej h3 small { font-size: 12px; font-weight: 700; color: var(--tx2); }
+.par { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.par .panel { background: var(--sup2); border: 0; }
+.barra { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+button { font: inherit; font-weight: 800; font-size: 14px; color: var(--tx); background: var(--sup); border: 2px solid var(--linea); border-radius: 12px; padding: 8px 14px; cursor: pointer; min-height: 40px; }
+button:hover { border-color: var(--verde); }
+button:focus-visible { outline: 3px solid var(--mag); outline-offset: 2px; }
+.nota { font-size: 13px; color: var(--tx2); line-height: 1.5; max-width: 70ch; margin: 0; }
+/* figura (las clases que dibuja figura.js) */
+.fig-mat { fill: var(--mat); } .fig-mat-sombra { fill: rgba(0,0,0,.15); }
+.fig-mat-arriba { fill: var(--mat-arriba); } .fig-mat-raya { stroke: rgba(255,255,255,.35); stroke-width: .6; }
+.fig-mat-persp { fill: var(--mat-arriba); }
+.fig-sombra { fill: var(--sombra-fig); } .fig-fantasma { opacity: .12; }
+.fig-cam { font: 700 8.5px var(--cuerpo); fill: var(--tx2); letter-spacing: .04em; text-transform: uppercase; }
+.tray { fill: none; stroke-width: 1.6; stroke-dasharray: 3 2.4; stroke-linecap: round; opacity: .9; }
+.tray-flecha { fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.tray-mano { stroke: #e11d48; } .tray-pie { stroke: var(--tray-pie); } .tray-cab { stroke: var(--mag); } .tray-pel { stroke: #f59e0b; }
+@media (max-width: 620px) {
+  .ref { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .ej { scroll-behavior: auto; } }
+</style>
+
+<div class="pag">
+  <header>
+    <h1>Comparador de silueta</h1>
+    <p>Las dos figuras usan el mismo esqueleto y las mismas poses: solo cambia la piel. A la izquierda de cada par, la silueta actual de la app; a la derecha, la que toma la estructura de la modelo de las fotos de respiración de Pre-Pilates.</p>
+    <ul class="cambios" aria-label="Qué cambia en la versión como la modelo">
+      <li>Muslos, cadera y glúteo un poco más llenos</li>
+      <li>Pantorrillas y antebrazos apenas más llenos</li>
+      <li>Cintura menos marcada, abdomen plano</li>
+      <li>Manos y pies de tamaño natural</li>
+    </ul>
+  </header>
+
+  <section aria-labelledby="t-ref">
+    <h2 id="t-ref">En la misma posición que la foto</h2>
+    <div class="ref">
+      <div class="panel foto"><span class="etq foto">La modelo (foto de referencia)</span><img src="{{FOTO}}" alt="La modelo boca arriba con las rodillas flexionadas y los brazos al costado"></div>
+      <div class="panel"><span class="etq">Actual</span><div class="fig" id="refA"></div></div>
+      <div class="panel"><span class="etq modelo">Como la modelo</span><div class="fig" id="refB"></div></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="t-mov">
+    <div class="barra"><h2 id="t-mov">En movimiento</h2><button type="button" id="pausa" aria-pressed="false">Pausar todo</button></div>
+    <div class="ejs" id="ejs"></div>
+  </section>
+
+  <p class="nota">La foto de referencia es del material del curso: esta página es privada, no compartas el link. Las animaciones son las mismas que las de la app, con la validación física de siempre (la piel no cambia apoyos ni recorridos).</p>
+</div>
+
+<script>/*FIGURA*/</script>
+<script>/*POSES*/</script>
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const EJS = [
+    ['pos-supino-rodillas', 'Supino con rodillas flexionadas', 'quieta'],
+    ['mat1-e03', 'The Roll Up', 'de perfil'],
+    ['mat1-e15', 'Swan', 'de perfil'],
+    ['mat2-e12', 'Leg Pull Up', 'manos en el mat'],
+    ['mat2-e03', 'Teaser 1 — Torso Roll Down', 'de perfil'],
+    ['mat2-e17', 'Side Bend (Mermaid)', 'de frente'],
+    ['mat1-e12', 'Spine Stretch Side', 'sentada de frente'],
+    ['mat1-e21', 'Side Leg Kicks', 'desde arriba'],
+    ['mat2-e06', 'Hip Circles', 'desde arriba'],
+    ['pos-bipedo-frente', 'De pie, de frente', 'quieta']
+  ];
+  const copia = (id, cuerpo) => ({ ...POSES[id], cuerpo, _prep: null, _enc: null });
+  $('#refA').innerHTML = FIGURA.svgEstatico(copia('pos-supino-rodillas', 'gracil'), 0, 0);
+  $('#refB').innerHTML = FIGURA.svgEstatico(copia('pos-supino-rodillas', 'modelo'), 0, 0);
+  /* las dos de referencia, acercadas a la figura con la misma caja (se comparan a igual escala) */
+  const cajas = ['#refA', '#refB'].map(sel => { const g = $(sel + ' svg > g[transform]'), b = g.getBBox(), m = g.transform.baseVal.consolidate().matrix;
+    return { x: m.a * b.x + m.e, y: m.d * b.y + m.f, w: m.a * b.width, h: m.d * b.height }; });
+  const x0 = Math.min(...cajas.map(c => c.x)) - 6, y0 = Math.min(...cajas.map(c => c.y)) - 6;
+  const x1 = Math.max(...cajas.map(c => c.x + c.w)) + 6, y1 = Math.max(...cajas.map(c => c.y + c.h)) + 8;
+  ['#refA', '#refB'].forEach(sel => $(sel + ' svg').setAttribute('viewBox', `${x0} ${y0} ${x1 - x0} ${y1 - y0}`));
+  const reps = [];
+  const cont = $('#ejs');
+  for (const [id, nom, nota] of EJS.slice(1)) {
+    const el = document.createElement('article');
+    el.className = 'ej';
+    el.innerHTML = `<h3>${nom} <small>${nota}</small></h3><div class="par">
+      <div class="panel"><span class="etq">Actual</span><div class="fig" data-c="gracil"></div></div>
+      <div class="panel"><span class="etq modelo">Como la modelo</span><div class="fig" data-c="modelo"></div></div></div>`;
+    cont.appendChild(el);
+    el.querySelectorAll('[data-c]').forEach(f => {
+      const ej = copia(id, f.dataset.c);
+      if (ej.poses.length > 1) reps.push({ el, rep: FIGURA.reproductor(f, ej, { fantasma: false, fluido: true }) });
+      else f.innerHTML = FIGURA.svgEstatico(ej, 0, 0);
+    });
+  }
+  /* solo se animan los que están a la vista */
+  let pausado = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const visibles = new Set();
+  const aplicar = () => reps.forEach(r => { if (!pausado && visibles.has(r.el)) r.rep.reanudar(); else r.rep.pausar(); });
+  const io = new IntersectionObserver(es => { es.forEach(e => e.isIntersecting ? visibles.add(e.target) : visibles.delete(e.target)); aplicar(); }, { rootMargin: '120px' });
+  document.querySelectorAll('.ej').forEach(e => io.observe(e));
+  const b = $('#pausa');
+  const rotulo = () => { b.textContent = pausado ? 'Reproducir todo' : 'Pausar todo'; b.setAttribute('aria-pressed', pausado); };
+  b.onclick = () => { pausado = !pausado; rotulo(); aplicar(); };
+  rotulo(); aplicar();
+})();
+</script>
