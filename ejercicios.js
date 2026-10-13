@@ -52,6 +52,7 @@ function vEjercicios() {
   app().innerHTML = `
     <h1 class="tit">Ejercicios</h1>
     <p class="sub">Animación e instrucciones de Mat 1 y Mat 2, y fotos de Pre-Pilates. Filtrá por posición o libro, o buscá por nombre o por lo que trabaja.</p>
+    <button type="button" class="gen-tarjeta" id="ejGenerar"><span>✨</span><b>Generar una clase</b><small>Con estos ejercicios: los 5 principios, fluida y con los props que elijas.</small></button>
     <label class="pl-buscar"><span class="sr">Buscar ejercicio</span><input type="search" id="ejQ" placeholder="Buscar (Roll Up, swan, glúteos…)" value="${esc(filtroEj.q)}" autocomplete="off"></label>
     <div class="cl-filtros">
       <div class="chips ej-chips" id="ejPos" role="group" aria-label="Posición"></div>
@@ -61,6 +62,7 @@ function vEjercicios() {
     <p class="micro ej-cuenta" id="ejCuenta" aria-live="polite"></p>
     <div id="ejLista"></div>`;
   let t = 0;
+  $('#ejGenerar').onclick = () => { SND.toque(); abrirGenerador(); };
   $('#ejQ').oninput = ev => { clearTimeout(t); t = setTimeout(() => { filtroEj.q = ev.target.value; pintarEjercicios(); }, 140); };
   $$('#ejF button').forEach(b => b.onclick = () => {
     filtroEj.f = b.dataset.f; SND.toque();

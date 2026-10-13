@@ -82,7 +82,8 @@ const rangoReps = txt => {
   const u = String(txt || '').match(/(\d+)/);
   return u ? [+u[1], +u[1]] : null;
 };
-const unidadReps = txt => /c[ií]rculo/i.test(txt) ? 'círculos' : /sets?\b/i.test(txt) ? 'sets' : 'reps';
+const unidadReps = txt => /c[ií]rculo/i.test(txt) ? 'círculos' : /sets?\b/i.test(txt) ? 'sets' : /segundo/i.test(txt) ? 'segundos'
+  : /respiraci/i.test(txt) ? 'respiraciones' : /pasos/i.test(txt) ? 'pasos' : /ciclos/i.test(txt) ? 'ciclos' : 'reps';
 
 /* catálogo de ejercicios para armar la clase */
 function ejerciciosClase() {

@@ -35,20 +35,27 @@ function planes() { if (!Array.isArray(S.planes)) S.planes = []; return S.planes
 const nuevoId = () => 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 function nuevoPlan(base = {}) {
   const p = { id: nuevoId(), nombre: base.nombre || 'Sesión nueva', fecha: base.fecha || HOY(), para: base.para || '', dur: base.dur || 55,
-    focos: base.focos || [], notas: base.notas || '', items: base.items || [], creado: HOY(), editado: Date.now() };
+    focos: base.focos || [], notas: base.notas || '', items: base.items || [], creado: HOY(), editado: Date.now(), ...(base.gen ? { gen: base.gen } : {}) };
   planes().unshift(p); guardar();
   return p;
 }
 const tocar = p => { p.editado = Date.now(); guardar(); };
 
-/* duración estimada: preparar cada ejercicio, sus repeticiones y los cambios de posición */
+/* tiempo de un ejercicio: explicarlo y acomodarse (≈ 45 s) y sus repeticiones, el doble si
+   son por lado, por pierna o en cada sentido (una clase de una hora tiene ≈ 25 ejercicios,
+   como pide el examen de Mat 2) */
+function segEj(e, r) {
+  const u = unidadReps(e.reps), lados = /por lado|cada lado|por pierna|\/lado|cada sentido|ambos sentidos|alternando|alternad/i.test(e.reps || '') ? 2 : 1;
+  const por = u === 'sets' ? 12 : u === 'círculos' ? 6 : u === 'segundos' ? 1 : u === 'respiraciones' ? 6 : u === 'pasos' ? 1.2 : u === 'ciclos' ? 8 : 7;
+  return 50 + r * por * (u === 'segundos' ? 1 : lados);
+}
+/* duración estimada: cada ejercicio y los cambios de posición */
 function duracionPlan(p) {
   let seg = 0, prev = null;
   for (const x of p.items) {
     const e = ejPlan(x.id); if (!e) continue;
-    const r = x.reps || (rangoReps(e.reps) || [6])[0], u = unidadReps(e.reps);
-    seg += 20 + r * (u === 'sets' ? 12 : u === 'círculos' ? 5 : 7);
-    if (prev && prev.pos !== e.pos) seg += 20;
+    seg += segEj(e, x.reps || (rangoReps(e.reps) || [6])[0]);
+    if (prev && prev.pos !== e.pos) seg += 45;
     prev = e;
   }
   return Math.round(seg / 60);
@@ -58,6 +65,7 @@ let planAbierto = null, filtroPlan = { pos: '', f: '', q: '' };
 
 /* ---------------- lista ---------------- */
 function vPlanes() {
+  if (genAbierto) return vGenerador();
   if (planAbierto && planes().some(p => p.id === planAbierto)) return vPlan(planAbierto);
   planAbierto = null;
   const lista = [...planes()].sort((a, b) => (b.fecha || '').localeCompare(a.fecha || '') || b.editado - a.editado);
@@ -65,6 +73,7 @@ function vPlanes() {
   app().innerHTML = `
     <h1 class="tit">Mis sesiones</h1>
     <p class="sub">Planeá tus sesiones de Pilates y quedan guardadas acá. La app calcula la duración, te marca las transiciones y las revisa como en "Armá tu clase".</p>
+    <button type="button" class="gen-tarjeta" id="plGenerar"><span>✨</span><b>Generar una clase</b><small>Completa, con los 5 principios, la fluidez entre posiciones y los props que elijas (o ninguno).</small></button>
     <div class="fila pl-acc">
       <button type="button" class="btn3d verde" id="plNueva">＋ Nueva sesión</button>
       ${claseActual().items.length ? '<button type="button" class="btn ghost" id="plDeClase">Desde mi clase de examen</button>' : ''}
@@ -86,6 +95,7 @@ function vPlanes() {
       </article>`; }).join('')}</div>`
       : '<p class="vacio">Todavía no hay sesiones. Tocá <b>＋ Nueva sesión</b> para planear la primera.</p>'}`;
   $('#plNueva').onclick = () => { const p = nuevoPlan(); planAbierto = p.id; SND.toque(); vPlan(p.id); };
+  $('#plGenerar').onclick = () => { SND.toque(); abrirGenerador(); };
   const dc = $('#plDeClase');
   if (dc) dc.onclick = () => { const p = planDesdeClase(); planAbierto = p.id; SND.toque(); vPlan(p.id); toast('Copiada tu clase de examen como sesión nueva.', 'toast-suave'); };
   $$('.pl-tarjeta').forEach(t => {
@@ -132,7 +142,10 @@ function vPlan(id) {
     <div class="chips pl-focos-sel" role="group" aria-label="Foco de la sesión">${FOCOS_PLAN.map(f => `<button type="button" data-foco="${esc(f)}" class="${p.focos.includes(f) ? 'on' : ''}" aria-pressed="${p.focos.includes(f)}">${esc(f)}</button>`).join('')}</div>
     <label class="pl-notas">Notas<textarea id="plNotas" rows="2" placeholder="Objetivo, adaptaciones, música, recordatorios…">${esc(p.notas)}</textarea></label>
 
+    ${p.gen ? `<div class="gen-banner"><p>✨ <b>Clase generada</b> · ${esc(resumenCfgGen(p.gen, p.gen.orden2))}</p>
+      <div class="fila"><button type="button" class="btn small" id="genOtra">🎲 Otra versión</button><button type="button" class="btn small ghost" id="genOpc">⚙️ Cambiar opciones</button></div></div>` : ''}
     <div class="pl-resumen" id="plResumen">${resumenPlanHTML(p)}</div>
+    ${p.items.length ? `<div class="gen-princ" aria-label="Los 5 principios en esta sesión">${principiosPlanHTML(p)}</div>` : ''}
     <div class="fila pl-acc">
       <button type="button" class="btn3d verde" id="plRevisar" ${p.items.length ? '' : 'disabled'}>Revisar sesión</button>
       <button type="button" class="btn ghost" id="plCopiar" ${p.items.length ? '' : 'disabled'}>Copiar como texto</button>
@@ -166,6 +179,12 @@ function vPlan(id) {
     b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); tocar(p); SND.toque();
   });
   $('#plRevisar').onclick = () => revisarPlan(p);
+  const go = $('#genOtra'), gc = $('#genOpc');
+  if (go) go.onclick = async () => {
+    if (!(await confirmar('¿Reemplazar esta clase por otra versión con las mismas opciones? Los cambios que le hiciste se pierden.', 'Generar otra'))) return;
+    crearClaseGenerada(p.gen, p); SND.fin(); vPlan(p.id); toast('Otra versión de la clase, con las mismas opciones.', 'toast-suave');
+  };
+  if (gc) gc.onclick = () => { const c = cfgGen(); Object.assign(c, JSON.parse(JSON.stringify(p.gen))); delete c.semilla; delete c.orden2; guardar(); abrirGenerador(); };
   $('#plCopiar').onclick = () => copiarPlan(p);
   $('#plDup').onclick = () => { const c = nuevoPlan({ ...JSON.parse(JSON.stringify(p)), nombre: p.nombre + ' (copia)' }); planAbierto = c.id; vPlan(c.id); toast('Duplicada: estás editando la copia.', 'toast-suave'); };
   $('#plBorrar').onclick = async () => {
@@ -195,7 +214,8 @@ function filasPlan(p) {
       <span class="cl-n">${i + 1}</span>
       <span class="cl-mini">${miniPlan(e)}</span>
       <div class="cl-info"><b>${esc(e.n)}</b>
-        <small><span class="cl-pos p-${e.pos}">${pz.ico} ${pz.nom}</span> ${fuenteNom(e.f)}${e.reps ? ` · ${esc(e.reps)}` : ''}</small>
+        <small><span class="cl-pos p-${e.pos}">${pz.ico} ${pz.nom}</span> ${fuenteNom(e.f)}${e.reps ? ` · ${esc(e.reps)}` : ''}${principiosEjHTML(e)}</small>
+        ${x.adap ? `<small class="pl-adap">⚕️ ${esc(x.adap)}</small>` : ''}
         <div class="pl-extra">
           <label class="pl-prop"><span class="sr">Prop</span><select data-k="prop"><option value="">Sin prop</option>${PROPS_PLAN.map(o => `<option ${x.prop === o ? 'selected' : ''}>${o}</option>`).join('')}</select></label>
           ${kFoto >= 0 ? `<button type="button" class="pl-foto" data-foto="${kFoto}" aria-label="Ver la foto de ${esc(e.n)} con ${esc(x.prop)}">📷</button>` : ''}
@@ -250,6 +270,15 @@ function pintarPoolPlan(p) {
   });
 }
 
+/* los 5 principios del movimiento en una sesión y en cada ejercicio (ver generador.js) */
+const principiosEjHTML = e => typeof principiosDe !== 'function' ? '' : ' ' + PRINCIPIOS.filter(pr => principiosDe(e.id).has(pr.k)).map(pr => `<span class="pl-pr" title="${esc(pr.nom)}">${pr.ico}</span>`).join('');
+function principiosPlanHTML(p) {
+  if (typeof principiosDe !== 'function') return '';
+  const es = p.items.map(x => ejPlan(x.id)).filter(Boolean);
+  return PRINCIPIOS.map(pr => { const n = es.filter(e => principiosDe(e.id).has(pr.k)).length;
+    return `<span class="${n >= 2 ? 'ok' : n ? 'poco' : 'falta'}" title="${esc(pr.nom)}">${pr.ico} ${esc(pr.corto)} <b>${n}</b></span>`; }).join('');
+}
+
 /* ---------------- revisión (los criterios de "Armá tu clase", sin la cantidad del examen) ---------------- */
 /* por qué importa cada elemento del balance (elaboración propia, no texto del manual) */
 const POR_QUE_BALANCE = {
@@ -296,7 +325,9 @@ function analizarPlan(p) {
     regresos.length ? `${regresos.map(n).join(', ')} ${regresos.length > 1 ? 'vuelven' : 'vuelve'} a supino después de ${n(fueAtras)} (${POS_CLASE[fueAtras.pos].nom.toLowerCase()}). Subilo${regresos.length > 1 ? 's' : ''} con ↑ antes de ${fueAtras.n}: el manual ordena de pie → cuatro apoyos → supino → sentado → prono → plancha → de costado.` : 'Sigue el orden del manual.');
   /* transiciones */
   const cambios = es.slice(1).filter((e, i) => e.pos !== es[i].pos), tope = Math.max(6, Math.round(es.length / 2.5));
-  const vueltas = [...new Set(es.map(e => e.pos))].filter(pz => { let bloques = 0; es.forEach((e, i) => { if (e.pos === pz && (i === 0 || es[i - 1].pos !== pz)) bloques++; }); return bloques > 1; });
+  /* volver a de pie al final es el cierre del manual: no cuenta como volver */
+  const cierre = es.length > 2 && es[0].pos === 'pie' && es[es.length - 1].pos === 'pie';
+  const vueltas = [...new Set(es.map(e => e.pos))].filter(pz => { let bloques = 0; es.forEach((e, i) => { if (e.pos === pz && (i === 0 || es[i - 1].pos !== pz)) bloques++; }); return bloques > (cierre && pz === 'pie' ? 2 : 1); });
   add(cambios.length > tope || vueltas.length ? 'aviso' : 'ok', `Transiciones: ${cambios.length} cambios de posición`,
     vueltas.length ? `Volvés más de una vez a ${vueltas.map(pz => POS_CLASE[pz].nom.toLowerCase()).join(' y ')}: juntá esos ejercicios en un solo bloque para que la clase fluya.`
       : cambios.length > tope ? 'Son muchos para la cantidad de ejercicios: agrupá los de la misma posición.' : 'Mirá cada "↳" de la lista: así pasa el cuerpo de uno al otro.');
@@ -306,11 +337,27 @@ function analizarPlan(p) {
     calienta ? `Arranca con ${primero.n}.` : `Arranca con ${primero ? primero.n : 'nada'}. Conviene empezar con respiración o activación de Pre-Pilates (o con el Hundred) para preparar el centro; tocá uno para ponerlo primero.`,
     calienta ? {} : { sug: sugerirPlan(p, e => e.f === 'pre' && /breath|respir|pelvic|imprint|toe tap|clock/i.test(e.n), 3), donde: 'inicio' });
   /* balance: cada elemento que falta con su porqué y ejercicios que lo cubren */
-  const faltan = ELEMENTOS_CLASE.filter(el => !es.some(e => el.re.test(norm(e.n))));
-  if (!faltan.length) add('ok', 'Balance', 'Tiene flexión, movilidad, extensión, rotación o lateral, tren superior y tren inferior.');
+  /* los elementos de cada ejercicio (con el generador cargado, también lo que dicen las fichas) */
+  const tiene = (e, el) => el.re.test(norm(e.n)) || (typeof infoGen === 'function' && infoGen(e.id) && infoGen(e.id).elementos.has(el.k));
+  /* con osteoporosis, sin flexión es lo indicado (el manual pide evitarla con carga) */
+  const osteoFoco = p.focos.some(f => /osteoporosis/i.test(f));
+  const faltan = ELEMENTOS_CLASE.filter(el => !es.some(e => tiene(e, el)) && !(osteoFoco && el.k === 'flexion'));
+  if (osteoFoco && !es.some(e => tiene(e, ELEMENTOS_CLASE[0]))) add('ok', 'Sin flexión de columna', 'Con osteoporosis el manual pide evitar la flexión de columna con carga: el centro se trabaja en neutro.');
+  if (!faltan.length) add('ok', 'Balance', osteoFoco ? 'Tiene los elementos de una clase balanceada (con la flexión cuidada por la osteoporosis).' : 'Tiene flexión, movilidad, extensión, rotación o lateral, tren superior y tren inferior.');
   else faltan.forEach(el => add('aviso', `Balance: falta ${el.nom.toLowerCase()}`,
     `Ningún ejercicio de la sesión ${POR_QUE_BALANCE[el.k]}.${el.k === 'extension' ? ' Sin extensión la clase queda toda en flexión.' : ''} Por ejemplo:`,
-    { sug: sugerirPlan(p, e => el.re.test(norm(e.n)), 3), donde: 'orden' }));
+    { sug: sugerirPlan(p, e => tiene(e, el), 3), donde: 'orden' }));
+  /* los 5 principios del movimiento (BB) y los tres planos */
+  if (typeof principiosDe === 'function' && es.length) {
+    const flojos = PRINCIPIOS.filter(pr => es.filter(e => principiosDe(e.id).has(pr.k)).length < 2);
+    add(flojos.length ? 'aviso' : 'ok', flojos.length ? `Principios: ${flojos.map(pr => pr.corto.toLowerCase()).join(', ')} con menos de dos ejercicios` : 'Los 5 principios del movimiento',
+      flojos.length ? 'Sumá ejercicios que los trabajen, por ejemplo:' : PRINCIPIOS.map(pr => `${pr.ico} ${pr.corto}: ${es.filter(e => principiosDe(e.id).has(pr.k)).length}`).join(' · '),
+      flojos.length ? { sug: sugerirPlan(p, e => flojos.some(pr => principiosDe(e.id).has(pr.k)), 3), donde: 'orden' } : {});
+    const planos = ['frontal', 'transversal'].filter(pl => !es.some(e => infoGen(e.id) && infoGen(e.id).planos.has(pl)));
+    add(planos.length ? 'aviso' : 'ok', planos.length ? `Planos: falta el ${planos.join(' y el ')}` : 'Los tres planos de movimiento',
+      planos.length ? `El movimiento de todo el cuerpo pide moverse en los tres planos (sagital, frontal y transversal). Por ejemplo:` : 'Hay flexión y extensión, trabajo lateral y rotación.',
+      planos.length ? { sug: sugerirPlan(p, e => planos.some(pl => infoGen(e.id) && infoGen(e.id).planos.has(pl)), 3), donde: 'orden' } : {});
+  }
   /* osteoporosis */
   if (p.focos.some(f => /osteoporosis/i.test(f))) {
     const ojo = es.filter(e => /evitar/i.test(e.osteo || ''));
@@ -367,7 +414,7 @@ function textoPlan(p) {
   p.items.forEach((x, i) => {
     const e = ejPlan(x.id); if (!e) return;
     if (prev && prev.pos !== e.pos) l.push(`   ↳ ${POS_CLASE[prev.pos].nom} → ${POS_CLASE[e.pos].nom}: ${TRANSICIONES[prev.pos + '>' + e.pos] || 'transición'}`);
-    l.push(`${i + 1}. ${e.n} — ${x.reps ? x.reps + ' ' + unidadReps(e.reps) : (e.reps || '')} (${POS_CLASE[e.pos].nom})${x.prop ? ' · ' + x.prop : ''}${x.nota ? ' · ' + x.nota : ''}`);
+    l.push(`${i + 1}. ${e.n} — ${x.reps ? x.reps + ' ' + unidadReps(e.reps) : (e.reps || '')} (${POS_CLASE[e.pos].nom})${x.prop ? ' · ' + x.prop : ''}${x.nota ? ' · ' + x.nota : ''}${x.adap ? ' · Adaptación: ' + x.adap : ''}`);
     prev = e;
   });
   l.push('', `Duración estimada: ≈ ${duracionPlan(p)} min`);

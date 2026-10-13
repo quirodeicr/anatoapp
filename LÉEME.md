@@ -121,6 +121,27 @@ repeticiones, calentamiento, balance, lo que el manual pide evitar con osteoporo
 tiempo. Se puede duplicar una sesión, copiarla como texto (para WhatsApp o notas) y, desde Armá tu clase,
 **Guardar como sesión**.
 
+**✨ Generar una clase** (en Sesiones y en Ejercicios) — la app arma una clase completa y la guarda como una
+sesión más. Elegís la duración (30, 45, 60 o 75 minutos), el nivel, los props (ninguno o los que tengas:
+bola, círculo, ligas, pesa, roller…, y si querés que asistan o resistan), el orden de las posiciones (el del
+manual, uno elegido por vos —por ejemplo de pie → sentado → de costado— o al azar), un principio para darle
+más peso y cuidados (osteoporosis, zona lumbar, cuello y hombros, muñecas, rodillas, cadera). Siempre busca:
+- **los 5 principios del movimiento** de Balanced Body (todo el cuerpo, integración del tronco, parte inferior,
+  parte superior, movilidad/flexibilidad/recuperación), al menos dos ejercicios de cada uno según tus análisis
+  MAT 1 y MAT 2, los propósitos del manual y tu planilla de Pre-Pilates;
+- **los elementos de una clase balanceada** (calentamiento, flexión, movilidad de columna, extensión, rotación
+  o lateral, tren superior y tren inferior) y **los tres planos**;
+- **la fluidez**: un bloque por posición con su transición, sin volver a supino después del prono, de lo
+  simple a lo exigente, respiración al empezar y movilidad o estiramiento al terminar, y los props en tramos
+  de dos a cuatro ejercicios para no cambiar a cada rato.
+
+Las repeticiones salen del rango del manual según el nivel; con cuidados se saca lo que el manual pide evitar y
+cada ejercicio lleva su adaptación (⚕️). Antes de generar, la app avisa lo que esas opciones no permiten
+cubrir (por ejemplo, sin plancha ni de pie casi no hay ejercicios de todo el cuerpo) y lo anota en la sesión.
+**🎲 Otra versión** arma otra con las mismas opciones y **⚙️ Cambiar opciones** vuelve al generador. En cada
+sesión se ven los 5 principios con su cantidad y los íconos de cada ejercicio. La clasificación de los
+ejercicios por principio más allá de lo que dicen tus fichas es elaboración propia.
+
 **Músculos y ejercicios tocables** — en los apuntes, las fichas, la corrección de cada respuesta y tus
 sesiones, los nombres de músculos (verde) y de ejercicios (magenta) aparecen subrayados. Al tocarlos se
 abre una ventana: el músculo resaltado en el mapa corporal con su región, su acción, lo que dicen tus
