@@ -131,9 +131,11 @@ más peso y cuidados (osteoporosis, zona lumbar, cuello y hombros, muñecas, rod
   MAT 1 y MAT 2, los propósitos del manual y tu planilla de Pre-Pilates;
 - **los elementos de una clase balanceada** (calentamiento, flexión, movilidad de columna, extensión, rotación
   o lateral, tren superior y tren inferior) y **los tres planos**;
-- **la fluidez**: un bloque por posición con su transición, sin volver a supino después del prono, de lo
-  simple a lo exigente, respiración al empezar y movilidad o estiramiento al terminar, y los props en tramos
-  de dos a cuatro ejercicios para no cambiar a cada rato.
+- **la fluidez**: un bloque por posición con su transición, de pie solo al empezar o al terminar (no sube y
+  vuelve a bajar), **los lados intercalados** como lo hace la profe (de costado sobre el lado derecho, después
+  boca abajo —o boca arriba— y de costado sobre el izquierdo; se puede apagar), de lo simple a lo exigente,
+  respiración al empezar y movilidad o estiramiento al terminar, y los props en tramos de dos a cuatro
+  ejercicios para no cambiar a cada rato.
 
 Las repeticiones salen del rango del manual según el nivel; con cuidados se saca lo que el manual pide evitar y
 cada ejercicio lleva su adaptación (⚕️). Con **poca movilidad** usa las modificaciones del manual para isquiotibiales
@@ -143,6 +145,20 @@ cubrir (por ejemplo, sin plancha ni de pie casi no hay ejercicios de todo el cue
 **🎲 Otra versión** arma otra con las mismas opciones y **⚙️ Cambiar opciones** vuelve al generador. En cada
 sesión se ven los 5 principios con su cantidad y los íconos de cada ejercicio. La clasificación de los
 ejercicios por principio más allá de lo que dicen tus fichas es elaboración propia.
+
+Los cuidados de rodilla, cadera y muñeca pueden ser de **un solo lado** (por ejemplo, rodilla derecha): la
+adaptación lo nombra, en cuatro apoyos pone un almohadón bajo esa rodilla y de costado dice si queda abajo o es la
+que trabaja.
+
+**Personas** (en Sesiones) — el perfil de cada persona: nivel, duración de sus clases, cuidados (con el lado),
+props que tiene, un principio con más peso, lo que le gusta u objetivos y notas. **✨ Generar una clase** desde su
+perfil arma la clase con todo eso, la deja a su nombre y varía respecto de sus últimas dos clases. En el perfil
+están sus sesiones. Se guarda solo en tu navegador.
+
+**⇅ Más fácil o más difícil** (en cada ejercicio de una sesión) — las regresiones y progresiones de tus análisis
+MAT 1 y MAT 2 (y al revés: si A es regresión de B, B es progresión de A). Primero los de la misma posición; los de
+otra posición van aparte porque cambian la fluidez. En una clase generada respeta sus cuidados y progresa hasta un
+nivel más; si el ejercicio está de los dos lados, cambian los dos.
 
 **⬇️ Word, Excel o PDF** (en cada sesión) — descarga la sesión para imprimirla o editarla: **Word** (.docx) y
 **Excel** (.xlsx) quedan editables; el **PDF** es para imprimir. Elegís qué incluir: solo los nombres, los nombres con

@@ -41,10 +41,10 @@ function datosExp(p, cfg) {
   const filas = [];
   let prev = null, num = 0;
   for (const { x, e } of es) {
-    if (!prev || prev.pos !== e.pos) filas.push({ tipo: 'pos', nom: POS_CLASE[e.pos].nom, trans: prev ? `Desde ${POS_CLASE[prev.pos].nom.toLowerCase()}: ${TRANSICIONES[prev.pos + '>' + e.pos] || 'transición'}` : '' });
+    if (!prev || prev.pos !== e.pos) filas.push({ tipo: 'pos', nom: POS_CLASE[e.pos].nom + (x.lado ? ' ' + LADO_NOM[x.lado] : ''), trans: prev ? `Desde ${POS_CLASE[prev.pos].nom.toLowerCase()}: ${TRANSICIONES[prev.pos + '>' + e.pos] || 'transición'}` : '' });
     num++;
     const b = e.pm ? null : BB.ejercicios.find(q => q.id === e.id), pm = e.pm ? PREMAT.find(q => q.id === e.id) : null;
-    const f = { tipo: 'ej', num, id: e.id, pm: !!e.pm, nombre: e.n, pos: POS_CLASE[e.pos].nom, fuente: fuenteNom(e.f),
+    const f = { tipo: 'ej', num, id: e.id, pm: !!e.pm, nombre: e.n, pos: POS_CLASE[e.pos].nom + (x.lado ? ' ' + LADO_NOM[x.lado] : ''), fuente: fuenteNom(e.f),
       reps: x.reps ? `${x.reps} ${unidadReps(e.reps)}` : (e.reps || ''), prop: x.prop || '', nota: x.nota || '', adap: x.adap || '',
       principios: typeof principiosDe === 'function' ? PRINCIPIOS.filter(pr => principiosDe(e.id).has(pr.k)).map(pr => pr.corto).join(', ') : '', mov: [] };
     /* el movimiento: del manual (posición inicial, pasos con la respiración, indicaciones) o de tu planilla */

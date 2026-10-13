@@ -1640,7 +1640,7 @@ const app = () => $('#app');
 
 function ir(v) {
   /* tocar "Sesiones" estando en una sesión vuelve a la lista */
-  if (v === 'planes' && vista === 'planes') { planAbierto = null; genAbierto = false; }
+  if (v === 'planes' && vista === 'planes') { planAbierto = null; genAbierto = false; if (typeof personaAbierta !== 'undefined') personaAbierta = null; }
   L = null;
   juegoMapa = null;
   vista = v;

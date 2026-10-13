@@ -51,6 +51,11 @@ const TRANSICIONES = {
   'prono>cuatro': 'Empujá con las manos y llevá la cadera hacia atrás hasta cuatro apoyos.',
   'cuatro>prono': 'Deslizá las manos hacia adelante y bajá el cuerpo con control.',
   'costado>sentado': 'Apoyá la mano de abajo y subí a sentarte.',
+  'sentado>costado': 'Apoyá la mano y el antebrazo a un costado y bajá de costado, alineando hombros, cadera y tobillos.',
+  'supino>costado': 'Rodá hacia un costado y alineá hombros, cadera y tobillos.',
+  'costado>supino': 'Rodá hacia atrás hasta quedar boca arriba.',
+  'cuatro>costado': 'Bajá la cadera hacia un lado y acostate de costado.',
+  'costado>cuatro': 'Apoyá las manos en el mat y subí a cuatro apoyos.',
   'costado>prono': 'Girá hacia el piso sin perder la línea del cuerpo.',
   'costado>plancha': 'Girá hacia el piso, apoyá las manos y subí a la plancha.',
   'plancha>costado': 'Rotá el cuerpo sobre una mano hasta el costado.',
@@ -178,8 +183,9 @@ function filasClase(c) {
   }).join('');
 }
 
-function transicionHTML(a, b) {
-  const regreso = POS_CLASE[b.pos].grupo === 2 && b.pos !== 'sentado' && POS_CLASE[a.pos].grupo >= 3;
+function transicionHTML(a, b, intercala = false) {
+  /* volver a supino después del prono se marca, salvo cuando es para intercalar los lados */
+  const regreso = !intercala && POS_CLASE[b.pos].grupo === 2 && b.pos !== 'sentado' && POS_CLASE[a.pos].grupo >= 3;
   const delManual = a.trans && norm(a.trans).includes(norm(b.n).split(' ').slice(0, 2).join(' ')) ? a.trans : '';
   const txt = delManual || TRANSICIONES[a.pos + '>' + b.pos] || `Pensá cómo pasa el cuerpo de ${POS_CLASE[a.pos].nom.toLowerCase()} a ${POS_CLASE[b.pos].nom.toLowerCase()} sin cortar el flujo.`;
   return `<li class="cl-trans ${regreso ? 'aviso' : ''}" aria-hidden="true">↳ ${POS_CLASE[a.pos].nom} → ${POS_CLASE[b.pos].nom}: ${esc(txt)}${delManual ? ' <i>(manual)</i>' : ''}${regreso ? ' <b>Vuelve a supino después del prono.</b>' : ''}</li>`;

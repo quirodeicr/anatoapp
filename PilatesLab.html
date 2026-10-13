@@ -1000,6 +1000,18 @@ article.ex-rev{margin-bottom:10px}
 .exp-formatos button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 6px;border-radius:14px;border:2px solid var(--linea2);background:var(--sup);color:var(--tx);font:inherit;cursor:pointer}
 .exp-formatos button b{font-size:16px;font-weight:900}.exp-formatos button small{font-size:11.5px;color:var(--tx2);text-align:center}
 .exp-formatos button.on{border-color:var(--verde);background:var(--verde-cl)}.exp-ojo{color:var(--xp-tx)}
+.gen-lado{margin-top:6px;align-items:center}.gen-lado>span{font-size:13px;font-weight:800;color:var(--tx2);margin-right:2px}
+.pl-lado select{font:inherit;font-size:13px;border:2px solid var(--linea2);border-radius:10px;background:var(--sup);color:var(--tx);padding:4px 6px}
+.pe-lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:8px;margin:6px 0 10px}
+.pe-tarjeta{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;padding:10px 12px;border-radius:14px;border:2px solid var(--linea2);background:var(--sup);color:var(--tx);font:inherit;cursor:pointer;min-width:0}
+.pe-tarjeta b{font-weight:900;font-size:15px}.pe-tarjeta small{font-size:12.5px;color:var(--tx2);line-height:1.35}.pe-tarjeta span{font-size:12px;font-weight:800;color:var(--verde-o)}
+.pe-nueva{border-style:dashed}
+.var h3{margin:0 0 4px}.var h4{font-size:14px;font-weight:900;margin:14px 0 6px}.var .fila{margin-top:14px}
+.var-lista{display:grid;gap:6px}
+.var-ej{display:flex;align-items:center;gap:10px;text-align:left;padding:6px 8px;border-radius:12px;border:2px solid var(--linea2);background:var(--sup);color:var(--tx);font:inherit;cursor:pointer;min-width:0}
+.var-ej .cl-mini{flex:0 0 64px;width:64px;height:44px}.var-txt{display:flex;flex-direction:column;min-width:0}.var-txt b{font-weight:800}.var-txt small{font-size:12px;color:var(--tx2)}
+.pl-var{font-weight:900}
+.var-otras{margin-top:8px}.var-otras summary{cursor:pointer;font-size:13px;font-weight:800;color:var(--tx2);margin-bottom:6px}
 .gen-previa{margin:14px 0 4px;line-height:1.45}.gen-previa ul{margin:4px 0 0;padding-left:18px}.gen-previa li{margin:2px 0}
 .gen-banner{background:color-mix(in srgb,var(--verde) 8%,var(--sup));border:2px solid color-mix(in srgb,var(--verde) 35%,var(--linea));border-radius:14px;padding:10px 12px;margin:0 0 10px}
 .gen-banner p{margin:0 0 8px;font-size:13.5px;line-height:1.45}.gen-banner .fila{display:flex;flex-wrap:wrap;gap:8px}
@@ -15947,6 +15959,11 @@ const TRANSICIONES = {
   'prono>cuatro': 'Empujá con las manos y llevá la cadera hacia atrás hasta cuatro apoyos.',
   'cuatro>prono': 'Deslizá las manos hacia adelante y bajá el cuerpo con control.',
   'costado>sentado': 'Apoyá la mano de abajo y subí a sentarte.',
+  'sentado>costado': 'Apoyá la mano y el antebrazo a un costado y bajá de costado, alineando hombros, cadera y tobillos.',
+  'supino>costado': 'Rodá hacia un costado y alineá hombros, cadera y tobillos.',
+  'costado>supino': 'Rodá hacia atrás hasta quedar boca arriba.',
+  'cuatro>costado': 'Bajá la cadera hacia un lado y acostate de costado.',
+  'costado>cuatro': 'Apoyá las manos en el mat y subí a cuatro apoyos.',
   'costado>prono': 'Girá hacia el piso sin perder la línea del cuerpo.',
   'costado>plancha': 'Girá hacia el piso, apoyá las manos y subí a la plancha.',
   'plancha>costado': 'Rotá el cuerpo sobre una mano hasta el costado.',
@@ -16074,8 +16091,9 @@ function filasClase(c) {
   }).join('');
 }
 
-function transicionHTML(a, b) {
-  const regreso = POS_CLASE[b.pos].grupo === 2 && b.pos !== 'sentado' && POS_CLASE[a.pos].grupo >= 3;
+function transicionHTML(a, b, intercala = false) {
+  /* volver a supino después del prono se marca, salvo cuando es para intercalar los lados */
+  const regreso = !intercala && POS_CLASE[b.pos].grupo === 2 && b.pos !== 'sentado' && POS_CLASE[a.pos].grupo >= 3;
   const delManual = a.trans && norm(a.trans).includes(norm(b.n).split(' ').slice(0, 2).join(' ')) ? a.trans : '';
   const txt = delManual || TRANSICIONES[a.pos + '>' + b.pos] || `Pensá cómo pasa el cuerpo de ${POS_CLASE[a.pos].nom.toLowerCase()} a ${POS_CLASE[b.pos].nom.toLowerCase()} sin cortar el flujo.`;
   return `<li class="cl-trans ${regreso ? 'aviso' : ''}" aria-hidden="true">↳ ${POS_CLASE[a.pos].nom} → ${POS_CLASE[b.pos].nom}: ${esc(txt)}${delManual ? ' <i>(manual)</i>' : ''}${regreso ? ' <b>Vuelve a supino después del prono.</b>' : ''}</li>`;
@@ -16241,6 +16259,8 @@ function catalogoPlan() {
   return (CATALOGO_PLAN = [...pm, ...bb]);
 }
 const ejPlan = id => catalogoPlan().find(e => e.id === id);
+/* de costado sobre un lado (lados intercalados) */
+const LADO_NOM = { der: 'sobre el lado derecho', izq: 'sobre el lado izquierdo' };
 const miniPlan = e => e.pm ? miniEj({ pm: e.id }) : miniEj({ bb: e.id });
 const fuenteNom = f => f === 'pre' ? 'Pre-Pilates' : f === 'mat1' ? 'Mat 1' : 'Mat 2';
 
@@ -16248,7 +16268,7 @@ function planes() { if (!Array.isArray(S.planes)) S.planes = []; return S.planes
 const nuevoId = () => 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 function nuevoPlan(base = {}) {
   const p = { id: nuevoId(), nombre: base.nombre || 'Sesión nueva', fecha: base.fecha || HOY(), para: base.para || '', dur: base.dur || 55,
-    focos: base.focos || [], notas: base.notas || '', items: base.items || [], creado: HOY(), editado: Date.now(), ...(base.gen ? { gen: base.gen } : {}) };
+    focos: base.focos || [], notas: base.notas || '', items: base.items || [], creado: HOY(), editado: Date.now(), ...(base.gen ? { gen: base.gen } : {}), ...(base.persona ? { persona: base.persona } : {}) };
   planes().unshift(p); guardar();
   return p;
 }
@@ -16257,17 +16277,19 @@ const tocar = p => { p.editado = Date.now(); guardar(); };
 /* tiempo de un ejercicio: explicarlo y acomodarse (≈ 45 s) y sus repeticiones, el doble si
    son por lado, por pierna o en cada sentido (una clase de una hora tiene ≈ 25 ejercicios,
    como pide el examen de Mat 2) */
-function segEj(e, r) {
-  const u = unidadReps(e.reps), lados = /por lado|cada lado|por pierna|\/lado|cada sentido|ambos sentidos|alternando|alternad/i.test(e.reps || '') ? 2 : 1;
+function segEj(e, r, lado = '') {
+  /* un ítem con lado (de costado sobre el derecho o el izquierdo) es un solo lado */
+  const u = unidadReps(e.reps), lados = !lado && /por lado|cada lado|por pierna|\/lado|cada sentido|ambos sentidos|alternando|alternad/i.test(e.reps || '') ? 2 : 1;
   const por = u === 'sets' ? 12 : u === 'círculos' ? 6 : u === 'segundos' ? 1 : u === 'respiraciones' ? 6 : u === 'pasos' ? 1.2 : u === 'ciclos' ? 8 : 7;
-  return 50 + r * por * (u === 'segundos' ? 1 : lados);
+  /* el segundo lado no se vuelve a explicar: cada lado lleva la mitad de los 50 s */
+  return (lado ? 25 : 50) + r * por * (u === 'segundos' ? 1 : lados);
 }
 /* duración estimada: cada ejercicio y los cambios de posición */
 function duracionPlan(p) {
   let seg = 0, prev = null;
   for (const x of p.items) {
     const e = ejPlan(x.id); if (!e) continue;
-    seg += segEj(e, x.reps || (rangoReps(e.reps) || [6])[0]);
+    seg += segEj(e, x.reps || (rangoReps(e.reps) || [6])[0], x.lado);
     if (prev && prev.pos !== e.pos) seg += 45;
     prev = e;
   }
@@ -16279,6 +16301,7 @@ let planAbierto = null, filtroPlan = { pos: '', f: '', q: '' };
 /* ---------------- lista ---------------- */
 function vPlanes() {
   if (genAbierto) return vGenerador();
+  if (typeof personaAbierta !== 'undefined' && personaAbierta && personaDe(personaAbierta)) return vPersona(personaAbierta);
   if (planAbierto && planes().some(p => p.id === planAbierto)) return vPlan(planAbierto);
   planAbierto = null;
   const lista = [...planes()].sort((a, b) => (b.fecha || '').localeCompare(a.fecha || '') || b.editado - a.editado);
@@ -16291,6 +16314,8 @@ function vPlanes() {
       <button type="button" class="btn3d verde" id="plNueva">＋ Nueva sesión</button>
       ${claseActual().items.length ? '<button type="button" class="btn ghost" id="plDeClase">Desde mi clase de examen</button>' : ''}
     </div>
+    ${typeof personasHTML === 'function' ? personasHTML() : ''}
+    ${lista.length ? '<h2 class="secc">Sesiones · ' + lista.length + '</h2>' : ''}
     ${lista.length ? `<div class="pl-lista">${lista.map(p => {
       const ps = [...new Set(p.items.map(x => (ejPlan(x.id) || {}).pos).filter(Boolean))];
       const proxima = p.fecha && p.fecha >= hoy;
@@ -16308,7 +16333,8 @@ function vPlanes() {
       </article>`; }).join('')}</div>`
       : '<p class="vacio">Todavía no hay sesiones. Tocá <b>＋ Nueva sesión</b> para planear la primera.</p>'}`;
   $('#plNueva').onclick = () => { const p = nuevoPlan(); planAbierto = p.id; SND.toque(); vPlan(p.id); };
-  $('#plGenerar').onclick = () => { SND.toque(); abrirGenerador(); };
+  $('#plGenerar').onclick = () => { SND.toque(); const c = cfgGen(); c.persona = ''; abrirGenerador(); };
+  if (typeof conectarPersonas === 'function') conectarPersonas();
   const dc = $('#plDeClase');
   if (dc) dc.onclick = () => { const p = planDesdeClase(); planAbierto = p.id; SND.toque(); vPlan(p.id); toast('Copiada tu clase de examen como sesión nueva.', 'toast-suave'); };
   $$('.pl-tarjeta').forEach(t => {
@@ -16423,17 +16449,18 @@ function filasPlan(p) {
   return p.items.map((x, i) => {
     const e = ejPlan(x.id); if (!e) return '';
     const pz = POS_CLASE[e.pos], r = rangoReps(e.reps), prev = i ? ejPlan(p.items[i - 1].id) : null;
-    const trans = prev && prev.pos !== e.pos ? transicionHTML(prev, e) : '';
+    const trans = prev && prev.pos !== e.pos ? transicionHTML(prev, e, !!(x.lado || p.items[i - 1].lado)) : '';
     const F = typeof fotosDe === 'function' ? fotosDe(e.id) : null, kFoto = F && x.prop ? F.fotos.findIndex(f => norm(f.prop) === norm(x.prop)) : -1;
     return `${trans}<li class="cl-fila pl-fila" data-i="${i}">
       <span class="cl-n">${i + 1}</span>
       <span class="cl-mini">${miniPlan(e)}</span>
       <div class="cl-info"><b>${esc(e.n)}</b>
-        <small><span class="cl-pos p-${e.pos}">${pz.ico} ${pz.nom}</span> ${fuenteNom(e.f)}${e.reps ? ` · ${esc(e.reps)}` : ''}${principiosEjHTML(e)}</small>
+        <small><span class="cl-pos p-${e.pos}">${pz.ico} ${pz.nom}${x.lado ? ' ' + LADO_NOM[x.lado] : ''}</span> ${fuenteNom(e.f)}${e.reps ? ` · ${esc(e.reps)}` : ''}${principiosEjHTML(e)}</small>
         ${x.adap ? `<small class="pl-adap">⚕️ ${esc(x.adap)}</small>` : ''}
         <div class="pl-extra">
           <label class="pl-prop"><span class="sr">Prop</span><select data-k="prop"><option value="">Sin prop</option>${PROPS_PLAN.map(o => `<option ${x.prop === o ? 'selected' : ''}>${o}</option>`).join('')}</select></label>
           ${kFoto >= 0 ? `<button type="button" class="pl-foto" data-foto="${kFoto}" aria-label="Ver la foto de ${esc(e.n)} con ${esc(x.prop)}">📷</button>` : ''}
+          ${e.pos === 'costado' ? `<label class="pl-lado"><span class="sr">Lado</span><select data-k="lado"><option value="">Los dos lados</option>${Object.entries(LADO_NOM).map(([k, t]) => `<option value="${k}" ${x.lado === k ? 'selected' : ''}>${t.charAt(0).toUpperCase() + t.slice(1)}</option>`).join('')}</select></label>` : ''}
           <label class="pl-nota"><span class="sr">Nota</span><input data-k="nota" value="${esc(x.nota || '')}" placeholder="nota (variante, cue…)" maxlength="140"></label>
         </div></div>
       <label class="cl-reps"><input type="number" data-k="reps" inputmode="numeric" min="1" max="100" step="1" value="${x.reps || ''}" placeholder="${r ? r[0] + (r[1] > r[0] ? '–' + r[1] : '') : '#'}" aria-label="Repeticiones de ${esc(e.n)}"><small>${unidadReps(e.reps)}</small></label>
@@ -16441,6 +16468,7 @@ function filasPlan(p) {
         <button type="button" data-a="sube" aria-label="Subir" ${i ? '' : 'disabled'}>↑</button>
         <button type="button" data-a="baja" aria-label="Bajar" ${i < p.items.length - 1 ? '' : 'disabled'}>↓</button>
         <button type="button" data-a="quita" aria-label="Quitar">✕</button>
+        ${typeof tieneVariantes === 'function' && tieneVariantes(p, i) ? '<button type="button" data-a="var" class="pl-var" aria-label="Más fácil o más difícil" title="Más fácil o más difícil">⇅</button>' : ''}
       </div>
     </li>`;
   }).join('');
@@ -16454,12 +16482,13 @@ function conectarFilasPlan(p) {
       x[k] = k === 'reps' ? (Math.round(+el.value) > 0 ? Math.round(+el.value) : null) : el.value;
       tocar(p);
       if (k === 'reps') $('#plResumen').innerHTML = resumenPlanHTML(p);
-      if (k === 'prop') rehacerPlan(p, `.pl-fila[data-i="${i}"]`);
+      if (k === 'prop' || k === 'lado') rehacerPlan(p, `.pl-fila[data-i="${i}"]`);
     });
     const bf = $('.pl-foto', li);
     if (bf) bf.onclick = () => verFoto(fotosDe(x.id), +bf.dataset.foto);
     $$('[data-a]', li).forEach(b => b.onclick = () => {
       const a = b.dataset.a;
+      if (a === 'var') return abrirVariantes(p, i);
       if (a === 'quita') p.items.splice(i, 1);
       else { const j = a === 'sube' ? i - 1 : i + 1; [p.items[i], p.items[j]] = [p.items[j], p.items[i]]; }
       SND.toque(); tocar(p);
@@ -16523,7 +16552,7 @@ function insertarOrdenado(p, id) {
   return k;
 }
 function analizarPlan(p) {
-  const es = p.items.map((x, i) => ({ ...ejPlan(x.id), rep: x.reps, i })).filter(e => e.id);
+  const es = p.items.map((x, i) => ({ ...ejPlan(x.id), rep: x.reps, lado: x.lado || '', i })).filter(e => e.id);
   const out = [], add = (estado, t, d, extra = {}) => out.push({ estado, t, d, ...extra });
   const n = e => `${e.i + 1}. ${e.n}`;
   /* repeticiones */
@@ -16533,16 +16562,31 @@ function analizarPlan(p) {
   const fuera = es.filter(e => e.rep > 0 && rangoReps(e.reps) && (e.rep < rangoReps(e.reps)[0] || e.rep > rangoReps(e.reps)[1]));
   if (fuera.length) add('aviso', 'Repeticiones fuera de lo que indica el material',
     fuera.map(e => `${n(e)}: pusiste ${e.rep}, el material indica ${e.reps}`).join(' · ') + '. Si es a propósito (una adaptación), anotalo en la nota del ejercicio.');
-  /* orden de posiciones */
+  /* lados intercalados: de costado sobre un lado → otra posición → de costado sobre el otro */
+  const kDer = es.findIndex(e => e.pos === 'costado' && e.lado), ultLado = es.reduce((a, e, k) => e.pos === 'costado' && e.lado ? k : a, -1);
+  const intercala = kDer >= 0 && ultLado > kDer && es.slice(kDer, ultLado).some(e => e.pos !== 'costado') && new Set(es.filter(e => e.lado).map(e => e.lado)).size === 2;
+  const enVentana = e => intercala && e.i > kDer && e.i < es[ultLado].i;
+  /* orden de posiciones: volver atrás está bien si es para intercalar; si no, se avisa */
   const regresos = []; let fueAtras = null;
-  es.forEach(e => { if (POS_CLASE[e.pos].grupo >= 3 && !fueAtras) fueAtras = e; if (fueAtras && (e.pos === 'supino' || e.pos === 'inversion')) regresos.push(e); });
-  add(regresos.length ? 'mal' : 'ok', 'Orden de posiciones',
-    regresos.length ? `${regresos.map(n).join(', ')} ${regresos.length > 1 ? 'vuelven' : 'vuelve'} a supino después de ${n(fueAtras)} (${POS_CLASE[fueAtras.pos].nom.toLowerCase()}). Subilo${regresos.length > 1 ? 's' : ''} con ↑ antes de ${fueAtras.n}: el manual ordena de pie → cuatro apoyos → supino → sentado → prono → plancha → de costado.` : 'Sigue el orden del manual.');
+  es.forEach(e => { if (POS_CLASE[e.pos].grupo >= 3 && !fueAtras) fueAtras = e; if (fueAtras && (e.pos === 'supino' || e.pos === 'inversion') && !enVentana(e)) regresos.push(e); });
+  add(regresos.length ? 'aviso' : 'ok', 'Orden de posiciones',
+    regresos.length ? `${regresos.map(n).join(', ')} ${regresos.length > 1 ? 'vuelven' : 'vuelve'} a supino después de ${n(fueAtras)} (${POS_CLASE[fueAtras.pos].nom.toLowerCase()}). El manual ordena de pie → cuatro apoyos → supino → sentado → prono → plancha → de costado; volver está bien si es para intercalar (por ejemplo, entre los dos lados), si no, subilo${regresos.length > 1 ? 's' : ''} con ↑ antes de ${fueAtras.n}.`
+      : intercala ? 'Sigue el orden del manual, con los lados intercalados.' : 'Sigue el orden del manual.');
+  /* fluidez: no subir a de pie en el medio para volver a bajar */
+  const bloquesPos = es.filter((e, k) => !k || es[k - 1].pos !== e.pos);
+  const pieMedio = bloquesPos.slice(1, -1).filter(e => e.pos === 'pie');
+  const medio = intercala ? es.slice(kDer, ultLado).find(e => e.pos !== 'costado') : null;
+  add(pieMedio.length ? 'aviso' : 'ok', 'Fluidez',
+    pieMedio.length ? `${pieMedio.map(n).join(', ')}: sube a de pie en el medio de la clase y después vuelve al piso. Para que fluya, lo de pie va al empezar o al terminar.`
+      : intercala ? `Intercala los lados: de costado ${LADO_NOM[es[kDer].lado]}, ${POS_CLASE[medio.pos].nom.toLowerCase()} y de costado ${LADO_NOM[es[ultLado].lado]}; de pie solo al empezar o al terminar.`
+      : 'Sin subir y bajar: de pie solo al empezar o al terminar.');
+  const sinOtro = es.filter(e => e.lado && !es.some(o => o.id === e.id && o.lado && o.lado !== e.lado));
+  if (sinOtro.length) add('aviso', 'Lados', `${sinOtro.map(n).join(', ')}: ${sinOtro.length > 1 ? 'falta hacerlos' : 'falta hacerlo'} sobre el otro lado.`);
   /* transiciones */
-  const cambios = es.slice(1).filter((e, i) => e.pos !== es[i].pos), tope = Math.max(6, Math.round(es.length / 2.5));
+  const cambios = es.slice(1).filter((e, i) => e.pos !== es[i].pos), tope = Math.max(6, Math.round(es.length / 2.5)) + (intercala ? 2 : 0);
   /* volver a de pie al final es el cierre del manual: no cuenta como volver */
   const cierre = es.length > 2 && es[0].pos === 'pie' && es[es.length - 1].pos === 'pie';
-  const vueltas = [...new Set(es.map(e => e.pos))].filter(pz => { let bloques = 0; es.forEach((e, i) => { if (e.pos === pz && (i === 0 || es[i - 1].pos !== pz)) bloques++; }); return bloques > (cierre && pz === 'pie' ? 2 : 1); });
+  const vueltas = [...new Set(es.map(e => e.pos))].filter(pz => { let bloques = 0; es.forEach((e, i) => { if (e.pos === pz && (i === 0 || es[i - 1].pos !== pz)) bloques++; }); return bloques > (cierre && pz === 'pie' ? 2 : intercala && pz === 'costado' ? 2 : 1); });
   add(cambios.length > tope || vueltas.length ? 'aviso' : 'ok', `Transiciones: ${cambios.length} cambios de posición`,
     vueltas.length ? `Volvés más de una vez a ${vueltas.map(pz => POS_CLASE[pz].nom.toLowerCase()).join(' y ')}: juntá esos ejercicios en un solo bloque para que la clase fluya.`
       : cambios.length > tope ? 'Son muchos para la cantidad de ejercicios: agrupá los de la misma posición.' : 'Mirá cada "↳" de la lista: así pasa el cuerpo de uno al otro.');
@@ -16629,7 +16673,7 @@ function textoPlan(p) {
   p.items.forEach((x, i) => {
     const e = ejPlan(x.id); if (!e) return;
     if (prev && prev.pos !== e.pos) l.push(`   ↳ ${POS_CLASE[prev.pos].nom} → ${POS_CLASE[e.pos].nom}: ${TRANSICIONES[prev.pos + '>' + e.pos] || 'transición'}`);
-    l.push(`${i + 1}. ${e.n} — ${x.reps ? x.reps + ' ' + unidadReps(e.reps) : (e.reps || '')} (${POS_CLASE[e.pos].nom})${x.prop ? ' · ' + x.prop : ''}${x.nota ? ' · ' + x.nota : ''}${x.adap ? ' · Adaptación: ' + x.adap : ''}`);
+    l.push(`${i + 1}. ${e.n} — ${x.reps ? x.reps + ' ' + unidadReps(e.reps) : (e.reps || '')} (${POS_CLASE[e.pos].nom}${x.lado ? ' ' + LADO_NOM[x.lado] : ''})${x.prop ? ' · ' + x.prop : ''}${x.nota ? ' · ' + x.nota : ''}${x.adap ? ' · Adaptación: ' + x.adap : ''}`);
     prev = e;
   });
   l.push('', `Duración estimada: ≈ ${duracionPlan(p)} min`);
@@ -16666,9 +16710,13 @@ async function copiarPlan(p) {
        calentamiento, flexión, movilidad de columna, extensión, rotación
        o lateral, tren superior y tren inferior;
      · la fluidez: un bloque por posición, cada cambio con su transición
-       (TRANSICIONES de clase.js), los props agrupados para no cambiar
-       a cada rato, de lo más simple a lo más exigente dentro de cada
-       bloque, respiración al empezar y recuperación al terminar.
+       (TRANSICIONES de clase.js), de pie solo al empezar o al terminar
+       (no sube y vuelve a bajar), los lados de costado intercalados
+       (derecho → boca abajo o boca arriba → izquierdo, como lo hace la
+       profe; volver a una posición está bien si es para intercalar),
+       los props agrupados para no cambiar a cada rato, de lo más simple
+       a lo más exigente dentro de cada bloque, respiración al empezar y
+       recuperación al terminar.
    Los props salen de los accesorios que asisten o resisten en las
    fichas MAT 1 y MAT 2 y de las fotos de Mat 3 Props. Los cuidados
    usan las precauciones del manual (y la columna de contraindicaciones
@@ -16815,7 +16863,7 @@ function azarGen(semilla) {
 const mezclarGen = (xs, r) => { const a = [...xs]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 
 /* ---------- opciones ---------- */
-const CFG_GEN_BASE = { dur: 60, nivel: 'principiante', props: [], sinProps: true, uso: 'auto', orden: 'manual', posiciones: [...ORDEN_MANUAL], enfasis: '', cuidados: [] };
+const CFG_GEN_BASE = { dur: 60, nivel: 'principiante', props: [], sinProps: true, uso: 'auto', orden: 'manual', posiciones: [...ORDEN_MANUAL], enfasis: '', cuidados: [], ladoCuidado: {}, lados: true, persona: '' };
 function cfgGen() {
   if (!S.genCfg) S.genCfg = JSON.parse(JSON.stringify(CFG_GEN_BASE));
   for (const [k, v] of Object.entries(CFG_GEN_BASE)) if (S.genCfg[k] === undefined) S.genCfg[k] = JSON.parse(JSON.stringify(v));
@@ -16842,18 +16890,38 @@ function permitidoGen(e, cfg) {
   /* poca movilidad: nada de lo avanzado (piden mucho rango) ni el Seal (manos por dentro de las piernas
      tomando los tobillos, sin modificación en el manual) */
   if (cu.has('movilidad') && (i.nivel >= 2 || e.id === 'mat1-e24')) return false;
+  /* rodilla: el Seal (rodillas muy flexionadas y en rotación, las manos en los tobillos) tampoco; Rolling
+     Like a Ball trabaja lo mismo y se puede tomar por detrás del muslo */
+  if (cu.has('rodilla') && e.id === 'mat1-e24') return false;
   /* props: los que el ejercicio necesita tienen que estar */
   if (i.requiere.some(t => cfg.sinProps || !cfg.props.includes(t))) return false;
   return true;
 }
 const ZONA_GEN = { movilidad: /(?!)/, osteo: /osteopor/, lumbar: /lumbar|espalda/, cuello: /cervical|cuello|hombro|subacromial/, muneca: /muneca/, rodilla: /rodilla|patelo/, cadera: /cadera/ };
 const contraGen = c => String(c || '').split(/,|;/).map(t => norm(t)).filter(Boolean);
-function adaptacionGen(e, cfg) {
-  const i = infoGen(e.id), cu = cfg.cuidados, xs = [];
+function adaptacionGen(e, cfg, ladoEj = '') {
+  const i = infoGen(e.id), cu = cfg.cuidados, xs = [], lc = cfg.ladoCuidado || {};
+  /* "Rodilla derecha: …" cuando el cuidado es de un solo lado */
+  const conLado = (z, t) => lc[z] ? `${ZONA_NOM[z]} ${LADO_TXT[lc[z]]}: ${t.charAt(0).toLowerCase()}${t.slice(1)}` : t;
   const agudo = String(i.contra || '').split(/,|;/).map(t => t.trim()).find(t => /agud/i.test(t) && cu.some(z => ZONA_GEN[z].test(norm(t))));
   if (agudo) xs.push(`No hacerlo con ${agudo.charAt(0).toLowerCase()}${agudo.slice(1)} (tu planilla).`);
   const zona = Object.entries(i.prec || {}).find(([k]) => cu.some(z => k.includes(z) || (z === 'cuello' && k.includes('hombro'))));
-  if (zona) xs.push(zona[1]);
+  if (zona) { const z = ['rodilla', 'cadera', 'muneca'].find(q => cu.includes(q) && zona[0].includes(q)); xs.push(z ? conLado(z, zona[1]) : zona[1]); }
+  /* apoyos que cargan la zona (elaboración propia): rodillas en cuatro apoyos y de rodillas, muñecas en planchas */
+  if (cu.includes('rodilla') && (e.pos === 'cuatro' || /kneeling|de rodillas|sobre las rodillas/i.test(e.n)))
+    xs.push(lc.rodilla ? `Almohadón o el mat doble bajo la rodilla ${LADO_TXT[lc.rodilla]}.` : 'Almohadón o el mat doble bajo las rodillas.');
+  if (cu.includes('muneca') && (e.pos === 'cuatro' || e.pos === 'plancha' || /plank|tabla|push up|leg pull/i.test(e.n)) && !/codo|antebrazo|forearm/i.test(e.n))
+    xs.push(lc.muneca ? `Muñeca ${LADO_TXT[lc.muneca]}: apoyar esa mano sobre el puño cerrado o pasar a los antebrazos.` : 'Apoyar sobre los puños cerrados o pasar a los antebrazos.');
+  /* de costado con la rodilla de un lado: abajo (apoyada) o arriba (la que trabaja) */
+  /* rodillas al pecho o rodar en bolita: tomarse por detrás del muslo para no forzar la flexión */
+  if (cu.includes('rodilla') && /single leg stretch|double leg stretch|rolling like|seal|open leg rocker/i.test(e.n))
+    xs.push(`Tomarse por detrás del muslo (no de la canilla) para no forzar la flexión de la rodilla${lc.rodilla ? ' ' + LADO_TXT[lc.rodilla] : ''}.`);
+  if (ladoEj && e.pos === 'costado' && cu.includes('rodilla') && lc.rodilla && ladoEj === lc.rodilla && /prep tabla lateral|modificad/i.test(e.n))
+    xs.push(`Si se apoya sobre la rodilla ${LADO_TXT[lc.rodilla]}: almohadón debajo.`);
+  if (ladoEj && e.pos === 'costado' && cu.includes('rodilla') && lc.rodilla && !/tabla|plank|side bend|twist/i.test(e.n)) {
+    if (ladoEj === lc.rodilla) xs.push(`La rodilla ${LADO_TXT[lc.rodilla]} queda abajo: flexionada y con un almohadón si molesta.`);
+    else if (/leg|pierna|abduc|aduc|kick|circle|banana|bicycle|levantamiento/i.test(e.n)) xs.push(`La pierna ${LADO_TXT[lc.rodilla]} es la que trabaja: rango cómodo, sin trabar la rodilla.`);
+  }
   if (cu.includes('osteo') && /modificar/i.test(e.osteo || '')) { const b = BB.ejercicios.find(x => x.id === e.id); xs.push((b && b.osteoTxt) || 'Modificar con osteoporosis.'); }
   if (cu.includes('movilidad')) { const m = movilidadGen(e); if (m && !xs.includes(m)) xs.push(m); }
   return xs.join(' · ');
@@ -16911,7 +16979,9 @@ function ordenAlAzar(r, niv) {
     if (niv === 0) { const k = extra.indexOf('plancha'); if (k >= 0 && r() < 0.5) extra.splice(k, 1); }
     const ps = mezclarGen([...base, ...extra], r);
     /* empieza donde hay respiración o activación y termina donde hay con qué recuperar */
-    if (ordenValido(ps) && ['pie', 'supino', 'sentado', 'cuatro'].includes(ps[0]) && ['pie', 'sentado', 'cuatro'].includes(ps[ps.length - 1])) return ps;
+    /* de pie solo al empezar o al terminar: subir y volver a bajar corta la fluidez */
+    const pieBien = !ps.includes('pie') || ps[0] === 'pie' || ps[ps.length - 1] === 'pie';
+    if (pieBien && ordenValido(ps) && ['pie', 'supino', 'sentado', 'cuatro'].includes(ps[0]) && ['pie', 'sentado', 'cuatro'].includes(ps[ps.length - 1])) return ps;
   }
   return [...ORDEN_MANUAL];
 }
@@ -16921,6 +16991,23 @@ function ordenDeCfg(cfg, r) {
   /* en una clase corta, siete cambios de posición son muchos: sin cuatro apoyos ni plancha */
   return cfg.dur <= 30 ? ORDEN_MANUAL.filter(p => p !== 'cuatro' && p !== 'plancha') : [...ORDEN_MANUAL];
 }
+
+/* intercalar los lados (como lo hace la profe): de costado sobre el lado derecho, una posición del
+   piso (boca abajo; si no hay, boca arriba) y de costado sobre el izquierdo, en vez de los dos lados
+   seguidos; cada cambio tiene que tener su transición */
+function ladosGen(orden) {
+  if (!orden.includes('costado')) return null;
+  const base = orden.filter(p => p !== 'costado');
+  for (const m of ['prono', 'supino', 'sentado', 'cuatro', 'plancha']) {
+    const iM = base.indexOf(m);
+    if (iM < 1) continue;
+    const seq = [...base.slice(0, iM), 'costado', m, 'costado', ...base.slice(iM + 1)];
+    if (seq.every((p, i) => !i || p === seq[i - 1] || hayTransicion(seq[i - 1], p))) return { seq, mid: m };
+  }
+  return null;
+}
+const LADO_TXT = { der: 'derecha', izq: 'izquierda' };
+const ZONA_NOM = { rodilla: 'Rodilla', cadera: 'Cadera', muneca: 'Muñeca' };
 
 /* ---------- generar ---------- */
 function generarClase(cfg, semilla = Date.now()) {
@@ -16949,8 +17036,10 @@ function armarClase(cfg, orden, r) {
   const total = cfg.dur * 60;
   /* el cierre de pie del manual: si la clase empieza de pie y es el orden del manual, vuelve a pie al final */
   const cierrePie = cfg.orden === 'manual' && orden[0] === 'pie' && orden[orden.length - 1] !== 'pie';
+  let lados = cfg.lados !== false ? ladosGen(orden) : null;
+  if (lados && cierrePie && !hayTransicion(lados.seq[lados.seq.length - 1], 'pie')) lados = null;
   const sumaPeso = bloques.reduce((a, b) => a + b.peso, 0);
-  const trans = Math.max(0, bloques.length - 1 + (cierrePie ? 1 : 0)) * SEG_TRANSICION;
+  const trans = Math.max(0, bloques.length - 1 + (cierrePie ? 1 : 0) + (lados ? 2 : 0)) * SEG_TRANSICION;
   bloques.forEach(b => { b.meta = (total - trans) * b.peso / sumaPeso * (cierrePie && b.pos === 'pie' ? 0.6 : 1); });
   const usados = new Set(), fams = {};
   let extraFam = 0;
@@ -16990,7 +17079,8 @@ function armarClase(cfg, orden, r) {
   const cubre = (e, req) => req.filter(q => { const [t, k] = q.split(':'), i = infoGen(e.id);
     return t === 'p' || t === 'f' ? i.sec.has(k) : t === 'e' ? i.elementos.has(k) : i.planos.has(k); }).length;
   const lugar = b => (b.meta - b.seg) / Math.max(1, b.meta);
-  const puntaje = (e, b, req) => cubre(e, req) * 3 + (cfg.enfasis && infoGen(e.id).sec.has(cfg.enfasis) ? 1.2 : 0) + nivelBien(e)
+  const evitar = new Set(cfg.evitar || []);
+  const puntaje = (e, b, req) => cubre(e, req) * 3 + (cfg.enfasis && infoGen(e.id).sec.has(cfg.enfasis) ? 1.2 : 0) + nivelBien(e) - (evitar.has(e.id) ? 1.5 : 0)
     + (!cfg.sinProps && infoGen(e.id).props.some(p => cfg.props.includes(p.tipo)) ? 0.6 : 0) + r() * 1.4 + lugar(b) * 0.8
     + (e.pm ? (nPre() + 1 > topePre * Math.max(8, nTot() + 1) ? -4 : 0) : 1);
   for (let paso = 0; paso < 60; paso++) {
@@ -17056,7 +17146,30 @@ function armarClase(cfg, orden, r) {
     if (!rg || x.reps >= rg[1]) continue;
     falta -= segEj(e, rg[1]) - segEj(e, x.reps); x.reps = rg[1];
   }
-  return { items: salida, orden: cierrePie ? [...orden, 'pie'] : orden, req: necesita(), ids: items.map(x => x.e.id) };
+  /* y al revés: si lo que la clase tiene que cubrir no entra, las repeticiones bajan a las de abajo del rango */
+  for (let k = salida.length - 1; k >= 0 && falta < -120; k--) {
+    const e = items[k].e, rg = rangoReps(e.reps), x = salida[k];
+    if (!rg || x.reps <= rg[0]) continue;
+    falta += segEj(e, x.reps) - segEj(e, rg[0]); x.reps = rg[0];
+  }
+  /* los lados intercalados: el bloque de costado se hace sobre el lado derecho antes de la posición del
+     medio y sobre el izquierdo después (mismos ejercicios, mismo prop) */
+  let final = salida, ordenFinal = cierrePie ? [...orden, 'pie'] : orden;
+  const bC = todos.find(b => b.pos === 'costado' && !b.fin);
+  if (lados && bC && bC.items.length) {
+    const porPos = new Map();
+    let ini = 0;
+    todos.forEach(b => { porPos.set(b.fin ? 'fin' : b.pos, salida.slice(ini, ini + b.items.length)); ini += b.items.length; });
+    let vez = 0;
+    final = lados.seq.flatMap(pz => {
+      if (pz !== 'costado') return porPos.get(pz) || [];
+      const lado = vez++ ? 'izq' : 'der';
+      return porPos.get('costado').map(x => ({ ...x, lado, adap: adaptacionGen(ejPlan(x.id), cfg, lado) }));
+    });
+    if (cierrePie) final = final.concat(porPos.get('fin') || []);
+    ordenFinal = cierrePie ? [...lados.seq, 'pie'] : lados.seq;
+  }
+  return { items: final, orden: ordenFinal, req: necesita(), ids: items.map(x => x.e.id) };
 }
 const SEG_TRANSICION = 45;
 
@@ -17089,27 +17202,36 @@ function motivosGen(cfg, orden, req, ids = []) {
 
 /* ---------- la sesión ---------- */
 const nomNivelGen = k => (NIVELES_GEN.find(x => x[0] === k) || [k, k])[1];
+/* "rodillas (derecha)" cuando el cuidado es de un lado */
+const nomCuidadoGen = (c, cfg) => (cfg.ladoCuidado || {})[c] ? `${ZONA_NOM[c].toLowerCase()} ${LADO_TXT[cfg.ladoCuidado[c]]}` : (CUIDADOS_GEN.find(x => x[0] === c) || [c, c])[1].toLowerCase();
 function resumenCfgGen(cfg, orden) {
-  const ps = (orden || []).map(p => POS_CLASE[p].nom.toLowerCase());
+  /* con los lados intercalados, de costado aparece dos veces: primero sobre el derecho */
+  let vez = 0;
+  const lad = (orden || []).filter(p => p === 'costado').length > 1;
+  const ps = (orden || []).map(p => POS_CLASE[p].nom.toLowerCase() + (p === 'costado' && lad ? ` (${vez++ ? 'lado izquierdo' : 'lado derecho'})` : ''));
   return [`${cfg.dur} min`, nomNivelGen(cfg.nivel), cfg.sinProps || !cfg.props.length ? 'sin props' : cfg.props.join(', '),
-    cfg.cuidados.length ? 'cuidando: ' + cfg.cuidados.map(c => (CUIDADOS_GEN.find(x => x[0] === c) || [c, c])[1].toLowerCase()).join(', ') : '',
+    cfg.cuidados.length ? 'cuidando: ' + cfg.cuidados.map(c => nomCuidadoGen(c, cfg)).join(', ') : '',
     cfg.enfasis ? 'más ' + (PRINCIPIOS.find(p => p.k === cfg.enfasis) || {}).corto.toLowerCase() : '',
     ps.length ? (cfg.orden === 'azar' ? 'orden al azar: ' : cfg.orden === 'elegido' ? 'orden elegido: ' : 'orden del manual: ') + ps.join(' → ') : ''].filter(Boolean).join(' · ');
 }
 function crearClaseGenerada(cfg, plan = null) {
-  const g = generarClase(cfg);
+  /* para una persona: su nombre en "Para" y variar respecto de sus últimas dos clases */
+  const h = cfg.persona && typeof personaDe === 'function' ? personaDe(cfg.persona) : null;
+  const evitar = h ? recientesDe(h) : [];
+  const g = generarClase({ ...cfg, evitar });
   const focos = [];
   if (cfg.cuidados.includes('osteo')) focos.push('Osteoporosis: cuidar la flexión');
-  const cuidados = cfg.cuidados.map(c => (CUIDADOS_GEN.find(x => x[0] === c) || [c, c])[1].toLowerCase());
+  const cuidados = cfg.cuidados.map(c => nomCuidadoGen(c, cfg));
   const datos = { nombre: `Clase de ${cfg.dur} min · ${nomNivelGen(cfg.nivel)}${cuidados.length ? ' · ' + cuidados.join(', ') : ''}`, dur: cfg.dur, focos, items: g.items,
-    notas: `Generada: ${resumenCfgGen(cfg, g.orden)}.${g.motivos.map(m => ' ' + m.txt).join('')}`, gen: { ...JSON.parse(JSON.stringify(cfg)), semilla: g.semilla, orden2: g.orden } };
+    para: h ? h.nombre : (plan ? plan.para : ''), ...(h ? { persona: h.id } : {}),
+    notas: `Generada: ${resumenCfgGen(cfg, g.orden)}.${h && h.gusta ? ` Le gusta, objetivos: ${h.gusta.trim()}.` : ''}${evitar.length ? ' Varía respecto de sus últimas clases.' : ''}${g.motivos.map(m => ' ' + m.txt).join('')}`, gen: { ...JSON.parse(JSON.stringify(cfg)), semilla: g.semilla, orden2: g.orden } };
   if (plan) { Object.assign(plan, datos, { editado: Date.now() }); guardar(); return plan; }
   return nuevoPlan(datos);
 }
 
 /* ---------- pantalla ---------- */
 let genAbierto = false;
-function abrirGenerador() { genAbierto = true; planAbierto = null; if (vista !== 'planes') ir('planes'); else vGenerador(); }
+function abrirGenerador() { genAbierto = true; planAbierto = null; if (typeof personaAbierta !== 'undefined') personaAbierta = null; if (vista !== 'planes') ir('planes'); else vGenerador(); }
 function vGenerador() {
   const cfg = cfgGen();
   const chip = (grupo, v, t, on, extra = '') => `<button type="button" data-g="${grupo}" data-v="${esc(v)}" class="${on ? 'on' : ''}" aria-pressed="${on}" ${extra}>${t}</button>`;
@@ -17124,7 +17246,8 @@ function vGenerador() {
     const ps = cfg.posiciones.filter(p => POS_GEN.includes(p)), malos = [];
     for (let i = 1; i < ps.length; i++) if (!hayTransicion(ps[i - 1], ps[i])) malos.push(`${POS_CLASE[ps[i - 1]].nom} → ${POS_CLASE[ps[i]].nom}`);
     const vuelve = ps.indexOf('supino') > ps.indexOf('prono') && ps.includes('prono');
-    return malos.length || vuelve ? `<p class="gen-aviso">${malos.length ? `Sin una transición directa en el material: ${malos.join(', ')} (la app igual la marca en la sesión). ` : ''}${vuelve ? 'El manual no vuelve a supino después del prono.' : ''}</p>` : '<p class="gen-ok">Cada cambio de posición tiene su transición.</p>';
+    const pieMedio = ps.includes('pie') && ps[0] !== 'pie' && ps[ps.length - 1] !== 'pie';
+    return malos.length || vuelve || pieMedio ? `<p class="gen-aviso">${malos.length ? `Sin una transición directa en el material: ${malos.join(', ')} (la app igual la marca en la sesión). ` : ''}${vuelve ? 'El manual no vuelve a supino después del prono. ' : ''}${pieMedio ? 'De pie queda en el medio: sube y vuelve a bajar; para que fluya, ponelo al empezar o al terminar.' : ''}</p>` : '<p class="gen-ok">Cada cambio de posición tiene su transición.</p>';
   };
   /* antes de generar: qué no va a poder cubrir con estas opciones (al azar, solo lo que no depende del orden) */
   const previa = () => {
@@ -17138,6 +17261,8 @@ function vGenerador() {
     <h1 class="tit">Generar una clase</h1>
     <p class="sub">La app arma una clase completa con tu material: los <b>5 principios del movimiento</b>, los elementos de una clase balanceada, los tres planos y la fluidez entre posiciones. Elegí lo que quieras; lo demás lo decide ella.</p>
 
+    ${typeof personas === 'function' && personas().length ? `<section class="gen-sec"><h2>Para</h2><div class="chips" role="group" aria-label="Para">${chip('persona', '', 'Sin perfil', !cfg.persona)}${personas().map(h => chip('persona', h.id, '👤 ' + esc(h.nombre || 'Sin nombre'), cfg.persona === h.id)).join('')}</div>
+      ${cfg.persona && personaDe(cfg.persona) ? '<p class="micro">Cargados su nivel, duración, cuidados, props y principio. Lo que cambies acá no cambia su perfil; la clase varía respecto de sus últimas dos.</p>' : ''}</section>` : ''}
     <section class="gen-sec"><h2>Duración</h2><div class="chips" role="group" aria-label="Duración">${[30, 45, 60, 75].map(m => chip('dur', m, m + ' min', cfg.dur === m)).join('')}</div></section>
     <section class="gen-sec"><h2>Nivel</h2><div class="chips" role="group" aria-label="Nivel">${NIVELES_GEN.map(([k, t]) => chip('nivel', k, t, cfg.nivel === k)).join('')}</div>
       <p class="micro">Principiante: sin inversiones, sin bajar las piernas largas del todo ni apoyo en un brazo (como pide el manual). Las inversiones aparecen desde Avanzado.</p></section>
@@ -17146,12 +17271,15 @@ function vGenerador() {
       <p class="micro">Se usan donde tus fichas de Mat 1 y Mat 2 (accesorios que asisten o resisten) y tus fotos de Mat 3 los muestran, agrupados para no cambiar de prop a cada rato.</p></section>
     <section class="gen-sec"><h2>Orden de las posiciones</h2>
       <div class="chips" role="group" aria-label="Orden">${[['manual', 'Como el manual'], ['elegido', 'Elegir el orden'], ['azar', 'Al azar']].map(([k, t]) => chip('orden', k, t, cfg.orden === k)).join('')}</div>
-      ${cfg.orden === 'manual' ? '<p class="micro">De pie → cuatro apoyos → supino → sentado → prono → plancha → de costado → cierre de pie (Mat 1, págs. 65–67).</p>'
+      ${cfg.orden === 'manual' ? (cfg.lados !== false ? '<p class="micro">De pie → cuatro apoyos → supino → sentado → de costado (lado derecho) → prono → de costado (lado izquierdo) → plancha → cierre de pie: el orden del manual (Mat 1, págs. 65–67) con los lados intercalados.</p>' : '<p class="micro">De pie → cuatro apoyos → supino → sentado → prono → plancha → de costado → cierre de pie (Mat 1, págs. 65–67).</p>')
         : cfg.orden === 'azar' ? '<p class="micro">Cambia cada vez, pero siempre con una transición entre posiciones, sin volver a supino después del prono y con supino (centro) y prono (extensión).</p>'
         : `<ol class="gen-posiciones" id="genPos">${posLista()}</ol>${avisoOrden()}`}</section>
     <section class="gen-sec"><h2>Darle más peso a un principio <small>(opcional)</small></h2><div class="chips" role="group" aria-label="Énfasis">${chip('enfasis', '', 'Equilibrada', !cfg.enfasis)}${PRINCIPIOS.map(p => chip('enfasis', p.k, `${p.ico} ${p.corto}`, cfg.enfasis === p.k)).join('')}</div>
       <p class="micro">Siempre están los cinco; el elegido suma más ejercicios.</p></section>
+    <section class="gen-sec"><h2>Fluidez</h2><div class="chips" role="group" aria-label="Fluidez">${chip('lados', '1', '↔️ Intercalar los lados', cfg.lados !== false)}</div>
+      <p class="micro">${cfg.lados !== false ? 'De costado sobre el lado derecho, después boca abajo (o boca arriba) y de costado sobre el izquierdo, en vez de los dos lados seguidos.' : 'Los dos lados de costado seguidos.'} Siempre: de pie solo al empezar o al terminar (no sube y vuelve a bajar), cada cambio con su transición.</p></section>
     <section class="gen-sec"><h2>Cuidados <small>(opcional)</small></h2><div class="chips" role="group" aria-label="Cuidados">${CUIDADOS_GEN.map(([k, t]) => chip('cuidado', k, t, cfg.cuidados.includes(k))).join('')}</div>
+      ${['rodilla', 'cadera', 'muneca'].filter(z => cfg.cuidados.includes(z)).map(z => `<div class="chips gen-lado" role="group" aria-label="${ZONA_NOM[z]}: qué lado"><span>${ZONA_NOM[z]}:</span>${[['', 'Las dos'], ['der', 'Derecha'], ['izq', 'Izquierda']].map(([k, t]) => chip('ladoCuidado', z + ':' + k, t, ((cfg.ladoCuidado || {})[z] || '') === k)).join('')}</div>`).join('')}
       <p class="micro">Saca lo que el manual pide evitar y anota la adaptación del manual en cada ejercicio que la tiene. Con <b>poca movilidad</b> usa las modificaciones del manual para isquiotibiales tensos (mat enrollado, rodillas flexionadas, roll down) y deja afuera lo que pide mucho rango; suele convenir darle más peso a 🌿 Movilidad. No reemplaza la indicación de un profesional de la salud.</p></section>
     ${previa()}
     <div class="fila pl-acc"><button type="button" class="btn3d verde" id="genIr">✨ Generar la clase</button></div>`;
@@ -17165,7 +17293,10 @@ function vGenerador() {
     else if (g === 'uso') cfg.uso = v;
     else if (g === 'orden') cfg.orden = v;
     else if (g === 'enfasis') cfg.enfasis = v;
-    else if (g === 'cuidado') cfg.cuidados = cfg.cuidados.includes(v) ? cfg.cuidados.filter(x => x !== v) : [...cfg.cuidados, v];
+    else if (g === 'cuidado') { cfg.cuidados = cfg.cuidados.includes(v) ? cfg.cuidados.filter(x => x !== v) : [...cfg.cuidados, v]; if (!cfg.cuidados.includes(v) && cfg.ladoCuidado) delete cfg.ladoCuidado[v]; }
+    else if (g === 'ladoCuidado') { const [z, l] = v.split(':'); cfg.ladoCuidado = { ...(cfg.ladoCuidado || {}) }; if (l) cfg.ladoCuidado[z] = l; else delete cfg.ladoCuidado[z]; }
+    else if (g === 'lados') cfg.lados = cfg.lados === false;
+    else if (g === 'persona') { const h = v && personaDe(v); if (h) { generarParaPersona(h); return; } cfg.persona = ''; }
     guardar(); SND.toque();
     const y = window.scrollY; vGenerador(); window.scrollTo(0, y);
   });
@@ -17183,6 +17314,228 @@ function vGenerador() {
     vPlan(p.id);
     toast('Clase generada y guardada en <b>Mis sesiones</b>. Revisala y cambiá lo que quieras.', 'toast-suave');
   };
+}
+
+</script>
+<script>
+/* ============================================================
+   Pilates Lab — Personas (perfil de cada persona que entrena)
+
+   En "Mis sesiones": cada persona tiene su nivel, sus cuidados (con
+   el lado: rodilla derecha…), los props que tiene, lo que le gusta o
+   sus objetivos, cuánto duran sus clases, un principio con más peso
+   y notas. Desde su perfil se genera una clase con todo eso cargado;
+   la sesión queda a su nombre ("Para") y el generador varía respecto
+   de sus últimas dos clases. Se guarda en S.personas (solo en este
+   navegador, como el resto del progreso).
+   ============================================================ */
+'use strict';
+
+function personas() { if (!Array.isArray(S.personas)) S.personas = []; return S.personas; }
+const personaDe = id => personas().find(x => x.id === id);
+let personaAbierta = null;
+function nuevaPersona() {
+  const x = { id: 'h' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), nombre: '', nivel: 'principiante', dur: 60,
+    cuidados: [], ladoCuidado: {}, props: [], sinProps: true, enfasis: '', gusta: '', notas: '', creado: HOY() };
+  personas().unshift(x); guardar();
+  return x;
+}
+/* las sesiones de una persona (las generadas para ella o con su nombre en "Para"), la más nueva primero */
+const sesionesDe = h => planes().filter(p => p.persona === h.id || (!p.persona && h.nombre && norm(p.para || '') === norm(h.nombre)))
+  .sort((a, b) => (b.fecha || '').localeCompare(a.fecha || '') || b.editado - a.editado);
+/* lo que hizo en sus últimas dos clases: el generador lo deja para otro día si puede */
+const recientesDe = h => [...new Set(sesionesDe(h).slice(0, 2).flatMap(p => p.items.map(x => x.id)))];
+const resumenPersona = h => [nomNivelGen(h.nivel), h.cuidados.length ? h.cuidados.map(c => nomCuidadoGen(c, h)).join(', ') : 'sin cuidados',
+  h.sinProps || !h.props.length ? 'sin props' : h.props.join(', ')].join(' · ');
+
+/* el generador con lo de la persona cargado */
+function generarParaPersona(h) {
+  const cfg = cfgGen();
+  Object.assign(cfg, { persona: h.id, nivel: h.nivel, dur: h.dur || cfg.dur, cuidados: [...h.cuidados], ladoCuidado: { ...(h.ladoCuidado || {}) },
+    props: [...h.props], sinProps: h.sinProps || !h.props.length, enfasis: h.enfasis || '' });
+  guardar();
+  personaAbierta = null;
+  abrirGenerador();
+}
+
+/* tarjetas en la lista de sesiones */
+function personasHTML() {
+  const xs = personas();
+  return `<h2 class="secc">Personas${xs.length ? ' · ' + xs.length : ''}</h2>
+    <div class="pe-lista">${xs.map(h => { const n = sesionesDe(h).length;
+      return `<button type="button" class="pe-tarjeta" data-pe="${h.id}"><b>👤 ${esc(h.nombre || 'Sin nombre')}</b><small>${esc(resumenPersona(h))}</small><span>${n ? `${n} ${n === 1 ? 'sesión' : 'sesiones'}` : 'Sin sesiones todavía'}</span></button>`; }).join('')}
+      <button type="button" class="pe-tarjeta pe-nueva" id="peNueva"><b>＋ Persona</b><small>Su nivel, sus cuidados y sus props, para generarle clases.</small></button></div>`;
+}
+function conectarPersonas() {
+  $$('[data-pe]').forEach(b => b.onclick = () => { personaAbierta = b.dataset.pe; SND.toque(); vPersona(personaAbierta); });
+  const nb = $('#peNueva');
+  if (nb) nb.onclick = () => { const h = nuevaPersona(); personaAbierta = h.id; SND.toque(); vPersona(h.id); setTimeout(() => { const i = $('#peNombre'); if (i) i.focus(); }, 50); };
+}
+
+function vPersona(id) {
+  const h = personaDe(id);
+  if (!h) { personaAbierta = null; return vPlanes(); }
+  const chip = (g, v, t, on) => `<button type="button" data-g="${g}" data-v="${esc(v)}" class="${on ? 'on' : ''}" aria-pressed="${on}">${t}</button>`;
+  const ses = sesionesDe(h);
+  app().innerHTML = `
+    <button type="button" class="volver" id="peVolver">← Mis sesiones</button>
+    <label class="pl-nombre"><span class="sr">Nombre</span><input id="peNombre" value="${esc(h.nombre)}" placeholder="Nombre o apodo" maxlength="60"></label>
+    <p class="micro">Queda guardado solo en este navegador, como tu progreso.</p>
+    <section class="gen-sec"><h2>Nivel</h2><div class="chips" role="group" aria-label="Nivel">${NIVELES_GEN.map(([k, t]) => chip('nivel', k, t, h.nivel === k)).join('')}</div></section>
+    <section class="gen-sec"><h2>Duración de sus clases</h2><div class="chips" role="group" aria-label="Duración">${[30, 45, 60, 75].map(m => chip('dur', m, m + ' min', (h.dur || 60) === m)).join('')}</div></section>
+    <section class="gen-sec"><h2>Cuidados</h2><div class="chips" role="group" aria-label="Cuidados">${CUIDADOS_GEN.map(([k, t]) => chip('cuidado', k, t, h.cuidados.includes(k))).join('')}</div>
+      ${['rodilla', 'cadera', 'muneca'].filter(z => h.cuidados.includes(z)).map(z => `<div class="chips gen-lado" role="group" aria-label="${ZONA_NOM[z]}: qué lado"><span>${ZONA_NOM[z]}:</span>${[['', 'Las dos'], ['der', 'Derecha'], ['izq', 'Izquierda']].map(([k, t]) => chip('ladoCuidado', z + ':' + k, t, ((h.ladoCuidado || {})[z] || '') === k)).join('')}</div>`).join('')}</section>
+    <section class="gen-sec"><h2>Props que tiene</h2><div class="chips" role="group" aria-label="Props">${chip('sinprops', '1', 'Sin props', h.sinProps || !h.props.length)}${PROPS_PLAN.map(t => chip('prop', t, t, !h.sinProps && h.props.includes(t))).join('')}</div></section>
+    <section class="gen-sec"><h2>Darle más peso a un principio <small>(opcional)</small></h2><div class="chips" role="group" aria-label="Énfasis">${chip('enfasis', '', 'Equilibrada', !h.enfasis)}${PRINCIPIOS.map(p => chip('enfasis', p.k, `${p.ico} ${p.corto}`, h.enfasis === p.k)).join('')}</div></section>
+    <label class="pl-notas">Le gusta, objetivos<textarea id="peGusta" rows="2" placeholder="Viene del gimnasio, quiere ganar movilidad…">${esc(h.gusta || '')}</textarea></label>
+    <label class="pl-notas">Notas<textarea id="peNotas" rows="2" placeholder="Lo que conviene recordar en cada clase">${esc(h.notas || '')}</textarea></label>
+    <div class="fila pl-acc"><button type="button" class="btn3d verde" id="peGenerar">✨ Generar una clase</button><button type="button" class="btn ghost" id="peBorrar">Borrar persona</button></div>
+    <h2 class="secc">Sus sesiones${ses.length ? ' · ' + ses.length : ''}</h2>
+    ${ses.length ? `<div class="pl-lista">${ses.map(p => `<article class="pl-tarjeta" data-id="${p.id}"><button type="button" class="pl-abrir" data-ses="${p.id}"><b>${esc(p.nombre)}</b><small>${p.fecha ? fechaLinda(p.fecha) : 'Sin fecha'}</small><span class="pl-datos">${p.items.length} ejercicios · ≈ ${duracionPlan(p)} min</span></button></article>`).join('')}</div>`
+      : '<p class="vacio">Todavía no tiene sesiones: tocá <b>✨ Generar una clase</b>.</p>'}`;
+  const guardarTxt = () => { h.nombre = $('#peNombre').value.trim(); h.gusta = $('#peGusta').value; h.notas = $('#peNotas').value; guardar(); };
+  ['#peNombre', '#peGusta', '#peNotas'].forEach(s => $(s).onchange = guardarTxt);
+  $('#peVolver').onclick = () => { guardarTxt(); personaAbierta = null; vPlanes(); };
+  $$('[data-g]').forEach(b => b.onclick = () => {
+    guardarTxt();
+    const g = b.dataset.g, v = b.dataset.v;
+    if (g === 'nivel') h.nivel = v;
+    else if (g === 'dur') h.dur = +v;
+    else if (g === 'cuidado') { h.cuidados = h.cuidados.includes(v) ? h.cuidados.filter(x => x !== v) : [...h.cuidados, v]; if (!h.cuidados.includes(v) && h.ladoCuidado) delete h.ladoCuidado[v]; }
+    else if (g === 'ladoCuidado') { const [z, l] = v.split(':'); h.ladoCuidado = { ...(h.ladoCuidado || {}) }; if (l) h.ladoCuidado[z] = l; else delete h.ladoCuidado[z]; }
+    else if (g === 'sinprops') { h.sinProps = true; h.props = []; }
+    else if (g === 'prop') { h.sinProps = false; h.props = h.props.includes(v) ? h.props.filter(x => x !== v) : [...h.props, v]; if (!h.props.length) h.sinProps = true; }
+    else if (g === 'enfasis') h.enfasis = v;
+    guardar(); SND.toque();
+    const y = window.scrollY; vPersona(id); window.scrollTo(0, y);
+  });
+  $('#peGenerar').onclick = () => { guardarTxt(); SND.toque(); generarParaPersona(h); };
+  $('#peBorrar').onclick = async () => {
+    if (!(await confirmar(`¿Borrar el perfil de ${h.nombre || 'esta persona'}? Sus sesiones quedan.`, 'Borrar'))) return;
+    planes().forEach(p => { if (p.persona === h.id) delete p.persona; });
+    S.personas = personas().filter(x => x.id !== h.id); personaAbierta = null; guardar(); vPlanes();
+  };
+  $$('[data-ses]').forEach(b => b.onclick = () => { personaAbierta = null; planAbierto = b.dataset.ses; vPlan(b.dataset.ses); });
+}
+
+</script>
+<script>
+/* ============================================================
+   Pilates Lab — Más fácil o más difícil en un toque
+
+   En cada ejercicio de una sesión, ⇅ ofrece las regresiones (más
+   fácil) y las progresiones (más difícil) que anotaste en tus
+   análisis MAT 1 (regresiones Pre-Pilates y Mat 1, progresiones Mat 1
+   y Mat 2) y MAT 2 (regresiones Pre-Pilates, Mat 1 y Mat 2,
+   progresiones). La relación vale para los dos lados: si A es
+   regresión de B, B es progresión de A (así los de Pre-Pilates
+   también tienen a dónde progresar). Los grupos ("Serie de 5", "Serie
+   lateral", "Teasers", "Todas las planchas", "Puentes", "Todas las
+   inversiones") se abren en sus ejercicios. Primero los de la misma
+   posición, para no cortar la fluidez; en una clase generada, solo
+   lo que sus cuidados permiten.
+   ============================================================ */
+'use strict';
+
+let VARIANTES = null;
+function variantesDe(id) { if (!VARIANTES) VARIANTES = armarVariantes(); return VARIANTES[id] || { reg: [], prog: [] }; }
+function armarVariantes() {
+  const cat = catalogoPlan(), ids = new Set(cat.map(e => e.id)), V = {};
+  const de = id => V[id] || (V[id] = { reg: new Set(), prog: new Set() });
+  const GRUPOS = { 'serie de 5': ['mat1-e06', 'mat1-e07', 'mat1-e08', 'mat1-e09', 'mat1-e10'], 'serie lateral': ['mat1-e19', 'mat1-e20', 'mat1-e21', 'mat1-e22', 'mat1-e23'],
+    'teasers': ['mat2-e02', 'mat2-e03', 'mat2-e04', 'mat2-e05'] };
+  const pmCon = re => cat.filter(e => e.pm && re.test(e.n)).map(e => e.id);
+  const resolver = (nombre, libro) => {
+    const k = norm(nombre);
+    if (!k) return [];
+    if (GRUPOS[k]) return GRUPOS[k];
+    if (/inversiones/.test(k)) return cat.filter(e => e.pos === 'inversion').map(e => e.id);
+    if (/(tablas|planchas) laterales/.test(k)) return pmCon(/tabla lateral|side plank/i);
+    if (/^(todas las )?(planchas|tablas)/.test(k)) return pmCon(/tabla|plank/i);
+    if (/puentes/.test(k)) return pmCon(/bridge|puente/i);
+    const r = EJ_REF(nombre, libro), id = r && (r.bb || r.pm);
+    return id && ids.has(id) ? [id] : [];
+  };
+  /* "Unidad interna: Pelvic clock, Fingertip abdominals · Unidad externa: …" → nombres */
+  const nombres = txt => (Array.isArray(txt) ? txt : String(txt || '').split(' · ')).flatMap(g => { const i = g.indexOf(':'); return (i > 0 ? g.slice(i + 1) : g).split(/,\s*/); })
+    .map(t => t.replace(/\(.*?\)/g, '').trim()).filter(Boolean);
+  const directo = [];
+  for (const b of BB.ejercicios) {
+    const m1 = b.analisis && typeof MAT1 !== 'undefined' ? MAT1.find(m => m.id === b.analisis) : null;
+    const m2s = typeof MAT2 !== 'undefined' ? MAT2.filter(m => m.bb === b.id) : [];
+    const reg = [], prog = [];
+    if (m1) {
+      nombres(m1.regPre).forEach(n => reg.push(...resolver(n, 'pre')));
+      nombres(m1.regMat1).forEach(n => reg.push(...resolver(n, 'mat1')));
+      nombres(m1.progMat1).forEach(n => prog.push(...resolver(n, 'mat1')));
+      nombres(m1.progMat2).forEach(n => prog.push(...resolver(n, 'mat2')));
+    }
+    for (const m of m2s) {
+      const r = m.reg || {};
+      nombres(r.pm).forEach(n => reg.push(...resolver(n, 'pre')));
+      nombres(r.m1).forEach(n => reg.push(...resolver(n, 'mat1')));
+      nombres(r.m2).forEach(n => reg.push(...resolver(n, 'mat2')));
+      nombres(m.prog).forEach(n => prog.push(...resolver(n, 'mat2')));
+    }
+    reg.forEach(x => { if (x !== b.id) { de(b.id).reg.add(x); directo.push([x, 'prog', b.id]); } });
+    prog.forEach(x => { if (x !== b.id) { de(b.id).prog.add(x); directo.push([x, 'reg', b.id]); } });
+  }
+  /* la relación inversa, salvo que la ficha diga lo contrario */
+  for (const [x, tipo, y] of directo) { const v = de(x), otro = tipo === 'reg' ? 'prog' : 'reg'; if (!v[otro].has(y)) v[tipo].add(y); }
+  return Object.fromEntries(Object.entries(V).map(([k, v]) => [k, { reg: [...v.reg], prog: [...v.prog] }]));
+}
+const nivVar = id => (typeof infoGen === 'function' && infoGen(id) ? infoGen(id).nivel : 0);
+/* las opciones para el ítem i de una sesión: en una clase generada, solo lo que sus cuidados permiten y,
+   para progresar, hasta un nivel más; de costado con los lados intercalados, solo otro de costado */
+function opcionesVariantes(p, i) {
+  const x = p.items[i], e = ejPlan(x.id), v = variantesDe(x.id), cfg = p.gen || null;
+  if (!e) return { reg: [], prog: [] };
+  const nivSig = cfg ? (NIVELES_GEN[Math.min(3, (NIVEL_IDX[cfg.nivel] ?? 0) + 1)] || NIVELES_GEN[3])[0] : 'super';
+  const sirve = c => !cfg || typeof permitidoGen !== 'function' || permitidoGen(c, { ...cfg, nivel: nivSig });
+  const usados = new Set(p.items.map(y => y.id));
+  const lista = (xs, sube) => xs.map(ejPlan).filter(Boolean).filter(c => !usados.has(c.id) && sirve(c) && (!x.lado || c.pos === e.pos))
+    .sort((a, b) => (b.pos === e.pos) - (a.pos === e.pos) || (sube ? nivVar(a.id) - nivVar(b.id) : nivVar(b.id) - nivVar(a.id)) || (a.f === 'pre') - (b.f === 'pre'));
+  return { reg: lista(v.reg, false), prog: lista(v.prog, true) };
+}
+const tieneVariantes = (p, i) => { const o = opcionesVariantes(p, i); return o.reg.length + o.prog.length > 0; };
+
+function abrirVariantes(p, i) {
+  const x = p.items[i], e = ejPlan(x.id), cfg = p.gen || null, soloPos = !!x.lado, niv = nivVar;
+  /* los de la misma posición a la vista; los demás, aparte */
+  const bloque = (cs, tipo, nada) => {
+    const misma = cs.filter(c => c.pos === e.pos), otras = cs.filter(c => c.pos !== e.pos);
+    if (!cs.length) return `<p class="vacio">${nada}</p>`;
+    return (misma.length ? `<div class="var-lista">${misma.map(c => fila(c, tipo)).join('')}</div>` : `<p class="micro">Ninguno en ${POS_CLASE[e.pos].nom.toLowerCase()}.</p>`)
+      + (otras.length ? `<details class="var-otras"><summary>En otras posiciones (${otras.length}): cambian la fluidez</summary><div class="var-lista">${otras.map(c => fila(c, tipo)).join('')}</div></details>` : '');
+  };
+  const fila = (c, tipo) => `<button type="button" class="var-ej" data-id="${c.id}" data-tipo="${tipo}">
+      <span class="cl-mini">${miniPlan(c)}</span>
+      <span class="var-txt"><b>${esc(c.n)}</b><small>${POS_CLASE[c.pos].ico} ${POS_CLASE[c.pos].nom} · ${fuenteNom(c.f)}${typeof NIVELES_GEN !== 'undefined' ? ' · ' + NIVELES_GEN[Math.min(3, niv(c.id))][1] : ''}${c.pos !== e.pos ? ' · <i>cambia de posición</i>' : ''}</small></span></button>`;
+  const { reg: regs, prog: progs } = opcionesVariantes(p, i);
+  const m = abrirModal(`<div class="var">
+    <h3>${esc(e.n)}</h3>
+    <p class="micro">Según tus análisis MAT 1 y MAT 2${cfg ? `; para progresar, hasta ${NIVELES_GEN[Math.min(3, (NIVEL_IDX[cfg.nivel] ?? 0) + 1)][1].toLowerCase()}${cfg.cuidados.length ? ' y lo que sus cuidados permiten' : ''}` : ''}.${soloPos ? ' Va en los dos lados.' : ''}</p>
+    <h4>⬇️ Más fácil (regresión)</h4>
+    ${bloque(regs, 'reg', soloPos ? 'Tus fichas no tienen regresiones de costado para este ejercicio.' : 'Tus fichas no tienen regresiones para este ejercicio.')}
+    <h4>⬆️ Más difícil (progresión)</h4>
+    ${bloque(progs, 'prog', soloPos ? 'Tus fichas no tienen progresiones de costado para este ejercicio (con su nivel y cuidados).' : 'Tus fichas no tienen progresiones para este ejercicio (con su nivel y cuidados).')}
+    <div class="fila"><button type="button" class="btn ghost" data-cerrar>Cerrar</button></div></div>`);
+  $('[data-cerrar]', m).onclick = cerrarModal;
+  $$('.var-ej', m).forEach(b => b.onclick = () => {
+    const c = ejPlan(b.dataset.id);
+    /* si estaba de los dos lados (intercalados), cambian los dos */
+    const gemelo = x.lado ? p.items.findIndex((y, k) => k !== i && y.id === x.id && y.lado && y.lado !== x.lado) : -1;
+    const nuevo = y => {
+      const lado = y.lado && c.pos === 'costado' ? y.lado : '';
+      return { id: c.id, reps: cfg && typeof repsGen === 'function' ? repsGen(c, cfg) : null, prop: '', nota: y.nota || '',
+        ...(lado ? { lado } : {}), ...(cfg && typeof adaptacionGen === 'function' ? { adap: adaptacionGen(c, cfg, lado) } : {}) };
+    };
+    if (gemelo >= 0) p.items[gemelo] = nuevo(p.items[gemelo]);
+    p.items[i] = nuevo(x);
+    cerrarModal(); SND.toque(); tocar(p);
+    rehacerPlan(p, `.pl-fila[data-i="${i}"]`);
+    toast(`Cambiado por <b>${esc(c.n)}</b> (${b.dataset.tipo === 'reg' ? 'más fácil' : 'más difícil'})${c.pos !== e.pos ? '. Cambia de posición: mirá la transición.' : ''}${gemelo >= 0 ? ' En los dos lados.' : ''}`, 'toast-suave');
+  });
 }
 
 </script>
@@ -17230,10 +17583,10 @@ function datosExp(p, cfg) {
   const filas = [];
   let prev = null, num = 0;
   for (const { x, e } of es) {
-    if (!prev || prev.pos !== e.pos) filas.push({ tipo: 'pos', nom: POS_CLASE[e.pos].nom, trans: prev ? `Desde ${POS_CLASE[prev.pos].nom.toLowerCase()}: ${TRANSICIONES[prev.pos + '>' + e.pos] || 'transición'}` : '' });
+    if (!prev || prev.pos !== e.pos) filas.push({ tipo: 'pos', nom: POS_CLASE[e.pos].nom + (x.lado ? ' ' + LADO_NOM[x.lado] : ''), trans: prev ? `Desde ${POS_CLASE[prev.pos].nom.toLowerCase()}: ${TRANSICIONES[prev.pos + '>' + e.pos] || 'transición'}` : '' });
     num++;
     const b = e.pm ? null : BB.ejercicios.find(q => q.id === e.id), pm = e.pm ? PREMAT.find(q => q.id === e.id) : null;
-    const f = { tipo: 'ej', num, id: e.id, pm: !!e.pm, nombre: e.n, pos: POS_CLASE[e.pos].nom, fuente: fuenteNom(e.f),
+    const f = { tipo: 'ej', num, id: e.id, pm: !!e.pm, nombre: e.n, pos: POS_CLASE[e.pos].nom + (x.lado ? ' ' + LADO_NOM[x.lado] : ''), fuente: fuenteNom(e.f),
       reps: x.reps ? `${x.reps} ${unidadReps(e.reps)}` : (e.reps || ''), prop: x.prop || '', nota: x.nota || '', adap: x.adap || '',
       principios: typeof principiosDe === 'function' ? PRINCIPIOS.filter(pr => principiosDe(e.id).has(pr.k)).map(pr => pr.corto).join(', ') : '', mov: [] };
     /* el movimiento: del manual (posición inicial, pasos con la respiración, indicaciones) o de tu planilla */
@@ -19534,7 +19887,7 @@ const app = () => $('#app');
 
 function ir(v) {
   /* tocar "Sesiones" estando en una sesión vuelve a la lista */
-  if (v === 'planes' && vista === 'planes') { planAbierto = null; genAbierto = false; }
+  if (v === 'planes' && vista === 'planes') { planAbierto = null; genAbierto = false; if (typeof personaAbierta !== 'undefined') personaAbierta = null; }
   L = null;
   juegoMapa = null;
   vista = v;

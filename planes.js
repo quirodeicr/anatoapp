@@ -28,6 +28,8 @@ function catalogoPlan() {
   return (CATALOGO_PLAN = [...pm, ...bb]);
 }
 const ejPlan = id => catalogoPlan().find(e => e.id === id);
+/* de costado sobre un lado (lados intercalados) */
+const LADO_NOM = { der: 'sobre el lado derecho', izq: 'sobre el lado izquierdo' };
 const miniPlan = e => e.pm ? miniEj({ pm: e.id }) : miniEj({ bb: e.id });
 const fuenteNom = f => f === 'pre' ? 'Pre-Pilates' : f === 'mat1' ? 'Mat 1' : 'Mat 2';
 
@@ -35,7 +37,7 @@ function planes() { if (!Array.isArray(S.planes)) S.planes = []; return S.planes
 const nuevoId = () => 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 function nuevoPlan(base = {}) {
   const p = { id: nuevoId(), nombre: base.nombre || 'Sesión nueva', fecha: base.fecha || HOY(), para: base.para || '', dur: base.dur || 55,
-    focos: base.focos || [], notas: base.notas || '', items: base.items || [], creado: HOY(), editado: Date.now(), ...(base.gen ? { gen: base.gen } : {}) };
+    focos: base.focos || [], notas: base.notas || '', items: base.items || [], creado: HOY(), editado: Date.now(), ...(base.gen ? { gen: base.gen } : {}), ...(base.persona ? { persona: base.persona } : {}) };
   planes().unshift(p); guardar();
   return p;
 }
@@ -44,17 +46,19 @@ const tocar = p => { p.editado = Date.now(); guardar(); };
 /* tiempo de un ejercicio: explicarlo y acomodarse (≈ 45 s) y sus repeticiones, el doble si
    son por lado, por pierna o en cada sentido (una clase de una hora tiene ≈ 25 ejercicios,
    como pide el examen de Mat 2) */
-function segEj(e, r) {
-  const u = unidadReps(e.reps), lados = /por lado|cada lado|por pierna|\/lado|cada sentido|ambos sentidos|alternando|alternad/i.test(e.reps || '') ? 2 : 1;
+function segEj(e, r, lado = '') {
+  /* un ítem con lado (de costado sobre el derecho o el izquierdo) es un solo lado */
+  const u = unidadReps(e.reps), lados = !lado && /por lado|cada lado|por pierna|\/lado|cada sentido|ambos sentidos|alternando|alternad/i.test(e.reps || '') ? 2 : 1;
   const por = u === 'sets' ? 12 : u === 'círculos' ? 6 : u === 'segundos' ? 1 : u === 'respiraciones' ? 6 : u === 'pasos' ? 1.2 : u === 'ciclos' ? 8 : 7;
-  return 50 + r * por * (u === 'segundos' ? 1 : lados);
+  /* el segundo lado no se vuelve a explicar: cada lado lleva la mitad de los 50 s */
+  return (lado ? 25 : 50) + r * por * (u === 'segundos' ? 1 : lados);
 }
 /* duración estimada: cada ejercicio y los cambios de posición */
 function duracionPlan(p) {
   let seg = 0, prev = null;
   for (const x of p.items) {
     const e = ejPlan(x.id); if (!e) continue;
-    seg += segEj(e, x.reps || (rangoReps(e.reps) || [6])[0]);
+    seg += segEj(e, x.reps || (rangoReps(e.reps) || [6])[0], x.lado);
     if (prev && prev.pos !== e.pos) seg += 45;
     prev = e;
   }
@@ -66,6 +70,7 @@ let planAbierto = null, filtroPlan = { pos: '', f: '', q: '' };
 /* ---------------- lista ---------------- */
 function vPlanes() {
   if (genAbierto) return vGenerador();
+  if (typeof personaAbierta !== 'undefined' && personaAbierta && personaDe(personaAbierta)) return vPersona(personaAbierta);
   if (planAbierto && planes().some(p => p.id === planAbierto)) return vPlan(planAbierto);
   planAbierto = null;
   const lista = [...planes()].sort((a, b) => (b.fecha || '').localeCompare(a.fecha || '') || b.editado - a.editado);
@@ -78,6 +83,8 @@ function vPlanes() {
       <button type="button" class="btn3d verde" id="plNueva">＋ Nueva sesión</button>
       ${claseActual().items.length ? '<button type="button" class="btn ghost" id="plDeClase">Desde mi clase de examen</button>' : ''}
     </div>
+    ${typeof personasHTML === 'function' ? personasHTML() : ''}
+    ${lista.length ? '<h2 class="secc">Sesiones · ' + lista.length + '</h2>' : ''}
     ${lista.length ? `<div class="pl-lista">${lista.map(p => {
       const ps = [...new Set(p.items.map(x => (ejPlan(x.id) || {}).pos).filter(Boolean))];
       const proxima = p.fecha && p.fecha >= hoy;
@@ -95,7 +102,8 @@ function vPlanes() {
       </article>`; }).join('')}</div>`
       : '<p class="vacio">Todavía no hay sesiones. Tocá <b>＋ Nueva sesión</b> para planear la primera.</p>'}`;
   $('#plNueva').onclick = () => { const p = nuevoPlan(); planAbierto = p.id; SND.toque(); vPlan(p.id); };
-  $('#plGenerar').onclick = () => { SND.toque(); abrirGenerador(); };
+  $('#plGenerar').onclick = () => { SND.toque(); const c = cfgGen(); c.persona = ''; abrirGenerador(); };
+  if (typeof conectarPersonas === 'function') conectarPersonas();
   const dc = $('#plDeClase');
   if (dc) dc.onclick = () => { const p = planDesdeClase(); planAbierto = p.id; SND.toque(); vPlan(p.id); toast('Copiada tu clase de examen como sesión nueva.', 'toast-suave'); };
   $$('.pl-tarjeta').forEach(t => {
@@ -210,17 +218,18 @@ function filasPlan(p) {
   return p.items.map((x, i) => {
     const e = ejPlan(x.id); if (!e) return '';
     const pz = POS_CLASE[e.pos], r = rangoReps(e.reps), prev = i ? ejPlan(p.items[i - 1].id) : null;
-    const trans = prev && prev.pos !== e.pos ? transicionHTML(prev, e) : '';
+    const trans = prev && prev.pos !== e.pos ? transicionHTML(prev, e, !!(x.lado || p.items[i - 1].lado)) : '';
     const F = typeof fotosDe === 'function' ? fotosDe(e.id) : null, kFoto = F && x.prop ? F.fotos.findIndex(f => norm(f.prop) === norm(x.prop)) : -1;
     return `${trans}<li class="cl-fila pl-fila" data-i="${i}">
       <span class="cl-n">${i + 1}</span>
       <span class="cl-mini">${miniPlan(e)}</span>
       <div class="cl-info"><b>${esc(e.n)}</b>
-        <small><span class="cl-pos p-${e.pos}">${pz.ico} ${pz.nom}</span> ${fuenteNom(e.f)}${e.reps ? ` · ${esc(e.reps)}` : ''}${principiosEjHTML(e)}</small>
+        <small><span class="cl-pos p-${e.pos}">${pz.ico} ${pz.nom}${x.lado ? ' ' + LADO_NOM[x.lado] : ''}</span> ${fuenteNom(e.f)}${e.reps ? ` · ${esc(e.reps)}` : ''}${principiosEjHTML(e)}</small>
         ${x.adap ? `<small class="pl-adap">⚕️ ${esc(x.adap)}</small>` : ''}
         <div class="pl-extra">
           <label class="pl-prop"><span class="sr">Prop</span><select data-k="prop"><option value="">Sin prop</option>${PROPS_PLAN.map(o => `<option ${x.prop === o ? 'selected' : ''}>${o}</option>`).join('')}</select></label>
           ${kFoto >= 0 ? `<button type="button" class="pl-foto" data-foto="${kFoto}" aria-label="Ver la foto de ${esc(e.n)} con ${esc(x.prop)}">📷</button>` : ''}
+          ${e.pos === 'costado' ? `<label class="pl-lado"><span class="sr">Lado</span><select data-k="lado"><option value="">Los dos lados</option>${Object.entries(LADO_NOM).map(([k, t]) => `<option value="${k}" ${x.lado === k ? 'selected' : ''}>${t.charAt(0).toUpperCase() + t.slice(1)}</option>`).join('')}</select></label>` : ''}
           <label class="pl-nota"><span class="sr">Nota</span><input data-k="nota" value="${esc(x.nota || '')}" placeholder="nota (variante, cue…)" maxlength="140"></label>
         </div></div>
       <label class="cl-reps"><input type="number" data-k="reps" inputmode="numeric" min="1" max="100" step="1" value="${x.reps || ''}" placeholder="${r ? r[0] + (r[1] > r[0] ? '–' + r[1] : '') : '#'}" aria-label="Repeticiones de ${esc(e.n)}"><small>${unidadReps(e.reps)}</small></label>
@@ -228,6 +237,7 @@ function filasPlan(p) {
         <button type="button" data-a="sube" aria-label="Subir" ${i ? '' : 'disabled'}>↑</button>
         <button type="button" data-a="baja" aria-label="Bajar" ${i < p.items.length - 1 ? '' : 'disabled'}>↓</button>
         <button type="button" data-a="quita" aria-label="Quitar">✕</button>
+        ${typeof tieneVariantes === 'function' && tieneVariantes(p, i) ? '<button type="button" data-a="var" class="pl-var" aria-label="Más fácil o más difícil" title="Más fácil o más difícil">⇅</button>' : ''}
       </div>
     </li>`;
   }).join('');
@@ -241,12 +251,13 @@ function conectarFilasPlan(p) {
       x[k] = k === 'reps' ? (Math.round(+el.value) > 0 ? Math.round(+el.value) : null) : el.value;
       tocar(p);
       if (k === 'reps') $('#plResumen').innerHTML = resumenPlanHTML(p);
-      if (k === 'prop') rehacerPlan(p, `.pl-fila[data-i="${i}"]`);
+      if (k === 'prop' || k === 'lado') rehacerPlan(p, `.pl-fila[data-i="${i}"]`);
     });
     const bf = $('.pl-foto', li);
     if (bf) bf.onclick = () => verFoto(fotosDe(x.id), +bf.dataset.foto);
     $$('[data-a]', li).forEach(b => b.onclick = () => {
       const a = b.dataset.a;
+      if (a === 'var') return abrirVariantes(p, i);
       if (a === 'quita') p.items.splice(i, 1);
       else { const j = a === 'sube' ? i - 1 : i + 1; [p.items[i], p.items[j]] = [p.items[j], p.items[i]]; }
       SND.toque(); tocar(p);
@@ -310,7 +321,7 @@ function insertarOrdenado(p, id) {
   return k;
 }
 function analizarPlan(p) {
-  const es = p.items.map((x, i) => ({ ...ejPlan(x.id), rep: x.reps, i })).filter(e => e.id);
+  const es = p.items.map((x, i) => ({ ...ejPlan(x.id), rep: x.reps, lado: x.lado || '', i })).filter(e => e.id);
   const out = [], add = (estado, t, d, extra = {}) => out.push({ estado, t, d, ...extra });
   const n = e => `${e.i + 1}. ${e.n}`;
   /* repeticiones */
@@ -320,16 +331,31 @@ function analizarPlan(p) {
   const fuera = es.filter(e => e.rep > 0 && rangoReps(e.reps) && (e.rep < rangoReps(e.reps)[0] || e.rep > rangoReps(e.reps)[1]));
   if (fuera.length) add('aviso', 'Repeticiones fuera de lo que indica el material',
     fuera.map(e => `${n(e)}: pusiste ${e.rep}, el material indica ${e.reps}`).join(' · ') + '. Si es a propósito (una adaptación), anotalo en la nota del ejercicio.');
-  /* orden de posiciones */
+  /* lados intercalados: de costado sobre un lado → otra posición → de costado sobre el otro */
+  const kDer = es.findIndex(e => e.pos === 'costado' && e.lado), ultLado = es.reduce((a, e, k) => e.pos === 'costado' && e.lado ? k : a, -1);
+  const intercala = kDer >= 0 && ultLado > kDer && es.slice(kDer, ultLado).some(e => e.pos !== 'costado') && new Set(es.filter(e => e.lado).map(e => e.lado)).size === 2;
+  const enVentana = e => intercala && e.i > kDer && e.i < es[ultLado].i;
+  /* orden de posiciones: volver atrás está bien si es para intercalar; si no, se avisa */
   const regresos = []; let fueAtras = null;
-  es.forEach(e => { if (POS_CLASE[e.pos].grupo >= 3 && !fueAtras) fueAtras = e; if (fueAtras && (e.pos === 'supino' || e.pos === 'inversion')) regresos.push(e); });
-  add(regresos.length ? 'mal' : 'ok', 'Orden de posiciones',
-    regresos.length ? `${regresos.map(n).join(', ')} ${regresos.length > 1 ? 'vuelven' : 'vuelve'} a supino después de ${n(fueAtras)} (${POS_CLASE[fueAtras.pos].nom.toLowerCase()}). Subilo${regresos.length > 1 ? 's' : ''} con ↑ antes de ${fueAtras.n}: el manual ordena de pie → cuatro apoyos → supino → sentado → prono → plancha → de costado.` : 'Sigue el orden del manual.');
+  es.forEach(e => { if (POS_CLASE[e.pos].grupo >= 3 && !fueAtras) fueAtras = e; if (fueAtras && (e.pos === 'supino' || e.pos === 'inversion') && !enVentana(e)) regresos.push(e); });
+  add(regresos.length ? 'aviso' : 'ok', 'Orden de posiciones',
+    regresos.length ? `${regresos.map(n).join(', ')} ${regresos.length > 1 ? 'vuelven' : 'vuelve'} a supino después de ${n(fueAtras)} (${POS_CLASE[fueAtras.pos].nom.toLowerCase()}). El manual ordena de pie → cuatro apoyos → supino → sentado → prono → plancha → de costado; volver está bien si es para intercalar (por ejemplo, entre los dos lados), si no, subilo${regresos.length > 1 ? 's' : ''} con ↑ antes de ${fueAtras.n}.`
+      : intercala ? 'Sigue el orden del manual, con los lados intercalados.' : 'Sigue el orden del manual.');
+  /* fluidez: no subir a de pie en el medio para volver a bajar */
+  const bloquesPos = es.filter((e, k) => !k || es[k - 1].pos !== e.pos);
+  const pieMedio = bloquesPos.slice(1, -1).filter(e => e.pos === 'pie');
+  const medio = intercala ? es.slice(kDer, ultLado).find(e => e.pos !== 'costado') : null;
+  add(pieMedio.length ? 'aviso' : 'ok', 'Fluidez',
+    pieMedio.length ? `${pieMedio.map(n).join(', ')}: sube a de pie en el medio de la clase y después vuelve al piso. Para que fluya, lo de pie va al empezar o al terminar.`
+      : intercala ? `Intercala los lados: de costado ${LADO_NOM[es[kDer].lado]}, ${POS_CLASE[medio.pos].nom.toLowerCase()} y de costado ${LADO_NOM[es[ultLado].lado]}; de pie solo al empezar o al terminar.`
+      : 'Sin subir y bajar: de pie solo al empezar o al terminar.');
+  const sinOtro = es.filter(e => e.lado && !es.some(o => o.id === e.id && o.lado && o.lado !== e.lado));
+  if (sinOtro.length) add('aviso', 'Lados', `${sinOtro.map(n).join(', ')}: ${sinOtro.length > 1 ? 'falta hacerlos' : 'falta hacerlo'} sobre el otro lado.`);
   /* transiciones */
-  const cambios = es.slice(1).filter((e, i) => e.pos !== es[i].pos), tope = Math.max(6, Math.round(es.length / 2.5));
+  const cambios = es.slice(1).filter((e, i) => e.pos !== es[i].pos), tope = Math.max(6, Math.round(es.length / 2.5)) + (intercala ? 2 : 0);
   /* volver a de pie al final es el cierre del manual: no cuenta como volver */
   const cierre = es.length > 2 && es[0].pos === 'pie' && es[es.length - 1].pos === 'pie';
-  const vueltas = [...new Set(es.map(e => e.pos))].filter(pz => { let bloques = 0; es.forEach((e, i) => { if (e.pos === pz && (i === 0 || es[i - 1].pos !== pz)) bloques++; }); return bloques > (cierre && pz === 'pie' ? 2 : 1); });
+  const vueltas = [...new Set(es.map(e => e.pos))].filter(pz => { let bloques = 0; es.forEach((e, i) => { if (e.pos === pz && (i === 0 || es[i - 1].pos !== pz)) bloques++; }); return bloques > (cierre && pz === 'pie' ? 2 : intercala && pz === 'costado' ? 2 : 1); });
   add(cambios.length > tope || vueltas.length ? 'aviso' : 'ok', `Transiciones: ${cambios.length} cambios de posición`,
     vueltas.length ? `Volvés más de una vez a ${vueltas.map(pz => POS_CLASE[pz].nom.toLowerCase()).join(' y ')}: juntá esos ejercicios en un solo bloque para que la clase fluya.`
       : cambios.length > tope ? 'Son muchos para la cantidad de ejercicios: agrupá los de la misma posición.' : 'Mirá cada "↳" de la lista: así pasa el cuerpo de uno al otro.');
@@ -416,7 +442,7 @@ function textoPlan(p) {
   p.items.forEach((x, i) => {
     const e = ejPlan(x.id); if (!e) return;
     if (prev && prev.pos !== e.pos) l.push(`   ↳ ${POS_CLASE[prev.pos].nom} → ${POS_CLASE[e.pos].nom}: ${TRANSICIONES[prev.pos + '>' + e.pos] || 'transición'}`);
-    l.push(`${i + 1}. ${e.n} — ${x.reps ? x.reps + ' ' + unidadReps(e.reps) : (e.reps || '')} (${POS_CLASE[e.pos].nom})${x.prop ? ' · ' + x.prop : ''}${x.nota ? ' · ' + x.nota : ''}${x.adap ? ' · Adaptación: ' + x.adap : ''}`);
+    l.push(`${i + 1}. ${e.n} — ${x.reps ? x.reps + ' ' + unidadReps(e.reps) : (e.reps || '')} (${POS_CLASE[e.pos].nom}${x.lado ? ' ' + LADO_NOM[x.lado] : ''})${x.prop ? ' · ' + x.prop : ''}${x.nota ? ' · ' + x.nota : ''}${x.adap ? ' · Adaptación: ' + x.adap : ''}`);
     prev = e;
   });
   l.push('', `Duración estimada: ≈ ${duracionPlan(p)} min`);
