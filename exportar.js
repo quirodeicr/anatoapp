@@ -16,7 +16,7 @@
    ============================================================ */
 'use strict';
 
-const EXP_BASE = { doc: 'clase', copias: 2, formato: 'docx', mov: 'no', img: 'no', reps: true, trans: true, princ: true, adap: true, notas: true, tilde: false, papel: 'carta' };
+const EXP_BASE = { doc: 'clase', copias: 2, quien: '', estudio: '', formato: 'docx', mov: 'no', img: 'no', reps: true, trans: true, princ: true, adap: true, notas: true, tilde: false, papel: 'carta' };
 const EXP_PRESETS = [
   ['nombres', 'Solo nombres', { mov: 'no', img: 'no' }],
   ['movs', 'Nombres y movimientos', { mov: 'breve', img: 'no' }],
@@ -495,16 +495,19 @@ const TIPO_EXP = { docx: 'application/vnd.openxmlformats-officedocument.wordproc
 function abrirExportar(p, opts = {}) {
   const cfg = cfgExp();
   /* sin ejercicios (desde el perfil de una persona) solo hay historia clínica */
-  const soloHistoria = !p.items.length;
+  /* sin ejercicios: desde el perfil de una persona solo hay historia clínica; en blanco, hoja o historia */
+  const blanco = !!opts.blanco, soloHistoria = !p.items.length && !blanco;
   if (opts.doc || soloHistoria) cfg.doc = soloHistoria ? 'historia' : opts.doc;
+  if (blanco && cfg.doc === 'clase') cfg.doc = 'entrega';
+  const docs = DOCS_EXP.filter(d => !blanco || d[0] !== 'clase');
   const chip = (g, v, t, on) => `<button type="button" data-xg="${g}" data-xv="${esc(v)}" class="${on ? 'on' : ''}" aria-pressed="${on}">${t}</button>`;
   const presetDe = () => (EXP_PRESETS.find(([, , o]) => o.mov === cfg.mov && o.img === cfg.img) || [''])[0];
   const pintar = () => {
     const doc = cfg.doc || 'clase', formatos = EXP_FORMATOS.filter(f => doc !== 'historia' || f[0] !== 'xlsx');
     if (!formatos.some(f => f[0] === cfg.formato)) cfg.formato = 'docx';
     const m = abrirModal(`<div class="exp">
-      <h3>${soloHistoria ? 'Historia clínica' : 'Descargar la sesión'}</h3>
-      ${soloHistoria ? '' : `<div class="exp-formatos exp-docs" role="group" aria-label="Documento">${DOCS_EXP.map(([k, t, s2]) => `<button type="button" data-xg="doc" data-xv="${k}" class="${doc === k ? 'on' : ''}" aria-pressed="${doc === k}"><b>${t}</b><small>${s2}</small></button>`).join('')}</div>`}
+      <h3>${blanco ? 'Hojas en blanco para imprimir' : soloHistoria ? 'Historia clínica' : 'Descargar la sesión'}</h3>
+      ${soloHistoria ? '' : `<div class="exp-formatos exp-docs" role="group" aria-label="Documento">${docs.map(([k, t, s2]) => `<button type="button" data-xg="doc" data-xv="${k}" class="${doc === k ? 'on' : ''}" aria-pressed="${doc === k}"><b>${t}</b><small>${s2}</small></button>`).join('')}</div>`}
       <p class="micro">${doc === 'clase' ? 'Word y Excel quedan editables; el PDF es para imprimir.' : doc === 'entrega' ? 'Para imprimir y completar: cada ejercicio con sus repeticiones y una observación (la adaptación, el prop y para qué, o qué se cambió y por qué; el motivo lo escribís al cambiarlo con ⇅ o en la nota). Lo que falte, a mano o en Word.' : 'Para imprimir y completar. Lo que ya se sabe (su perfil, sus cuidados) viene escrito; lo demás queda en blanco. Word queda editable.'}</p>
       <div class="exp-formatos" role="group" aria-label="Formato">${formatos.map(([k, t, s2]) => `<button type="button" data-xg="formato" data-xv="${k}" class="${cfg.formato === k ? 'on' : ''}" aria-pressed="${cfg.formato === k}"><b>${t}</b><small>${s2}</small></button>`).join('')}</div>
       ${doc === 'clase' ? `<h4>Qué incluir</h4>
@@ -515,6 +518,8 @@ function abrirExportar(p, opts = {}) {
       <div class="chips" role="group" aria-label="Imagen">${chip('img', 'no', 'Sin', cfg.img === 'no')}${chip('img', 'primera', 'La primera', cfg.img === 'primera')}${chip('img', 'secuencia', 'La secuencia', cfg.img === 'secuencia')}</div>
       <h4>Además</h4>
       <div class="chips" role="group" aria-label="Además">${[['reps', 'Repeticiones y prop'], ['trans', 'Transiciones'], ['princ', 'Los 5 principios'], ['adap', 'Adaptaciones'], ['notas', 'Notas'], ['tilde', 'Casilla para tildar']].map(([k, t]) => chip('extra', k, t, cfg[k])).join('')}</div>` : ''}
+      ${doc !== 'clase' ? `<h4>Tus datos <small>(opcional, quedan guardados en este navegador)</small></h4>
+      <div class="exp-datos"><label>Tu nombre<input data-xi="quien" value="${esc(cfg.quien || '')}" maxlength="60" placeholder="Quien da la clase"></label><label>Estudio o lugar<input data-xi="estudio" value="${esc(cfg.estudio || '')}" maxlength="60" placeholder="Opcional"></label></div>` : ''}
       ${doc === 'entrega' ? `<h4>Copias</h4><div class="chips" role="group" aria-label="Copias">${chip('copias', '2', 'Dos: una para entregar y otra para vos', cfg.copias !== 1)}${chip('copias', '1', 'Una', cfg.copias === 1)}</div>` : ''}
       <h4>Papel</h4>
       <div class="chips" role="group" aria-label="Papel">${chip('papel', 'carta', 'Carta', cfg.papel !== 'a4')}${chip('papel', 'a4', 'A4', cfg.papel === 'a4')}</div>
@@ -530,6 +535,7 @@ function abrirExportar(p, opts = {}) {
       else cfg[g] = v;
       guardar(); SND.toque(); pintar();
     });
+    $$('[data-xi]', m).forEach(inp => inp.oninput = () => { cfg[inp.dataset.xi] = inp.value.trim(); guardar(); });
     $('[data-cerrar]', m).onclick = cerrarModal;
     $('#expIr', m).onclick = async () => {
       const bot = $('#expIr', m);

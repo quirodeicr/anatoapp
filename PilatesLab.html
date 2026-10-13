@@ -1000,7 +1000,11 @@ article.ex-rev{margin-bottom:10px}
 .exp-formatos button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 6px;border-radius:14px;border:2px solid var(--linea2);background:var(--sup);color:var(--tx);font:inherit;cursor:pointer}
 .exp-formatos button b{font-size:16px;font-weight:900}.exp-formatos button small{font-size:11.5px;color:var(--tx2);text-align:center}
 .exp-formatos button.on{border-color:var(--verde);background:var(--verde-cl)}
-.exp-docs{margin:8px 0 2px}.exp-docs button b{font-size:14.5px}.exp-ojo{color:var(--xp-tx)}
+.exp-docs{margin:8px 0 2px}.exp-docs button b{font-size:14.5px}
+.exp h4 small{font-weight:600;color:var(--tx2);font-size:12px}
+.exp-datos{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:8px}
+.exp-datos label{display:flex;flex-direction:column;gap:3px;font-size:12.5px;font-weight:800;color:var(--tx2)}
+.exp-datos input{font:inherit;font-size:14px;font-weight:500;color:var(--tx);background:var(--sup);border:2px solid var(--linea2);border-radius:10px;padding:7px 9px;min-width:0}.exp-ojo{color:var(--xp-tx)}
 .gen-lado{margin-top:6px;align-items:center}.gen-lado>span{font-size:13px;font-weight:800;color:var(--tx2);margin-right:2px}
 .pl-lado select{font:inherit;font-size:13px;border:2px solid var(--linea2);border-radius:10px;background:var(--sup);color:var(--tx);padding:4px 6px}
 .pe-lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:8px;margin:6px 0 10px}
@@ -16553,6 +16557,7 @@ function vPlanes() {
     <div class="fila pl-acc">
       <button type="button" class="btn3d verde" id="plNueva">＋ Nueva sesión</button>
       ${claseActual().items.length ? '<button type="button" class="btn ghost" id="plDeClase">Desde mi clase de examen</button>' : ''}
+      ${typeof hojasEnBlanco === 'function' ? '<button type="button" class="btn ghost" id="plBlanco">🖨 Hojas en blanco</button>' : ''}
     </div>
     ${typeof personasHTML === 'function' ? personasHTML() : ''}
     ${lista.length ? '<h2 class="secc">Sesiones · ' + lista.length + '</h2>' : ''}
@@ -16575,6 +16580,7 @@ function vPlanes() {
   $('#plNueva').onclick = () => { const p = nuevoPlan(); planAbierto = p.id; SND.toque(); vPlan(p.id); };
   $('#plGenerar').onclick = () => { SND.toque(); const c = cfgGen(); c.persona = ''; abrirGenerador(); };
   if (typeof conectarPersonas === 'function') conectarPersonas();
+  const hb = $('#plBlanco'); if (hb) hb.onclick = () => { SND.toque(); hojasEnBlanco(); };
   const dc = $('#plDeClase');
   if (dc) dc.onclick = () => { const p = planDesdeClase(); planAbierto = p.id; SND.toque(); vPlan(p.id); toast('Copiada tu clase de examen como sesión nueva.', 'toast-suave'); };
   $$('.pl-tarjeta').forEach(t => {
@@ -17840,7 +17846,7 @@ function abrirVariantes(p, i) {
    ============================================================ */
 'use strict';
 
-const EXP_BASE = { doc: 'clase', copias: 2, formato: 'docx', mov: 'no', img: 'no', reps: true, trans: true, princ: true, adap: true, notas: true, tilde: false, papel: 'carta' };
+const EXP_BASE = { doc: 'clase', copias: 2, quien: '', estudio: '', formato: 'docx', mov: 'no', img: 'no', reps: true, trans: true, princ: true, adap: true, notas: true, tilde: false, papel: 'carta' };
 const EXP_PRESETS = [
   ['nombres', 'Solo nombres', { mov: 'no', img: 'no' }],
   ['movs', 'Nombres y movimientos', { mov: 'breve', img: 'no' }],
@@ -18319,16 +18325,19 @@ const TIPO_EXP = { docx: 'application/vnd.openxmlformats-officedocument.wordproc
 function abrirExportar(p, opts = {}) {
   const cfg = cfgExp();
   /* sin ejercicios (desde el perfil de una persona) solo hay historia clínica */
-  const soloHistoria = !p.items.length;
+  /* sin ejercicios: desde el perfil de una persona solo hay historia clínica; en blanco, hoja o historia */
+  const blanco = !!opts.blanco, soloHistoria = !p.items.length && !blanco;
   if (opts.doc || soloHistoria) cfg.doc = soloHistoria ? 'historia' : opts.doc;
+  if (blanco && cfg.doc === 'clase') cfg.doc = 'entrega';
+  const docs = DOCS_EXP.filter(d => !blanco || d[0] !== 'clase');
   const chip = (g, v, t, on) => `<button type="button" data-xg="${g}" data-xv="${esc(v)}" class="${on ? 'on' : ''}" aria-pressed="${on}">${t}</button>`;
   const presetDe = () => (EXP_PRESETS.find(([, , o]) => o.mov === cfg.mov && o.img === cfg.img) || [''])[0];
   const pintar = () => {
     const doc = cfg.doc || 'clase', formatos = EXP_FORMATOS.filter(f => doc !== 'historia' || f[0] !== 'xlsx');
     if (!formatos.some(f => f[0] === cfg.formato)) cfg.formato = 'docx';
     const m = abrirModal(`<div class="exp">
-      <h3>${soloHistoria ? 'Historia clínica' : 'Descargar la sesión'}</h3>
-      ${soloHistoria ? '' : `<div class="exp-formatos exp-docs" role="group" aria-label="Documento">${DOCS_EXP.map(([k, t, s2]) => `<button type="button" data-xg="doc" data-xv="${k}" class="${doc === k ? 'on' : ''}" aria-pressed="${doc === k}"><b>${t}</b><small>${s2}</small></button>`).join('')}</div>`}
+      <h3>${blanco ? 'Hojas en blanco para imprimir' : soloHistoria ? 'Historia clínica' : 'Descargar la sesión'}</h3>
+      ${soloHistoria ? '' : `<div class="exp-formatos exp-docs" role="group" aria-label="Documento">${docs.map(([k, t, s2]) => `<button type="button" data-xg="doc" data-xv="${k}" class="${doc === k ? 'on' : ''}" aria-pressed="${doc === k}"><b>${t}</b><small>${s2}</small></button>`).join('')}</div>`}
       <p class="micro">${doc === 'clase' ? 'Word y Excel quedan editables; el PDF es para imprimir.' : doc === 'entrega' ? 'Para imprimir y completar: cada ejercicio con sus repeticiones y una observación (la adaptación, el prop y para qué, o qué se cambió y por qué; el motivo lo escribís al cambiarlo con ⇅ o en la nota). Lo que falte, a mano o en Word.' : 'Para imprimir y completar. Lo que ya se sabe (su perfil, sus cuidados) viene escrito; lo demás queda en blanco. Word queda editable.'}</p>
       <div class="exp-formatos" role="group" aria-label="Formato">${formatos.map(([k, t, s2]) => `<button type="button" data-xg="formato" data-xv="${k}" class="${cfg.formato === k ? 'on' : ''}" aria-pressed="${cfg.formato === k}"><b>${t}</b><small>${s2}</small></button>`).join('')}</div>
       ${doc === 'clase' ? `<h4>Qué incluir</h4>
@@ -18339,6 +18348,8 @@ function abrirExportar(p, opts = {}) {
       <div class="chips" role="group" aria-label="Imagen">${chip('img', 'no', 'Sin', cfg.img === 'no')}${chip('img', 'primera', 'La primera', cfg.img === 'primera')}${chip('img', 'secuencia', 'La secuencia', cfg.img === 'secuencia')}</div>
       <h4>Además</h4>
       <div class="chips" role="group" aria-label="Además">${[['reps', 'Repeticiones y prop'], ['trans', 'Transiciones'], ['princ', 'Los 5 principios'], ['adap', 'Adaptaciones'], ['notas', 'Notas'], ['tilde', 'Casilla para tildar']].map(([k, t]) => chip('extra', k, t, cfg[k])).join('')}</div>` : ''}
+      ${doc !== 'clase' ? `<h4>Tus datos <small>(opcional, quedan guardados en este navegador)</small></h4>
+      <div class="exp-datos"><label>Tu nombre<input data-xi="quien" value="${esc(cfg.quien || '')}" maxlength="60" placeholder="Quien da la clase"></label><label>Estudio o lugar<input data-xi="estudio" value="${esc(cfg.estudio || '')}" maxlength="60" placeholder="Opcional"></label></div>` : ''}
       ${doc === 'entrega' ? `<h4>Copias</h4><div class="chips" role="group" aria-label="Copias">${chip('copias', '2', 'Dos: una para entregar y otra para vos', cfg.copias !== 1)}${chip('copias', '1', 'Una', cfg.copias === 1)}</div>` : ''}
       <h4>Papel</h4>
       <div class="chips" role="group" aria-label="Papel">${chip('papel', 'carta', 'Carta', cfg.papel !== 'a4')}${chip('papel', 'a4', 'A4', cfg.papel === 'a4')}</div>
@@ -18354,6 +18365,7 @@ function abrirExportar(p, opts = {}) {
       else cfg[g] = v;
       guardar(); SND.toque(); pintar();
     });
+    $$('[data-xi]', m).forEach(inp => inp.oninput = () => { cfg[inp.dataset.xi] = inp.value.trim(); guardar(); });
     $('[data-cerrar]', m).onclick = cerrarModal;
     $('#expIr', m).onclick = async () => {
       const bot = $('#expIr', m);
@@ -18423,17 +18435,20 @@ function contextoDe(p) {
 }
 
 /* ---------- los dos formularios como lista de bloques ---------- */
+/* en blanco (sin ejercicios): para imprimir varias y completar a mano */
+const enBlanco = p => !p.items.length;
 function specEntrega(p, cfg) {
-  const c = contextoDe(p);
+  const c = contextoDe(p), blanco = enBlanco(p);
   const filas = p.items.map((x, i) => { const e = ejPlan(x.id); return e ? [String(i + 1), `${e.n}\n${POS_CLASE[e.pos].nom}${x.lado ? ' ' + LADO_NOM[x.lado] : ''}`, x.reps ? `${x.reps} ${unidadReps(e.reps)}` : (e.reps || ''), obsItem(x)] : null; }).filter(Boolean);
   const copias = cfg.copias === 1 ? [''] : ['Copia para entregar', 'Copia para quien da la clase'];
   return copias.flatMap((rot, k) => [
     ...(k ? [{ t: 'salto' }] : []),
     { t: 'titulo', texto: 'Plan de clase', rot },
-    { t: 'sub', texto: p.nombre || '' },
-    { t: 'campos', pares: [['Persona', p.para || (c.h && c.h.nombre) || ''], ['Fecha', p.fecha ? fechaLarga(p.fecha) : ''], ['Quien da la clase', ''], ['Duración', `≈ ${duracionPlan(p)} min`],
-      ['Nivel', c.nivel], ['Props', c.props], ['Cuidados', c.cuidados.join(', ')], ['Objetivo', c.h && c.h.gusta ? c.h.gusta.trim() : '']] },
-    { t: 'tabla', cols: [['Nº', 0.06], ['Ejercicio', 0.32], ['Repeticiones', 0.15], ['Observación (adaptación, prop y por qué; o qué se cambió y por qué)', 0.47]], filas, vacias: 2, alto: 22 },
+    { t: 'sub', texto: [cfg.estudio, blanco ? '' : p.nombre].filter(Boolean).join(' · ') },
+    { t: 'campos', pares: [['Persona', p.para || (c.h && c.h.nombre) || ''], ['Fecha', !blanco && p.fecha ? fechaLarga(p.fecha) : ''], ['Sesión n.º', ''], ['Hora', ''],
+      ['Quien da la clase', cfg.quien || ''], ['Duración', blanco ? '' : `≈ ${duracionPlan(p)} min`],
+      ['Nivel', c.nivel], ['Props', blanco ? '' : c.props], ['Cuidados', c.cuidados.join(', ')], ['Objetivo', c.h && c.h.gusta ? c.h.gusta.trim() : '']] },
+    { t: 'tabla', cols: [['Nº', 0.06], ['Ejercicio', 0.32], ['Repeticiones', 0.15], ['Observación (adaptación, prop y por qué; o qué se cambió y por qué)', 0.47]], filas, vacias: blanco ? 30 : 2, alto: blanco ? 24 : 22 },
     { t: 'lineas', label: 'Observaciones generales', n: 2 },
     { t: 'firmas', labels: ['Firma de quien da la clase', 'Firma de quien recibe'] }
   ]);
@@ -18441,7 +18456,7 @@ function specEntrega(p, cfg) {
 const ZONAS_HC = [['cuello', 'Cuello'], ['hombro', 'Hombros'], ['codo', 'Codos'], ['muneca', 'Muñecas y manos'], ['dorsal', 'Espalda alta (dorsal)'], ['lumbar', 'Zona lumbar'], ['cadera', 'Cadera'], ['rodilla', 'Rodillas'], ['tobillo', 'Tobillos y pies']];
 const SALUD_HC = [['cardio', 'Hipertensión o problemas cardíacos'], ['diabetes', 'Diabetes'], ['osteo', 'Osteoporosis u osteopenia'], ['hernia', 'Hernia de disco o ciática'], ['artrosis', 'Artrosis o artritis'], ['resp', 'Problemas respiratorios (asma…)'],
   ['mareo', 'Mareos o vértigo'], ['piso', 'Piso pélvico (pérdidas, prolapso)'], ['embarazo', 'Embarazo actual o posparto reciente'], ['cirugia', 'Cirugías (cuáles y cuándo)'], ['fractura', 'Fracturas'], ['medic', 'Medicación'], ['alergia', 'Alergias']];
-function specHistoria(p) {
+function specHistoria(p, cfg = {}) {
   const c = contextoDe(p), g = c.g || {}, cu = g.cuidados || [], lc = g.ladoCuidado || {};
   const LADO = { der: 'Derecha', izq: 'Izquierda' };
   /* lo que ya se sabe por sus cuidados queda marcado */
@@ -18452,10 +18467,10 @@ function specHistoria(p) {
   const adaps = [...new Set(p.items.map(x => x.adap).filter(Boolean))];
   return [
     { t: 'titulo', texto: 'Historia clínica', rot: '' },
-    { t: 'sub', texto: 'Pilates · completar en la primera sesión y actualizar si algo cambia' },
+    { t: 'sub', texto: [cfg.estudio, 'Pilates · completar en la primera sesión y actualizar si algo cambia'].filter(Boolean).join(' · ') },
     { t: 'seccion', texto: 'Datos personales' },
-    { t: 'campos', pares: [['Nombre y apellidos', p.para || (c.h && c.h.nombre) || ''], ['Fecha', fechaLarga(p.fecha || HOY())], ['Fecha de nacimiento', ''], ['Edad', ''], ['Teléfono', ''], ['Correo', ''],
-      ['Contacto de emergencia', ''], ['Teléfono de emergencia', ''], ['Ocupación', ''], ['Horas al día en posición sentada', '']] },
+    { t: 'campos', pares: [['Nombre y apellidos', p.para || (c.h && c.h.nombre) || ''], ['Fecha', p.blanco ? '' : fechaLarga(p.fecha || HOY())], ['Fecha de nacimiento', ''], ['Edad', ''], ['Teléfono', ''], ['Correo', ''],
+      ['Contacto de emergencia', ''], ['Teléfono de emergencia', ''], ['Ocupación', ''], ['Horas al día en posición sentada', ''], ['Quien completa la historia', cfg.quien || '']] },
     { t: 'seccion', texto: 'Motivo de consulta y objetivos' },
     { t: 'lineas', label: c.h && c.h.gusta ? '' : 'Qué busca con las clases', n: c.h && c.h.gusta ? 0 : 3, texto: c.h && c.h.gusta ? c.h.gusta.trim() : '' },
     { t: 'seccion', texto: 'Derivación' },
@@ -18671,13 +18686,17 @@ function xlsxEntrega(spec, cfg, titulo) {
 /* ---------- armar el formulario que se pidió ---------- */
 function exportarFormulario(p, cfg) {
   const entrega = cfg.doc === 'entrega';
-  const spec = entrega ? specEntrega(p, cfg) : specHistoria(p);
+  const spec = entrega ? specEntrega(p, cfg) : specHistoria(p, cfg);
   const quien = p.para || (contextoDe(p).h || {}).nombre || '';
-  const titulo = (entrega ? 'Plan de clase' : 'Historia clínica') + (quien ? ' · ' + quien : '');
+  const titulo = (entrega ? (p.blanco ? 'Hoja de clase en blanco' : 'Plan de clase') : (p.blanco ? 'Historia clínica en blanco' : 'Historia clínica')) + (quien ? ' · ' + quien : '');
   const formato = !entrega && cfg.formato === 'xlsx' ? 'docx' : cfg.formato;
   const bytes = formato === 'pdf' ? pdfForm(spec, cfg, titulo) : formato === 'xlsx' ? xlsxEntrega(spec, cfg, titulo) : docxForm(spec, cfg, titulo);
   const base = (sinEmoji(titulo).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^\w\- ]+/g, '').trim().replace(/\s+/g, '-') || 'formulario').slice(0, 60);
   return { nombre: `${base}.${formato}`, bytes, formato };
+}
+/* hojas en blanco para imprimir varias (hoja de la clase o historia clínica) */
+function hojasEnBlanco() {
+  abrirExportar({ nombre: '', para: '', items: [], focos: [], notas: '', fecha: HOY(), blanco: true }, { blanco: true });
 }
 /* desde el perfil de una persona: la historia clínica con lo que se sabe de ella */
 function historiaDePersona(h) {

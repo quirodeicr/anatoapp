@@ -82,6 +82,7 @@ function vPlanes() {
     <div class="fila pl-acc">
       <button type="button" class="btn3d verde" id="plNueva">＋ Nueva sesión</button>
       ${claseActual().items.length ? '<button type="button" class="btn ghost" id="plDeClase">Desde mi clase de examen</button>' : ''}
+      ${typeof hojasEnBlanco === 'function' ? '<button type="button" class="btn ghost" id="plBlanco">🖨 Hojas en blanco</button>' : ''}
     </div>
     ${typeof personasHTML === 'function' ? personasHTML() : ''}
     ${lista.length ? '<h2 class="secc">Sesiones · ' + lista.length + '</h2>' : ''}
@@ -104,6 +105,7 @@ function vPlanes() {
   $('#plNueva').onclick = () => { const p = nuevoPlan(); planAbierto = p.id; SND.toque(); vPlan(p.id); };
   $('#plGenerar').onclick = () => { SND.toque(); const c = cfgGen(); c.persona = ''; abrirGenerador(); };
   if (typeof conectarPersonas === 'function') conectarPersonas();
+  const hb = $('#plBlanco'); if (hb) hb.onclick = () => { SND.toque(); hojasEnBlanco(); };
   const dc = $('#plDeClase');
   if (dc) dc.onclick = () => { const p = planDesdeClase(); planAbierto = p.id; SND.toque(); vPlan(p.id); toast('Copiada tu clase de examen como sesión nueva.', 'toast-suave'); };
   $$('.pl-tarjeta').forEach(t => {

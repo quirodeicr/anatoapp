@@ -46,17 +46,20 @@ function contextoDe(p) {
 }
 
 /* ---------- los dos formularios como lista de bloques ---------- */
+/* en blanco (sin ejercicios): para imprimir varias y completar a mano */
+const enBlanco = p => !p.items.length;
 function specEntrega(p, cfg) {
-  const c = contextoDe(p);
+  const c = contextoDe(p), blanco = enBlanco(p);
   const filas = p.items.map((x, i) => { const e = ejPlan(x.id); return e ? [String(i + 1), `${e.n}\n${POS_CLASE[e.pos].nom}${x.lado ? ' ' + LADO_NOM[x.lado] : ''}`, x.reps ? `${x.reps} ${unidadReps(e.reps)}` : (e.reps || ''), obsItem(x)] : null; }).filter(Boolean);
   const copias = cfg.copias === 1 ? [''] : ['Copia para entregar', 'Copia para quien da la clase'];
   return copias.flatMap((rot, k) => [
     ...(k ? [{ t: 'salto' }] : []),
     { t: 'titulo', texto: 'Plan de clase', rot },
-    { t: 'sub', texto: p.nombre || '' },
-    { t: 'campos', pares: [['Persona', p.para || (c.h && c.h.nombre) || ''], ['Fecha', p.fecha ? fechaLarga(p.fecha) : ''], ['Quien da la clase', ''], ['Duración', `≈ ${duracionPlan(p)} min`],
-      ['Nivel', c.nivel], ['Props', c.props], ['Cuidados', c.cuidados.join(', ')], ['Objetivo', c.h && c.h.gusta ? c.h.gusta.trim() : '']] },
-    { t: 'tabla', cols: [['Nº', 0.06], ['Ejercicio', 0.32], ['Repeticiones', 0.15], ['Observación (adaptación, prop y por qué; o qué se cambió y por qué)', 0.47]], filas, vacias: 2, alto: 22 },
+    { t: 'sub', texto: [cfg.estudio, blanco ? '' : p.nombre].filter(Boolean).join(' · ') },
+    { t: 'campos', pares: [['Persona', p.para || (c.h && c.h.nombre) || ''], ['Fecha', !blanco && p.fecha ? fechaLarga(p.fecha) : ''], ['Sesión n.º', ''], ['Hora', ''],
+      ['Quien da la clase', cfg.quien || ''], ['Duración', blanco ? '' : `≈ ${duracionPlan(p)} min`],
+      ['Nivel', c.nivel], ['Props', blanco ? '' : c.props], ['Cuidados', c.cuidados.join(', ')], ['Objetivo', c.h && c.h.gusta ? c.h.gusta.trim() : '']] },
+    { t: 'tabla', cols: [['Nº', 0.06], ['Ejercicio', 0.32], ['Repeticiones', 0.15], ['Observación (adaptación, prop y por qué; o qué se cambió y por qué)', 0.47]], filas, vacias: blanco ? 30 : 2, alto: blanco ? 24 : 22 },
     { t: 'lineas', label: 'Observaciones generales', n: 2 },
     { t: 'firmas', labels: ['Firma de quien da la clase', 'Firma de quien recibe'] }
   ]);
@@ -64,7 +67,7 @@ function specEntrega(p, cfg) {
 const ZONAS_HC = [['cuello', 'Cuello'], ['hombro', 'Hombros'], ['codo', 'Codos'], ['muneca', 'Muñecas y manos'], ['dorsal', 'Espalda alta (dorsal)'], ['lumbar', 'Zona lumbar'], ['cadera', 'Cadera'], ['rodilla', 'Rodillas'], ['tobillo', 'Tobillos y pies']];
 const SALUD_HC = [['cardio', 'Hipertensión o problemas cardíacos'], ['diabetes', 'Diabetes'], ['osteo', 'Osteoporosis u osteopenia'], ['hernia', 'Hernia de disco o ciática'], ['artrosis', 'Artrosis o artritis'], ['resp', 'Problemas respiratorios (asma…)'],
   ['mareo', 'Mareos o vértigo'], ['piso', 'Piso pélvico (pérdidas, prolapso)'], ['embarazo', 'Embarazo actual o posparto reciente'], ['cirugia', 'Cirugías (cuáles y cuándo)'], ['fractura', 'Fracturas'], ['medic', 'Medicación'], ['alergia', 'Alergias']];
-function specHistoria(p) {
+function specHistoria(p, cfg = {}) {
   const c = contextoDe(p), g = c.g || {}, cu = g.cuidados || [], lc = g.ladoCuidado || {};
   const LADO = { der: 'Derecha', izq: 'Izquierda' };
   /* lo que ya se sabe por sus cuidados queda marcado */
@@ -75,10 +78,10 @@ function specHistoria(p) {
   const adaps = [...new Set(p.items.map(x => x.adap).filter(Boolean))];
   return [
     { t: 'titulo', texto: 'Historia clínica', rot: '' },
-    { t: 'sub', texto: 'Pilates · completar en la primera sesión y actualizar si algo cambia' },
+    { t: 'sub', texto: [cfg.estudio, 'Pilates · completar en la primera sesión y actualizar si algo cambia'].filter(Boolean).join(' · ') },
     { t: 'seccion', texto: 'Datos personales' },
-    { t: 'campos', pares: [['Nombre y apellidos', p.para || (c.h && c.h.nombre) || ''], ['Fecha', fechaLarga(p.fecha || HOY())], ['Fecha de nacimiento', ''], ['Edad', ''], ['Teléfono', ''], ['Correo', ''],
-      ['Contacto de emergencia', ''], ['Teléfono de emergencia', ''], ['Ocupación', ''], ['Horas al día en posición sentada', '']] },
+    { t: 'campos', pares: [['Nombre y apellidos', p.para || (c.h && c.h.nombre) || ''], ['Fecha', p.blanco ? '' : fechaLarga(p.fecha || HOY())], ['Fecha de nacimiento', ''], ['Edad', ''], ['Teléfono', ''], ['Correo', ''],
+      ['Contacto de emergencia', ''], ['Teléfono de emergencia', ''], ['Ocupación', ''], ['Horas al día en posición sentada', ''], ['Quien completa la historia', cfg.quien || '']] },
     { t: 'seccion', texto: 'Motivo de consulta y objetivos' },
     { t: 'lineas', label: c.h && c.h.gusta ? '' : 'Qué busca con las clases', n: c.h && c.h.gusta ? 0 : 3, texto: c.h && c.h.gusta ? c.h.gusta.trim() : '' },
     { t: 'seccion', texto: 'Derivación' },
@@ -294,13 +297,17 @@ function xlsxEntrega(spec, cfg, titulo) {
 /* ---------- armar el formulario que se pidió ---------- */
 function exportarFormulario(p, cfg) {
   const entrega = cfg.doc === 'entrega';
-  const spec = entrega ? specEntrega(p, cfg) : specHistoria(p);
+  const spec = entrega ? specEntrega(p, cfg) : specHistoria(p, cfg);
   const quien = p.para || (contextoDe(p).h || {}).nombre || '';
-  const titulo = (entrega ? 'Plan de clase' : 'Historia clínica') + (quien ? ' · ' + quien : '');
+  const titulo = (entrega ? (p.blanco ? 'Hoja de clase en blanco' : 'Plan de clase') : (p.blanco ? 'Historia clínica en blanco' : 'Historia clínica')) + (quien ? ' · ' + quien : '');
   const formato = !entrega && cfg.formato === 'xlsx' ? 'docx' : cfg.formato;
   const bytes = formato === 'pdf' ? pdfForm(spec, cfg, titulo) : formato === 'xlsx' ? xlsxEntrega(spec, cfg, titulo) : docxForm(spec, cfg, titulo);
   const base = (sinEmoji(titulo).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^\w\- ]+/g, '').trim().replace(/\s+/g, '-') || 'formulario').slice(0, 60);
   return { nombre: `${base}.${formato}`, bytes, formato };
+}
+/* hojas en blanco para imprimir varias (hoja de la clase o historia clínica) */
+function hojasEnBlanco() {
+  abrirExportar({ nombre: '', para: '', items: [], focos: [], notas: '', fecha: HOY(), blanco: true }, { blanco: true });
 }
 /* desde el perfil de una persona: la historia clínica con lo que se sabe de ella */
 function historiaDePersona(h) {

@@ -169,6 +169,10 @@ nivel más; si el ejercicio está de los dos lados, cambian los dos.
   hiperlordosis, hipercifosis, genu valgo/varo, síndromes cruzados), precauciones, seguimiento y consentimiento. Lo que
   ya se sabe por su perfil viene escrito. También desde el perfil de la persona (🗂 Historia clínica). Word o PDF.
 
+Es tu formato: en "Tus datos" ponés tu nombre (y el del estudio, si querés) y aparece solo en "Quien da la clase"; la
+hoja también tiene Sesión n.º y Hora. **🖨 Hojas en blanco** (en Sesiones) baja la hoja de clase (30 renglones por
+copia) o la historia clínica vacías, para imprimir varias y llenarlas a mano.
+
 **Todo tu material** — el generador y ⇅ usan Principios del Movimiento (Pre-Pilates), tus análisis MAT 1 y MAT 2, el
 manual y tu planilla de **Mat 3** (qué prop, dónde va y para qué, y sus observaciones de cuidados: por ejemplo "muñeca
 en neutro" o "evitar con lesiones cervicales u osteoporosis"). ⇅ también ofrece el mismo ejercicio **con un prop** que
