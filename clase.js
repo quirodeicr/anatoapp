@@ -56,6 +56,8 @@ const TRANSICIONES = {
   'plancha>costado': 'Rotá el cuerpo sobre una mano hasta el costado.',
   'sentado>pie': 'Cruzá las piernas o rodá hacia adelante para ponerte de pie, como al final del Seal.',
   'plancha>pie': 'Caminá con las manos hacia los pies y enrollá la columna hasta quedar de pie.',
+  'costado>pie': 'Apoyá la mano de abajo, pasá a cuatro apoyos, caminá las manos hacia los pies y enrollá la columna hasta quedar de pie.',
+  'cuatro>pie': 'Llevá la cadera hacia atrás, caminá las manos hacia los pies y enrollá la columna hasta quedar de pie.',
   'pie>plancha': 'Enrollá la columna hacia abajo y caminá con las manos hasta la plancha.',
   'pie>supino': 'Bajá a sentarte y rodá la espalda hasta el mat.',
   'pie>cuatro': 'Bajá las manos al mat y apoyá las rodillas.',

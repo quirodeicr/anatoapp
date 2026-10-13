@@ -136,11 +136,20 @@ más peso y cuidados (osteoporosis, zona lumbar, cuello y hombros, muñecas, rod
   de dos a cuatro ejercicios para no cambiar a cada rato.
 
 Las repeticiones salen del rango del manual según el nivel; con cuidados se saca lo que el manual pide evitar y
-cada ejercicio lleva su adaptación (⚕️). Antes de generar, la app avisa lo que esas opciones no permiten
+cada ejercicio lleva su adaptación (⚕️). Con **poca movilidad** usa las modificaciones del manual para isquiotibiales
+tensos (sentarse sobre un mat enrollado, rodillas flexionadas, piernas en mesa, roll down), deja afuera lo que pide
+mucho rango y, donde el manual no dice nada, propone un rango cómodo según la posición (elaboración propia). Antes de generar, la app avisa lo que esas opciones no permiten
 cubrir (por ejemplo, sin plancha ni de pie casi no hay ejercicios de todo el cuerpo) y lo anota en la sesión.
 **🎲 Otra versión** arma otra con las mismas opciones y **⚙️ Cambiar opciones** vuelve al generador. En cada
 sesión se ven los 5 principios con su cantidad y los íconos de cada ejercicio. La clasificación de los
 ejercicios por principio más allá de lo que dicen tus fichas es elaboración propia.
+
+**⬇️ Word, Excel o PDF** (en cada sesión) — descarga la sesión para imprimirla o editarla: **Word** (.docx) y
+**Excel** (.xlsx) quedan editables; el **PDF** es para imprimir. Elegís qué incluir: solo los nombres, los nombres con
+el movimiento (posición inicial y pasos con la respiración; o además la forma óptima y las indicaciones), la primera
+imagen o la secuencia (la figura de la app; en Pre-Pilates, la foto de tu planilla), y si querés repeticiones y prop,
+transiciones, los 5 principios, adaptaciones, notas y una casilla para tildar cada ejercicio durante la clase. Papel
+carta o A4. Las fotos de Pre-Pilates parecen del manual del curso: esos archivos son para tu uso, no para publicar.
 
 **Músculos y ejercicios tocables** — en los apuntes, las fichas, la corrección de cada respuesta y tus
 sesiones, los nombres de músculos (verde) y de ejercicios (magenta) aparecen subrayados. Al tocarlos se

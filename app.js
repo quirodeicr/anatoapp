@@ -2951,8 +2951,10 @@ async function descargar(nombre, contenido, tipo, mensajeOk) {
     } catch (err) {
       const code = err && err.code;
       if (code === 'declined') return;
-      if (code === 'extension_not_enabled' || code === 'rejected_extension')
-        avisoAlmacen('Esta vista no permite descargar archivos <b>.html</b>. Generá la copia desde la app abierta como archivo.');
+      if (code === 'extension_not_enabled' || code === 'rejected_extension') {
+        const ext = (nombre.match(/\.\w+$/) || ['.html'])[0];
+        avisoAlmacen(`Esta vista no permite descargar archivos <b>${esc(ext)}</b>. Probá desde la app abierta como archivo (PilatesLab.html).`);
+      }
       else if (code) avisoAlmacen('No se pudo descargar (' + esc(code) + ').');
     }
     return;

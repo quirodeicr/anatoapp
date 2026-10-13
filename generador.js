@@ -39,7 +39,7 @@ const PRINCIPIOS = [
 const PLANOS_GEN = ['sagital', 'frontal', 'transversal'];
 const NIVELES_GEN = [['principiante', 'Principiante'], ['intermedio', 'Intermedio'], ['avanzado', 'Avanzado'], ['super', 'Súper avanzado']];
 const CUIDADOS_GEN = [
-  ['osteo', 'Osteoporosis'], ['lumbar', 'Zona lumbar'], ['cuello', 'Cuello y hombros'],
+  ['movilidad', 'Poca movilidad'], ['osteo', 'Osteoporosis'], ['lumbar', 'Zona lumbar'], ['cuello', 'Cuello y hombros'],
   ['muneca', 'Muñecas'], ['rodilla', 'Rodillas'], ['cadera', 'Cadera']
 ];
 /* props: lo que dicen las fichas (bola, banda, aro, mancuerna…) en los de la app */
@@ -190,19 +190,49 @@ function permitidoGen(e, cfg) {
   const zonas = Object.keys(i.prec).join(' ');
   for (const z of ['lumbar', 'cuello', 'muneca', 'rodilla', 'cadera']) if (cu.has(z) && zonas.includes(z) && i.nivel >= 2) return false;
   if (cu.has('cuello') && /hombro/.test(zonas) && i.nivel >= 2) return false;
+  /* poca movilidad: nada de lo avanzado (piden mucho rango) ni el Seal (manos por dentro de las piernas
+     tomando los tobillos, sin modificación en el manual) */
+  if (cu.has('movilidad') && (i.nivel >= 2 || e.id === 'mat1-e24')) return false;
   /* props: los que el ejercicio necesita tienen que estar */
   if (i.requiere.some(t => cfg.sinProps || !cfg.props.includes(t))) return false;
   return true;
 }
-const ZONA_GEN = { osteo: /osteopor/, lumbar: /lumbar|espalda/, cuello: /cervical|cuello|hombro|subacromial/, muneca: /muneca/, rodilla: /rodilla|patelo/, cadera: /cadera/ };
+const ZONA_GEN = { movilidad: /(?!)/, osteo: /osteopor/, lumbar: /lumbar|espalda/, cuello: /cervical|cuello|hombro|subacromial/, muneca: /muneca/, rodilla: /rodilla|patelo/, cadera: /cadera/ };
 const contraGen = c => String(c || '').split(/,|;/).map(t => norm(t)).filter(Boolean);
 function adaptacionGen(e, cfg) {
-  const i = infoGen(e.id), cu = cfg.cuidados;
+  const i = infoGen(e.id), cu = cfg.cuidados, xs = [];
   const agudo = String(i.contra || '').split(/,|;/).map(t => t.trim()).find(t => /agud/i.test(t) && cu.some(z => ZONA_GEN[z].test(norm(t))));
-  if (agudo) return `No hacerlo con ${agudo.charAt(0).toLowerCase()}${agudo.slice(1)} (tu planilla).`;
-  for (const [k, t] of Object.entries(i.prec || {})) if (cu.some(z => k.includes(z) || (z === 'cuello' && k.includes('hombro')))) return t;
-  if (cu.includes('osteo') && /modificar/i.test(e.osteo || '')) { const b = BB.ejercicios.find(x => x.id === e.id); return (b && b.osteoTxt) || 'Modificar con osteoporosis.'; }
-  return '';
+  if (agudo) xs.push(`No hacerlo con ${agudo.charAt(0).toLowerCase()}${agudo.slice(1)} (tu planilla).`);
+  const zona = Object.entries(i.prec || {}).find(([k]) => cu.some(z => k.includes(z) || (z === 'cuello' && k.includes('hombro'))));
+  if (zona) xs.push(zona[1]);
+  if (cu.includes('osteo') && /modificar/i.test(e.osteo || '')) { const b = BB.ejercicios.find(x => x.id === e.id); xs.push((b && b.osteoTxt) || 'Modificar con osteoporosis.'); }
+  if (cu.includes('movilidad')) { const m = movilidadGen(e); if (m && !xs.includes(m)) xs.push(m); }
+  return xs.join(' · ');
+}
+/* poca movilidad: la modificación del manual para isquiotibiales tensos o rodillas flexionadas, o
+   la de la posición inicial; si el manual no tiene, una según la posición (elaboración propia) */
+const MOVILIDAD_POS = {
+  sentado: 'Sentarse sobre un mat enrollado o un almohadón, con las rodillas flexionadas si la pelvis se va hacia atrás.',
+  supino: 'Rango cómodo; piernas en mesa o rodillas flexionadas si los isquiotibiales tiran.',
+  prono: 'Rango chico de extensión, sin forzar.',
+  costado: 'Rango chico; la cabeza apoyada en el brazo o en un almohadón.',
+  inversion: 'Rango cómodo, sin forzar.', pie: 'Rango cómodo, sin forzar.', cuatro: 'Rango cómodo, sin forzar.', plancha: 'Rango cómodo, sin forzar.'
+};
+function movilidadGen(e) {
+  /* en Pre-Pilates: solo sentado y acostado de costado (no en las tablas laterales) */
+  if (e.pm) return e.pos === 'sentado' || (e.pos === 'costado' && !/tabla|plank/i.test(e.n)) ? MOVILIDAD_POS[e.pos] : '';
+  /* rodar en C: no se sienta sobre un soporte */
+  if (/rolling|rocker/i.test(e.n)) return 'Tomarse por detrás de los muslos y rodar poco, sin llevar el peso al cuello.';
+  const b = BB.ejercicios.find(x => x.id === e.id) || {};
+  const vars = (b.var || []).filter(v => v && typeof v === 'object');
+  for (const re of [/isquiotibiales tensos/i, /rodillas flexionadas/i, /mesa/i, /roll down/i]) {
+    const v = vars.find(x => re.test(x.nombre || ''));
+    if (v) return `${v.nombre}: ${String(v.descripcion || '').replace(/\.?$/, '.')}`;
+  }
+  const ini = String(b.inicial || '').match(/(con )?isquiotibiales tensos:[^.]*\./i);
+  if (ini) return ini[0].charAt(0).toUpperCase() + ini[0].slice(1);
+  const lim = Object.values(b.prec || {}).find(t => /limitar|rango/i.test(t));
+  return lim || MOVILIDAD_POS[e.pos] || '';
 }
 
 /* ---------- tiempo de cada ejercicio (el mismo que estima Mis sesiones) ---------- */
@@ -421,7 +451,8 @@ function crearClaseGenerada(cfg, plan = null) {
   const g = generarClase(cfg);
   const focos = [];
   if (cfg.cuidados.includes('osteo')) focos.push('Osteoporosis: cuidar la flexión');
-  const datos = { nombre: `Clase de ${cfg.dur} min · ${nomNivelGen(cfg.nivel)}`, dur: cfg.dur, focos, items: g.items,
+  const cuidados = cfg.cuidados.map(c => (CUIDADOS_GEN.find(x => x[0] === c) || [c, c])[1].toLowerCase());
+  const datos = { nombre: `Clase de ${cfg.dur} min · ${nomNivelGen(cfg.nivel)}${cuidados.length ? ' · ' + cuidados.join(', ') : ''}`, dur: cfg.dur, focos, items: g.items,
     notas: `Generada: ${resumenCfgGen(cfg, g.orden)}.${g.motivos.map(m => ' ' + m.txt).join('')}`, gen: { ...JSON.parse(JSON.stringify(cfg)), semilla: g.semilla, orden2: g.orden } };
   if (plan) { Object.assign(plan, datos, { editado: Date.now() }); guardar(); return plan; }
   return nuevoPlan(datos);
@@ -472,7 +503,7 @@ function vGenerador() {
     <section class="gen-sec"><h2>Darle más peso a un principio <small>(opcional)</small></h2><div class="chips" role="group" aria-label="Énfasis">${chip('enfasis', '', 'Equilibrada', !cfg.enfasis)}${PRINCIPIOS.map(p => chip('enfasis', p.k, `${p.ico} ${p.corto}`, cfg.enfasis === p.k)).join('')}</div>
       <p class="micro">Siempre están los cinco; el elegido suma más ejercicios.</p></section>
     <section class="gen-sec"><h2>Cuidados <small>(opcional)</small></h2><div class="chips" role="group" aria-label="Cuidados">${CUIDADOS_GEN.map(([k, t]) => chip('cuidado', k, t, cfg.cuidados.includes(k))).join('')}</div>
-      <p class="micro">Saca lo que el manual pide evitar y anota la adaptación del manual en cada ejercicio que la tiene. No reemplaza la indicación de un profesional de la salud.</p></section>
+      <p class="micro">Saca lo que el manual pide evitar y anota la adaptación del manual en cada ejercicio que la tiene. Con <b>poca movilidad</b> usa las modificaciones del manual para isquiotibiales tensos (mat enrollado, rodillas flexionadas, roll down) y deja afuera lo que pide mucho rango; suele convenir darle más peso a 🌿 Movilidad. No reemplaza la indicación de un profesional de la salud.</p></section>
     ${previa()}
     <div class="fila pl-acc"><button type="button" class="btn3d verde" id="genIr">✨ Generar la clase</button></div>`;
   $('#genVolver').onclick = () => { genAbierto = false; vPlanes(); };

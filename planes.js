@@ -148,6 +148,7 @@ function vPlan(id) {
     ${p.items.length ? `<div class="gen-princ" aria-label="Los 5 principios en esta sesión">${principiosPlanHTML(p)}</div>` : ''}
     <div class="fila pl-acc">
       <button type="button" class="btn3d verde" id="plRevisar" ${p.items.length ? '' : 'disabled'}>Revisar sesión</button>
+      <button type="button" class="btn ghost" id="plExportar" ${p.items.length ? '' : 'disabled'}>⬇️ Word, Excel o PDF</button>
       <button type="button" class="btn ghost" id="plCopiar" ${p.items.length ? '' : 'disabled'}>Copiar como texto</button>
       <button type="button" class="btn ghost" id="plDup">Duplicar</button>
       <button type="button" class="btn ghost" id="plBorrar">Borrar</button>
@@ -186,6 +187,7 @@ function vPlan(id) {
   };
   if (gc) gc.onclick = () => { const c = cfgGen(); Object.assign(c, JSON.parse(JSON.stringify(p.gen))); delete c.semilla; delete c.orden2; guardar(); abrirGenerador(); };
   $('#plCopiar').onclick = () => copiarPlan(p);
+  $('#plExportar').onclick = () => abrirExportar(p);
   $('#plDup').onclick = () => { const c = nuevoPlan({ ...JSON.parse(JSON.stringify(p)), nombre: p.nombre + ' (copia)' }); planAbierto = c.id; vPlan(c.id); toast('Duplicada: estás editando la copia.', 'toast-suave'); };
   $('#plBorrar').onclick = async () => {
     if (!(await confirmar(`¿Borrar la sesión "${p.nombre}"?`, 'Borrar'))) return;
