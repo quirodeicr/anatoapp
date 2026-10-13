@@ -44,7 +44,7 @@ const PLANOS_GEN = ['sagital', 'frontal', 'transversal'];
 const NIVELES_GEN = [['principiante', 'Principiante'], ['intermedio', 'Intermedio'], ['avanzado', 'Avanzado'], ['super', 'Súper avanzado']];
 const CUIDADOS_GEN = [
   ['movilidad', 'Poca movilidad'], ['osteo', 'Osteoporosis'], ['lumbar', 'Zona lumbar'], ['cuello', 'Cuello y hombros'],
-  ['muneca', 'Muñecas'], ['rodilla', 'Rodillas'], ['cadera', 'Cadera']
+  ['muneca', 'Muñecas'], ['codo', 'Codos'], ['rodilla', 'Rodillas'], ['cadera', 'Cadera']
 ];
 /* props: lo que dicen las fichas (bola, banda, aro, mancuerna…) en los de la app */
 const PROP_TIPOS = [
@@ -132,8 +132,14 @@ function analizarEjGen(e) {
     recupera = /spine stretch|saw|mermaid/.test(n);
     texto = [b.n, principal, ...(ficha.obj || []), ...(b.prop || [])].join(' ');
   }
-  /* props de las fotos de Mat 3 que las fichas no nombran */
-  for (const t of PROPS_MAT3[e.id] || []) if (!props.some(x => x.tipo === t)) props.push({ tipo: t, txt: `Con ${t.toLowerCase()} (como en tus fotos de Mat 3)`, modo: '' });
+  /* Mat 3: lo que dice tu planilla de cada prop (dónde va y para qué) y los props de las fotos */
+  const m3 = typeof MAT3 !== 'undefined' ? MAT3[e.id] : null;
+  const de3 = m3 ? [...new Set([...(m3.conFoto || []), ...Object.keys(m3.props || {})])] : (PROPS_MAT3[e.id] || []);
+  for (const t of de3) {
+    const txt3 = m3 && m3.props ? m3.props[t] : '', ya = props.find(x => x.tipo === t);
+    if (ya) { if (txt3 && !ya.txt.includes(txt3)) ya.txt += ` · Mat 3: ${txt3}`; }
+    else props.push({ tipo: t, txt: txt3 ? `${t} (Mat 3): ${txt3}` : `Con ${t.toLowerCase()} (como en tus fotos de Mat 3)`, modo: '' });
+  }
   pri.forEach(k => sec.add(k));
   const n = norm(e.n);
   const elementos = new Set(ELEMENTOS_CLASE.filter(el => el.re.test(n)).map(el => el.k));
@@ -192,7 +198,10 @@ function permitidoGen(e, cfg) {
   if (contraGen(i.contra).some(t => !/agud/.test(t) && cfg.cuidados.some(z => ZONA_GEN[z].test(t)))) return false;
   /* con cuidados, lo más exigente que el manual marca para esa zona queda afuera; lo demás lleva la adaptación */
   const zonas = Object.keys(i.prec).join(' ');
-  for (const z of ['lumbar', 'cuello', 'muneca', 'rodilla', 'cadera']) if (cu.has(z) && zonas.includes(z) && i.nivel >= 2) return false;
+  for (const z of ['lumbar', 'cuello', 'muneca', 'codo', 'rodilla', 'cadera']) if (cu.has(z) && zonas.includes(z) && i.nivel >= 2) return false;
+  /* lo que tu planilla de Mat 3 pide evitar */
+  const obs3 = typeof MAT3 !== 'undefined' && MAT3[e.id] ? norm(MAT3[e.id].observaciones) : '';
+  if (obs3 && ((cu.has('osteo') && /osteopor/.test(obs3)) || (/lesiones cervicales/.test(obs3) && (cu.has('cuello') || cu.has('lumbar'))))) return false;
   if (cu.has('cuello') && /hombro/.test(zonas) && i.nivel >= 2) return false;
   /* poca movilidad: nada de lo avanzado (piden mucho rango) ni el Seal (manos por dentro de las piernas
      tomando los tobillos, sin modificación en el manual) */
@@ -204,7 +213,7 @@ function permitidoGen(e, cfg) {
   if (i.requiere.some(t => cfg.sinProps || !cfg.props.includes(t))) return false;
   return true;
 }
-const ZONA_GEN = { movilidad: /(?!)/, osteo: /osteopor/, lumbar: /lumbar|espalda/, cuello: /cervical|cuello|hombro|subacromial/, muneca: /muneca/, rodilla: /rodilla|patelo/, cadera: /cadera/ };
+const ZONA_GEN = { movilidad: /(?!)/, codo: /codo/, osteo: /osteopor/, lumbar: /lumbar|espalda/, cuello: /cervical|cuello|hombro|subacromial/, muneca: /muneca/, rodilla: /rodilla|patelo/, cadera: /cadera/ };
 const contraGen = c => String(c || '').split(/,|;/).map(t => norm(t)).filter(Boolean);
 function adaptacionGen(e, cfg, ladoEj = '') {
   const i = infoGen(e.id), cu = cfg.cuidados, xs = [], lc = cfg.ladoCuidado || {};
@@ -213,10 +222,19 @@ function adaptacionGen(e, cfg, ladoEj = '') {
   const agudo = String(i.contra || '').split(/,|;/).map(t => t.trim()).find(t => /agud/i.test(t) && cu.some(z => ZONA_GEN[z].test(norm(t))));
   if (agudo) xs.push(`No hacerlo con ${agudo.charAt(0).toLowerCase()}${agudo.slice(1)} (tu planilla).`);
   const zona = Object.entries(i.prec || {}).find(([k]) => cu.some(z => k.includes(z) || (z === 'cuello' && k.includes('hombro'))));
-  if (zona) { const z = ['rodilla', 'cadera', 'muneca'].find(q => cu.includes(q) && zona[0].includes(q)); xs.push(z ? conLado(z, zona[1]) : zona[1]); }
+  if (zona) { const z = ZONAS_LADO.find(q => cu.includes(q) && zona[0].includes(q)); xs.push(z ? conLado(z, zona[1]) : zona[1]); }
+  /* lo que dice tu planilla de Mat 3 para esa zona */
+  const obs3 = typeof MAT3 !== 'undefined' && MAT3[e.id] ? MAT3[e.id].observaciones : '';
+  if (obs3) {
+    const ZONA3 = { muneca: /muneca|desviacion/, codo: /codo/, cuello: /cervical|cuello|hombro/, lumbar: /lumbar|columna/ };
+    const frases = obs3.split(/\.\s*|,\s*(?=[A-ZÁÉÍÓÚ])/).map(f => f.trim()).filter(f => f && cu.some(z => ZONA3[z] && ZONA3[z].test(norm(f))));
+    if (frases.length) xs.push(`Mat 3: ${frases.join('. ')}.`);
+  }
   /* apoyos que cargan la zona (elaboración propia): rodillas en cuatro apoyos y de rodillas, muñecas en planchas */
   if (cu.includes('rodilla') && (e.pos === 'cuatro' || /kneeling|de rodillas|sobre las rodillas/i.test(e.n)))
     xs.push(lc.rodilla ? `Almohadón o el mat doble bajo la rodilla ${LADO_TXT[lc.rodilla]}.` : 'Almohadón o el mat doble bajo las rodillas.');
+  if (cu.includes('codo') && (e.pos === 'cuatro' || e.pos === 'plancha' || /plank|tabla|push up|leg pull/i.test(e.n)) && !/codo|antebrazo|forearm/i.test(e.n))
+    xs.push(lc.codo ? `Codo ${LADO_TXT[lc.codo]}: sin trabarlo (apenas flexionado) o pasar a los antebrazos.` : 'Codos sin trabar (apenas flexionados) o pasar a los antebrazos.');
   if (cu.includes('muneca') && (e.pos === 'cuatro' || e.pos === 'plancha' || /plank|tabla|push up|leg pull/i.test(e.n)) && !/codo|antebrazo|forearm/i.test(e.n))
     xs.push(lc.muneca ? `Muñeca ${LADO_TXT[lc.muneca]}: apoyar esa mano sobre el puño cerrado o pasar a los antebrazos.` : 'Apoyar sobre los puños cerrados o pasar a los antebrazos.');
   /* de costado con la rodilla de un lado: abajo (apoyada) o arriba (la que trabaja) */
@@ -314,7 +332,8 @@ function ladosGen(orden) {
   return null;
 }
 const LADO_TXT = { der: 'derecha', izq: 'izquierda' };
-const ZONA_NOM = { rodilla: 'Rodilla', cadera: 'Cadera', muneca: 'Muñeca' };
+const ZONA_NOM = { rodilla: 'Rodilla', cadera: 'Cadera', muneca: 'Muñeca', codo: 'Codo' };
+const ZONAS_LADO = ['rodilla', 'cadera', 'muneca', 'codo'];
 
 /* ---------- generar ---------- */
 function generarClase(cfg, semilla = Date.now()) {
@@ -434,7 +453,7 @@ function armarClase(cfg, orden, r) {
     const ops = opsDe(e);
     if (enMano) {
       const o = ops.find(p => p.tipo === enMano);
-      if (o && quedan > 0) { quedan--; x.prop = o.tipo; x.nota = o.txt.slice(0, 140); if (!quedan) { enMano = ''; pausa = 1 + Math.floor(r() * 2); } return x; }
+      if (o && quedan > 0) { quedan--; x.prop = o.tipo; x.propModo = o.modo || ''; x.nota = o.txt.slice(0, 160); if (!quedan) { enMano = ''; pausa = 1 + Math.floor(r() * 2); } return x; }
       enMano = ''; pausa = 1;
     }
     if (pausa > 0) { pausa--; return x; }
@@ -442,7 +461,7 @@ function armarClase(cfg, orden, r) {
     /* el prop que más ejercicios seguidos puede acompañar */
     const largo = t => { let n = 0; for (let q = k + 1; q < items.length && opsDe(items[q].e).some(p => p.tipo === t); q++) n++; return n; };
     const o = [...ops].sort((a, b) => largo(b.tipo) - largo(a.tipo) + (r() - 0.5))[0];
-    x.prop = o.tipo; x.nota = o.txt.slice(0, 140); enMano = o.tipo; quedan = 1 + Math.floor(r() * 3);
+    x.prop = o.tipo; x.propModo = o.modo || ''; x.nota = o.txt.slice(0, 160); enMano = o.tipo; quedan = 1 + Math.floor(r() * 3);
     return x;
   });
   /* si no hay más ejercicios para estas opciones y posiciones, se llega al tiempo con las
@@ -531,7 +550,7 @@ function crearClaseGenerada(cfg, plan = null) {
   const cuidados = cfg.cuidados.map(c => nomCuidadoGen(c, cfg));
   const datos = { nombre: `Clase de ${cfg.dur} min · ${nomNivelGen(cfg.nivel)}${cuidados.length ? ' · ' + cuidados.join(', ') : ''}`, dur: cfg.dur, focos, items: g.items,
     para: h ? h.nombre : (plan ? plan.para : ''), ...(h ? { persona: h.id } : {}),
-    notas: `Generada: ${resumenCfgGen(cfg, g.orden)}.${h && h.gusta ? ` Le gusta, objetivos: ${h.gusta.trim()}.` : ''}${evitar.length ? ' Varía respecto de sus últimas clases.' : ''}${g.motivos.map(m => ' ' + m.txt).join('')}`, gen: { ...JSON.parse(JSON.stringify(cfg)), semilla: g.semilla, orden2: g.orden } };
+    notas: `Generada: ${resumenCfgGen(cfg, g.orden)}.${h && h.gusta ? ` Le gusta, objetivos: ${h.gusta.trim().replace(/\.+$/, '')}.` : ''}${evitar.length ? ' Varía respecto de sus últimas clases.' : ''}${g.motivos.map(m => ' ' + m.txt).join('')}`, gen: { ...JSON.parse(JSON.stringify(cfg)), semilla: g.semilla, orden2: g.orden } };
   if (plan) { Object.assign(plan, datos, { editado: Date.now() }); guardar(); return plan; }
   return nuevoPlan(datos);
 }
@@ -566,7 +585,7 @@ function vGenerador() {
   app().innerHTML = `
     <button type="button" class="volver" id="genVolver">← Mis sesiones</button>
     <h1 class="tit">Generar una clase</h1>
-    <p class="sub">La app arma una clase completa con tu material: los <b>5 principios del movimiento</b>, los elementos de una clase balanceada, los tres planos y la fluidez entre posiciones. Elegí lo que quieras; lo demás lo decide ella.</p>
+    <p class="sub">La app arma una clase completa con todo tu material (Principios del Movimiento y Pre-Pilates, Mat 1, Mat 2 y Mat 3): los <b>5 principios del movimiento</b>, los elementos de una clase balanceada, los tres planos y la fluidez entre posiciones. Elegí lo que quieras; lo demás lo decide ella.</p>
 
     ${typeof personas === 'function' && personas().length ? `<section class="gen-sec"><h2>Para</h2><div class="chips" role="group" aria-label="Para">${chip('persona', '', 'Sin perfil', !cfg.persona)}${personas().map(h => chip('persona', h.id, '👤 ' + esc(h.nombre || 'Sin nombre'), cfg.persona === h.id)).join('')}</div>
       ${cfg.persona && personaDe(cfg.persona) ? '<p class="micro">Cargados su nivel, duración, cuidados, props y principio. Lo que cambies acá no cambia su perfil; la clase varía respecto de sus últimas dos.</p>' : ''}</section>` : ''}
@@ -575,7 +594,7 @@ function vGenerador() {
       <p class="micro">Principiante: sin inversiones, sin bajar las piernas largas del todo ni apoyo en un brazo (como pide el manual). Las inversiones aparecen desde Avanzado.</p></section>
     <section class="gen-sec"><h2>Props</h2><div class="chips" role="group" aria-label="Props">${chip('sinprops', '1', 'Sin props', cfg.sinProps)}${PROPS_PLAN.map(t => chip('prop', t, t, !cfg.sinProps && cfg.props.includes(t))).join('')}</div>
       ${!cfg.sinProps && cfg.props.length ? `<div class="chips gen-uso" role="group" aria-label="Para qué">${[['auto', 'Según el nivel'], ['asiste', 'Que asistan'], ['resiste', 'Que resistan']].map(([k, t]) => chip('uso', k, t, cfg.uso === k)).join('')}</div>` : ''}
-      <p class="micro">Se usan donde tus fichas de Mat 1 y Mat 2 (accesorios que asisten o resisten) y tus fotos de Mat 3 los muestran, agrupados para no cambiar de prop a cada rato.</p></section>
+      <p class="micro">Se usan donde tus fichas de Mat 1 y Mat 2 (accesorios que asisten o resisten) y tu planilla de Mat 3 (qué prop, dónde va y para qué) los muestran, agrupados para no cambiar de prop a cada rato.</p></section>
     <section class="gen-sec"><h2>Orden de las posiciones</h2>
       <div class="chips" role="group" aria-label="Orden">${[['manual', 'Como el manual'], ['elegido', 'Elegir el orden'], ['azar', 'Al azar']].map(([k, t]) => chip('orden', k, t, cfg.orden === k)).join('')}</div>
       ${cfg.orden === 'manual' ? (cfg.lados !== false ? '<p class="micro">De pie → cuatro apoyos → supino → sentado → de costado (lado derecho) → prono → de costado (lado izquierdo) → plancha → cierre de pie: el orden del manual (Mat 1, págs. 65–67) con los lados intercalados.</p>' : '<p class="micro">De pie → cuatro apoyos → supino → sentado → prono → plancha → de costado → cierre de pie (Mat 1, págs. 65–67).</p>')
@@ -586,8 +605,8 @@ function vGenerador() {
     <section class="gen-sec"><h2>Fluidez</h2><div class="chips" role="group" aria-label="Fluidez">${chip('lados', '1', '↔️ Intercalar los lados', cfg.lados !== false)}</div>
       <p class="micro">${cfg.lados !== false ? 'De costado sobre el lado derecho, después boca abajo (o boca arriba) y de costado sobre el izquierdo, en vez de los dos lados seguidos.' : 'Los dos lados de costado seguidos.'} Siempre: de pie solo al empezar o al terminar (no sube y vuelve a bajar), cada cambio con su transición.</p></section>
     <section class="gen-sec"><h2>Cuidados <small>(opcional)</small></h2><div class="chips" role="group" aria-label="Cuidados">${CUIDADOS_GEN.map(([k, t]) => chip('cuidado', k, t, cfg.cuidados.includes(k))).join('')}</div>
-      ${['rodilla', 'cadera', 'muneca'].filter(z => cfg.cuidados.includes(z)).map(z => `<div class="chips gen-lado" role="group" aria-label="${ZONA_NOM[z]}: qué lado"><span>${ZONA_NOM[z]}:</span>${[['', 'Las dos'], ['der', 'Derecha'], ['izq', 'Izquierda']].map(([k, t]) => chip('ladoCuidado', z + ':' + k, t, ((cfg.ladoCuidado || {})[z] || '') === k)).join('')}</div>`).join('')}
-      <p class="micro">Saca lo que el manual pide evitar y anota la adaptación del manual en cada ejercicio que la tiene. Con <b>poca movilidad</b> usa las modificaciones del manual para isquiotibiales tensos (mat enrollado, rodillas flexionadas, roll down) y deja afuera lo que pide mucho rango; suele convenir darle más peso a 🌿 Movilidad. No reemplaza la indicación de un profesional de la salud.</p></section>
+      ${ZONAS_LADO.filter(z => cfg.cuidados.includes(z)).map(z => `<div class="chips gen-lado" role="group" aria-label="${ZONA_NOM[z]}: qué lado"><span>${ZONA_NOM[z]}:</span>${[['', 'Las dos'], ['der', 'Derecha'], ['izq', 'Izquierda']].map(([k, t]) => chip('ladoCuidado', z + ':' + k, t, ((cfg.ladoCuidado || {})[z] || '') === k)).join('')}</div>`).join('')}
+      <p class="micro">Saca lo que el manual y tu planilla de Mat 3 piden evitar y anota la adaptación (del manual, de Mat 3 o, si no hay, una propia) en cada ejercicio. Con <b>poca movilidad</b> usa las modificaciones del manual para isquiotibiales tensos (mat enrollado, rodillas flexionadas, roll down) y deja afuera lo que pide mucho rango; suele convenir darle más peso a 🌿 Movilidad. No reemplaza la indicación de un profesional de la salud.</p></section>
     ${previa()}
     <div class="fila pl-acc"><button type="button" class="btn3d verde" id="genIr">✨ Generar la clase</button></div>`;
   $('#genVolver').onclick = () => { genAbierto = false; vPlanes(); };

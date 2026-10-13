@@ -16,7 +16,7 @@
    ============================================================ */
 'use strict';
 
-const EXP_BASE = { formato: 'docx', mov: 'no', img: 'no', reps: true, trans: true, princ: true, adap: true, notas: true, tilde: false, papel: 'carta' };
+const EXP_BASE = { doc: 'clase', copias: 2, formato: 'docx', mov: 'no', img: 'no', reps: true, trans: true, princ: true, adap: true, notas: true, tilde: false, papel: 'carta' };
 const EXP_PRESETS = [
   ['nombres', 'Solo nombres', { mov: 'no', img: 'no' }],
   ['movs', 'Nombres y movimientos', { mov: 'breve', img: 'no' }],
@@ -149,17 +149,52 @@ const coreXml = titulo => `<?xml version="1.0" encoding="UTF-8" standalone="yes"
 
 /* ---------- Word (.docx) ---------- */
 const EMU_PX = 9525;
-function docxArmar(D, cfg, imgs) {
-  const carta = cfg.papel !== 'a4', pgW = carta ? 12240 : 11906, pgH = carta ? 15840 : 16838, mar = 1000, ancho = pgW - 2 * mar;
+/* papel en twips: carta o A4, con márgenes de 1000 */
+const papelDocx = cfg => { const carta = cfg.papel !== 'a4', pgW = carta ? 12240 : 11906, pgH = carta ? 15840 : 16838, mar = 1000; return { pgW, pgH, mar, ancho: pgW - 2 * mar }; };
+/* las piezas de un documento de Word (párrafos, celdas, imágenes); las imágenes se juntan en `medios` */
+function docxKit() {
   const medios = [];
   let idDib = 1;
   const run = (t, o = {}) => `<w:r><w:rPr>${o.b ? '<w:b/>' : ''}${o.i ? '<w:i/>' : ''}${o.color ? `<w:color w:val="${o.color}"/>` : ''}${o.sz ? `<w:sz w:val="${o.sz}"/><w:szCs w:val="${o.sz}"/>` : ''}</w:rPr><w:t xml:space="preserve">${xmlEsc(t)}</w:t></w:r>`;
-  const par = (runs, o = {}) => `<w:p><w:pPr>${o.estilo ? `<w:pStyle w:val="${o.estilo}"/>` : ''}${o.keep ? '<w:keepNext/>' : ''}<w:spacing w:before="${o.antes || 0}" w:after="${o.despues == null ? 60 : o.despues}"/>${o.jc ? `<w:jc w:val="${o.jc}"/>` : ''}</w:pPr>${runs}</w:p>`;
+  const par = (runs, o = {}) => `<w:p><w:pPr>${o.estilo ? `<w:pStyle w:val="${o.estilo}"/>` : ''}${o.keep ? '<w:keepNext/>' : ''}${o.salto ? '<w:pageBreakBefore/>' : ''}<w:spacing w:before="${o.antes || 0}" w:after="${o.despues == null ? 60 : o.despues}"/>${o.jc ? `<w:jc w:val="${o.jc}"/>` : ''}</w:pPr>${runs}</w:p>`;
   const dibujo = (im, anchoPx) => {
     const n = idDib++, rid = 'rIdImg' + n, cx = Math.round(anchoPx * EMU_PX), cy = Math.round(anchoPx * im.h / im.w * EMU_PX);
     medios.push({ name: `word/media/img${n}.jpeg`, data: im.bytes, rid, file: `media/img${n}.jpeg` });
     return `<w:r><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0"><wp:extent cx="${cx}" cy="${cy}"/><wp:docPr id="${n}" name="Imagen ${n}"/><wp:cNvGraphicFramePr><a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"/></wp:cNvGraphicFramePr><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:nvPicPr><pic:cNvPr id="${n}" name="img${n}.jpeg"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="${rid}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${cx}" cy="${cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r>`;
   };
+  const celda = (contenido, w, o = {}) => `<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${o.span ? `<w:gridSpan w:val="${o.span}"/>` : ''}${o.fill ? `<w:shd w:val="clear" w:color="auto" w:fill="${o.fill}"/>` : ''}<w:vAlign w:val="${o.centro ? 'center' : 'top'}"/></w:tcPr>${contenido || par('')}</w:tc>`;
+  /* alto mínimo de la fila en twips (renglones para escribir a mano) */
+  const filaTabla = (celdas, o = {}) => `<w:tr><w:trPr><w:cantSplit/>${o.alto ? `<w:trHeight w:val="${o.alto}"/>` : ''}${o.cab ? '<w:tblHeader/>' : ''}</w:trPr>${celdas}</w:tr>`;
+  const borde = t => `<w:${t} w:val="single" w:sz="4" w:space="0" w:color="BFBFBF"/>`;
+  const tabla = (anchos, filas) => `<w:tbl><w:tblPr><w:tblW w:w="${anchos.reduce((a, b) => a + b, 0)}" w:type="dxa"/><w:tblBorders>${['top', 'left', 'bottom', 'right', 'insideH', 'insideV'].map(borde).join('')}</w:tblBorders><w:tblLayout w:type="fixed"/><w:tblCellMar><w:top w:w="60" w:type="dxa"/><w:left w:w="90" w:type="dxa"/><w:bottom w:w="60" w:type="dxa"/><w:right w:w="90" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>${anchos.map(w => `<w:gridCol w:w="${w}"/>`).join('')}</w:tblGrid>${filas}</w:tbl>`;
+  return { medios, run, par, dibujo, celda, filaTabla, tabla };
+}
+/* el paquete .docx: documento, estilos, pie con el número de página e imágenes */
+function docxPaquete(cuerpo, K, titulo, cfg) {
+  const { pgW, pgH, mar } = papelDocx(cfg), run = K.run, medios = K.medios;
+  const NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"';
+  const documento = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document ${NS}><w:body>${cuerpo}<w:sectPr><w:footerReference w:type="default" r:id="rIdPie"/><w:pgSz w:w="${pgW}" w:h="${pgH}"/><w:pgMar w:top="${mar}" w:right="${mar}" w:bottom="${mar}" w:left="${mar}" w:header="600" w:footer="500" w:gutter="0"/></w:sectPr></w:body></w:document>`;
+  const pie = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:ftr ${NS}><w:p><w:pPr><w:jc w:val="right"/></w:pPr>${run(sinEmoji(titulo) + ' · Pilates Lab · página ', { sz: 16, color: '888888' })}<w:r><w:rPr><w:sz w:val="16"/><w:color w:val="888888"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:sz w:val="16"/><w:color w:val="888888"/></w:rPr><w:instrText xml:space="preserve"> PAGE </w:instrText></w:r><w:r><w:rPr><w:sz w:val="16"/><w:color w:val="888888"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:sz w:val="16"/><w:color w:val="888888"/></w:rPr><w:t>1</w:t></w:r><w:r><w:rPr><w:sz w:val="16"/><w:color w:val="888888"/></w:rPr><w:fldChar w:fldCharType="end"/></w:r></w:p></w:ftr>`;
+  const estilos = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:eastAsia="Calibri" w:cs="Calibri"/><w:sz w:val="21"/><w:szCs w:val="21"/><w:lang w:val="es-419"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="60" w:line="259" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/></w:style><w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:rPr><w:b/><w:color w:val="1F6F4A"/><w:sz w:val="40"/><w:szCs w:val="40"/></w:rPr></w:style><w:style w:type="table" w:default="1" w:styleId="TableNormal"><w:name w:val="Normal Table"/><w:tblPr><w:tblInd w:w="0" w:type="dxa"/><w:tblCellMar><w:top w:w="0" w:type="dxa"/><w:left w:w="108" w:type="dxa"/><w:bottom w:w="0" w:type="dxa"/><w:right w:w="108" w:type="dxa"/></w:tblCellMar></w:tblPr></w:style></w:styles>`;
+  const tipos = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="jpeg" ContentType="image/jpeg"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/><Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>`;
+  const rels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/></Relationships>`;
+  const docRels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rIdEst" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/><Relationship Id="rIdPie" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer1.xml"/>${medios.map(m => `<Relationship Id="${m.rid}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="${m.file}"/>`).join('')}</Relationships>`;
+  return armarZip([
+    { name: '[Content_Types].xml', data: tipos }, { name: '_rels/.rels', data: rels }, { name: 'docProps/core.xml', data: coreXml(titulo) },
+    { name: 'word/document.xml', data: documento }, { name: 'word/styles.xml', data: estilos }, { name: 'word/footer1.xml', data: pie },
+    { name: 'word/_rels/document.xml.rels', data: docRels }, ...medios.map(m => ({ name: m.name, data: m.data }))
+  ]);
+}
+
+
+function docxArmar(D, cfg, imgs) {
+  const { ancho } = papelDocx(cfg), K = docxKit(), { run, par, dibujo, celda, filaTabla } = K;
   /* columnas: casilla, Nº, imagen, ejercicio (con el movimiento), repeticiones, prop */
   const conImg = cfg.img !== 'no', seq = cfg.img === 'secuencia', conReps = cfg.reps;
   const cols = [];
@@ -169,8 +204,6 @@ function docxArmar(D, cfg, imgs) {
   const fijas = cols.reduce((a, c) => a + c[1], 0) + (conReps ? 1500 + 1500 : 0);
   cols.push(['Ejercicio', ancho - fijas]);
   if (conReps) cols.push(['Repeticiones', 1500], ['Prop', 1500]);
-  const celda = (contenido, w, o = {}) => `<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${o.span ? `<w:gridSpan w:val="${o.span}"/>` : ''}${o.fill ? `<w:shd w:val="clear" w:color="auto" w:fill="${o.fill}"/>` : ''}<w:vAlign w:val="${o.centro ? 'center' : 'top'}"/></w:tcPr>${contenido || par('')}</w:tc>`;
-  const filaTabla = (celdas, o = {}) => `<w:tr><w:trPr><w:cantSplit/>${o.cab ? '<w:tblHeader/>' : ''}</w:trPr>${celdas}</w:tr>`;
   let filas = filaTabla(cols.map(([t, w]) => celda(par(run(t, { b: true, sz: 19 }), { despues: 0 }), w, { fill: 'E3F2EA', centro: true })).join(''), { cab: true });
   let k = 0;
   for (const f of D.filas) {
@@ -195,33 +228,19 @@ function docxArmar(D, cfg, imgs) {
     if (conReps) { cs.push(celda(par(run(f.reps, { sz: 19 }), { despues: 0 }), cols[ci++][1])); cs.push(celda(par(run(f.prop, { sz: 19 }), { despues: 0 }), cols[ci++][1])); }
     filas += filaTabla(cs.join(''));
   }
-  const borde = t => `<w:${t} w:val="single" w:sz="4" w:space="0" w:color="BFBFBF"/>`;
-  const tabla = `<w:tbl><w:tblPr><w:tblW w:w="${ancho}" w:type="dxa"/><w:tblBorders>${['top', 'left', 'bottom', 'right', 'insideH', 'insideV'].map(borde).join('')}</w:tblBorders><w:tblLayout w:type="fixed"/><w:tblCellMar><w:top w:w="60" w:type="dxa"/><w:left w:w="90" w:type="dxa"/><w:bottom w:w="60" w:type="dxa"/><w:right w:w="90" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>${cols.map(c => `<w:gridCol w:w="${c[1]}"/>`).join('')}</w:tblGrid>${filas}</w:tbl>`;
+  const tabla = K.tabla(cols.map(c => c[1]), filas);
   let cuerpo = par(run(D.titulo), { estilo: 'Title', despues: 60 }) + par(run(D.info, { color: '555555' }), { despues: 60 });
   for (const t of D.extra) cuerpo += par(run(t, { sz: 20 }), { despues: 60 });
   if (cfg.princ && D.princ.length) cuerpo += par(run('Los 5 principios del movimiento: ', { b: true, sz: 20 }) + run(D.princ.map(p => `${p.corto} ${p.n}`).join(' · '), { sz: 20 }), { despues: 160 });
   cuerpo += tabla + par('', { despues: 0 });
-  const NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"';
-  const documento = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document ${NS}><w:body>${cuerpo}<w:sectPr><w:footerReference w:type="default" r:id="rIdPie"/><w:pgSz w:w="${pgW}" w:h="${pgH}"/><w:pgMar w:top="${mar}" w:right="${mar}" w:bottom="${mar}" w:left="${mar}" w:header="600" w:footer="500" w:gutter="0"/></w:sectPr></w:body></w:document>`;
-  const pie = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:ftr ${NS}><w:p><w:pPr><w:jc w:val="right"/></w:pPr>${run(sinEmoji(D.titulo) + ' · Pilates Lab · página ', { sz: 16, color: '888888' })}<w:r><w:rPr><w:sz w:val="16"/><w:color w:val="888888"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:sz w:val="16"/><w:color w:val="888888"/></w:rPr><w:instrText xml:space="preserve"> PAGE </w:instrText></w:r><w:r><w:rPr><w:sz w:val="16"/><w:color w:val="888888"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:sz w:val="16"/><w:color w:val="888888"/></w:rPr><w:t>1</w:t></w:r><w:r><w:rPr><w:sz w:val="16"/><w:color w:val="888888"/></w:rPr><w:fldChar w:fldCharType="end"/></w:r></w:p></w:ftr>`;
-  const estilos = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:eastAsia="Calibri" w:cs="Calibri"/><w:sz w:val="21"/><w:szCs w:val="21"/><w:lang w:val="es-419"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="60" w:line="259" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/></w:style><w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:rPr><w:b/><w:color w:val="1F6F4A"/><w:sz w:val="40"/><w:szCs w:val="40"/></w:rPr></w:style><w:style w:type="table" w:default="1" w:styleId="TableNormal"><w:name w:val="Normal Table"/><w:tblPr><w:tblInd w:w="0" w:type="dxa"/><w:tblCellMar><w:top w:w="0" w:type="dxa"/><w:left w:w="108" w:type="dxa"/><w:bottom w:w="0" w:type="dxa"/><w:right w:w="108" w:type="dxa"/></w:tblCellMar></w:tblPr></w:style></w:styles>`;
-  const tipos = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="jpeg" ContentType="image/jpeg"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/><Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>`;
-  const rels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/></Relationships>`;
-  const docRels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rIdEst" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/><Relationship Id="rIdPie" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer1.xml"/>${medios.map(m => `<Relationship Id="${m.rid}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="${m.file}"/>`).join('')}</Relationships>`;
-  return armarZip([
-    { name: '[Content_Types].xml', data: tipos }, { name: '_rels/.rels', data: rels }, { name: 'docProps/core.xml', data: coreXml(D.titulo) },
-    { name: 'word/document.xml', data: documento }, { name: 'word/styles.xml', data: estilos }, { name: 'word/footer1.xml', data: pie },
-    { name: 'word/_rels/document.xml.rels', data: docRels }, ...medios.map(m => ({ name: m.name, data: m.data }))
-  ]);
+  return docxPaquete(cuerpo, K, D.titulo, cfg);
 }
 
 /* ---------- Excel (.xlsx) ---------- */
+/* estilos de las planillas: 1 título, 2 encabezado, 3 celda, 4 celda en negrita, 5 fila de posición,
+   6 texto gris, 7 número centrado, 8 texto que se parte sin borde */
+const XLSX_ESTILOS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="5"><font><sz val="11"/><name val="Calibri"/><family val="2"/></font><font><b/><sz val="11"/><name val="Calibri"/><family val="2"/></font><font><b/><sz val="16"/><color rgb="FF1F6F4A"/><name val="Calibri"/><family val="2"/></font><font><i/><sz val="10"/><color rgb="FF444444"/><name val="Calibri"/><family val="2"/></font><font><sz val="10"/><color rgb="FF555555"/><name val="Calibri"/><family val="2"/></font></fonts><fills count="4"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE3F2EA"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF2F2F2"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFBFBFBF"/></left><right style="thin"><color rgb="FFBFBFBF"/></right><top style="thin"><color rgb="FFBFBFBF"/></top><bottom style="thin"><color rgb="FFBFBFBF"/></bottom><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="9"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf><xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf><xf numFmtId="0" fontId="1" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf><xf numFmtId="0" fontId="3" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf><xf numFmtId="0" fontId="4" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="0" fontId="1" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="top"/></xf><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
 const colLetra = i => { let s = ''; i++; while (i > 0) { const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; };
 function xlsxArmar(D, cfg, imgs) {
   const cols = [];
@@ -279,8 +298,7 @@ function xlsxArmar(D, cfg, imgs) {
     const cx = Math.round(a.w * EMU_PX), cy = Math.round(a.h * EMU_PX);
     return `<xdr:oneCellAnchor><xdr:from><xdr:col>${a.col}</xdr:col><xdr:colOff>${Math.round(a.x * EMU_PX)}</xdr:colOff><xdr:row>${a.fila}</xdr:row><xdr:rowOff>${4 * EMU_PX}</xdr:rowOff></xdr:from><xdr:ext cx="${cx}" cy="${cy}"/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="${i + 2}" name="Imagen ${i + 1}"/><xdr:cNvPicPr><a:picLocks noChangeAspect="1"/></xdr:cNvPicPr></xdr:nvPicPr><xdr:blipFill><a:blip r:embed="rIdImg${i + 1}"/><a:stretch><a:fillRect/></a:stretch></xdr:blipFill><xdr:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${cx}" cy="${cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></xdr:spPr></xdr:pic><xdr:clientData/></xdr:oneCellAnchor>`;
   }).join('')}</xdr:wsDr>`;
-  const estilos = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="5"><font><sz val="11"/><name val="Calibri"/><family val="2"/></font><font><b/><sz val="11"/><name val="Calibri"/><family val="2"/></font><font><b/><sz val="16"/><color rgb="FF1F6F4A"/><name val="Calibri"/><family val="2"/></font><font><i/><sz val="10"/><color rgb="FF444444"/><name val="Calibri"/><family val="2"/></font><font><sz val="10"/><color rgb="FF555555"/><name val="Calibri"/><family val="2"/></font></fonts><fills count="4"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE3F2EA"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF2F2F2"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFBFBFBF"/></left><right style="thin"><color rgb="FFBFBFBF"/></right><top style="thin"><color rgb="FFBFBFBF"/></top><bottom style="thin"><color rgb="FFBFBFBF"/></bottom><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="9"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf><xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf><xf numFmtId="0" fontId="1" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf><xf numFmtId="0" fontId="3" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf><xf numFmtId="0" fontId="4" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="0" fontId="1" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="top"/></xf><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+  const estilos = XLSX_ESTILOS;
   const libro = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ${NSR}><sheets><sheet name="Clase" sheetId="1" r:id="rId1"/></sheets><definedNames><definedName name="_xlnm.Print_Titles" localSheetId="0">Clase!$${filaCab}:$${filaCab}</definedName></definedNames></workbook>`;
   const tipos = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -352,32 +370,82 @@ function pdfPartir(s, negrita, tam, ancho) {
 }
 const pdfStr = s => '(' + s.replace(/\\/g, '\\\\').replace(/\(/g, '\\(').replace(/\)/g, '\\)') + ')';
 const n2 = v => (Math.round(v * 100) / 100).toString();
-function pdfArmar(D, cfg, imgs) {
+/* un PDF en blanco con lo necesario para escribir: texto que se parte en líneas, rectángulos, líneas,
+   fotos, salto de página y el cierre (pie con el número de página y los objetos del archivo) */
+function nuevoPDF(cfg) {
   const carta = cfg.papel !== 'a4', PW = carta ? 612 : 595.28, PH = carta ? 792 : 841.89, M = 42, AN = PW - 2 * M, PIE = 30;
   const paginas = [], fotos = [];
-  let ops = [], y = M, usadas = new Set();
-  const nueva = () => { if (ops.length) paginas.push({ ops, usadas }); ops = []; usadas = new Set(); y = M; };
+  let ops = [], usadas = new Set();
+  const doc = { PW, PH, M, AN, PIE, y: M };
+  const nueva = () => { if (ops.length) paginas.push({ ops, usadas }); ops = []; usadas = new Set(); doc.y = M; };
   const Y = v => PH - v;
   const texto = (s, x, yTop, tam, negrita, color = '0.1 0.1 0.1') => ops.push(`BT /${negrita ? 'F2' : 'F1'} ${tam} Tf ${color} rg ${n2(x)} ${n2(Y(yTop + tam * 0.8))} Td ${pdfStr(s)} Tj ET`);
   const rect = (x, yTop, w, h, fill, stroke) => { if (fill) ops.push(`${fill} rg ${n2(x)} ${n2(Y(yTop + h))} ${n2(w)} ${n2(h)} re f`); if (stroke) ops.push(`${stroke} RG 0.7 w ${n2(x)} ${n2(Y(yTop + h))} ${n2(w)} ${n2(h)} re S`); };
   const foto = (m, x, yTop, w) => { let i = fotos.indexOf(m); if (i < 0) { fotos.push(m); i = fotos.length - 1; } usadas.add(i); const h = w * m.h / m.w; ops.push(`q ${n2(w)} 0 0 ${n2(h)} ${n2(x)} ${n2(Y(yTop + h))} cm /Im${i + 1} Do Q`); return h; };
-  const cabe = h => y + h <= PH - M - PIE;
+  const cabe = h => doc.y + h <= PH - M - PIE;
   /* bloques de texto: [texto, negrita, tamaño, color, sangría] → líneas medidas */
   const medir = (partes, ancho) => partes.flatMap(([s, b, tam, color]) => pdfPartir(s, b, tam, ancho).map(l => ({ l, b, tam, color, h: tam * 1.3 })));
-  const escribir = (lineas, x) => { for (const ln of lineas) { if (!cabe(ln.h)) nueva(); texto(ln.l, x, y, ln.tam, ln.b, ln.color); y += ln.h; } };
+  const escribir = (lineas, x) => { for (const ln of lineas) { if (!cabe(ln.h)) nueva(); texto(ln.l, x, doc.y, ln.tam, ln.b, ln.color); doc.y += ln.h; } };
+  const linea = (x1, y1, x2, y2, color = '0.6 0.6 0.6', w = 0.6) => ops.push(`${color} RG ${w} w ${n2(x1)} ${n2(Y(y1))} m ${n2(x2)} ${n2(Y(y2))} l S`);
+  Object.assign(doc, { nueva, Y, texto, rect, foto, cabe, medir, escribir, linea });
+  doc.cerrar = titulo => {
+    nueva();
+    /* pie con el número de página */
+    const tot = paginas.length;
+    paginas.forEach((pg, i) => {
+      const t = pdfTexto(`${titulo} · Pilates Lab`), d = pdfTexto(`página ${i + 1} de ${tot}`);
+      pg.ops.push(`BT /F1 8 Tf 0.5 0.5 0.5 rg ${n2(M)} ${n2(M - 16)} Td ${pdfStr(t)} Tj ET`, `BT /F1 8 Tf 0.5 0.5 0.5 rg ${n2(PW - M - pdfAncho(d, false, 8))} ${n2(M - 16)} Td ${pdfStr(d)} Tj ET`);
+    });
+    /* objetos: 1 catálogo, 2 páginas, 3–4 fuentes, imágenes, y por página contenido + página */
+    const objs = [];
+    const latin1 = s => { const u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i) & 255; return u; };
+    objs[1] = latin1('<< /Type /Catalog /Pages 2 0 R >>');
+    objs[3] = latin1('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>');
+    objs[4] = latin1('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
+    fotos.forEach((m, i) => { objs[5 + i] = unirBytes([latin1(`<< /Type /XObject /Subtype /Image /Width ${m.w} /Height ${m.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${m.bytes.length} >>\nstream\n`), m.bytes, latin1('\nendstream')]); });
+    let sig = 5 + fotos.length;
+    const kids = [];
+    for (const pg of paginas) {
+      const cont = latin1(pg.ops.join('\n')), nc = sig++, np = sig++;
+      objs[nc] = unirBytes([latin1(`<< /Length ${cont.length} >>\nstream\n`), cont, latin1('\nendstream')]);
+      const xo = [...pg.usadas].map(i => `/Im${i + 1} ${5 + i} 0 R`).join(' ');
+      objs[np] = latin1(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${n2(PW)} ${n2(PH)}] /Resources << /Font << /F1 3 0 R /F2 4 0 R >>${xo ? ` /XObject << ${xo} >>` : ''} >> /Contents ${nc} 0 R >>`);
+      kids.push(np);
+    }
+    objs[2] = latin1(`<< /Type /Pages /Kids [${kids.map(k2 => k2 + ' 0 R').join(' ')}] /Count ${kids.length} >>`);
+    const info = sig;
+    objs[info] = latin1(`<< /Title ${pdfStr(pdfTexto(titulo))} /Producer (Pilates Lab) >>`);
+    const partes = [latin1('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n')], offs = [];
+    let off = partes[0].length;
+    for (let i = 1; i < objs.length; i++) {
+      const cab = latin1(`${i} 0 obj\n`), fin = latin1('\nendobj\n');
+      offs[i] = off;
+      partes.push(cab, objs[i], fin);
+      off += cab.length + objs[i].length + fin.length;
+    }
+    const xref = [`xref\n0 ${objs.length}\n0000000000 65535 f \n`, ...offs.slice(1).map(o => String(o).padStart(10, '0') + ' 00000 n \n')].join('');
+    partes.push(latin1(xref + `trailer\n<< /Size ${objs.length} /Root 1 0 R /Info ${info} 0 R >>\nstartxref\n${off}\n%%EOF\n`));
+    return unirBytes(partes);
+
+  };
+  return doc;
+}
+
+function pdfArmar(D, cfg, imgs) {
+  const doc = nuevoPDF(cfg), { PW, M, AN, Y, texto, rect, foto, cabe, medir, escribir, nueva } = doc, PH = doc.PH;
   /* encabezado */
-  escribir(medir([[D.titulo, true, 20, '0.12 0.43 0.29']], AN), M); y += 4;
+  escribir(medir([[D.titulo, true, 20, '0.12 0.43 0.29']], AN), M); doc.y += 4;
   escribir(medir([[D.info, false, 10, '0.35 0.35 0.35'], ...D.extra.map(t => [t, false, 10, '0.2 0.2 0.2'])], AN), M);
-  if (cfg.princ && D.princ.length) { y += 2; escribir(medir([['Los 5 principios del movimiento: ' + D.princ.map(p => `${p.corto} ${p.n}`).join(' · '), true, 10, '0.12 0.43 0.29']], AN), M); }
-  y += 10;
+  if (cfg.princ && D.princ.length) { doc.y += 2; escribir(medir([['Los 5 principios del movimiento: ' + D.princ.map(p => `${p.corto} ${p.n}`).join(' · '), true, 10, '0.12 0.43 0.29']], AN), M); }
+  doc.y += 10;
   let k = 0;
   for (const f of D.filas) {
     if (f.tipo === 'pos') {
       const ls = medir([[f.nom, true, 11.5, '0.1 0.1 0.1'], ...(cfg.trans && f.trans ? [['› ' + f.trans, false, 9, '0.35 0.35 0.35']] : [])], AN - 12);
       const h = ls.reduce((a, l) => a + l.h, 0) + 8;
       if (!cabe(h + 60)) nueva();
-      rect(M, y, AN, h, '0.95 0.95 0.95');
-      y += 4; escribir(ls, M + 6); y += 8;
+      rect(M, doc.y, AN, h, '0.95 0.95 0.95');
+      doc.y += 4; escribir(ls, M + 6); doc.y += 8;
       continue;
     }
     /* una imagen va al costado; la secuencia, en fila debajo del nombre; nada más alto que 95 pt */
@@ -387,7 +455,7 @@ function pdfArmar(D, cfg, imgs) {
     const x0 = M + (cfg.tilde ? 20 : 0) + 22, anchoTxt = AN - (x0 - M) - (izq ? izq + 10 : 0);
     const meta = [cfg.reps && f.reps ? f.reps : '', cfg.reps && f.prop ? 'Prop: ' + f.prop : '', f.pos, f.fuente, compacto && cfg.princ && f.principios ? 'Principios: ' + f.principios : ''].filter(Boolean).join(' · ');
     const conPr = !compacto && cfg.princ && f.principios;
-    /* cabecera (nombre, datos, principios) y cuerpo (movimiento, adaptación, nota); la secuencia va entre los dos */
+    /* cabecera (nombre, datos, principios) doc.y cuerpo (movimiento, adaptación, nota); la secuencia va entre los dos */
     const cab = medir([[f.nombre, true, 12, '0.08 0.08 0.08'], [meta, false, 9.5, '0.3 0.3 0.3'],
       ...(conPr ? [['Principios: ' + f.principios, false, 8.5, '0.12 0.43 0.29']] : [])], anchoTxt);
     const cuerpo = medir([...f.mov.map(([a, b]) => [`${a}: ${b}`, false, 9.5, '0.12 0.12 0.12']),
@@ -398,55 +466,19 @@ function pdfArmar(D, cfg, imgs) {
     const hSeq = seq ? Math.max(...im.map(m => anchoSeq(m) * m.h / m.w)) + 6 : 0;
     const hImg = izq ? izq * im[0].h / im[0].w : 0;
     const sep = compacto ? 3 : 6, hBloque = Math.max(hTxt + hSeq, hImg) + 2 * sep;
-    if (!cabe(hBloque) && hBloque < PH - 2 * M - PIE) nueva();
-    const y0 = y;
+    if (!cabe(hBloque) && hBloque < PH - 2 * M - doc.PIE) nueva();
+    const y0 = doc.y;
     if (cfg.tilde) rect(M, y0 + 1, 11, 11, null, '0.4 0.4 0.4');
     texto(String(f.num), M + (cfg.tilde ? 20 : 0), y0, 12, true, '0.12 0.43 0.29');
     if (izq) foto(im[0], PW - M - izq, y0, izq);
     escribir(cab, x0);
-    if (hSeq) { let x = x0; y += 2; for (const m of im) { const w = anchoSeq(m); foto(m, x, y, w); x += w + 6; } y += hSeq; }
+    if (hSeq) { let x = x0; doc.y += 2; for (const m of im) { const w = anchoSeq(m); foto(m, x, doc.y, w); x += w + 6; } doc.y += hSeq; }
     escribir(cuerpo, x0);
-    y = Math.max(y, y0 + hImg) + sep;
-    ops.push(`0.85 0.85 0.85 RG 0.5 w ${n2(M)} ${n2(Y(y))} m ${n2(PW - M)} ${n2(Y(y))} l S`);
-    y += sep;
+    doc.y = Math.max(doc.y, y0 + hImg) + sep;
+    doc.linea(M, doc.y, PW - M, doc.y, '0.85 0.85 0.85', 0.5);
+    doc.y += sep;
   }
-  nueva();
-  /* pie con el número de página */
-  const tot = paginas.length;
-  paginas.forEach((pg, i) => {
-    const t = pdfTexto(`${D.titulo} · Pilates Lab`), d = pdfTexto(`página ${i + 1} de ${tot}`);
-    pg.ops.push(`BT /F1 8 Tf 0.5 0.5 0.5 rg ${n2(M)} ${n2(M - 16)} Td ${pdfStr(t)} Tj ET`, `BT /F1 8 Tf 0.5 0.5 0.5 rg ${n2(PW - M - pdfAncho(d, false, 8))} ${n2(M - 16)} Td ${pdfStr(d)} Tj ET`);
-  });
-  /* objetos: 1 catálogo, 2 páginas, 3–4 fuentes, imágenes, y por página contenido + página */
-  const objs = [];
-  const latin1 = s => { const u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i) & 255; return u; };
-  objs[1] = latin1('<< /Type /Catalog /Pages 2 0 R >>');
-  objs[3] = latin1('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>');
-  objs[4] = latin1('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
-  fotos.forEach((m, i) => { objs[5 + i] = unirBytes([latin1(`<< /Type /XObject /Subtype /Image /Width ${m.w} /Height ${m.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${m.bytes.length} >>\nstream\n`), m.bytes, latin1('\nendstream')]); });
-  let sig = 5 + fotos.length;
-  const kids = [];
-  for (const pg of paginas) {
-    const cont = latin1(pg.ops.join('\n')), nc = sig++, np = sig++;
-    objs[nc] = unirBytes([latin1(`<< /Length ${cont.length} >>\nstream\n`), cont, latin1('\nendstream')]);
-    const xo = [...pg.usadas].map(i => `/Im${i + 1} ${5 + i} 0 R`).join(' ');
-    objs[np] = latin1(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${n2(PW)} ${n2(PH)}] /Resources << /Font << /F1 3 0 R /F2 4 0 R >>${xo ? ` /XObject << ${xo} >>` : ''} >> /Contents ${nc} 0 R >>`);
-    kids.push(np);
-  }
-  objs[2] = latin1(`<< /Type /Pages /Kids [${kids.map(k2 => k2 + ' 0 R').join(' ')}] /Count ${kids.length} >>`);
-  const info = sig;
-  objs[info] = latin1(`<< /Title ${pdfStr(pdfTexto(D.titulo))} /Producer (Pilates Lab) >>`);
-  const partes = [latin1('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n')], offs = [];
-  let off = partes[0].length;
-  for (let i = 1; i < objs.length; i++) {
-    const cab = latin1(`${i} 0 obj\n`), fin = latin1('\nendobj\n');
-    offs[i] = off;
-    partes.push(cab, objs[i], fin);
-    off += cab.length + objs[i].length + fin.length;
-  }
-  const xref = [`xref\n0 ${objs.length}\n0000000000 65535 f \n`, ...offs.slice(1).map(o => String(o).padStart(10, '0') + ' 00000 n \n')].join('');
-  partes.push(latin1(xref + `trailer\n<< /Size ${objs.length} /Root 1 0 R /Info ${info} 0 R >>\nstartxref\n${off}\n%%EOF\n`));
-  return unirBytes(partes);
+  return doc.cerrar(D.titulo);
 }
 
 /* ---------- armar y descargar ---------- */
@@ -460,32 +492,41 @@ async function exportarPlan(p, cfg) {
 }
 const TIPO_EXP = { docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', pdf: 'application/pdf' };
 
-function abrirExportar(p) {
+function abrirExportar(p, opts = {}) {
   const cfg = cfgExp();
+  /* sin ejercicios (desde el perfil de una persona) solo hay historia clínica */
+  const soloHistoria = !p.items.length;
+  if (opts.doc || soloHistoria) cfg.doc = soloHistoria ? 'historia' : opts.doc;
   const chip = (g, v, t, on) => `<button type="button" data-xg="${g}" data-xv="${esc(v)}" class="${on ? 'on' : ''}" aria-pressed="${on}">${t}</button>`;
   const presetDe = () => (EXP_PRESETS.find(([, , o]) => o.mov === cfg.mov && o.img === cfg.img) || [''])[0];
   const pintar = () => {
+    const doc = cfg.doc || 'clase', formatos = EXP_FORMATOS.filter(f => doc !== 'historia' || f[0] !== 'xlsx');
+    if (!formatos.some(f => f[0] === cfg.formato)) cfg.formato = 'docx';
     const m = abrirModal(`<div class="exp">
-      <h3>Descargar la sesión</h3>
-      <p class="micro">Word y Excel quedan editables; el PDF es para imprimir.</p>
-      <div class="exp-formatos" role="group" aria-label="Formato">${EXP_FORMATOS.map(([k, t, s]) => `<button type="button" data-xg="formato" data-xv="${k}" class="${cfg.formato === k ? 'on' : ''}" aria-pressed="${cfg.formato === k}"><b>${t}</b><small>${s}</small></button>`).join('')}</div>
-      <h4>Qué incluir</h4>
+      <h3>${soloHistoria ? 'Historia clínica' : 'Descargar la sesión'}</h3>
+      ${soloHistoria ? '' : `<div class="exp-formatos exp-docs" role="group" aria-label="Documento">${DOCS_EXP.map(([k, t, s2]) => `<button type="button" data-xg="doc" data-xv="${k}" class="${doc === k ? 'on' : ''}" aria-pressed="${doc === k}"><b>${t}</b><small>${s2}</small></button>`).join('')}</div>`}
+      <p class="micro">${doc === 'clase' ? 'Word y Excel quedan editables; el PDF es para imprimir.' : doc === 'entrega' ? 'Para imprimir y completar: cada ejercicio con sus repeticiones y una observación (la adaptación, el prop y para qué, o qué se cambió y por qué; el motivo lo escribís al cambiarlo con ⇅ o en la nota). Lo que falte, a mano o en Word.' : 'Para imprimir y completar. Lo que ya se sabe (su perfil, sus cuidados) viene escrito; lo demás queda en blanco. Word queda editable.'}</p>
+      <div class="exp-formatos" role="group" aria-label="Formato">${formatos.map(([k, t, s2]) => `<button type="button" data-xg="formato" data-xv="${k}" class="${cfg.formato === k ? 'on' : ''}" aria-pressed="${cfg.formato === k}"><b>${t}</b><small>${s2}</small></button>`).join('')}</div>
+      ${doc === 'clase' ? `<h4>Qué incluir</h4>
       <div class="chips" role="group" aria-label="Contenido">${EXP_PRESETS.map(([k, t]) => chip('preset', k, t, presetDe() === k)).join('')}</div>
       <h4>Movimiento</h4>
       <div class="chips" role="group" aria-label="Movimiento">${chip('mov', 'no', 'Sin', cfg.mov === 'no')}${chip('mov', 'breve', 'Posición inicial y pasos', cfg.mov === 'breve')}${chip('mov', 'completo', '+ indicaciones', cfg.mov === 'completo')}</div>
       <h4>Imagen</h4>
       <div class="chips" role="group" aria-label="Imagen">${chip('img', 'no', 'Sin', cfg.img === 'no')}${chip('img', 'primera', 'La primera', cfg.img === 'primera')}${chip('img', 'secuencia', 'La secuencia', cfg.img === 'secuencia')}</div>
       <h4>Además</h4>
-      <div class="chips" role="group" aria-label="Además">${[['reps', 'Repeticiones y prop'], ['trans', 'Transiciones'], ['princ', 'Los 5 principios'], ['adap', 'Adaptaciones'], ['notas', 'Notas'], ['tilde', 'Casilla para tildar']].map(([k, t]) => chip('extra', k, t, cfg[k])).join('')}</div>
+      <div class="chips" role="group" aria-label="Además">${[['reps', 'Repeticiones y prop'], ['trans', 'Transiciones'], ['princ', 'Los 5 principios'], ['adap', 'Adaptaciones'], ['notas', 'Notas'], ['tilde', 'Casilla para tildar']].map(([k, t]) => chip('extra', k, t, cfg[k])).join('')}</div>` : ''}
+      ${doc === 'entrega' ? `<h4>Copias</h4><div class="chips" role="group" aria-label="Copias">${chip('copias', '2', 'Dos: una para entregar y otra para vos', cfg.copias !== 1)}${chip('copias', '1', 'Una', cfg.copias === 1)}</div>` : ''}
       <h4>Papel</h4>
       <div class="chips" role="group" aria-label="Papel">${chip('papel', 'carta', 'Carta', cfg.papel !== 'a4')}${chip('papel', 'a4', 'A4', cfg.papel === 'a4')}</div>
-      ${cfg.img !== 'no' && p.items.some(x => (ejPlan(x.id) || {}).pm) ? '<p class="micro exp-ojo">Las fotos de Pre-Pilates parecen del manual del curso: el archivo es para tu uso; no lo publiques.</p>' : ''}
-      <div class="fila"><button type="button" class="btn3d verde" id="expIr">⬇️ Descargar ${EXP_FORMATOS.find(f => f[0] === cfg.formato)[1]}</button><button type="button" class="btn ghost" data-cerrar>Cerrar</button></div>
+      ${doc === 'clase' && cfg.img !== 'no' && p.items.some(x => (ejPlan(x.id) || {}).pm) ? '<p class="micro exp-ojo">Las fotos de Pre-Pilates parecen del manual del curso: el archivo es para tu uso; no lo publiques.</p>' : ''}
+      ${doc === 'historia' ? '<p class="micro exp-ojo">Tiene datos de salud: guardalo y compartilo con cuidado.</p>' : ''}
+      <div class="fila"><button type="button" class="btn3d verde" id="expIr">⬇️ Descargar ${formatos.find(f => f[0] === cfg.formato)[1]}</button><button type="button" class="btn ghost" data-cerrar>Cerrar</button></div>
     </div>`);
     $$('[data-xg]', m).forEach(b => b.onclick = () => {
       const g = b.dataset.xg, v = b.dataset.xv;
       if (g === 'preset') Object.assign(cfg, EXP_PRESETS.find(x => x[0] === v)[2]);
       else if (g === 'extra') cfg[v] = !cfg[v];
+      else if (g === 'copias') cfg.copias = +v;
       else cfg[g] = v;
       guardar(); SND.toque(); pintar();
     });
@@ -494,9 +535,10 @@ function abrirExportar(p) {
       const bot = $('#expIr', m);
       bot.disabled = true; bot.textContent = 'Armando…';
       try {
-        const { nombre, bytes } = await exportarPlan(p, cfg);
+        const { nombre, bytes } = doc === 'clase' ? await exportarPlan(p, cfg) : exportarFormulario(p, cfg);
+        const tipo = TIPO_EXP[nombre.split('.').pop()];
         cerrarModal();
-        await descargar(nombre, new Blob([bytes], { type: TIPO_EXP[cfg.formato] }), TIPO_EXP[cfg.formato], `Listo: <b>${esc(nombre)}</b>.`);
+        await descargar(nombre, new Blob([bytes], { type: tipo }), tipo, `Listo: <b>${esc(nombre)}</b>.`);
       } catch (e) {
         console.error(e);
         bot.disabled = false; bot.textContent = 'Probar de nuevo';

@@ -999,7 +999,8 @@ article.ex-rev{margin-bottom:10px}
 .exp-formatos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
 .exp-formatos button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 6px;border-radius:14px;border:2px solid var(--linea2);background:var(--sup);color:var(--tx);font:inherit;cursor:pointer}
 .exp-formatos button b{font-size:16px;font-weight:900}.exp-formatos button small{font-size:11.5px;color:var(--tx2);text-align:center}
-.exp-formatos button.on{border-color:var(--verde);background:var(--verde-cl)}.exp-ojo{color:var(--xp-tx)}
+.exp-formatos button.on{border-color:var(--verde);background:var(--verde-cl)}
+.exp-docs{margin:8px 0 2px}.exp-docs button b{font-size:14.5px}.exp-ojo{color:var(--xp-tx)}
 .gen-lado{margin-top:6px;align-items:center}.gen-lado>span{font-size:13px;font-weight:800;color:var(--tx2);margin-right:2px}
 .pl-lado select{font:inherit;font-size:13px;border:2px solid var(--linea2);border-radius:10px;background:var(--sup);color:var(--tx);padding:4px 6px}
 .pe-lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:8px;margin:6px 0 10px}
@@ -1011,6 +1012,11 @@ article.ex-rev{margin-bottom:10px}
 .var-ej{display:flex;align-items:center;gap:10px;text-align:left;padding:6px 8px;border-radius:12px;border:2px solid var(--linea2);background:var(--sup);color:var(--tx);font:inherit;cursor:pointer;min-width:0}
 .var-ej .cl-mini{flex:0 0 64px;width:64px;height:44px}.var-txt{display:flex;flex-direction:column;min-width:0}.var-txt b{font-weight:800}.var-txt small{font-size:12px;color:var(--tx2)}
 .pl-var{font-weight:900}
+.var-tag{font-style:normal;font-size:11px;font-weight:800;border-radius:99px;padding:1px 7px;margin-left:4px;background:var(--sup2);color:var(--tx2)}
+.var-tag.asiste{background:var(--verde-cl);color:var(--verde-o)}.var-tag.resiste{background:var(--azul-cl);color:var(--azul-o)}
+.pl-cambio{display:block;font-size:12px;color:var(--azul,#2563eb);margin-top:2px}
+.var-motivo{display:flex;flex-direction:column;gap:4px;margin:10px 0 2px;font-size:13px;font-weight:800}.var-motivo small{font-weight:600;color:var(--tx2)}
+.var-motivo input{font:inherit;font-weight:500;border:2px solid var(--linea2);border-radius:10px;padding:8px 10px;background:var(--sup);color:var(--tx)}
 .var-otras{margin-top:8px}.var-otras summary{cursor:pointer;font-size:13px;font-weight:800;color:var(--tx2);margin-bottom:6px}
 .gen-previa{margin:14px 0 4px;line-height:1.45}.gen-previa ul{margin:4px 0 0;padding-left:18px}.gen-previa li{margin:2px 0}
 .gen-banner{background:color-mix(in srgb,var(--verde) 8%,var(--sup));border:2px solid color-mix(in srgb,var(--verde) 35%,var(--linea));border-radius:14px;padding:10px 12px;margin:0 0 10px}
@@ -14043,6 +14049,240 @@ FAMILIAS.forEach(f => { f.ref = EJ_REF(f.n, f.libro); });
 
 </script>
 <script>
+/* Mat 3 Props: los textos de tu planilla (qué prop, dónde va y para qué; observaciones de cuidados).
+   Generado por importar_mat3.py, sin fotos y sin lo personal (las fotos quedan en privado/). */
+const MAT3 = {
+ "mat1-e01": {
+  "nombre": "Hundred",
+  "props": {},
+  "conFoto": [
+   "Bola",
+   "Círculo",
+   "Liga abierta",
+   "Pesa",
+   "Roller"
+  ],
+  "observaciones": "Evitar en Osteoporosis. Usar cuña en la espalda. Cuidar de las muñecas. Muñeca en neutro. Evitar desviación radial o cubital. EL cículo con talones en V trabaja ABD"
+ },
+ "mat1-e02": {
+  "nombre": "Hundred",
+  "props": {},
+  "conFoto": [
+   "Bola",
+   "Círculo",
+   "Liga abierta",
+   "Pesa",
+   "Roller"
+  ],
+  "observaciones": "Evitar en Osteoporosis. Usar cuña en la espalda. Cuidar de las muñecas. Muñeca en neutro. Evitar desviación radial o cubital. EL cículo con talones en V trabaja ABD"
+ },
+ "mat1-e03": {
+  "nombre": "Roll Up",
+  "props": {},
+  "conFoto": [
+   "Bola",
+   "Círculo",
+   "Liga abierta",
+   "Liga cerrada",
+   "Pesa",
+   "Roller"
+  ],
+  "observaciones": ""
+ },
+ "mat1-e04": {
+  "nombre": "Single Leg Circles",
+  "props": {
+   "Bola": "Trabaja Estabilidad LuboPelvica",
+   "Pesa": "Abdominales",
+   "Roller": "Estabilidad Lumbopelvica"
+  },
+  "conFoto": [
+   "Bola",
+   "Liga abierta",
+   "Liga cerrada",
+   "Pesa",
+   "Roller"
+  ],
+  "observaciones": ""
+ },
+ "mat1-e05": {
+  "nombre": "Rolling Like a Ball",
+  "props": {},
+  "conFoto": [
+   "Bola",
+   "Círculo",
+   "Liga cerrada"
+  ],
+  "observaciones": ""
+ },
+ "mat1-e06": {
+  "nombre": "Single Leg Stretch",
+  "props": {},
+  "conFoto": [
+   "Bola",
+   "Círculo",
+   "Liga abierta",
+   "Pesa"
+  ],
+  "observaciones": ""
+ },
+ "mat1-e07": {
+  "nombre": "Double Leg Stretch",
+  "props": {},
+  "conFoto": [
+   "Bola",
+   "Círculo"
+  ],
+  "observaciones": ""
+ },
+ "mat1-e09": {
+  "nombre": "Double Straight Leg Stretch",
+  "props": {},
+  "conFoto": [
+   "Bola",
+   "Liga abierta"
+  ],
+  "observaciones": ""
+ },
+ "mat1-e10": {
+  "nombre": "Criss Cross",
+  "props": {},
+  "conFoto": [
+   "Círculo",
+   "Liga abierta"
+  ],
+  "observaciones": ""
+ },
+ "mat2-e10": {
+  "nombre": "Neck Pull",
+  "props": {},
+  "conFoto": [
+   "Bola",
+   "Círculo",
+   "Liga cerrada"
+  ],
+  "observaciones": "Lesiones cervicales, columna, cuello, hombros, u osteoporosis"
+ },
+ "mat2-e07": {
+  "nombre": "Roll Over",
+  "props": {},
+  "conFoto": [
+   "Bola",
+   "Círculo",
+   "Liga cerrada"
+  ],
+  "observaciones": "Lesiones cervicales, columna, cuello, hombros, u osteoporosis"
+ },
+ "mat2-e13": {
+  "nombre": "Jackknife",
+  "props": {},
+  "conFoto": [
+   "Bola",
+   "Círculo",
+   "Liga abierta",
+   "Pesa"
+  ],
+  "observaciones": "Lesiones cervicales, columna, cuello, hombros, u osteoporosis"
+ },
+ "mat1-e11": {
+  "nombre": "Spine Stretch Forward",
+  "props": {
+   "Pesa": "Se puede utilizar. Muñecas Neutras."
+  },
+  "conFoto": [
+   "Bola",
+   "Liga abierta",
+   "Liga cerrada",
+   "Roller"
+  ],
+  "observaciones": ""
+ },
+ "mat1-e12": {
+  "nombre": "Spine Stretch Side",
+  "props": {},
+  "conFoto": [
+   "Bola",
+   "Círculo",
+   "Liga cerrada"
+  ],
+  "observaciones": ""
+ },
+ "mat1-e13": {
+  "nombre": "Saw",
+  "props": {
+   "Bola": "1-Bola Mediana En Abdomen. 2-Bola presionando con los pies"
+  },
+  "conFoto": [
+   "Liga abierta"
+  ],
+  "observaciones": ""
+ },
+ "mat1-e24": {
+  "nombre": "Seal",
+  "props": {
+   "Bola": "Presiona bola adelante y atrás"
+  },
+  "conFoto": [
+   "Bola",
+   "Liga cerrada"
+  ],
+  "observaciones": ""
+ },
+ "mat1-e14": {
+  "nombre": "Open Leg Rocker",
+  "props": {
+   "Liga abierta": "Ver pag 53 Mat 3"
+  },
+  "conFoto": [
+   "Círculo",
+   "Liga abierta"
+  ],
+  "observaciones": ""
+ },
+ "mat1-e15": {
+  "nombre": "Swan",
+  "props": {
+   "Bola": "Ver pág 58 Mat 3. Pag 65 Matr para Double Leg Kicks",
+   "Liga abierta": "Ver pág 60 Mat 3. Pág 67 mat 3 Double Leg Kicks",
+   "Círculo": "Presionar círculo, igual en swiming.Ver Pág- 67 mat 3 Double Leg Kicks",
+   "Roller": "Pág 60 mat 3.Gira en el antebrazo. Cuidado Hombros"
+  },
+  "conFoto": [
+   "Bola",
+   "Círculo",
+   "Liga cerrada",
+   "Roller"
+  ],
+  "observaciones": "Los props se pueden usar para Single Leg Kicks. Respiración abajo y arriba exhalar, activación del core. Cuidado. No doblar codos, hombros lejos orejas"
+ },
+ "mat1-e18": {
+  "nombre": "Swimming",
+  "props": {
+   "Bola": "Ver pág 63 Mat 3",
+   "Roller": "Ver pág 63 Mat 3"
+  },
+  "conFoto": [
+   "Círculo",
+   "Liga cerrada",
+   "Roller"
+  ],
+  "observaciones": ""
+ },
+ "mat2-e12": {
+  "nombre": "Leg Pull Up",
+  "props": {},
+  "conFoto": [
+   "Bola",
+   "Círculo",
+   "Liga abierta",
+   "Roller"
+  ],
+  "observaciones": ""
+ }
+};
+
+</script>
+<script>
 /* ============================================================
    Pilates Lab — figuras del manual dibujadas en código (SVG)
 
@@ -16456,6 +16696,7 @@ function filasPlan(p) {
       <span class="cl-mini">${miniPlan(e)}</span>
       <div class="cl-info"><b>${esc(e.n)}</b>
         <small><span class="cl-pos p-${e.pos}">${pz.ico} ${pz.nom}${x.lado ? ' ' + LADO_NOM[x.lado] : ''}</span> ${fuenteNom(e.f)}${e.reps ? ` · ${esc(e.reps)}` : ''}${principiosEjHTML(e)}</small>
+        ${x.cambio && x.cambio.de ? `<small class="pl-cambio">↺ En lugar de ${esc((ejPlan(x.cambio.de) || {}).n || '')} (${x.cambio.tipo === 'reg' ? 'más fácil' : x.cambio.tipo === 'prog' ? 'más difícil' : 'con prop'})${x.cambio.motivo ? ': ' + esc(x.cambio.motivo) : ''}</small>` : ''}
         ${x.adap ? `<small class="pl-adap">⚕️ ${esc(x.adap)}</small>` : ''}
         <div class="pl-extra">
           <label class="pl-prop"><span class="sr">Prop</span><select data-k="prop"><option value="">Sin prop</option>${PROPS_PLAN.map(o => `<option ${x.prop === o ? 'selected' : ''}>${o}</option>`).join('')}</select></label>
@@ -16737,7 +16978,7 @@ const PLANOS_GEN = ['sagital', 'frontal', 'transversal'];
 const NIVELES_GEN = [['principiante', 'Principiante'], ['intermedio', 'Intermedio'], ['avanzado', 'Avanzado'], ['super', 'Súper avanzado']];
 const CUIDADOS_GEN = [
   ['movilidad', 'Poca movilidad'], ['osteo', 'Osteoporosis'], ['lumbar', 'Zona lumbar'], ['cuello', 'Cuello y hombros'],
-  ['muneca', 'Muñecas'], ['rodilla', 'Rodillas'], ['cadera', 'Cadera']
+  ['muneca', 'Muñecas'], ['codo', 'Codos'], ['rodilla', 'Rodillas'], ['cadera', 'Cadera']
 ];
 /* props: lo que dicen las fichas (bola, banda, aro, mancuerna…) en los de la app */
 const PROP_TIPOS = [
@@ -16825,8 +17066,14 @@ function analizarEjGen(e) {
     recupera = /spine stretch|saw|mermaid/.test(n);
     texto = [b.n, principal, ...(ficha.obj || []), ...(b.prop || [])].join(' ');
   }
-  /* props de las fotos de Mat 3 que las fichas no nombran */
-  for (const t of PROPS_MAT3[e.id] || []) if (!props.some(x => x.tipo === t)) props.push({ tipo: t, txt: `Con ${t.toLowerCase()} (como en tus fotos de Mat 3)`, modo: '' });
+  /* Mat 3: lo que dice tu planilla de cada prop (dónde va y para qué) y los props de las fotos */
+  const m3 = typeof MAT3 !== 'undefined' ? MAT3[e.id] : null;
+  const de3 = m3 ? [...new Set([...(m3.conFoto || []), ...Object.keys(m3.props || {})])] : (PROPS_MAT3[e.id] || []);
+  for (const t of de3) {
+    const txt3 = m3 && m3.props ? m3.props[t] : '', ya = props.find(x => x.tipo === t);
+    if (ya) { if (txt3 && !ya.txt.includes(txt3)) ya.txt += ` · Mat 3: ${txt3}`; }
+    else props.push({ tipo: t, txt: txt3 ? `${t} (Mat 3): ${txt3}` : `Con ${t.toLowerCase()} (como en tus fotos de Mat 3)`, modo: '' });
+  }
   pri.forEach(k => sec.add(k));
   const n = norm(e.n);
   const elementos = new Set(ELEMENTOS_CLASE.filter(el => el.re.test(n)).map(el => el.k));
@@ -16885,7 +17132,10 @@ function permitidoGen(e, cfg) {
   if (contraGen(i.contra).some(t => !/agud/.test(t) && cfg.cuidados.some(z => ZONA_GEN[z].test(t)))) return false;
   /* con cuidados, lo más exigente que el manual marca para esa zona queda afuera; lo demás lleva la adaptación */
   const zonas = Object.keys(i.prec).join(' ');
-  for (const z of ['lumbar', 'cuello', 'muneca', 'rodilla', 'cadera']) if (cu.has(z) && zonas.includes(z) && i.nivel >= 2) return false;
+  for (const z of ['lumbar', 'cuello', 'muneca', 'codo', 'rodilla', 'cadera']) if (cu.has(z) && zonas.includes(z) && i.nivel >= 2) return false;
+  /* lo que tu planilla de Mat 3 pide evitar */
+  const obs3 = typeof MAT3 !== 'undefined' && MAT3[e.id] ? norm(MAT3[e.id].observaciones) : '';
+  if (obs3 && ((cu.has('osteo') && /osteopor/.test(obs3)) || (/lesiones cervicales/.test(obs3) && (cu.has('cuello') || cu.has('lumbar'))))) return false;
   if (cu.has('cuello') && /hombro/.test(zonas) && i.nivel >= 2) return false;
   /* poca movilidad: nada de lo avanzado (piden mucho rango) ni el Seal (manos por dentro de las piernas
      tomando los tobillos, sin modificación en el manual) */
@@ -16897,7 +17147,7 @@ function permitidoGen(e, cfg) {
   if (i.requiere.some(t => cfg.sinProps || !cfg.props.includes(t))) return false;
   return true;
 }
-const ZONA_GEN = { movilidad: /(?!)/, osteo: /osteopor/, lumbar: /lumbar|espalda/, cuello: /cervical|cuello|hombro|subacromial/, muneca: /muneca/, rodilla: /rodilla|patelo/, cadera: /cadera/ };
+const ZONA_GEN = { movilidad: /(?!)/, codo: /codo/, osteo: /osteopor/, lumbar: /lumbar|espalda/, cuello: /cervical|cuello|hombro|subacromial/, muneca: /muneca/, rodilla: /rodilla|patelo/, cadera: /cadera/ };
 const contraGen = c => String(c || '').split(/,|;/).map(t => norm(t)).filter(Boolean);
 function adaptacionGen(e, cfg, ladoEj = '') {
   const i = infoGen(e.id), cu = cfg.cuidados, xs = [], lc = cfg.ladoCuidado || {};
@@ -16906,10 +17156,19 @@ function adaptacionGen(e, cfg, ladoEj = '') {
   const agudo = String(i.contra || '').split(/,|;/).map(t => t.trim()).find(t => /agud/i.test(t) && cu.some(z => ZONA_GEN[z].test(norm(t))));
   if (agudo) xs.push(`No hacerlo con ${agudo.charAt(0).toLowerCase()}${agudo.slice(1)} (tu planilla).`);
   const zona = Object.entries(i.prec || {}).find(([k]) => cu.some(z => k.includes(z) || (z === 'cuello' && k.includes('hombro'))));
-  if (zona) { const z = ['rodilla', 'cadera', 'muneca'].find(q => cu.includes(q) && zona[0].includes(q)); xs.push(z ? conLado(z, zona[1]) : zona[1]); }
+  if (zona) { const z = ZONAS_LADO.find(q => cu.includes(q) && zona[0].includes(q)); xs.push(z ? conLado(z, zona[1]) : zona[1]); }
+  /* lo que dice tu planilla de Mat 3 para esa zona */
+  const obs3 = typeof MAT3 !== 'undefined' && MAT3[e.id] ? MAT3[e.id].observaciones : '';
+  if (obs3) {
+    const ZONA3 = { muneca: /muneca|desviacion/, codo: /codo/, cuello: /cervical|cuello|hombro/, lumbar: /lumbar|columna/ };
+    const frases = obs3.split(/\.\s*|,\s*(?=[A-ZÁÉÍÓÚ])/).map(f => f.trim()).filter(f => f && cu.some(z => ZONA3[z] && ZONA3[z].test(norm(f))));
+    if (frases.length) xs.push(`Mat 3: ${frases.join('. ')}.`);
+  }
   /* apoyos que cargan la zona (elaboración propia): rodillas en cuatro apoyos y de rodillas, muñecas en planchas */
   if (cu.includes('rodilla') && (e.pos === 'cuatro' || /kneeling|de rodillas|sobre las rodillas/i.test(e.n)))
     xs.push(lc.rodilla ? `Almohadón o el mat doble bajo la rodilla ${LADO_TXT[lc.rodilla]}.` : 'Almohadón o el mat doble bajo las rodillas.');
+  if (cu.includes('codo') && (e.pos === 'cuatro' || e.pos === 'plancha' || /plank|tabla|push up|leg pull/i.test(e.n)) && !/codo|antebrazo|forearm/i.test(e.n))
+    xs.push(lc.codo ? `Codo ${LADO_TXT[lc.codo]}: sin trabarlo (apenas flexionado) o pasar a los antebrazos.` : 'Codos sin trabar (apenas flexionados) o pasar a los antebrazos.');
   if (cu.includes('muneca') && (e.pos === 'cuatro' || e.pos === 'plancha' || /plank|tabla|push up|leg pull/i.test(e.n)) && !/codo|antebrazo|forearm/i.test(e.n))
     xs.push(lc.muneca ? `Muñeca ${LADO_TXT[lc.muneca]}: apoyar esa mano sobre el puño cerrado o pasar a los antebrazos.` : 'Apoyar sobre los puños cerrados o pasar a los antebrazos.');
   /* de costado con la rodilla de un lado: abajo (apoyada) o arriba (la que trabaja) */
@@ -17007,7 +17266,8 @@ function ladosGen(orden) {
   return null;
 }
 const LADO_TXT = { der: 'derecha', izq: 'izquierda' };
-const ZONA_NOM = { rodilla: 'Rodilla', cadera: 'Cadera', muneca: 'Muñeca' };
+const ZONA_NOM = { rodilla: 'Rodilla', cadera: 'Cadera', muneca: 'Muñeca', codo: 'Codo' };
+const ZONAS_LADO = ['rodilla', 'cadera', 'muneca', 'codo'];
 
 /* ---------- generar ---------- */
 function generarClase(cfg, semilla = Date.now()) {
@@ -17127,7 +17387,7 @@ function armarClase(cfg, orden, r) {
     const ops = opsDe(e);
     if (enMano) {
       const o = ops.find(p => p.tipo === enMano);
-      if (o && quedan > 0) { quedan--; x.prop = o.tipo; x.nota = o.txt.slice(0, 140); if (!quedan) { enMano = ''; pausa = 1 + Math.floor(r() * 2); } return x; }
+      if (o && quedan > 0) { quedan--; x.prop = o.tipo; x.propModo = o.modo || ''; x.nota = o.txt.slice(0, 160); if (!quedan) { enMano = ''; pausa = 1 + Math.floor(r() * 2); } return x; }
       enMano = ''; pausa = 1;
     }
     if (pausa > 0) { pausa--; return x; }
@@ -17135,7 +17395,7 @@ function armarClase(cfg, orden, r) {
     /* el prop que más ejercicios seguidos puede acompañar */
     const largo = t => { let n = 0; for (let q = k + 1; q < items.length && opsDe(items[q].e).some(p => p.tipo === t); q++) n++; return n; };
     const o = [...ops].sort((a, b) => largo(b.tipo) - largo(a.tipo) + (r() - 0.5))[0];
-    x.prop = o.tipo; x.nota = o.txt.slice(0, 140); enMano = o.tipo; quedan = 1 + Math.floor(r() * 3);
+    x.prop = o.tipo; x.propModo = o.modo || ''; x.nota = o.txt.slice(0, 160); enMano = o.tipo; quedan = 1 + Math.floor(r() * 3);
     return x;
   });
   /* si no hay más ejercicios para estas opciones y posiciones, se llega al tiempo con las
@@ -17224,7 +17484,7 @@ function crearClaseGenerada(cfg, plan = null) {
   const cuidados = cfg.cuidados.map(c => nomCuidadoGen(c, cfg));
   const datos = { nombre: `Clase de ${cfg.dur} min · ${nomNivelGen(cfg.nivel)}${cuidados.length ? ' · ' + cuidados.join(', ') : ''}`, dur: cfg.dur, focos, items: g.items,
     para: h ? h.nombre : (plan ? plan.para : ''), ...(h ? { persona: h.id } : {}),
-    notas: `Generada: ${resumenCfgGen(cfg, g.orden)}.${h && h.gusta ? ` Le gusta, objetivos: ${h.gusta.trim()}.` : ''}${evitar.length ? ' Varía respecto de sus últimas clases.' : ''}${g.motivos.map(m => ' ' + m.txt).join('')}`, gen: { ...JSON.parse(JSON.stringify(cfg)), semilla: g.semilla, orden2: g.orden } };
+    notas: `Generada: ${resumenCfgGen(cfg, g.orden)}.${h && h.gusta ? ` Le gusta, objetivos: ${h.gusta.trim().replace(/\.+$/, '')}.` : ''}${evitar.length ? ' Varía respecto de sus últimas clases.' : ''}${g.motivos.map(m => ' ' + m.txt).join('')}`, gen: { ...JSON.parse(JSON.stringify(cfg)), semilla: g.semilla, orden2: g.orden } };
   if (plan) { Object.assign(plan, datos, { editado: Date.now() }); guardar(); return plan; }
   return nuevoPlan(datos);
 }
@@ -17259,7 +17519,7 @@ function vGenerador() {
   app().innerHTML = `
     <button type="button" class="volver" id="genVolver">← Mis sesiones</button>
     <h1 class="tit">Generar una clase</h1>
-    <p class="sub">La app arma una clase completa con tu material: los <b>5 principios del movimiento</b>, los elementos de una clase balanceada, los tres planos y la fluidez entre posiciones. Elegí lo que quieras; lo demás lo decide ella.</p>
+    <p class="sub">La app arma una clase completa con todo tu material (Principios del Movimiento y Pre-Pilates, Mat 1, Mat 2 y Mat 3): los <b>5 principios del movimiento</b>, los elementos de una clase balanceada, los tres planos y la fluidez entre posiciones. Elegí lo que quieras; lo demás lo decide ella.</p>
 
     ${typeof personas === 'function' && personas().length ? `<section class="gen-sec"><h2>Para</h2><div class="chips" role="group" aria-label="Para">${chip('persona', '', 'Sin perfil', !cfg.persona)}${personas().map(h => chip('persona', h.id, '👤 ' + esc(h.nombre || 'Sin nombre'), cfg.persona === h.id)).join('')}</div>
       ${cfg.persona && personaDe(cfg.persona) ? '<p class="micro">Cargados su nivel, duración, cuidados, props y principio. Lo que cambies acá no cambia su perfil; la clase varía respecto de sus últimas dos.</p>' : ''}</section>` : ''}
@@ -17268,7 +17528,7 @@ function vGenerador() {
       <p class="micro">Principiante: sin inversiones, sin bajar las piernas largas del todo ni apoyo en un brazo (como pide el manual). Las inversiones aparecen desde Avanzado.</p></section>
     <section class="gen-sec"><h2>Props</h2><div class="chips" role="group" aria-label="Props">${chip('sinprops', '1', 'Sin props', cfg.sinProps)}${PROPS_PLAN.map(t => chip('prop', t, t, !cfg.sinProps && cfg.props.includes(t))).join('')}</div>
       ${!cfg.sinProps && cfg.props.length ? `<div class="chips gen-uso" role="group" aria-label="Para qué">${[['auto', 'Según el nivel'], ['asiste', 'Que asistan'], ['resiste', 'Que resistan']].map(([k, t]) => chip('uso', k, t, cfg.uso === k)).join('')}</div>` : ''}
-      <p class="micro">Se usan donde tus fichas de Mat 1 y Mat 2 (accesorios que asisten o resisten) y tus fotos de Mat 3 los muestran, agrupados para no cambiar de prop a cada rato.</p></section>
+      <p class="micro">Se usan donde tus fichas de Mat 1 y Mat 2 (accesorios que asisten o resisten) y tu planilla de Mat 3 (qué prop, dónde va y para qué) los muestran, agrupados para no cambiar de prop a cada rato.</p></section>
     <section class="gen-sec"><h2>Orden de las posiciones</h2>
       <div class="chips" role="group" aria-label="Orden">${[['manual', 'Como el manual'], ['elegido', 'Elegir el orden'], ['azar', 'Al azar']].map(([k, t]) => chip('orden', k, t, cfg.orden === k)).join('')}</div>
       ${cfg.orden === 'manual' ? (cfg.lados !== false ? '<p class="micro">De pie → cuatro apoyos → supino → sentado → de costado (lado derecho) → prono → de costado (lado izquierdo) → plancha → cierre de pie: el orden del manual (Mat 1, págs. 65–67) con los lados intercalados.</p>' : '<p class="micro">De pie → cuatro apoyos → supino → sentado → prono → plancha → de costado → cierre de pie (Mat 1, págs. 65–67).</p>')
@@ -17279,8 +17539,8 @@ function vGenerador() {
     <section class="gen-sec"><h2>Fluidez</h2><div class="chips" role="group" aria-label="Fluidez">${chip('lados', '1', '↔️ Intercalar los lados', cfg.lados !== false)}</div>
       <p class="micro">${cfg.lados !== false ? 'De costado sobre el lado derecho, después boca abajo (o boca arriba) y de costado sobre el izquierdo, en vez de los dos lados seguidos.' : 'Los dos lados de costado seguidos.'} Siempre: de pie solo al empezar o al terminar (no sube y vuelve a bajar), cada cambio con su transición.</p></section>
     <section class="gen-sec"><h2>Cuidados <small>(opcional)</small></h2><div class="chips" role="group" aria-label="Cuidados">${CUIDADOS_GEN.map(([k, t]) => chip('cuidado', k, t, cfg.cuidados.includes(k))).join('')}</div>
-      ${['rodilla', 'cadera', 'muneca'].filter(z => cfg.cuidados.includes(z)).map(z => `<div class="chips gen-lado" role="group" aria-label="${ZONA_NOM[z]}: qué lado"><span>${ZONA_NOM[z]}:</span>${[['', 'Las dos'], ['der', 'Derecha'], ['izq', 'Izquierda']].map(([k, t]) => chip('ladoCuidado', z + ':' + k, t, ((cfg.ladoCuidado || {})[z] || '') === k)).join('')}</div>`).join('')}
-      <p class="micro">Saca lo que el manual pide evitar y anota la adaptación del manual en cada ejercicio que la tiene. Con <b>poca movilidad</b> usa las modificaciones del manual para isquiotibiales tensos (mat enrollado, rodillas flexionadas, roll down) y deja afuera lo que pide mucho rango; suele convenir darle más peso a 🌿 Movilidad. No reemplaza la indicación de un profesional de la salud.</p></section>
+      ${ZONAS_LADO.filter(z => cfg.cuidados.includes(z)).map(z => `<div class="chips gen-lado" role="group" aria-label="${ZONA_NOM[z]}: qué lado"><span>${ZONA_NOM[z]}:</span>${[['', 'Las dos'], ['der', 'Derecha'], ['izq', 'Izquierda']].map(([k, t]) => chip('ladoCuidado', z + ':' + k, t, ((cfg.ladoCuidado || {})[z] || '') === k)).join('')}</div>`).join('')}
+      <p class="micro">Saca lo que el manual y tu planilla de Mat 3 piden evitar y anota la adaptación (del manual, de Mat 3 o, si no hay, una propia) en cada ejercicio. Con <b>poca movilidad</b> usa las modificaciones del manual para isquiotibiales tensos (mat enrollado, rodillas flexionadas, roll down) y deja afuera lo que pide mucho rango; suele convenir darle más peso a 🌿 Movilidad. No reemplaza la indicación de un profesional de la salud.</p></section>
     ${previa()}
     <div class="fila pl-acc"><button type="button" class="btn3d verde" id="genIr">✨ Generar la clase</button></div>`;
   $('#genVolver').onclick = () => { genAbierto = false; vPlanes(); };
@@ -17384,12 +17644,12 @@ function vPersona(id) {
     <section class="gen-sec"><h2>Nivel</h2><div class="chips" role="group" aria-label="Nivel">${NIVELES_GEN.map(([k, t]) => chip('nivel', k, t, h.nivel === k)).join('')}</div></section>
     <section class="gen-sec"><h2>Duración de sus clases</h2><div class="chips" role="group" aria-label="Duración">${[30, 45, 60, 75].map(m => chip('dur', m, m + ' min', (h.dur || 60) === m)).join('')}</div></section>
     <section class="gen-sec"><h2>Cuidados</h2><div class="chips" role="group" aria-label="Cuidados">${CUIDADOS_GEN.map(([k, t]) => chip('cuidado', k, t, h.cuidados.includes(k))).join('')}</div>
-      ${['rodilla', 'cadera', 'muneca'].filter(z => h.cuidados.includes(z)).map(z => `<div class="chips gen-lado" role="group" aria-label="${ZONA_NOM[z]}: qué lado"><span>${ZONA_NOM[z]}:</span>${[['', 'Las dos'], ['der', 'Derecha'], ['izq', 'Izquierda']].map(([k, t]) => chip('ladoCuidado', z + ':' + k, t, ((h.ladoCuidado || {})[z] || '') === k)).join('')}</div>`).join('')}</section>
+      ${ZONAS_LADO.filter(z => h.cuidados.includes(z)).map(z => `<div class="chips gen-lado" role="group" aria-label="${ZONA_NOM[z]}: qué lado"><span>${ZONA_NOM[z]}:</span>${[['', 'Las dos'], ['der', 'Derecha'], ['izq', 'Izquierda']].map(([k, t]) => chip('ladoCuidado', z + ':' + k, t, ((h.ladoCuidado || {})[z] || '') === k)).join('')}</div>`).join('')}</section>
     <section class="gen-sec"><h2>Props que tiene</h2><div class="chips" role="group" aria-label="Props">${chip('sinprops', '1', 'Sin props', h.sinProps || !h.props.length)}${PROPS_PLAN.map(t => chip('prop', t, t, !h.sinProps && h.props.includes(t))).join('')}</div></section>
     <section class="gen-sec"><h2>Darle más peso a un principio <small>(opcional)</small></h2><div class="chips" role="group" aria-label="Énfasis">${chip('enfasis', '', 'Equilibrada', !h.enfasis)}${PRINCIPIOS.map(p => chip('enfasis', p.k, `${p.ico} ${p.corto}`, h.enfasis === p.k)).join('')}</div></section>
     <label class="pl-notas">Le gusta, objetivos<textarea id="peGusta" rows="2" placeholder="Viene del gimnasio, quiere ganar movilidad…">${esc(h.gusta || '')}</textarea></label>
     <label class="pl-notas">Notas<textarea id="peNotas" rows="2" placeholder="Lo que conviene recordar en cada clase">${esc(h.notas || '')}</textarea></label>
-    <div class="fila pl-acc"><button type="button" class="btn3d verde" id="peGenerar">✨ Generar una clase</button><button type="button" class="btn ghost" id="peBorrar">Borrar persona</button></div>
+    <div class="fila pl-acc"><button type="button" class="btn3d verde" id="peGenerar">✨ Generar una clase</button><button type="button" class="btn ghost" id="peHistoria">🗂 Historia clínica</button><button type="button" class="btn ghost" id="peBorrar">Borrar persona</button></div>
     <h2 class="secc">Sus sesiones${ses.length ? ' · ' + ses.length : ''}</h2>
     ${ses.length ? `<div class="pl-lista">${ses.map(p => `<article class="pl-tarjeta" data-id="${p.id}"><button type="button" class="pl-abrir" data-ses="${p.id}"><b>${esc(p.nombre)}</b><small>${p.fecha ? fechaLinda(p.fecha) : 'Sin fecha'}</small><span class="pl-datos">${p.items.length} ejercicios · ≈ ${duracionPlan(p)} min</span></button></article>`).join('')}</div>`
       : '<p class="vacio">Todavía no tiene sesiones: tocá <b>✨ Generar una clase</b>.</p>'}`;
@@ -17410,6 +17670,7 @@ function vPersona(id) {
     const y = window.scrollY; vPersona(id); window.scrollTo(0, y);
   });
   $('#peGenerar').onclick = () => { guardarTxt(); SND.toque(); generarParaPersona(h); };
+  $('#peHistoria').onclick = () => { guardarTxt(); historiaDePersona(h); };
   $('#peBorrar').onclick = async () => {
     if (!(await confirmar(`¿Borrar el perfil de ${h.nombre || 'esta persona'}? Sus sesiones quedan.`, 'Borrar'))) return;
     planes().forEach(p => { if (p.persona === h.id) delete p.persona; });
@@ -17425,9 +17686,10 @@ function vPersona(id) {
 
    En cada ejercicio de una sesión, ⇅ ofrece las regresiones (más
    fácil) y las progresiones (más difícil) que anotaste en tus
-   análisis MAT 1 (regresiones Pre-Pilates y Mat 1, progresiones Mat 1
-   y Mat 2) y MAT 2 (regresiones Pre-Pilates, Mat 1 y Mat 2,
-   progresiones). La relación vale para los dos lados: si A es
+   análisis MAT 1 (regresiones de Principios del Movimiento/Pre-Pilates
+   y Mat 1, progresiones Mat 1 y Mat 2) y MAT 2 (regresiones
+   Pre-Pilates, Mat 1 y Mat 2, progresiones), y el mismo ejercicio con
+   un prop que asiste o resiste (fichas y planilla de Mat 3). La relación vale para los dos lados: si A es
    regresión de B, B es progresión de A (así los de Pre-Pilates
    también tienen a dónde progresar). Los grupos ("Serie de 5", "Serie
    lateral", "Teasers", "Todas las planchas", "Puentes", "Todas las
@@ -17495,9 +17757,15 @@ function opcionesVariantes(p, i) {
   const usados = new Set(p.items.map(y => y.id));
   const lista = (xs, sube) => xs.map(ejPlan).filter(Boolean).filter(c => !usados.has(c.id) && sirve(c) && (!x.lado || c.pos === e.pos))
     .sort((a, b) => (b.pos === e.pos) - (a.pos === e.pos) || (sube ? nivVar(a.id) - nivVar(b.id) : nivVar(b.id) - nivVar(a.id)) || (a.f === 'pre') - (b.f === 'pre'));
-  return { reg: lista(v.reg, false), prog: lista(v.prog, true) };
+  /* el mismo ejercicio con un prop: los que asisten (más fácil) o resisten (más difícil) según tus fichas
+     de Mat 1 y Mat 2, y los de tu planilla de Mat 3; en una clase generada, solo los props que tiene */
+  const ps = typeof infoGen === 'function' && infoGen(x.id) ? infoGen(x.id).props : [];
+  const props = cfg && cfg.sinProps ? [] : ps.filter(o => o.tipo !== x.prop && (!cfg || !cfg.props.length || cfg.props.includes(o.tipo)))
+    .filter((o, k, a) => a.findIndex(q => q.tipo === o.tipo && q.modo === o.modo) === k)
+    .sort((a, b) => ['asiste', 'resiste', ''].indexOf(a.modo) - ['asiste', 'resiste', ''].indexOf(b.modo));
+  return { reg: lista(v.reg, false), prog: lista(v.prog, true), props };
 }
-const tieneVariantes = (p, i) => { const o = opcionesVariantes(p, i); return o.reg.length + o.prog.length > 0; };
+const tieneVariantes = (p, i) => { const o = opcionesVariantes(p, i); return o.reg.length + o.prog.length + o.props.length > 0; };
 
 function abrirVariantes(p, i) {
   const x = p.items[i], e = ejPlan(x.id), cfg = p.gen || null, soloPos = !!x.lado, niv = nivVar;
@@ -17511,23 +17779,37 @@ function abrirVariantes(p, i) {
   const fila = (c, tipo) => `<button type="button" class="var-ej" data-id="${c.id}" data-tipo="${tipo}">
       <span class="cl-mini">${miniPlan(c)}</span>
       <span class="var-txt"><b>${esc(c.n)}</b><small>${POS_CLASE[c.pos].ico} ${POS_CLASE[c.pos].nom} · ${fuenteNom(c.f)}${typeof NIVELES_GEN !== 'undefined' ? ' · ' + NIVELES_GEN[Math.min(3, niv(c.id))][1] : ''}${c.pos !== e.pos ? ' · <i>cambia de posición</i>' : ''}</small></span></button>`;
-  const { reg: regs, prog: progs } = opcionesVariantes(p, i);
+  const { reg: regs, prog: progs, props } = opcionesVariantes(p, i);
   const m = abrirModal(`<div class="var">
     <h3>${esc(e.n)}</h3>
-    <p class="micro">Según tus análisis MAT 1 y MAT 2${cfg ? `; para progresar, hasta ${NIVELES_GEN[Math.min(3, (NIVEL_IDX[cfg.nivel] ?? 0) + 1)][1].toLowerCase()}${cfg.cuidados.length ? ' y lo que sus cuidados permiten' : ''}` : ''}.${soloPos ? ' Va en los dos lados.' : ''}</p>
+    <p class="micro">Según tu material (Principios del Movimiento y Pre-Pilates, análisis MAT 1 y MAT 2, Mat 3)${cfg ? `; para progresar, hasta ${NIVELES_GEN[Math.min(3, (NIVEL_IDX[cfg.nivel] ?? 0) + 1)][1].toLowerCase()}${cfg.cuidados.length ? ' y lo que sus cuidados permiten' : ''}` : ''}.${soloPos ? ' Va en los dos lados.' : ''}</p>
+    <label class="var-motivo"><span>Por qué lo cambiás <small>(opcional: va a la observación de la hoja para entregar)</small></span><input id="varMotivo" maxlength="160" placeholder="Por ejemplo: le molesta la rodilla al flexionar"></label>
     <h4>⬇️ Más fácil (regresión)</h4>
     ${bloque(regs, 'reg', soloPos ? 'Tus fichas no tienen regresiones de costado para este ejercicio.' : 'Tus fichas no tienen regresiones para este ejercicio.')}
     <h4>⬆️ Más difícil (progresión)</h4>
     ${bloque(progs, 'prog', soloPos ? 'Tus fichas no tienen progresiones de costado para este ejercicio (con su nivel y cuidados).' : 'Tus fichas no tienen progresiones para este ejercicio (con su nivel y cuidados).')}
+    ${props.length ? `<h4>🎯 Con un prop</h4><p class="micro">El mismo ejercicio con un prop: los que asisten lo hacen más fácil y los que resisten, más difícil (tus fichas de Mat 1 y Mat 2 y tu planilla de Mat 3).</p>
+      <div class="var-lista">${props.map((o, k) => `<button type="button" class="var-ej var-prop" data-k="${k}"><span class="var-txt"><b>${esc(o.tipo)} <i class="var-tag ${o.modo || 'm3'}">${o.modo === 'asiste' ? 'más fácil' : o.modo === 'resiste' ? 'más difícil' : 'Mat 3'}</i></b><small>${esc(o.txt)}</small></span></button>`).join('')}</div>` : ''}
     <div class="fila"><button type="button" class="btn ghost" data-cerrar>Cerrar</button></div></div>`);
   $('[data-cerrar]', m).onclick = cerrarModal;
-  $$('.var-ej', m).forEach(b => b.onclick = () => {
-    const c = ejPlan(b.dataset.id);
+  /* un prop: queda en el ejercicio (y en el otro lado, si está intercalado) con su para qué y el motivo */
+  $$('.var-prop', m).forEach(b => b.onclick = () => {
+    const o = props[+b.dataset.k], motivo = (($('#varMotivo', m) || {}).value || '').trim();
+    const gemelo = x.lado ? p.items.findIndex((y, k) => k !== i && y.id === x.id && y.lado && y.lado !== x.lado) : -1;
+    for (const y of [x, ...(gemelo >= 0 ? [p.items[gemelo]] : [])]) Object.assign(y, { prop: o.tipo, propModo: o.modo || '', nota: o.txt.slice(0, 160), motivoProp: motivo });
+    cerrarModal(); SND.toque(); tocar(p);
+    rehacerPlan(p, `.pl-fila[data-i="${i}"]`);
+    toast(`Con <b>${esc(o.tipo)}</b>${o.modo === 'asiste' ? ' (asiste: más fácil)' : o.modo === 'resiste' ? ' (resiste: más difícil)' : ''}${gemelo >= 0 ? ' en los dos lados' : ''}.`, 'toast-suave');
+  });
+  $$('.var-ej:not(.var-prop)', m).forEach(b => b.onclick = () => {
+    const c = ejPlan(b.dataset.id), motivo = ($('#varMotivo', m) || {}).value || '';
     /* si estaba de los dos lados (intercalados), cambian los dos */
     const gemelo = x.lado ? p.items.findIndex((y, k) => k !== i && y.id === x.id && y.lado && y.lado !== x.lado) : -1;
     const nuevo = y => {
       const lado = y.lado && c.pos === 'costado' ? y.lado : '';
-      return { id: c.id, reps: cfg && typeof repsGen === 'function' ? repsGen(c, cfg) : null, prop: '', nota: y.nota || '',
+      /* el cambio queda anotado (qué era, si es más fácil o más difícil y por qué) para la hoja para entregar */
+      return { id: c.id, reps: cfg && typeof repsGen === 'function' ? repsGen(c, cfg) : null, prop: '', nota: y.prop ? '' : y.nota || '',
+        cambio: { de: (y.cambio && y.cambio.de) || y.id, tipo: b.dataset.tipo, motivo: motivo.trim() },
         ...(lado ? { lado } : {}), ...(cfg && typeof adaptacionGen === 'function' ? { adap: adaptacionGen(c, cfg, lado) } : {}) };
     };
     if (gemelo >= 0) p.items[gemelo] = nuevo(p.items[gemelo]);
@@ -17558,7 +17840,7 @@ function abrirVariantes(p, i) {
    ============================================================ */
 'use strict';
 
-const EXP_BASE = { formato: 'docx', mov: 'no', img: 'no', reps: true, trans: true, princ: true, adap: true, notas: true, tilde: false, papel: 'carta' };
+const EXP_BASE = { doc: 'clase', copias: 2, formato: 'docx', mov: 'no', img: 'no', reps: true, trans: true, princ: true, adap: true, notas: true, tilde: false, papel: 'carta' };
 const EXP_PRESETS = [
   ['nombres', 'Solo nombres', { mov: 'no', img: 'no' }],
   ['movs', 'Nombres y movimientos', { mov: 'breve', img: 'no' }],
@@ -17691,17 +17973,52 @@ const coreXml = titulo => `<?xml version="1.0" encoding="UTF-8" standalone="yes"
 
 /* ---------- Word (.docx) ---------- */
 const EMU_PX = 9525;
-function docxArmar(D, cfg, imgs) {
-  const carta = cfg.papel !== 'a4', pgW = carta ? 12240 : 11906, pgH = carta ? 15840 : 16838, mar = 1000, ancho = pgW - 2 * mar;
+/* papel en twips: carta o A4, con márgenes de 1000 */
+const papelDocx = cfg => { const carta = cfg.papel !== 'a4', pgW = carta ? 12240 : 11906, pgH = carta ? 15840 : 16838, mar = 1000; return { pgW, pgH, mar, ancho: pgW - 2 * mar }; };
+/* las piezas de un documento de Word (párrafos, celdas, imágenes); las imágenes se juntan en `medios` */
+function docxKit() {
   const medios = [];
   let idDib = 1;
   const run = (t, o = {}) => `<w:r><w:rPr>${o.b ? '<w:b/>' : ''}${o.i ? '<w:i/>' : ''}${o.color ? `<w:color w:val="${o.color}"/>` : ''}${o.sz ? `<w:sz w:val="${o.sz}"/><w:szCs w:val="${o.sz}"/>` : ''}</w:rPr><w:t xml:space="preserve">${xmlEsc(t)}</w:t></w:r>`;
-  const par = (runs, o = {}) => `<w:p><w:pPr>${o.estilo ? `<w:pStyle w:val="${o.estilo}"/>` : ''}${o.keep ? '<w:keepNext/>' : ''}<w:spacing w:before="${o.antes || 0}" w:after="${o.despues == null ? 60 : o.despues}"/>${o.jc ? `<w:jc w:val="${o.jc}"/>` : ''}</w:pPr>${runs}</w:p>`;
+  const par = (runs, o = {}) => `<w:p><w:pPr>${o.estilo ? `<w:pStyle w:val="${o.estilo}"/>` : ''}${o.keep ? '<w:keepNext/>' : ''}${o.salto ? '<w:pageBreakBefore/>' : ''}<w:spacing w:before="${o.antes || 0}" w:after="${o.despues == null ? 60 : o.despues}"/>${o.jc ? `<w:jc w:val="${o.jc}"/>` : ''}</w:pPr>${runs}</w:p>`;
   const dibujo = (im, anchoPx) => {
     const n = idDib++, rid = 'rIdImg' + n, cx = Math.round(anchoPx * EMU_PX), cy = Math.round(anchoPx * im.h / im.w * EMU_PX);
     medios.push({ name: `word/media/img${n}.jpeg`, data: im.bytes, rid, file: `media/img${n}.jpeg` });
     return `<w:r><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0"><wp:extent cx="${cx}" cy="${cy}"/><wp:docPr id="${n}" name="Imagen ${n}"/><wp:cNvGraphicFramePr><a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"/></wp:cNvGraphicFramePr><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:nvPicPr><pic:cNvPr id="${n}" name="img${n}.jpeg"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="${rid}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${cx}" cy="${cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r>`;
   };
+  const celda = (contenido, w, o = {}) => `<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${o.span ? `<w:gridSpan w:val="${o.span}"/>` : ''}${o.fill ? `<w:shd w:val="clear" w:color="auto" w:fill="${o.fill}"/>` : ''}<w:vAlign w:val="${o.centro ? 'center' : 'top'}"/></w:tcPr>${contenido || par('')}</w:tc>`;
+  /* alto mínimo de la fila en twips (renglones para escribir a mano) */
+  const filaTabla = (celdas, o = {}) => `<w:tr><w:trPr><w:cantSplit/>${o.alto ? `<w:trHeight w:val="${o.alto}"/>` : ''}${o.cab ? '<w:tblHeader/>' : ''}</w:trPr>${celdas}</w:tr>`;
+  const borde = t => `<w:${t} w:val="single" w:sz="4" w:space="0" w:color="BFBFBF"/>`;
+  const tabla = (anchos, filas) => `<w:tbl><w:tblPr><w:tblW w:w="${anchos.reduce((a, b) => a + b, 0)}" w:type="dxa"/><w:tblBorders>${['top', 'left', 'bottom', 'right', 'insideH', 'insideV'].map(borde).join('')}</w:tblBorders><w:tblLayout w:type="fixed"/><w:tblCellMar><w:top w:w="60" w:type="dxa"/><w:left w:w="90" w:type="dxa"/><w:bottom w:w="60" w:type="dxa"/><w:right w:w="90" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>${anchos.map(w => `<w:gridCol w:w="${w}"/>`).join('')}</w:tblGrid>${filas}</w:tbl>`;
+  return { medios, run, par, dibujo, celda, filaTabla, tabla };
+}
+/* el paquete .docx: documento, estilos, pie con el número de página e imágenes */
+function docxPaquete(cuerpo, K, titulo, cfg) {
+  const { pgW, pgH, mar } = papelDocx(cfg), run = K.run, medios = K.medios;
+  const NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"';
+  const documento = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document ${NS}><w:body>${cuerpo}<w:sectPr><w:footerReference w:type="default" r:id="rIdPie"/><w:pgSz w:w="${pgW}" w:h="${pgH}"/><w:pgMar w:top="${mar}" w:right="${mar}" w:bottom="${mar}" w:left="${mar}" w:header="600" w:footer="500" w:gutter="0"/></w:sectPr></w:body></w:document>`;
+  const pie = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:ftr ${NS}><w:p><w:pPr><w:jc w:val="right"/></w:pPr>${run(sinEmoji(titulo) + ' · Pilates Lab · página ', { sz: 16, color: '888888' })}<w:r><w:rPr><w:sz w:val="16"/><w:color w:val="888888"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:sz w:val="16"/><w:color w:val="888888"/></w:rPr><w:instrText xml:space="preserve"> PAGE </w:instrText></w:r><w:r><w:rPr><w:sz w:val="16"/><w:color w:val="888888"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:sz w:val="16"/><w:color w:val="888888"/></w:rPr><w:t>1</w:t></w:r><w:r><w:rPr><w:sz w:val="16"/><w:color w:val="888888"/></w:rPr><w:fldChar w:fldCharType="end"/></w:r></w:p></w:ftr>`;
+  const estilos = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:eastAsia="Calibri" w:cs="Calibri"/><w:sz w:val="21"/><w:szCs w:val="21"/><w:lang w:val="es-419"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="60" w:line="259" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/></w:style><w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:rPr><w:b/><w:color w:val="1F6F4A"/><w:sz w:val="40"/><w:szCs w:val="40"/></w:rPr></w:style><w:style w:type="table" w:default="1" w:styleId="TableNormal"><w:name w:val="Normal Table"/><w:tblPr><w:tblInd w:w="0" w:type="dxa"/><w:tblCellMar><w:top w:w="0" w:type="dxa"/><w:left w:w="108" w:type="dxa"/><w:bottom w:w="0" w:type="dxa"/><w:right w:w="108" w:type="dxa"/></w:tblCellMar></w:tblPr></w:style></w:styles>`;
+  const tipos = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="jpeg" ContentType="image/jpeg"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/><Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>`;
+  const rels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/></Relationships>`;
+  const docRels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rIdEst" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/><Relationship Id="rIdPie" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer1.xml"/>${medios.map(m => `<Relationship Id="${m.rid}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="${m.file}"/>`).join('')}</Relationships>`;
+  return armarZip([
+    { name: '[Content_Types].xml', data: tipos }, { name: '_rels/.rels', data: rels }, { name: 'docProps/core.xml', data: coreXml(titulo) },
+    { name: 'word/document.xml', data: documento }, { name: 'word/styles.xml', data: estilos }, { name: 'word/footer1.xml', data: pie },
+    { name: 'word/_rels/document.xml.rels', data: docRels }, ...medios.map(m => ({ name: m.name, data: m.data }))
+  ]);
+}
+
+
+function docxArmar(D, cfg, imgs) {
+  const { ancho } = papelDocx(cfg), K = docxKit(), { run, par, dibujo, celda, filaTabla } = K;
   /* columnas: casilla, Nº, imagen, ejercicio (con el movimiento), repeticiones, prop */
   const conImg = cfg.img !== 'no', seq = cfg.img === 'secuencia', conReps = cfg.reps;
   const cols = [];
@@ -17711,8 +18028,6 @@ function docxArmar(D, cfg, imgs) {
   const fijas = cols.reduce((a, c) => a + c[1], 0) + (conReps ? 1500 + 1500 : 0);
   cols.push(['Ejercicio', ancho - fijas]);
   if (conReps) cols.push(['Repeticiones', 1500], ['Prop', 1500]);
-  const celda = (contenido, w, o = {}) => `<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${o.span ? `<w:gridSpan w:val="${o.span}"/>` : ''}${o.fill ? `<w:shd w:val="clear" w:color="auto" w:fill="${o.fill}"/>` : ''}<w:vAlign w:val="${o.centro ? 'center' : 'top'}"/></w:tcPr>${contenido || par('')}</w:tc>`;
-  const filaTabla = (celdas, o = {}) => `<w:tr><w:trPr><w:cantSplit/>${o.cab ? '<w:tblHeader/>' : ''}</w:trPr>${celdas}</w:tr>`;
   let filas = filaTabla(cols.map(([t, w]) => celda(par(run(t, { b: true, sz: 19 }), { despues: 0 }), w, { fill: 'E3F2EA', centro: true })).join(''), { cab: true });
   let k = 0;
   for (const f of D.filas) {
@@ -17737,33 +18052,19 @@ function docxArmar(D, cfg, imgs) {
     if (conReps) { cs.push(celda(par(run(f.reps, { sz: 19 }), { despues: 0 }), cols[ci++][1])); cs.push(celda(par(run(f.prop, { sz: 19 }), { despues: 0 }), cols[ci++][1])); }
     filas += filaTabla(cs.join(''));
   }
-  const borde = t => `<w:${t} w:val="single" w:sz="4" w:space="0" w:color="BFBFBF"/>`;
-  const tabla = `<w:tbl><w:tblPr><w:tblW w:w="${ancho}" w:type="dxa"/><w:tblBorders>${['top', 'left', 'bottom', 'right', 'insideH', 'insideV'].map(borde).join('')}</w:tblBorders><w:tblLayout w:type="fixed"/><w:tblCellMar><w:top w:w="60" w:type="dxa"/><w:left w:w="90" w:type="dxa"/><w:bottom w:w="60" w:type="dxa"/><w:right w:w="90" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>${cols.map(c => `<w:gridCol w:w="${c[1]}"/>`).join('')}</w:tblGrid>${filas}</w:tbl>`;
+  const tabla = K.tabla(cols.map(c => c[1]), filas);
   let cuerpo = par(run(D.titulo), { estilo: 'Title', despues: 60 }) + par(run(D.info, { color: '555555' }), { despues: 60 });
   for (const t of D.extra) cuerpo += par(run(t, { sz: 20 }), { despues: 60 });
   if (cfg.princ && D.princ.length) cuerpo += par(run('Los 5 principios del movimiento: ', { b: true, sz: 20 }) + run(D.princ.map(p => `${p.corto} ${p.n}`).join(' · '), { sz: 20 }), { despues: 160 });
   cuerpo += tabla + par('', { despues: 0 });
-  const NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"';
-  const documento = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document ${NS}><w:body>${cuerpo}<w:sectPr><w:footerReference w:type="default" r:id="rIdPie"/><w:pgSz w:w="${pgW}" w:h="${pgH}"/><w:pgMar w:top="${mar}" w:right="${mar}" w:bottom="${mar}" w:left="${mar}" w:header="600" w:footer="500" w:gutter="0"/></w:sectPr></w:body></w:document>`;
-  const pie = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:ftr ${NS}><w:p><w:pPr><w:jc w:val="right"/></w:pPr>${run(sinEmoji(D.titulo) + ' · Pilates Lab · página ', { sz: 16, color: '888888' })}<w:r><w:rPr><w:sz w:val="16"/><w:color w:val="888888"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:sz w:val="16"/><w:color w:val="888888"/></w:rPr><w:instrText xml:space="preserve"> PAGE </w:instrText></w:r><w:r><w:rPr><w:sz w:val="16"/><w:color w:val="888888"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:sz w:val="16"/><w:color w:val="888888"/></w:rPr><w:t>1</w:t></w:r><w:r><w:rPr><w:sz w:val="16"/><w:color w:val="888888"/></w:rPr><w:fldChar w:fldCharType="end"/></w:r></w:p></w:ftr>`;
-  const estilos = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:eastAsia="Calibri" w:cs="Calibri"/><w:sz w:val="21"/><w:szCs w:val="21"/><w:lang w:val="es-419"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="60" w:line="259" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/></w:style><w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:rPr><w:b/><w:color w:val="1F6F4A"/><w:sz w:val="40"/><w:szCs w:val="40"/></w:rPr></w:style><w:style w:type="table" w:default="1" w:styleId="TableNormal"><w:name w:val="Normal Table"/><w:tblPr><w:tblInd w:w="0" w:type="dxa"/><w:tblCellMar><w:top w:w="0" w:type="dxa"/><w:left w:w="108" w:type="dxa"/><w:bottom w:w="0" w:type="dxa"/><w:right w:w="108" w:type="dxa"/></w:tblCellMar></w:tblPr></w:style></w:styles>`;
-  const tipos = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="jpeg" ContentType="image/jpeg"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/><Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>`;
-  const rels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/></Relationships>`;
-  const docRels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rIdEst" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/><Relationship Id="rIdPie" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer1.xml"/>${medios.map(m => `<Relationship Id="${m.rid}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="${m.file}"/>`).join('')}</Relationships>`;
-  return armarZip([
-    { name: '[Content_Types].xml', data: tipos }, { name: '_rels/.rels', data: rels }, { name: 'docProps/core.xml', data: coreXml(D.titulo) },
-    { name: 'word/document.xml', data: documento }, { name: 'word/styles.xml', data: estilos }, { name: 'word/footer1.xml', data: pie },
-    { name: 'word/_rels/document.xml.rels', data: docRels }, ...medios.map(m => ({ name: m.name, data: m.data }))
-  ]);
+  return docxPaquete(cuerpo, K, D.titulo, cfg);
 }
 
 /* ---------- Excel (.xlsx) ---------- */
+/* estilos de las planillas: 1 título, 2 encabezado, 3 celda, 4 celda en negrita, 5 fila de posición,
+   6 texto gris, 7 número centrado, 8 texto que se parte sin borde */
+const XLSX_ESTILOS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="5"><font><sz val="11"/><name val="Calibri"/><family val="2"/></font><font><b/><sz val="11"/><name val="Calibri"/><family val="2"/></font><font><b/><sz val="16"/><color rgb="FF1F6F4A"/><name val="Calibri"/><family val="2"/></font><font><i/><sz val="10"/><color rgb="FF444444"/><name val="Calibri"/><family val="2"/></font><font><sz val="10"/><color rgb="FF555555"/><name val="Calibri"/><family val="2"/></font></fonts><fills count="4"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE3F2EA"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF2F2F2"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFBFBFBF"/></left><right style="thin"><color rgb="FFBFBFBF"/></right><top style="thin"><color rgb="FFBFBFBF"/></top><bottom style="thin"><color rgb="FFBFBFBF"/></bottom><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="9"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf><xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf><xf numFmtId="0" fontId="1" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf><xf numFmtId="0" fontId="3" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf><xf numFmtId="0" fontId="4" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="0" fontId="1" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="top"/></xf><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
 const colLetra = i => { let s = ''; i++; while (i > 0) { const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; };
 function xlsxArmar(D, cfg, imgs) {
   const cols = [];
@@ -17821,8 +18122,7 @@ function xlsxArmar(D, cfg, imgs) {
     const cx = Math.round(a.w * EMU_PX), cy = Math.round(a.h * EMU_PX);
     return `<xdr:oneCellAnchor><xdr:from><xdr:col>${a.col}</xdr:col><xdr:colOff>${Math.round(a.x * EMU_PX)}</xdr:colOff><xdr:row>${a.fila}</xdr:row><xdr:rowOff>${4 * EMU_PX}</xdr:rowOff></xdr:from><xdr:ext cx="${cx}" cy="${cy}"/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="${i + 2}" name="Imagen ${i + 1}"/><xdr:cNvPicPr><a:picLocks noChangeAspect="1"/></xdr:cNvPicPr></xdr:nvPicPr><xdr:blipFill><a:blip r:embed="rIdImg${i + 1}"/><a:stretch><a:fillRect/></a:stretch></xdr:blipFill><xdr:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${cx}" cy="${cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></xdr:spPr></xdr:pic><xdr:clientData/></xdr:oneCellAnchor>`;
   }).join('')}</xdr:wsDr>`;
-  const estilos = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="5"><font><sz val="11"/><name val="Calibri"/><family val="2"/></font><font><b/><sz val="11"/><name val="Calibri"/><family val="2"/></font><font><b/><sz val="16"/><color rgb="FF1F6F4A"/><name val="Calibri"/><family val="2"/></font><font><i/><sz val="10"/><color rgb="FF444444"/><name val="Calibri"/><family val="2"/></font><font><sz val="10"/><color rgb="FF555555"/><name val="Calibri"/><family val="2"/></font></fonts><fills count="4"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE3F2EA"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF2F2F2"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFBFBFBF"/></left><right style="thin"><color rgb="FFBFBFBF"/></right><top style="thin"><color rgb="FFBFBFBF"/></top><bottom style="thin"><color rgb="FFBFBFBF"/></bottom><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="9"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf><xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf><xf numFmtId="0" fontId="1" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf><xf numFmtId="0" fontId="3" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf><xf numFmtId="0" fontId="4" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="0" fontId="1" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="top"/></xf><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+  const estilos = XLSX_ESTILOS;
   const libro = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ${NSR}><sheets><sheet name="Clase" sheetId="1" r:id="rId1"/></sheets><definedNames><definedName name="_xlnm.Print_Titles" localSheetId="0">Clase!$${filaCab}:$${filaCab}</definedName></definedNames></workbook>`;
   const tipos = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -17894,32 +18194,82 @@ function pdfPartir(s, negrita, tam, ancho) {
 }
 const pdfStr = s => '(' + s.replace(/\\/g, '\\\\').replace(/\(/g, '\\(').replace(/\)/g, '\\)') + ')';
 const n2 = v => (Math.round(v * 100) / 100).toString();
-function pdfArmar(D, cfg, imgs) {
+/* un PDF en blanco con lo necesario para escribir: texto que se parte en líneas, rectángulos, líneas,
+   fotos, salto de página y el cierre (pie con el número de página y los objetos del archivo) */
+function nuevoPDF(cfg) {
   const carta = cfg.papel !== 'a4', PW = carta ? 612 : 595.28, PH = carta ? 792 : 841.89, M = 42, AN = PW - 2 * M, PIE = 30;
   const paginas = [], fotos = [];
-  let ops = [], y = M, usadas = new Set();
-  const nueva = () => { if (ops.length) paginas.push({ ops, usadas }); ops = []; usadas = new Set(); y = M; };
+  let ops = [], usadas = new Set();
+  const doc = { PW, PH, M, AN, PIE, y: M };
+  const nueva = () => { if (ops.length) paginas.push({ ops, usadas }); ops = []; usadas = new Set(); doc.y = M; };
   const Y = v => PH - v;
   const texto = (s, x, yTop, tam, negrita, color = '0.1 0.1 0.1') => ops.push(`BT /${negrita ? 'F2' : 'F1'} ${tam} Tf ${color} rg ${n2(x)} ${n2(Y(yTop + tam * 0.8))} Td ${pdfStr(s)} Tj ET`);
   const rect = (x, yTop, w, h, fill, stroke) => { if (fill) ops.push(`${fill} rg ${n2(x)} ${n2(Y(yTop + h))} ${n2(w)} ${n2(h)} re f`); if (stroke) ops.push(`${stroke} RG 0.7 w ${n2(x)} ${n2(Y(yTop + h))} ${n2(w)} ${n2(h)} re S`); };
   const foto = (m, x, yTop, w) => { let i = fotos.indexOf(m); if (i < 0) { fotos.push(m); i = fotos.length - 1; } usadas.add(i); const h = w * m.h / m.w; ops.push(`q ${n2(w)} 0 0 ${n2(h)} ${n2(x)} ${n2(Y(yTop + h))} cm /Im${i + 1} Do Q`); return h; };
-  const cabe = h => y + h <= PH - M - PIE;
+  const cabe = h => doc.y + h <= PH - M - PIE;
   /* bloques de texto: [texto, negrita, tamaño, color, sangría] → líneas medidas */
   const medir = (partes, ancho) => partes.flatMap(([s, b, tam, color]) => pdfPartir(s, b, tam, ancho).map(l => ({ l, b, tam, color, h: tam * 1.3 })));
-  const escribir = (lineas, x) => { for (const ln of lineas) { if (!cabe(ln.h)) nueva(); texto(ln.l, x, y, ln.tam, ln.b, ln.color); y += ln.h; } };
+  const escribir = (lineas, x) => { for (const ln of lineas) { if (!cabe(ln.h)) nueva(); texto(ln.l, x, doc.y, ln.tam, ln.b, ln.color); doc.y += ln.h; } };
+  const linea = (x1, y1, x2, y2, color = '0.6 0.6 0.6', w = 0.6) => ops.push(`${color} RG ${w} w ${n2(x1)} ${n2(Y(y1))} m ${n2(x2)} ${n2(Y(y2))} l S`);
+  Object.assign(doc, { nueva, Y, texto, rect, foto, cabe, medir, escribir, linea });
+  doc.cerrar = titulo => {
+    nueva();
+    /* pie con el número de página */
+    const tot = paginas.length;
+    paginas.forEach((pg, i) => {
+      const t = pdfTexto(`${titulo} · Pilates Lab`), d = pdfTexto(`página ${i + 1} de ${tot}`);
+      pg.ops.push(`BT /F1 8 Tf 0.5 0.5 0.5 rg ${n2(M)} ${n2(M - 16)} Td ${pdfStr(t)} Tj ET`, `BT /F1 8 Tf 0.5 0.5 0.5 rg ${n2(PW - M - pdfAncho(d, false, 8))} ${n2(M - 16)} Td ${pdfStr(d)} Tj ET`);
+    });
+    /* objetos: 1 catálogo, 2 páginas, 3–4 fuentes, imágenes, y por página contenido + página */
+    const objs = [];
+    const latin1 = s => { const u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i) & 255; return u; };
+    objs[1] = latin1('<< /Type /Catalog /Pages 2 0 R >>');
+    objs[3] = latin1('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>');
+    objs[4] = latin1('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
+    fotos.forEach((m, i) => { objs[5 + i] = unirBytes([latin1(`<< /Type /XObject /Subtype /Image /Width ${m.w} /Height ${m.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${m.bytes.length} >>\nstream\n`), m.bytes, latin1('\nendstream')]); });
+    let sig = 5 + fotos.length;
+    const kids = [];
+    for (const pg of paginas) {
+      const cont = latin1(pg.ops.join('\n')), nc = sig++, np = sig++;
+      objs[nc] = unirBytes([latin1(`<< /Length ${cont.length} >>\nstream\n`), cont, latin1('\nendstream')]);
+      const xo = [...pg.usadas].map(i => `/Im${i + 1} ${5 + i} 0 R`).join(' ');
+      objs[np] = latin1(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${n2(PW)} ${n2(PH)}] /Resources << /Font << /F1 3 0 R /F2 4 0 R >>${xo ? ` /XObject << ${xo} >>` : ''} >> /Contents ${nc} 0 R >>`);
+      kids.push(np);
+    }
+    objs[2] = latin1(`<< /Type /Pages /Kids [${kids.map(k2 => k2 + ' 0 R').join(' ')}] /Count ${kids.length} >>`);
+    const info = sig;
+    objs[info] = latin1(`<< /Title ${pdfStr(pdfTexto(titulo))} /Producer (Pilates Lab) >>`);
+    const partes = [latin1('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n')], offs = [];
+    let off = partes[0].length;
+    for (let i = 1; i < objs.length; i++) {
+      const cab = latin1(`${i} 0 obj\n`), fin = latin1('\nendobj\n');
+      offs[i] = off;
+      partes.push(cab, objs[i], fin);
+      off += cab.length + objs[i].length + fin.length;
+    }
+    const xref = [`xref\n0 ${objs.length}\n0000000000 65535 f \n`, ...offs.slice(1).map(o => String(o).padStart(10, '0') + ' 00000 n \n')].join('');
+    partes.push(latin1(xref + `trailer\n<< /Size ${objs.length} /Root 1 0 R /Info ${info} 0 R >>\nstartxref\n${off}\n%%EOF\n`));
+    return unirBytes(partes);
+
+  };
+  return doc;
+}
+
+function pdfArmar(D, cfg, imgs) {
+  const doc = nuevoPDF(cfg), { PW, M, AN, Y, texto, rect, foto, cabe, medir, escribir, nueva } = doc, PH = doc.PH;
   /* encabezado */
-  escribir(medir([[D.titulo, true, 20, '0.12 0.43 0.29']], AN), M); y += 4;
+  escribir(medir([[D.titulo, true, 20, '0.12 0.43 0.29']], AN), M); doc.y += 4;
   escribir(medir([[D.info, false, 10, '0.35 0.35 0.35'], ...D.extra.map(t => [t, false, 10, '0.2 0.2 0.2'])], AN), M);
-  if (cfg.princ && D.princ.length) { y += 2; escribir(medir([['Los 5 principios del movimiento: ' + D.princ.map(p => `${p.corto} ${p.n}`).join(' · '), true, 10, '0.12 0.43 0.29']], AN), M); }
-  y += 10;
+  if (cfg.princ && D.princ.length) { doc.y += 2; escribir(medir([['Los 5 principios del movimiento: ' + D.princ.map(p => `${p.corto} ${p.n}`).join(' · '), true, 10, '0.12 0.43 0.29']], AN), M); }
+  doc.y += 10;
   let k = 0;
   for (const f of D.filas) {
     if (f.tipo === 'pos') {
       const ls = medir([[f.nom, true, 11.5, '0.1 0.1 0.1'], ...(cfg.trans && f.trans ? [['› ' + f.trans, false, 9, '0.35 0.35 0.35']] : [])], AN - 12);
       const h = ls.reduce((a, l) => a + l.h, 0) + 8;
       if (!cabe(h + 60)) nueva();
-      rect(M, y, AN, h, '0.95 0.95 0.95');
-      y += 4; escribir(ls, M + 6); y += 8;
+      rect(M, doc.y, AN, h, '0.95 0.95 0.95');
+      doc.y += 4; escribir(ls, M + 6); doc.y += 8;
       continue;
     }
     /* una imagen va al costado; la secuencia, en fila debajo del nombre; nada más alto que 95 pt */
@@ -17929,7 +18279,7 @@ function pdfArmar(D, cfg, imgs) {
     const x0 = M + (cfg.tilde ? 20 : 0) + 22, anchoTxt = AN - (x0 - M) - (izq ? izq + 10 : 0);
     const meta = [cfg.reps && f.reps ? f.reps : '', cfg.reps && f.prop ? 'Prop: ' + f.prop : '', f.pos, f.fuente, compacto && cfg.princ && f.principios ? 'Principios: ' + f.principios : ''].filter(Boolean).join(' · ');
     const conPr = !compacto && cfg.princ && f.principios;
-    /* cabecera (nombre, datos, principios) y cuerpo (movimiento, adaptación, nota); la secuencia va entre los dos */
+    /* cabecera (nombre, datos, principios) doc.y cuerpo (movimiento, adaptación, nota); la secuencia va entre los dos */
     const cab = medir([[f.nombre, true, 12, '0.08 0.08 0.08'], [meta, false, 9.5, '0.3 0.3 0.3'],
       ...(conPr ? [['Principios: ' + f.principios, false, 8.5, '0.12 0.43 0.29']] : [])], anchoTxt);
     const cuerpo = medir([...f.mov.map(([a, b]) => [`${a}: ${b}`, false, 9.5, '0.12 0.12 0.12']),
@@ -17940,55 +18290,19 @@ function pdfArmar(D, cfg, imgs) {
     const hSeq = seq ? Math.max(...im.map(m => anchoSeq(m) * m.h / m.w)) + 6 : 0;
     const hImg = izq ? izq * im[0].h / im[0].w : 0;
     const sep = compacto ? 3 : 6, hBloque = Math.max(hTxt + hSeq, hImg) + 2 * sep;
-    if (!cabe(hBloque) && hBloque < PH - 2 * M - PIE) nueva();
-    const y0 = y;
+    if (!cabe(hBloque) && hBloque < PH - 2 * M - doc.PIE) nueva();
+    const y0 = doc.y;
     if (cfg.tilde) rect(M, y0 + 1, 11, 11, null, '0.4 0.4 0.4');
     texto(String(f.num), M + (cfg.tilde ? 20 : 0), y0, 12, true, '0.12 0.43 0.29');
     if (izq) foto(im[0], PW - M - izq, y0, izq);
     escribir(cab, x0);
-    if (hSeq) { let x = x0; y += 2; for (const m of im) { const w = anchoSeq(m); foto(m, x, y, w); x += w + 6; } y += hSeq; }
+    if (hSeq) { let x = x0; doc.y += 2; for (const m of im) { const w = anchoSeq(m); foto(m, x, doc.y, w); x += w + 6; } doc.y += hSeq; }
     escribir(cuerpo, x0);
-    y = Math.max(y, y0 + hImg) + sep;
-    ops.push(`0.85 0.85 0.85 RG 0.5 w ${n2(M)} ${n2(Y(y))} m ${n2(PW - M)} ${n2(Y(y))} l S`);
-    y += sep;
+    doc.y = Math.max(doc.y, y0 + hImg) + sep;
+    doc.linea(M, doc.y, PW - M, doc.y, '0.85 0.85 0.85', 0.5);
+    doc.y += sep;
   }
-  nueva();
-  /* pie con el número de página */
-  const tot = paginas.length;
-  paginas.forEach((pg, i) => {
-    const t = pdfTexto(`${D.titulo} · Pilates Lab`), d = pdfTexto(`página ${i + 1} de ${tot}`);
-    pg.ops.push(`BT /F1 8 Tf 0.5 0.5 0.5 rg ${n2(M)} ${n2(M - 16)} Td ${pdfStr(t)} Tj ET`, `BT /F1 8 Tf 0.5 0.5 0.5 rg ${n2(PW - M - pdfAncho(d, false, 8))} ${n2(M - 16)} Td ${pdfStr(d)} Tj ET`);
-  });
-  /* objetos: 1 catálogo, 2 páginas, 3–4 fuentes, imágenes, y por página contenido + página */
-  const objs = [];
-  const latin1 = s => { const u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i) & 255; return u; };
-  objs[1] = latin1('<< /Type /Catalog /Pages 2 0 R >>');
-  objs[3] = latin1('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>');
-  objs[4] = latin1('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
-  fotos.forEach((m, i) => { objs[5 + i] = unirBytes([latin1(`<< /Type /XObject /Subtype /Image /Width ${m.w} /Height ${m.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${m.bytes.length} >>\nstream\n`), m.bytes, latin1('\nendstream')]); });
-  let sig = 5 + fotos.length;
-  const kids = [];
-  for (const pg of paginas) {
-    const cont = latin1(pg.ops.join('\n')), nc = sig++, np = sig++;
-    objs[nc] = unirBytes([latin1(`<< /Length ${cont.length} >>\nstream\n`), cont, latin1('\nendstream')]);
-    const xo = [...pg.usadas].map(i => `/Im${i + 1} ${5 + i} 0 R`).join(' ');
-    objs[np] = latin1(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${n2(PW)} ${n2(PH)}] /Resources << /Font << /F1 3 0 R /F2 4 0 R >>${xo ? ` /XObject << ${xo} >>` : ''} >> /Contents ${nc} 0 R >>`);
-    kids.push(np);
-  }
-  objs[2] = latin1(`<< /Type /Pages /Kids [${kids.map(k2 => k2 + ' 0 R').join(' ')}] /Count ${kids.length} >>`);
-  const info = sig;
-  objs[info] = latin1(`<< /Title ${pdfStr(pdfTexto(D.titulo))} /Producer (Pilates Lab) >>`);
-  const partes = [latin1('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n')], offs = [];
-  let off = partes[0].length;
-  for (let i = 1; i < objs.length; i++) {
-    const cab = latin1(`${i} 0 obj\n`), fin = latin1('\nendobj\n');
-    offs[i] = off;
-    partes.push(cab, objs[i], fin);
-    off += cab.length + objs[i].length + fin.length;
-  }
-  const xref = [`xref\n0 ${objs.length}\n0000000000 65535 f \n`, ...offs.slice(1).map(o => String(o).padStart(10, '0') + ' 00000 n \n')].join('');
-  partes.push(latin1(xref + `trailer\n<< /Size ${objs.length} /Root 1 0 R /Info ${info} 0 R >>\nstartxref\n${off}\n%%EOF\n`));
-  return unirBytes(partes);
+  return doc.cerrar(D.titulo);
 }
 
 /* ---------- armar y descargar ---------- */
@@ -18002,32 +18316,41 @@ async function exportarPlan(p, cfg) {
 }
 const TIPO_EXP = { docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', pdf: 'application/pdf' };
 
-function abrirExportar(p) {
+function abrirExportar(p, opts = {}) {
   const cfg = cfgExp();
+  /* sin ejercicios (desde el perfil de una persona) solo hay historia clínica */
+  const soloHistoria = !p.items.length;
+  if (opts.doc || soloHistoria) cfg.doc = soloHistoria ? 'historia' : opts.doc;
   const chip = (g, v, t, on) => `<button type="button" data-xg="${g}" data-xv="${esc(v)}" class="${on ? 'on' : ''}" aria-pressed="${on}">${t}</button>`;
   const presetDe = () => (EXP_PRESETS.find(([, , o]) => o.mov === cfg.mov && o.img === cfg.img) || [''])[0];
   const pintar = () => {
+    const doc = cfg.doc || 'clase', formatos = EXP_FORMATOS.filter(f => doc !== 'historia' || f[0] !== 'xlsx');
+    if (!formatos.some(f => f[0] === cfg.formato)) cfg.formato = 'docx';
     const m = abrirModal(`<div class="exp">
-      <h3>Descargar la sesión</h3>
-      <p class="micro">Word y Excel quedan editables; el PDF es para imprimir.</p>
-      <div class="exp-formatos" role="group" aria-label="Formato">${EXP_FORMATOS.map(([k, t, s]) => `<button type="button" data-xg="formato" data-xv="${k}" class="${cfg.formato === k ? 'on' : ''}" aria-pressed="${cfg.formato === k}"><b>${t}</b><small>${s}</small></button>`).join('')}</div>
-      <h4>Qué incluir</h4>
+      <h3>${soloHistoria ? 'Historia clínica' : 'Descargar la sesión'}</h3>
+      ${soloHistoria ? '' : `<div class="exp-formatos exp-docs" role="group" aria-label="Documento">${DOCS_EXP.map(([k, t, s2]) => `<button type="button" data-xg="doc" data-xv="${k}" class="${doc === k ? 'on' : ''}" aria-pressed="${doc === k}"><b>${t}</b><small>${s2}</small></button>`).join('')}</div>`}
+      <p class="micro">${doc === 'clase' ? 'Word y Excel quedan editables; el PDF es para imprimir.' : doc === 'entrega' ? 'Para imprimir y completar: cada ejercicio con sus repeticiones y una observación (la adaptación, el prop y para qué, o qué se cambió y por qué; el motivo lo escribís al cambiarlo con ⇅ o en la nota). Lo que falte, a mano o en Word.' : 'Para imprimir y completar. Lo que ya se sabe (su perfil, sus cuidados) viene escrito; lo demás queda en blanco. Word queda editable.'}</p>
+      <div class="exp-formatos" role="group" aria-label="Formato">${formatos.map(([k, t, s2]) => `<button type="button" data-xg="formato" data-xv="${k}" class="${cfg.formato === k ? 'on' : ''}" aria-pressed="${cfg.formato === k}"><b>${t}</b><small>${s2}</small></button>`).join('')}</div>
+      ${doc === 'clase' ? `<h4>Qué incluir</h4>
       <div class="chips" role="group" aria-label="Contenido">${EXP_PRESETS.map(([k, t]) => chip('preset', k, t, presetDe() === k)).join('')}</div>
       <h4>Movimiento</h4>
       <div class="chips" role="group" aria-label="Movimiento">${chip('mov', 'no', 'Sin', cfg.mov === 'no')}${chip('mov', 'breve', 'Posición inicial y pasos', cfg.mov === 'breve')}${chip('mov', 'completo', '+ indicaciones', cfg.mov === 'completo')}</div>
       <h4>Imagen</h4>
       <div class="chips" role="group" aria-label="Imagen">${chip('img', 'no', 'Sin', cfg.img === 'no')}${chip('img', 'primera', 'La primera', cfg.img === 'primera')}${chip('img', 'secuencia', 'La secuencia', cfg.img === 'secuencia')}</div>
       <h4>Además</h4>
-      <div class="chips" role="group" aria-label="Además">${[['reps', 'Repeticiones y prop'], ['trans', 'Transiciones'], ['princ', 'Los 5 principios'], ['adap', 'Adaptaciones'], ['notas', 'Notas'], ['tilde', 'Casilla para tildar']].map(([k, t]) => chip('extra', k, t, cfg[k])).join('')}</div>
+      <div class="chips" role="group" aria-label="Además">${[['reps', 'Repeticiones y prop'], ['trans', 'Transiciones'], ['princ', 'Los 5 principios'], ['adap', 'Adaptaciones'], ['notas', 'Notas'], ['tilde', 'Casilla para tildar']].map(([k, t]) => chip('extra', k, t, cfg[k])).join('')}</div>` : ''}
+      ${doc === 'entrega' ? `<h4>Copias</h4><div class="chips" role="group" aria-label="Copias">${chip('copias', '2', 'Dos: una para entregar y otra para vos', cfg.copias !== 1)}${chip('copias', '1', 'Una', cfg.copias === 1)}</div>` : ''}
       <h4>Papel</h4>
       <div class="chips" role="group" aria-label="Papel">${chip('papel', 'carta', 'Carta', cfg.papel !== 'a4')}${chip('papel', 'a4', 'A4', cfg.papel === 'a4')}</div>
-      ${cfg.img !== 'no' && p.items.some(x => (ejPlan(x.id) || {}).pm) ? '<p class="micro exp-ojo">Las fotos de Pre-Pilates parecen del manual del curso: el archivo es para tu uso; no lo publiques.</p>' : ''}
-      <div class="fila"><button type="button" class="btn3d verde" id="expIr">⬇️ Descargar ${EXP_FORMATOS.find(f => f[0] === cfg.formato)[1]}</button><button type="button" class="btn ghost" data-cerrar>Cerrar</button></div>
+      ${doc === 'clase' && cfg.img !== 'no' && p.items.some(x => (ejPlan(x.id) || {}).pm) ? '<p class="micro exp-ojo">Las fotos de Pre-Pilates parecen del manual del curso: el archivo es para tu uso; no lo publiques.</p>' : ''}
+      ${doc === 'historia' ? '<p class="micro exp-ojo">Tiene datos de salud: guardalo y compartilo con cuidado.</p>' : ''}
+      <div class="fila"><button type="button" class="btn3d verde" id="expIr">⬇️ Descargar ${formatos.find(f => f[0] === cfg.formato)[1]}</button><button type="button" class="btn ghost" data-cerrar>Cerrar</button></div>
     </div>`);
     $$('[data-xg]', m).forEach(b => b.onclick = () => {
       const g = b.dataset.xg, v = b.dataset.xv;
       if (g === 'preset') Object.assign(cfg, EXP_PRESETS.find(x => x[0] === v)[2]);
       else if (g === 'extra') cfg[v] = !cfg[v];
+      else if (g === 'copias') cfg.copias = +v;
       else cfg[g] = v;
       guardar(); SND.toque(); pintar();
     });
@@ -18036,9 +18359,10 @@ function abrirExportar(p) {
       const bot = $('#expIr', m);
       bot.disabled = true; bot.textContent = 'Armando…';
       try {
-        const { nombre, bytes } = await exportarPlan(p, cfg);
+        const { nombre, bytes } = doc === 'clase' ? await exportarPlan(p, cfg) : exportarFormulario(p, cfg);
+        const tipo = TIPO_EXP[nombre.split('.').pop()];
         cerrarModal();
-        await descargar(nombre, new Blob([bytes], { type: TIPO_EXP[cfg.formato] }), TIPO_EXP[cfg.formato], `Listo: <b>${esc(nombre)}</b>.`);
+        await descargar(nombre, new Blob([bytes], { type: tipo }), tipo, `Listo: <b>${esc(nombre)}</b>.`);
       } catch (e) {
         console.error(e);
         bot.disabled = false; bot.textContent = 'Probar de nuevo';
@@ -18047,6 +18371,318 @@ function abrirExportar(p) {
     };
   };
   pintar();
+}
+
+</script>
+<script>
+/* ============================================================
+   Pilates Lab — Formularios para imprimir y completar
+
+   · Hoja para entregar: el plan de la clase con Nº, ejercicio,
+     repeticiones y una observación por ejercicio (la adaptación, el
+     prop y para qué, o el ejercicio que se cambió y por qué). Dos
+     copias: una para entregar y otra para quien da la clase. Con
+     renglones para completar a mano y lugar para las firmas.
+   · Historia clínica: datos, motivo y objetivos, derivación,
+     antecedentes por zona (con el lado), salud general, dolor (0 a
+     10), actividad física, evaluación postural con los términos de
+     Principios del Movimiento (plomada, hiperlordosis, hipercifosis,
+     genu valgo/varo, síndromes cruzados de Janda), precauciones,
+     seguimiento por sesión y consentimiento. Lo que se sabe (el perfil
+     de la persona, la clase) viene completado; lo demás, en blanco.
+
+   Un mismo armado (`spec`: lista de bloques) se dibuja en Word y en
+   PDF; la hoja para entregar también sale en Excel.
+   ============================================================ */
+'use strict';
+
+const DOCS_EXP = [['clase', 'La clase', 'con o sin movimientos e imágenes'], ['entrega', 'Hoja para entregar', 'ejercicio, repeticiones y observación · 2 copias'], ['historia', 'Historia clínica', 'para completar']];
+const fechaLarga = f => { try { return new Date(f + 'T12:00').toLocaleDateString('es', { day: 'numeric', month: 'long', year: 'numeric' }); } catch (e) { return f || ''; } };
+const nomEj = id => (ejPlan(id) || {}).n || '';
+
+/* la observación de un ejercicio: el cambio y por qué, la adaptación, el prop y para qué, la nota */
+function obsItem(x) {
+  const xs = [];
+  if (x.cambio && x.cambio.de) xs.push(`En lugar de ${nomEj(x.cambio.de)} (${x.cambio.tipo === 'reg' ? 'más fácil' : x.cambio.tipo === 'prog' ? 'más difícil' : 'con prop'})${x.cambio.motivo ? ': ' + x.cambio.motivo.trim() : ''}.`);
+  if (x.adap) xs.push(`Adaptación: ${x.adap}`);
+  const nota = String(x.nota || '').trim();
+  if (x.prop) {
+    /* la nota del generador empieza con el nombre del prop ("Bola: …"): no se repite */
+    const sinProp = nota.replace(new RegExp('^' + x.prop.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*:\\s*', 'i'), '');
+    xs.push(`Prop: ${x.prop}${x.propModo === 'asiste' ? ' (asiste)' : x.propModo === 'resiste' ? ' (resiste)' : ''}${sinProp ? ' — ' + sinProp : ''}${x.motivoProp ? `. Por qué: ${x.motivoProp.trim()}` : ''}`);
+  } else if (nota) xs.push(nota);
+  return xs.join(' ').replace(/\.\./g, '.');
+}
+/* lo que se sabe de la persona: su perfil, o las opciones con que se generó la clase */
+function contextoDe(p) {
+  const h = p.persona && typeof personaDe === 'function' ? personaDe(p.persona) : null;
+  const g = p.gen || h || null;
+  const cuidados = g && g.cuidados ? g.cuidados.map(c => typeof nomCuidadoGen === 'function' ? nomCuidadoGen(c, g) : c) : [];
+  if (p.focos && p.focos.some(f => /osteopor/i.test(f)) && !cuidados.some(c => /osteopor/i.test(c))) cuidados.push('osteoporosis');
+  return { h, g, cuidados, nivel: g && g.nivel && typeof nomNivelGen === 'function' ? nomNivelGen(g.nivel) : '', props: g ? (g.sinProps || !(g.props || []).length ? 'sin props' : g.props.join(', ')) : '' };
+}
+
+/* ---------- los dos formularios como lista de bloques ---------- */
+function specEntrega(p, cfg) {
+  const c = contextoDe(p);
+  const filas = p.items.map((x, i) => { const e = ejPlan(x.id); return e ? [String(i + 1), `${e.n}\n${POS_CLASE[e.pos].nom}${x.lado ? ' ' + LADO_NOM[x.lado] : ''}`, x.reps ? `${x.reps} ${unidadReps(e.reps)}` : (e.reps || ''), obsItem(x)] : null; }).filter(Boolean);
+  const copias = cfg.copias === 1 ? [''] : ['Copia para entregar', 'Copia para quien da la clase'];
+  return copias.flatMap((rot, k) => [
+    ...(k ? [{ t: 'salto' }] : []),
+    { t: 'titulo', texto: 'Plan de clase', rot },
+    { t: 'sub', texto: p.nombre || '' },
+    { t: 'campos', pares: [['Persona', p.para || (c.h && c.h.nombre) || ''], ['Fecha', p.fecha ? fechaLarga(p.fecha) : ''], ['Quien da la clase', ''], ['Duración', `≈ ${duracionPlan(p)} min`],
+      ['Nivel', c.nivel], ['Props', c.props], ['Cuidados', c.cuidados.join(', ')], ['Objetivo', c.h && c.h.gusta ? c.h.gusta.trim() : '']] },
+    { t: 'tabla', cols: [['Nº', 0.06], ['Ejercicio', 0.32], ['Repeticiones', 0.15], ['Observación (adaptación, prop y por qué; o qué se cambió y por qué)', 0.47]], filas, vacias: 2, alto: 22 },
+    { t: 'lineas', label: 'Observaciones generales', n: 2 },
+    { t: 'firmas', labels: ['Firma de quien da la clase', 'Firma de quien recibe'] }
+  ]);
+}
+const ZONAS_HC = [['cuello', 'Cuello'], ['hombro', 'Hombros'], ['codo', 'Codos'], ['muneca', 'Muñecas y manos'], ['dorsal', 'Espalda alta (dorsal)'], ['lumbar', 'Zona lumbar'], ['cadera', 'Cadera'], ['rodilla', 'Rodillas'], ['tobillo', 'Tobillos y pies']];
+const SALUD_HC = [['cardio', 'Hipertensión o problemas cardíacos'], ['diabetes', 'Diabetes'], ['osteo', 'Osteoporosis u osteopenia'], ['hernia', 'Hernia de disco o ciática'], ['artrosis', 'Artrosis o artritis'], ['resp', 'Problemas respiratorios (asma…)'],
+  ['mareo', 'Mareos o vértigo'], ['piso', 'Piso pélvico (pérdidas, prolapso)'], ['embarazo', 'Embarazo actual o posparto reciente'], ['cirugia', 'Cirugías (cuáles y cuándo)'], ['fractura', 'Fracturas'], ['medic', 'Medicación'], ['alergia', 'Alergias']];
+function specHistoria(p) {
+  const c = contextoDe(p), g = c.g || {}, cu = g.cuidados || [], lc = g.ladoCuidado || {};
+  const LADO = { der: 'Derecha', izq: 'Izquierda' };
+  /* lo que ya se sabe por sus cuidados queda marcado */
+  const zona = ([k, nom]) => { const on = cu.includes(k) || (k === 'hombro' && cu.includes('cuello')) || (k === 'lumbar' && cu.includes('lumbar'));
+    return [nom, on ? 'X' : '', '', on ? (lc[k] ? LADO[lc[k]] : '') : '', ''];
+  };
+  const salud = ([k, nom]) => [nom, k === 'osteo' && cu.includes('osteo') ? 'X' : '', '', ''];
+  const adaps = [...new Set(p.items.map(x => x.adap).filter(Boolean))];
+  return [
+    { t: 'titulo', texto: 'Historia clínica', rot: '' },
+    { t: 'sub', texto: 'Pilates · completar en la primera sesión y actualizar si algo cambia' },
+    { t: 'seccion', texto: 'Datos personales' },
+    { t: 'campos', pares: [['Nombre y apellidos', p.para || (c.h && c.h.nombre) || ''], ['Fecha', fechaLarga(p.fecha || HOY())], ['Fecha de nacimiento', ''], ['Edad', ''], ['Teléfono', ''], ['Correo', ''],
+      ['Contacto de emergencia', ''], ['Teléfono de emergencia', ''], ['Ocupación', ''], ['Horas al día en posición sentada', '']] },
+    { t: 'seccion', texto: 'Motivo de consulta y objetivos' },
+    { t: 'lineas', label: c.h && c.h.gusta ? '' : 'Qué busca con las clases', n: c.h && c.h.gusta ? 0 : 3, texto: c.h && c.h.gusta ? c.h.gusta.trim() : '' },
+    { t: 'seccion', texto: 'Derivación' },
+    { t: 'campos', pares: [['Profesional de la salud que deriva', ''], ['Diagnóstico', '']] },
+    { t: 'checks', label: 'Autorización médica para hacer ejercicio', ops: ['Sí', 'No', 'No hace falta'] },
+    { t: 'seccion', texto: 'Lesiones o dolor por zona' },
+    { t: 'tabla', cols: [['Zona', 0.28], ['Sí', 0.07], ['No', 0.07], ['Lado', 0.14], ['Detalle (qué, desde cuándo, tratamiento)', 0.44]], filas: ZONAS_HC.map(zona), alto: 18 },
+    { t: 'seccion', texto: 'Salud general' },
+    { t: 'tabla', cols: [['', 0.4], ['Sí', 0.07], ['No', 0.07], ['Detalle', 0.46]], filas: SALUD_HC.map(salud), alto: 18 },
+    { t: 'seccion', texto: 'Dolor actual' },
+    { t: 'campos', pares: [['Zona', ''], ['Desde cuándo', ''], ['Qué lo empeora', ''], ['Qué lo alivia', '']] },
+    { t: 'escala', label: 'Intensidad (0 = nada, 10 = el peor dolor)' },
+    { t: 'seccion', texto: 'Actividad física' },
+    { t: 'campos', pares: [['Deporte o actividad', ''], ['Frecuencia', '']] },
+    { t: 'checks', label: 'Experiencia en Pilates', ops: ['Ninguna', 'Algo', 'Sí, con regularidad'] },
+    { t: 'checks', label: 'Nivel con que empieza', ops: (typeof NIVELES_GEN !== 'undefined' ? NIVELES_GEN : []).map(n => n[1]), on: c.nivel ? [c.nivel] : [] },
+    { t: 'seccion', texto: 'Evaluación postural (Principios del Movimiento)' },
+    { t: 'checks', label: 'Plomada lateral · cabeza', ops: ['Alineada', 'Adelantada'] },
+    { t: 'checks', label: 'Plomada lateral · hombros', ops: ['Alineados', 'Adelantados'] },
+    { t: 'checks', label: 'Columna', ops: ['Neutra', 'Hiperlordosis lumbar', 'Hipercifosis torácica', 'Espalda plana'] },
+    { t: 'checks', label: 'Pelvis', ops: ['Neutra', 'Anteversión', 'Retroversión'] },
+    { t: 'checks', label: 'Rodillas', ops: ['Alineadas', 'Hiperextensión', 'Genu valgo', 'Genu varo'] },
+    { t: 'checks', label: 'Plomada posterior', ops: ['Hombros a la misma altura', 'Escápulas despegadas', 'Escoliosis', 'Pelvis inclinada'] },
+    { t: 'checks', label: 'Pies', ops: ['Neutros', 'Pronación', 'Supinación'] },
+    { t: 'checks', label: 'Síndromes cruzados (Janda)', ops: ['No', 'Superior', 'Inferior'] },
+    { t: 'checks', label: 'Respiración', ops: ['Lateral (costal)', 'Abdominal', 'Alta (clavicular)'] },
+    { t: 'lineas', label: 'Movilidad, flexibilidad y otras observaciones', n: 2 },
+    { t: 'seccion', texto: 'Precauciones para las clases' },
+    { t: 'lineas', label: '', n: c.cuidados.length || adaps.length ? 1 : 3, texto: [c.cuidados.length ? 'Cuidar: ' + c.cuidados.join(', ') + '.' : '', ...adaps.slice(0, 6)].filter(Boolean).join(' · ') },
+    { t: 'seccion', texto: 'Seguimiento' },
+    { t: 'tabla', cols: [['Fecha', 0.15], ['Sesión', 0.25], ['Cómo llegó, qué se trabajó, cómo se fue', 0.6]], filas: p.items.length ? [[p.fecha ? fechaLarga(p.fecha) : '', p.nombre || '', '']] : [], vacias: p.items.length ? 5 : 6, alto: 24 },
+    { t: 'parrafo', texto: 'Declaro que la información es correcta y que voy a avisar cualquier cambio en mi salud. Entiendo que las clases no reemplazan la indicación de un profesional de la salud.' },
+    { t: 'firmas', labels: ['Firma de la persona', 'Firma de quien da la clase', 'Fecha'] }
+  ];
+}
+
+/* ---------- Word ---------- */
+function docxForm(spec, cfg, titulo) {
+  const K = docxKit(), { run, par, celda, filaTabla } = K, { ancho } = papelDocx(cfg);
+  const VERDE = '1F6F4A', GRIS = '666666', CLARO = 'EEF6F1';
+  let cuerpo = '', salto = false;
+  const multilinea = (t, o) => String(t || '').split('\n').map((l, k) => par(run(l, k ? { ...o, b: false, sz: 17, color: GRIS } : o), { despues: 0 })).join('');
+  for (const b of spec) {
+    if (b.t === 'salto') { salto = true; continue; }
+    if (b.t === 'titulo') { cuerpo += par(run(b.texto) + (b.rot ? run('    ' + b.rot, { sz: 18, color: GRIS }) : ''), { estilo: 'Title', despues: 20, salto }); salto = false; }
+    else if (b.t === 'sub') { if (b.texto) cuerpo += par(run(b.texto, { color: GRIS, sz: 19 }), { despues: 100 }); }
+    else if (b.t === 'seccion') cuerpo += par(run(b.texto, { b: true, sz: 23, color: VERDE }), { antes: 160, despues: 60, keep: true });
+    else if (b.t === 'campos') {
+      const wl = Math.round(ancho * 0.18), wv = Math.round(ancho / 2 - wl);
+      let filas = '';
+      for (let i = 0; i < b.pares.length; i += 2) {
+        const [l1, v1] = b.pares[i], [l2, v2] = b.pares[i + 1] || ['', ''];
+        filas += filaTabla(celda(par(run(l1, { b: true, sz: 17 }), { despues: 0 }), wl, { fill: CLARO }) + celda(par(run(v1, { sz: 19 }), { despues: 0 }), wv)
+          + celda(par(run(l2, { b: true, sz: 17 }), { despues: 0 }), wl, { fill: l2 ? CLARO : '' }) + celda(par(run(v2, { sz: 19 }), { despues: 0 }), ancho - 2 * wl - wv), { alto: 380 });
+      }
+      cuerpo += K.tabla([wl, wv, wl, ancho - 2 * wl - wv], filas) + par('', { despues: 60 });
+    } else if (b.t === 'tabla') {
+      const ws = b.cols.map(([, f]) => Math.round(ancho * f)); ws[ws.length - 1] = ancho - ws.slice(0, -1).reduce((a, x) => a + x, 0);
+      const alto = Math.round((b.alto || 18) * 20);
+      let filas = filaTabla(b.cols.map(([t], i) => celda(par(run(t, { b: true, sz: 17 }), { despues: 0 }), ws[i], { fill: 'E3F2EA', centro: true })).join(''), { cab: true });
+      for (const f of b.filas) filas += filaTabla(f.map((v, i) => celda(multilinea(v, { sz: 19, b: i === 1 && b.cols.length === 4 && /Ejercicio/.test(b.cols[1][0]) }), ws[i])).join(''), { alto });
+      for (let k = 0; k < (b.vacias || 0); k++) filas += filaTabla(ws.map(w => celda(par(''), w)).join(''), { alto });
+      cuerpo += K.tabla(ws, filas) + par('', { despues: 60 });
+    } else if (b.t === 'checks') {
+      const on = new Set(b.on || []);
+      cuerpo += par(run(b.label + ':  ', { b: true, sz: 19 }) + b.ops.map(o => run((on.has(o) ? '☒ ' : '☐ ') + o + '    ', { sz: 19 })).join(''), { despues: 50 });
+    } else if (b.t === 'escala') {
+      cuerpo += par(run(b.label + ':  ', { b: true, sz: 19 }) + Array.from({ length: 11 }, (_, k) => run(`☐ ${k}   `, { sz: 19 })).join(''), { despues: 60 });
+    } else if (b.t === 'lineas') {
+      if (b.label) cuerpo += par(run(b.label, { b: true, sz: 19 }), { despues: 30, keep: true });
+      const filas = [...(b.texto ? [filaTabla(celda(par(run(b.texto, { sz: 19 }), { despues: 0 }), ancho), { alto: 380 })] : []),
+        ...Array.from({ length: b.n || 0 }, () => filaTabla(celda(par(''), ancho), { alto: 380 }))].join('');
+      if (filas) cuerpo += K.tabla([ancho], filas) + par('', { despues: 60 });
+    } else if (b.t === 'parrafo') cuerpo += par(run(b.texto, { sz: 18, color: '333333' }), { antes: 120, despues: 120 });
+    else if (b.t === 'firmas') {
+      const w = Math.floor(ancho / b.labels.length);
+      cuerpo += K.tabla(b.labels.map(() => w), filaTabla(b.labels.map(l => celda(par('', { despues: 0 }) + par(run(l, { sz: 17, color: GRIS }), { despues: 0 }), w)).join(''), { alto: 900 })) + par('', { despues: 0 });
+    }
+  }
+  return docxPaquete(cuerpo || par(''), K, titulo, cfg);
+}
+
+/* ---------- PDF ---------- */
+function pdfForm(spec, cfg, titulo) {
+  const doc = nuevoPDF(cfg), { PW, M, AN, texto, rect, linea, medir, escribir, nueva, cabe } = doc;
+  const VERDE = '0.12 0.43 0.29', GRIS = '0.4 0.4 0.4', NEGRO = '0.1 0.1 0.1', BORDE = '0.72 0.72 0.72';
+  const t = s => pdfTexto(s);
+  const caja = (x, yTop, marcado) => { rect(x, yTop, 8.5, 8.5, null, '0.35 0.35 0.35'); if (marcado) { linea(x + 1.5, yTop + 1.5, x + 7, yTop + 7, NEGRO, 1); linea(x + 7, yTop + 1.5, x + 1.5, yTop + 7, NEGRO, 1); } };
+  let cabTabla = null;
+  for (const b of spec) {
+    if (b.t === 'salto') { nueva(); continue; }
+    if (b.t === 'titulo') {
+      if (!cabe(60)) nueva();
+      texto(t(b.texto), M, doc.y, 18, true, VERDE);
+      if (b.rot) texto(t(b.rot), PW - M - pdfAncho(t(b.rot), false, 9), doc.y + 5, 9, false, GRIS);
+      doc.y += 26;
+    } else if (b.t === 'sub') { if (b.texto) { escribir(medir([[b.texto, false, 10, GRIS]], AN), M); doc.y += 6; } }
+    else if (b.t === 'seccion') { if (!cabe(70)) nueva(); doc.y += 8; texto(t(b.texto), M, doc.y, 11.5, true, VERDE); doc.y += 15; linea(M, doc.y, PW - M, doc.y, '0.6 0.78 0.68', 0.8); doc.y += 6; }
+    else if (b.t === 'campos') {
+      const wc = AN / 2 - 6;
+      for (let i = 0; i < b.pares.length; i += 2) {
+        const par2 = [b.pares[i], b.pares[i + 1]].filter(Boolean);
+        const medidas = par2.map(([l, v]) => { const wl = pdfAncho(t(l + ': '), true, 9) + 2; return { l, v, wl, ls: v ? pdfPartir(v, false, 10, wc - wl) : [] }; });
+        const h = Math.max(18, ...medidas.map(m => m.ls.length * 12.5 + 6));
+        if (!cabe(h)) nueva();
+        medidas.forEach((m, k) => {
+          const x = M + k * (wc + 12);
+          texto(t(m.l + ':'), x, doc.y + 3, 9, true, NEGRO);
+          if (m.ls.length) m.ls.forEach((ln, j) => texto(ln, x + m.wl, doc.y + 2 + j * 12.5, 10, false, NEGRO));
+          else linea(x + m.wl, doc.y + 14, x + wc, doc.y + 14, '0.55 0.55 0.55', 0.5);
+        });
+        doc.y += h;
+      }
+      doc.y += 4;
+    } else if (b.t === 'tabla') {
+      const ws = b.cols.map(([, f]) => AN * f), alto = b.alto || 18, PAD = 3;
+      const cab = () => {
+        const ls = b.cols.map(([h], i) => pdfPartir(h, true, 8.5, ws[i] - 2 * PAD)), h = Math.max(...ls.map(l => l.length)) * 10.5 + 2 * PAD;
+        let x = M;
+        ls.forEach((l, i) => { rect(x, doc.y, ws[i], h, '0.89 0.95 0.92', BORDE); l.forEach((ln, j) => texto(ln, x + PAD, doc.y + PAD + j * 10.5, 8.5, true, NEGRO)); x += ws[i]; });
+        doc.y += h;
+      };
+      cabTabla = cab;
+      if (!cabe(60)) nueva();
+      cab();
+      const filas = [...b.filas, ...Array.from({ length: b.vacias || 0 }, () => b.cols.map(() => ''))];
+      for (const f of filas) {
+        const ls = f.map((v, i) => String(v || '').split('\n').flatMap((parte, k) => pdfPartir(parte, i === 1 && k === 0 && /Ejercicio/.test(b.cols[1][0]), k ? 8 : 9, ws[i] - 2 * PAD).map(ln => ({ ln, k }))));
+        const h = Math.max(alto, Math.max(...ls.map(l => l.length)) * 10.5 + 2 * PAD);
+        if (!cabe(h)) { nueva(); cab(); }
+        let x = M;
+        ls.forEach((l, i) => {
+          rect(x, doc.y, ws[i], h, null, BORDE);
+          l.forEach(({ ln, k }, j) => texto(ln, x + PAD, doc.y + PAD + j * 10.5, k ? 8 : 9, i === 1 && k === 0 && /Ejercicio/.test(b.cols[1][0]), k ? GRIS : NEGRO));
+          x += ws[i];
+        });
+        doc.y += h;
+      }
+      doc.y += 8;
+    } else if (b.t === 'checks') {
+      const on = new Set(b.on || []), lab = t(b.label + ':'), wl = pdfAncho(lab, true, 9.5) + 6;
+      if (!cabe(16)) nueva();
+      texto(lab, M, doc.y, 9.5, true, NEGRO);
+      let x = M + wl;
+      for (const o of b.ops) {
+        const w = 12 + pdfAncho(t(o), false, 9.5) + 12;
+        if (x + w > PW - M) { x = M + 14; doc.y += 14; if (!cabe(14)) nueva(); }
+        caja(x, doc.y + 0.5, on.has(o)); texto(t(o), x + 12, doc.y, 9.5, false, NEGRO); x += w;
+      }
+      doc.y += 16;
+    } else if (b.t === 'escala') {
+      const lab = t(b.label + ':'), wl = pdfAncho(lab, true, 9.5) + 8;
+      if (!cabe(22)) nueva();
+      texto(lab, M, doc.y + 3, 9.5, true, NEGRO);
+      for (let k = 0; k <= 10; k++) { const x = M + wl + k * 22; rect(x, doc.y, 18, 15, null, '0.45 0.45 0.45'); const s = String(k); texto(s, x + 9 - pdfAncho(s, false, 9) / 2, doc.y + 3.5, 9, false, NEGRO); }
+      doc.y += 22;
+    } else if (b.t === 'lineas') {
+      if (b.label) { if (!cabe(30)) nueva(); texto(t(b.label), M, doc.y, 9.5, true, NEGRO); doc.y += 13; }
+      if (b.texto) { escribir(medir([[b.texto, false, 10, NEGRO]], AN), M); doc.y += 2; }
+      for (let k = 0; k < (b.n || 0); k++) { if (!cabe(18)) nueva(); doc.y += 17; linea(M, doc.y, PW - M, doc.y, '0.6 0.6 0.6', 0.5); }
+      doc.y += 8;
+    } else if (b.t === 'parrafo') { doc.y += 4; escribir(medir([[b.texto, false, 9, '0.25 0.25 0.25']], AN), M); doc.y += 6; }
+    else if (b.t === 'firmas') {
+      if (!cabe(44)) nueva();
+      const w = AN / b.labels.length;
+      doc.y += 26;
+      b.labels.forEach((l, k) => { const x = M + k * w; linea(x + 4, doc.y, x + w - 10, doc.y, '0.4 0.4 0.4', 0.6); texto(t(l), x + 4, doc.y + 3, 8.5, false, GRIS); });
+      doc.y += 18;
+    }
+  }
+  return doc.cerrar(titulo);
+}
+
+/* ---------- Excel (la hoja para entregar: las dos copias con un salto de página) ---------- */
+function xlsxEntrega(spec, cfg, titulo) {
+  const cols = [{ w: 6 }, { w: 34 }, { w: 16 }, { w: 60 }];
+  const filas = [], merges = [], saltos = [];
+  let r = 1;
+  const celda = (ref, v, s) => v === '' || v == null ? `<c r="${ref}" s="${s}"/>` : `<c r="${ref}" s="${s}" t="inlineStr"><is><t xml:space="preserve">${xmlEsc(v)}</t></is></c>`;
+  const lineas = (txt, ancho) => String(txt || '').split('\n').reduce((a, l) => a + Math.max(1, Math.ceil(l.length / Math.max(4, ancho * 1.1))), 0);
+  const fila = (vals, estilos, alto) => { filas.push(`<row r="${r}"${alto ? ` ht="${alto}" customHeight="1"` : ''}>${vals.map((v, i) => celda('ABCD'[i] + r, v, estilos[i] ?? estilos[0])).join('')}</row>`); return r++; };
+  for (const b of spec) {
+    if (b.t === 'salto') { saltos.push(r - 1); continue; }
+    if (b.t === 'titulo') { const k = fila([b.texto + (b.rot ? '  ·  ' + b.rot : '')], [1], 26); merges.push(`A${k}:D${k}`); }
+    else if (b.t === 'sub') { if (b.texto) { const k = fila([b.texto], [6]); merges.push(`A${k}:D${k}`); } }
+    else if (b.t === 'campos') { for (let i = 0; i < b.pares.length; i += 2) { const [l1, v1] = b.pares[i], [l2, v2] = b.pares[i + 1] || ['', '']; fila([l1, v1, l2, v2], [4, 3, l2 ? 4 : 3, 3], Math.max(18, 15 * Math.max(lineas(v1, 34), lineas(v2, 60)))); } r++; }
+    else if (b.t === 'tabla') {
+      fila(b.cols.map(c => c[0]), [2], 30);
+      for (const f of b.filas) fila(f, [7, 4, 3, 3], Math.max(32, 15 * Math.max(...f.map((v, i) => lineas(v, cols[i].w)))));
+      for (let k = 0; k < (b.vacias || 0); k++) fila(['', '', '', ''], [3], 32);
+      r++;
+    } else if (b.t === 'lineas') { const k = fila([b.label], [4]); merges.push(`A${k}:D${k}`); for (let j = 0; j < b.n; j++) { const q = fila(['', '', '', ''], [3], 22); merges.push(`A${q}:D${q}`); } r++; }
+    else if (b.t === 'firmas') { r++; fila([b.labels[0], '', b.labels[1] || '', ''], [6], 40); r++; }
+  }
+  const hoja = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><dimension ref="A1:D${r}"/><sheetViews><sheetView workbookViewId="0"/></sheetViews><sheetFormatPr defaultRowHeight="15"/><cols>${cols.map((c, i) => `<col min="${i + 1}" max="${i + 1}" width="${c.w}" customWidth="1"/>`).join('')}</cols><sheetData>${filas.join('')}</sheetData>${merges.length ? `<mergeCells count="${merges.length}">${merges.map(m => `<mergeCell ref="${m}"/>`).join('')}</mergeCells>` : ''}<pageMargins left="0.4" right="0.4" top="0.5" bottom="0.6" header="0.3" footer="0.3"/><pageSetup paperSize="${cfg.papel === 'a4' ? 9 : 1}" orientation="portrait" fitToWidth="1" fitToHeight="0"/><headerFooter><oddFooter>&amp;L${xmlEsc(sinEmoji(titulo))} · Pilates Lab&amp;RPágina &amp;P de &amp;N</oddFooter></headerFooter>${saltos.length ? `<rowBreaks count="${saltos.length}" manualBreakCount="${saltos.length}">${saltos.map(k => `<brk id="${k}" max="16383" man="1"/>`).join('')}</rowBreaks>` : ''}</worksheet>`;
+  const R = (id, tipo, dest) => `<Relationship Id="${id}" Type="${tipo}" Target="${dest}"/>`, RT = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/';
+  const rels = (...xs) => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${xs.join('')}</Relationships>`;
+  return armarZip([
+    { name: '[Content_Types].xml', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>` },
+    { name: '_rels/.rels', data: rels(R('rId1', RT + 'officeDocument', 'xl/workbook.xml'), R('rId2', 'http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties', 'docProps/core.xml')) },
+    { name: 'docProps/core.xml', data: coreXml(titulo) },
+    { name: 'xl/workbook.xml', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Hoja para entregar" sheetId="1" r:id="rId1"/></sheets></workbook>` },
+    { name: 'xl/_rels/workbook.xml.rels', data: rels(R('rId1', RT + 'worksheet', 'worksheets/sheet1.xml'), R('rId2', RT + 'styles', 'styles.xml')) },
+    { name: 'xl/styles.xml', data: XLSX_ESTILOS },
+    { name: 'xl/worksheets/sheet1.xml', data: hoja }
+  ]);
+}
+
+/* ---------- armar el formulario que se pidió ---------- */
+function exportarFormulario(p, cfg) {
+  const entrega = cfg.doc === 'entrega';
+  const spec = entrega ? specEntrega(p, cfg) : specHistoria(p);
+  const quien = p.para || (contextoDe(p).h || {}).nombre || '';
+  const titulo = (entrega ? 'Plan de clase' : 'Historia clínica') + (quien ? ' · ' + quien : '');
+  const formato = !entrega && cfg.formato === 'xlsx' ? 'docx' : cfg.formato;
+  const bytes = formato === 'pdf' ? pdfForm(spec, cfg, titulo) : formato === 'xlsx' ? xlsxEntrega(spec, cfg, titulo) : docxForm(spec, cfg, titulo);
+  const base = (sinEmoji(titulo).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^\w\- ]+/g, '').trim().replace(/\s+/g, '-') || 'formulario').slice(0, 60);
+  return { nombre: `${base}.${formato}`, bytes, formato };
+}
+/* desde el perfil de una persona: la historia clínica con lo que se sabe de ella */
+function historiaDePersona(h) {
+  const p = { nombre: 'Historia clínica', para: h.nombre, persona: h.id, items: [], focos: [], notas: '', fecha: HOY() };
+  abrirExportar(p, { doc: 'historia' });
 }
 
 </script>

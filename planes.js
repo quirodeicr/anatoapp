@@ -225,6 +225,7 @@ function filasPlan(p) {
       <span class="cl-mini">${miniPlan(e)}</span>
       <div class="cl-info"><b>${esc(e.n)}</b>
         <small><span class="cl-pos p-${e.pos}">${pz.ico} ${pz.nom}${x.lado ? ' ' + LADO_NOM[x.lado] : ''}</span> ${fuenteNom(e.f)}${e.reps ? ` · ${esc(e.reps)}` : ''}${principiosEjHTML(e)}</small>
+        ${x.cambio && x.cambio.de ? `<small class="pl-cambio">↺ En lugar de ${esc((ejPlan(x.cambio.de) || {}).n || '')} (${x.cambio.tipo === 'reg' ? 'más fácil' : x.cambio.tipo === 'prog' ? 'más difícil' : 'con prop'})${x.cambio.motivo ? ': ' + esc(x.cambio.motivo) : ''}</small>` : ''}
         ${x.adap ? `<small class="pl-adap">⚕️ ${esc(x.adap)}</small>` : ''}
         <div class="pl-extra">
           <label class="pl-prop"><span class="sr">Prop</span><select data-k="prop"><option value="">Sin prop</option>${PROPS_PLAN.map(o => `<option ${x.prop === o ? 'selected' : ''}>${o}</option>`).join('')}</select></label>

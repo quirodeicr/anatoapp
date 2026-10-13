@@ -64,12 +64,12 @@ function vPersona(id) {
     <section class="gen-sec"><h2>Nivel</h2><div class="chips" role="group" aria-label="Nivel">${NIVELES_GEN.map(([k, t]) => chip('nivel', k, t, h.nivel === k)).join('')}</div></section>
     <section class="gen-sec"><h2>Duración de sus clases</h2><div class="chips" role="group" aria-label="Duración">${[30, 45, 60, 75].map(m => chip('dur', m, m + ' min', (h.dur || 60) === m)).join('')}</div></section>
     <section class="gen-sec"><h2>Cuidados</h2><div class="chips" role="group" aria-label="Cuidados">${CUIDADOS_GEN.map(([k, t]) => chip('cuidado', k, t, h.cuidados.includes(k))).join('')}</div>
-      ${['rodilla', 'cadera', 'muneca'].filter(z => h.cuidados.includes(z)).map(z => `<div class="chips gen-lado" role="group" aria-label="${ZONA_NOM[z]}: qué lado"><span>${ZONA_NOM[z]}:</span>${[['', 'Las dos'], ['der', 'Derecha'], ['izq', 'Izquierda']].map(([k, t]) => chip('ladoCuidado', z + ':' + k, t, ((h.ladoCuidado || {})[z] || '') === k)).join('')}</div>`).join('')}</section>
+      ${ZONAS_LADO.filter(z => h.cuidados.includes(z)).map(z => `<div class="chips gen-lado" role="group" aria-label="${ZONA_NOM[z]}: qué lado"><span>${ZONA_NOM[z]}:</span>${[['', 'Las dos'], ['der', 'Derecha'], ['izq', 'Izquierda']].map(([k, t]) => chip('ladoCuidado', z + ':' + k, t, ((h.ladoCuidado || {})[z] || '') === k)).join('')}</div>`).join('')}</section>
     <section class="gen-sec"><h2>Props que tiene</h2><div class="chips" role="group" aria-label="Props">${chip('sinprops', '1', 'Sin props', h.sinProps || !h.props.length)}${PROPS_PLAN.map(t => chip('prop', t, t, !h.sinProps && h.props.includes(t))).join('')}</div></section>
     <section class="gen-sec"><h2>Darle más peso a un principio <small>(opcional)</small></h2><div class="chips" role="group" aria-label="Énfasis">${chip('enfasis', '', 'Equilibrada', !h.enfasis)}${PRINCIPIOS.map(p => chip('enfasis', p.k, `${p.ico} ${p.corto}`, h.enfasis === p.k)).join('')}</div></section>
     <label class="pl-notas">Le gusta, objetivos<textarea id="peGusta" rows="2" placeholder="Viene del gimnasio, quiere ganar movilidad…">${esc(h.gusta || '')}</textarea></label>
     <label class="pl-notas">Notas<textarea id="peNotas" rows="2" placeholder="Lo que conviene recordar en cada clase">${esc(h.notas || '')}</textarea></label>
-    <div class="fila pl-acc"><button type="button" class="btn3d verde" id="peGenerar">✨ Generar una clase</button><button type="button" class="btn ghost" id="peBorrar">Borrar persona</button></div>
+    <div class="fila pl-acc"><button type="button" class="btn3d verde" id="peGenerar">✨ Generar una clase</button><button type="button" class="btn ghost" id="peHistoria">🗂 Historia clínica</button><button type="button" class="btn ghost" id="peBorrar">Borrar persona</button></div>
     <h2 class="secc">Sus sesiones${ses.length ? ' · ' + ses.length : ''}</h2>
     ${ses.length ? `<div class="pl-lista">${ses.map(p => `<article class="pl-tarjeta" data-id="${p.id}"><button type="button" class="pl-abrir" data-ses="${p.id}"><b>${esc(p.nombre)}</b><small>${p.fecha ? fechaLinda(p.fecha) : 'Sin fecha'}</small><span class="pl-datos">${p.items.length} ejercicios · ≈ ${duracionPlan(p)} min</span></button></article>`).join('')}</div>`
       : '<p class="vacio">Todavía no tiene sesiones: tocá <b>✨ Generar una clase</b>.</p>'}`;
@@ -90,6 +90,7 @@ function vPersona(id) {
     const y = window.scrollY; vPersona(id); window.scrollTo(0, y);
   });
   $('#peGenerar').onclick = () => { guardarTxt(); SND.toque(); generarParaPersona(h); };
+  $('#peHistoria').onclick = () => { guardarTxt(); historiaDePersona(h); };
   $('#peBorrar').onclick = async () => {
     if (!(await confirmar(`¿Borrar el perfil de ${h.nombre || 'esta persona'}? Sus sesiones quedan.`, 'Borrar'))) return;
     planes().forEach(p => { if (p.persona === h.id) delete p.persona; });

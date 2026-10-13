@@ -6,6 +6,12 @@ repositorio es público y las fotos muestran personas (y las observaciones,
 datos personales).
 
   python importar_mat3.py "ruta/Mat 3 Props.xlsx"
+  python importar_mat3.py --textos      (solo datos-mat3.js, desde privado/mat3/mat3.json)
+
+Además escribe datos-mat3.js (SÍ se versiona): solo los textos de cada hoja
+(qué prop, dónde va y para qué, y las observaciones de cuidados), sin fotos y
+sin lo personal ("En mi caso…"), para que el generador y "más fácil o más
+difícil" usen Mat 3 en todas las versiones de la app.
 
 Cada hoja tiene la ficha (nombre, posición, principio, objetivo, un renglón por
 prop y observaciones) y fotos ancladas en el renglón del prop que muestran.
@@ -127,6 +133,7 @@ def main(ruta):
     peso = sum(os.path.getsize(os.path.join(SALIDA, f["archivo"])) for h in hojas for f in h["fotos"])
     print(len(hojas), "hojas,", sum(len(h["fotos"]) for h in hojas), f"fotos ({peso / 1024 / 1024:.1f} MB) →", SALIDA)
     escribir_js(hojas)
+    escribir_textos(hojas)
 
 def limpiar(t):
     """Notas de estudio para la app: sin lo personal (salud) ni espacios de más."""
@@ -151,7 +158,28 @@ def escribir_js(hojas):
     open(ruta, "w", encoding="utf-8", newline="\n").write(js)
     print("fotos-mat3.js:", len(datos), "ejercicios,", f"{len(js) / 1024 / 1024:.1f} MB")
 
+PROP_APP = {"Liga Cerrada": "Liga cerrada", "Liga Abierta": "Liga abierta", "Roler": "Roller"}
+
+def escribir_textos(hojas):
+    """datos-mat3.js: MAT3[id del ejercicio] = {nombre, props: {prop: texto}, conFoto: [props con foto],
+    observaciones}. Sin fotos ni lo personal; se versiona."""
+    datos = {}
+    for h in hojas:
+        props = {PROP_APP.get(k, k): limpiar(v) for k, v in h["props"].items() if limpiar(v)}
+        con_foto = sorted({PROP_APP.get(f["prop"], f["prop"]) for f in h["fotos"] if f["prop"]})
+        for ej in h["ejercicios"]:
+            datos[ej] = {"nombre": h["nombre"], "props": props, "conFoto": con_foto, "observaciones": limpiar(h["observaciones"])}
+    js = ("/* Mat 3 Props: los textos de tu planilla (qué prop, dónde va y para qué; observaciones de cuidados).\n"
+          "   Generado por importar_mat3.py, sin fotos y sin lo personal (las fotos quedan en privado/). */\n"
+          "const MAT3 = " + json.dumps(datos, ensure_ascii=False, indent=1) + ";\n")
+    ruta = os.path.join(BASE, "datos-mat3.js")
+    open(ruta, "w", encoding="utf-8", newline="\n").write(js)
+    print("datos-mat3.js:", len(datos), "ejercicios")
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         sys.exit(__doc__)
-    main(sys.argv[1])
+    if sys.argv[1] == "--textos":
+        escribir_textos(json.load(open(os.path.join(SALIDA, "mat3.json"), encoding="utf-8")))
+    else:
+        main(sys.argv[1])

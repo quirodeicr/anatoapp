@@ -3,9 +3,10 @@
 
    En cada ejercicio de una sesión, ⇅ ofrece las regresiones (más
    fácil) y las progresiones (más difícil) que anotaste en tus
-   análisis MAT 1 (regresiones Pre-Pilates y Mat 1, progresiones Mat 1
-   y Mat 2) y MAT 2 (regresiones Pre-Pilates, Mat 1 y Mat 2,
-   progresiones). La relación vale para los dos lados: si A es
+   análisis MAT 1 (regresiones de Principios del Movimiento/Pre-Pilates
+   y Mat 1, progresiones Mat 1 y Mat 2) y MAT 2 (regresiones
+   Pre-Pilates, Mat 1 y Mat 2, progresiones), y el mismo ejercicio con
+   un prop que asiste o resiste (fichas y planilla de Mat 3). La relación vale para los dos lados: si A es
    regresión de B, B es progresión de A (así los de Pre-Pilates
    también tienen a dónde progresar). Los grupos ("Serie de 5", "Serie
    lateral", "Teasers", "Todas las planchas", "Puentes", "Todas las
@@ -73,9 +74,15 @@ function opcionesVariantes(p, i) {
   const usados = new Set(p.items.map(y => y.id));
   const lista = (xs, sube) => xs.map(ejPlan).filter(Boolean).filter(c => !usados.has(c.id) && sirve(c) && (!x.lado || c.pos === e.pos))
     .sort((a, b) => (b.pos === e.pos) - (a.pos === e.pos) || (sube ? nivVar(a.id) - nivVar(b.id) : nivVar(b.id) - nivVar(a.id)) || (a.f === 'pre') - (b.f === 'pre'));
-  return { reg: lista(v.reg, false), prog: lista(v.prog, true) };
+  /* el mismo ejercicio con un prop: los que asisten (más fácil) o resisten (más difícil) según tus fichas
+     de Mat 1 y Mat 2, y los de tu planilla de Mat 3; en una clase generada, solo los props que tiene */
+  const ps = typeof infoGen === 'function' && infoGen(x.id) ? infoGen(x.id).props : [];
+  const props = cfg && cfg.sinProps ? [] : ps.filter(o => o.tipo !== x.prop && (!cfg || !cfg.props.length || cfg.props.includes(o.tipo)))
+    .filter((o, k, a) => a.findIndex(q => q.tipo === o.tipo && q.modo === o.modo) === k)
+    .sort((a, b) => ['asiste', 'resiste', ''].indexOf(a.modo) - ['asiste', 'resiste', ''].indexOf(b.modo));
+  return { reg: lista(v.reg, false), prog: lista(v.prog, true), props };
 }
-const tieneVariantes = (p, i) => { const o = opcionesVariantes(p, i); return o.reg.length + o.prog.length > 0; };
+const tieneVariantes = (p, i) => { const o = opcionesVariantes(p, i); return o.reg.length + o.prog.length + o.props.length > 0; };
 
 function abrirVariantes(p, i) {
   const x = p.items[i], e = ejPlan(x.id), cfg = p.gen || null, soloPos = !!x.lado, niv = nivVar;
@@ -89,23 +96,37 @@ function abrirVariantes(p, i) {
   const fila = (c, tipo) => `<button type="button" class="var-ej" data-id="${c.id}" data-tipo="${tipo}">
       <span class="cl-mini">${miniPlan(c)}</span>
       <span class="var-txt"><b>${esc(c.n)}</b><small>${POS_CLASE[c.pos].ico} ${POS_CLASE[c.pos].nom} · ${fuenteNom(c.f)}${typeof NIVELES_GEN !== 'undefined' ? ' · ' + NIVELES_GEN[Math.min(3, niv(c.id))][1] : ''}${c.pos !== e.pos ? ' · <i>cambia de posición</i>' : ''}</small></span></button>`;
-  const { reg: regs, prog: progs } = opcionesVariantes(p, i);
+  const { reg: regs, prog: progs, props } = opcionesVariantes(p, i);
   const m = abrirModal(`<div class="var">
     <h3>${esc(e.n)}</h3>
-    <p class="micro">Según tus análisis MAT 1 y MAT 2${cfg ? `; para progresar, hasta ${NIVELES_GEN[Math.min(3, (NIVEL_IDX[cfg.nivel] ?? 0) + 1)][1].toLowerCase()}${cfg.cuidados.length ? ' y lo que sus cuidados permiten' : ''}` : ''}.${soloPos ? ' Va en los dos lados.' : ''}</p>
+    <p class="micro">Según tu material (Principios del Movimiento y Pre-Pilates, análisis MAT 1 y MAT 2, Mat 3)${cfg ? `; para progresar, hasta ${NIVELES_GEN[Math.min(3, (NIVEL_IDX[cfg.nivel] ?? 0) + 1)][1].toLowerCase()}${cfg.cuidados.length ? ' y lo que sus cuidados permiten' : ''}` : ''}.${soloPos ? ' Va en los dos lados.' : ''}</p>
+    <label class="var-motivo"><span>Por qué lo cambiás <small>(opcional: va a la observación de la hoja para entregar)</small></span><input id="varMotivo" maxlength="160" placeholder="Por ejemplo: le molesta la rodilla al flexionar"></label>
     <h4>⬇️ Más fácil (regresión)</h4>
     ${bloque(regs, 'reg', soloPos ? 'Tus fichas no tienen regresiones de costado para este ejercicio.' : 'Tus fichas no tienen regresiones para este ejercicio.')}
     <h4>⬆️ Más difícil (progresión)</h4>
     ${bloque(progs, 'prog', soloPos ? 'Tus fichas no tienen progresiones de costado para este ejercicio (con su nivel y cuidados).' : 'Tus fichas no tienen progresiones para este ejercicio (con su nivel y cuidados).')}
+    ${props.length ? `<h4>🎯 Con un prop</h4><p class="micro">El mismo ejercicio con un prop: los que asisten lo hacen más fácil y los que resisten, más difícil (tus fichas de Mat 1 y Mat 2 y tu planilla de Mat 3).</p>
+      <div class="var-lista">${props.map((o, k) => `<button type="button" class="var-ej var-prop" data-k="${k}"><span class="var-txt"><b>${esc(o.tipo)} <i class="var-tag ${o.modo || 'm3'}">${o.modo === 'asiste' ? 'más fácil' : o.modo === 'resiste' ? 'más difícil' : 'Mat 3'}</i></b><small>${esc(o.txt)}</small></span></button>`).join('')}</div>` : ''}
     <div class="fila"><button type="button" class="btn ghost" data-cerrar>Cerrar</button></div></div>`);
   $('[data-cerrar]', m).onclick = cerrarModal;
-  $$('.var-ej', m).forEach(b => b.onclick = () => {
-    const c = ejPlan(b.dataset.id);
+  /* un prop: queda en el ejercicio (y en el otro lado, si está intercalado) con su para qué y el motivo */
+  $$('.var-prop', m).forEach(b => b.onclick = () => {
+    const o = props[+b.dataset.k], motivo = (($('#varMotivo', m) || {}).value || '').trim();
+    const gemelo = x.lado ? p.items.findIndex((y, k) => k !== i && y.id === x.id && y.lado && y.lado !== x.lado) : -1;
+    for (const y of [x, ...(gemelo >= 0 ? [p.items[gemelo]] : [])]) Object.assign(y, { prop: o.tipo, propModo: o.modo || '', nota: o.txt.slice(0, 160), motivoProp: motivo });
+    cerrarModal(); SND.toque(); tocar(p);
+    rehacerPlan(p, `.pl-fila[data-i="${i}"]`);
+    toast(`Con <b>${esc(o.tipo)}</b>${o.modo === 'asiste' ? ' (asiste: más fácil)' : o.modo === 'resiste' ? ' (resiste: más difícil)' : ''}${gemelo >= 0 ? ' en los dos lados' : ''}.`, 'toast-suave');
+  });
+  $$('.var-ej:not(.var-prop)', m).forEach(b => b.onclick = () => {
+    const c = ejPlan(b.dataset.id), motivo = ($('#varMotivo', m) || {}).value || '';
     /* si estaba de los dos lados (intercalados), cambian los dos */
     const gemelo = x.lado ? p.items.findIndex((y, k) => k !== i && y.id === x.id && y.lado && y.lado !== x.lado) : -1;
     const nuevo = y => {
       const lado = y.lado && c.pos === 'costado' ? y.lado : '';
-      return { id: c.id, reps: cfg && typeof repsGen === 'function' ? repsGen(c, cfg) : null, prop: '', nota: y.nota || '',
+      /* el cambio queda anotado (qué era, si es más fácil o más difícil y por qué) para la hoja para entregar */
+      return { id: c.id, reps: cfg && typeof repsGen === 'function' ? repsGen(c, cfg) : null, prop: '', nota: y.prop ? '' : y.nota || '',
+        cambio: { de: (y.cambio && y.cambio.de) || y.id, tipo: b.dataset.tipo, motivo: motivo.trim() },
         ...(lado ? { lado } : {}), ...(cfg && typeof adaptacionGen === 'function' ? { adap: adaptacionGen(c, cfg, lado) } : {}) };
     };
     if (gemelo >= 0) p.items[gemelo] = nuevo(p.items[gemelo]);

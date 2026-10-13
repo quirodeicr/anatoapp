@@ -160,6 +160,20 @@ MAT 1 y MAT 2 (y al revés: si A es regresión de B, B es progresión de A). Pri
 otra posición van aparte porque cambian la fluidez. En una clase generada respeta sus cuidados y progresa hasta un
 nivel más; si el ejercicio está de los dos lados, cambian los dos.
 
+**Hoja para entregar e historia clínica** — en la descarga de cada sesión elegís el documento:
+- **Hoja para entregar**: dos copias (una para entregar y otra para quien da la clase) con cada ejercicio, sus
+  repeticiones y una observación: la adaptación, el prop y para qué, o qué ejercicio se cambió y por qué (el motivo lo
+  escribís al cambiarlo con ⇅ o en la nota). Lugar para completar a mano y para las firmas. Word, Excel o PDF.
+- **Historia clínica**: datos, motivo y objetivos, derivación, lesiones por zona (con el lado), salud general, dolor
+  de 0 a 10, actividad física, evaluación postural con los términos de Principios del Movimiento (plomada,
+  hiperlordosis, hipercifosis, genu valgo/varo, síndromes cruzados), precauciones, seguimiento y consentimiento. Lo que
+  ya se sabe por su perfil viene escrito. También desde el perfil de la persona (🗂 Historia clínica). Word o PDF.
+
+**Todo tu material** — el generador y ⇅ usan Principios del Movimiento (Pre-Pilates), tus análisis MAT 1 y MAT 2, el
+manual y tu planilla de **Mat 3** (qué prop, dónde va y para qué, y sus observaciones de cuidados: por ejemplo "muñeca
+en neutro" o "evitar con lesiones cervicales u osteoporosis"). ⇅ también ofrece el mismo ejercicio **con un prop** que
+asiste (más fácil) o resiste (más difícil). Cuidados nuevos: **codos** (con el lado).
+
 **⬇️ Word, Excel o PDF** (en cada sesión) — descarga la sesión para imprimirla o editarla: **Word** (.docx) y
 **Excel** (.xlsx) quedan editables; el **PDF** es para imprimir. Elegís qué incluir: solo los nombres, los nombres con
 el movimiento (posición inicial y pasos con la respiración; o además la forma óptima y las indicaciones), la primera
